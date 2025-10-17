@@ -270,7 +270,7 @@ function ParaQuem() {
       {/* Success Stories */}
       <section className="py-20 bg-slate-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-slate-900 mb-12">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-8 md:mb-12">
             Histórias de Sucesso
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -298,10 +298,10 @@ function ParaQuem() {
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-blue-600 to-blue-700 text-white">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-6">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6">
             Encontre a solução perfeita para você
           </h2>
-          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
             Seja estudante, professor, escola ou curso preparatório, temos o plano ideal para transformar o aprendizado da escrita.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

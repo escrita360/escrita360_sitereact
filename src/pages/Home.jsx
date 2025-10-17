@@ -6,18 +6,18 @@ function Home() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="hero bg-gradient-to-br from-blue-50 to-white py-20">
+      <section className="hero bg-gradient-to-br from-blue-50 to-white py-12 md:py-16 lg:py-20">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="hero-content">
-              <h1 className="text-5xl lg:text-6xl font-bold text-slate-900 mb-6 leading-tight">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-slate-900 mb-6 leading-tight">
                 A Inteligência Artificial e Inovação potencializando o Aprendizado da Escrita
               </h1>
-              <h2 className="hero-subtitle text-xl text-slate-600 mb-8">
+              <h2 className="hero-subtitle text-lg md:text-xl text-slate-600 mb-8">
                 Plataforma adaptativa de escrita autorregulada e avaliação inteligente
               </h2>
               <div className="hero-buttons">
-                <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg">
+                <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-6 md:px-8 py-4 md:py-6 text-base md:text-lg">
                   Entre em contato
                 </Button>
               </div>
@@ -36,9 +36,9 @@ function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className="stats bg-slate-100 py-16">
+      <section className="stats bg-slate-100 py-8 md:py-12 lg:py-16">
         <div className="container mx-auto px-4">
-          <h2 className="section-title text-4xl font-bold text-center text-slate-900 mb-12">
+          <h2 className="section-title text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-8 md:mb-12">
             Eficiência educacional na prática
           </h2>
           <div className="stats-grid grid md:grid-cols-4 gap-8">
@@ -79,7 +79,7 @@ function Home() {
       </section>
 
       {/* About Section */}
-      <section className="about-platform container mx-auto px-4 py-16">
+      <section className="about-platform container mx-auto px-4 py-8 md:py-12 lg:py-16">
         <div className="max-w-4xl mx-auto text-center">
           <p className="about-text text-lg text-slate-700 leading-relaxed">
             O <span className="font-bold text-blue-600">Escrita360</span> é a plataforma mais completa de escrita autorregulada e avaliação inteligente,
@@ -93,21 +93,21 @@ function Home() {
       </section>
 
       {/* Platforms Section */}
-      <section className="platforms-section bg-slate-50 py-16">
+      <section className="platforms-section bg-slate-50 py-8 md:py-12 lg:py-16">
         <div className="container mx-auto px-4">
-          <h2 className="section-title text-4xl font-bold text-center text-slate-900 mb-12">
+          <h2 className="section-title text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-8 md:mb-12">
             Conheça nossas Plataformas
           </h2>
 
           <div className="grid lg:grid-cols-2 gap-8 mb-8">
-            <Card className="platform-card platform-left p-8 hover:shadow-lg transition-shadow">
-              <div className="flex items-center gap-6 mb-6">
-                <div className="platform-image w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+            <Card className="platform-card platform-left p-6 md:p-8 hover:shadow-lg transition-shadow">
+              <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 mb-6">
+                <div className="platform-image w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto md:mx-0">
                   <UserCheck className="w-8 h-8 text-blue-600" />
                 </div>
-                <div className="platform-content">
-                  <h3 className="text-2xl font-bold text-slate-900 mb-2">Estudantes</h3>
-                  <p className="text-slate-700">
+                <div className="platform-content text-center md:text-left">
+                  <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-2">Estudantes</h3>
+                  <p className="text-slate-700 text-sm md:text-base">
                     Os estudantes desenvolvem autonomia na escrita de forma estruturada e personalizada,
                     vivenciando todo o processo de planejamento, escrita, autoavaliação e reescrita com
                     recursos que promovem autorregulação e senso crítico.
@@ -117,31 +117,31 @@ function Home() {
               </div>
             </Card>
 
-            <Card className="platform-card platform-right p-8 hover:shadow-lg transition-shadow">
-              <div className="flex items-center gap-6 mb-6">
-                <div className="platform-content">
-                  <h3 className="text-2xl font-bold text-slate-900 mb-2">Professores</h3>
-                  <p className="text-slate-700">
+            <Card className="platform-card platform-right p-6 md:p-8 hover:shadow-lg transition-shadow">
+              <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 mb-6">
+                <div className="platform-content text-center md:text-left">
+                  <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-2">Professores</h3>
+                  <p className="text-slate-700 text-sm md:text-base">
                     Professores ganham tempo com recursos valiosos para a gestão de turmas, criação de
                     atividades personalizadas e acompanhamento individual, baseadas nas competências do ENEM
                     e alinhadas à BNCC.
                   </p>
                   <Button variant="outline" className="mt-4">Acesse a Plataforma</Button>
                 </div>
-                <div className="platform-image w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+                <div className="platform-image w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto md:mx-0">
                   <UserCheck className="w-8 h-8 text-blue-600" />
                 </div>
               </div>
             </Card>
 
-            <Card className="platform-card platform-left p-8 hover:shadow-lg transition-shadow">
-              <div className="flex items-center gap-6 mb-6">
-                <div className="platform-image w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+            <Card className="platform-card platform-left p-6 md:p-8 hover:shadow-lg transition-shadow">
+              <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 mb-6">
+                <div className="platform-image w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto md:mx-0">
                   <Users className="w-8 h-8 text-blue-600" />
                 </div>
-                <div className="platform-content">
-                  <h3 className="text-2xl font-bold text-slate-900 mb-2">Famílias</h3>
-                  <p className="text-slate-700">
+                <div className="platform-content text-center md:text-left">
+                  <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-2">Famílias</h3>
+                  <p className="text-slate-700 text-sm md:text-base">
                     As famílias acompanham o desempenho dos estudantes, a proficiência de aprendizagem
                     e o engajamento em tempo real através de dashboards intuitivos e relatórios detalhados.
                   </p>
@@ -150,17 +150,17 @@ function Home() {
               </div>
             </Card>
 
-            <Card className="platform-card platform-right p-8 hover:shadow-lg transition-shadow">
-              <div className="flex items-center gap-6 mb-6">
-                <div className="platform-content">
-                  <h3 className="text-2xl font-bold text-slate-900 mb-2">Escolas e Gestores</h3>
-                  <p className="text-slate-700">
+            <Card className="platform-card platform-right p-6 md:p-8 hover:shadow-lg transition-shadow">
+              <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 mb-6">
+                <div className="platform-content text-center md:text-left">
+                  <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-2">Escolas e Gestores</h3>
+                  <p className="text-slate-700 text-sm md:text-base">
                     A plataforma dos gestores oferece flexibilização curricular e relatórios em tempo real,
                     para uma gestão eficaz do engajamento e aprendizagem dos seus estudantes, turmas e escolas.
                   </p>
                   <Button variant="outline" className="mt-4">Acesso Exclusivo - Consulte seu Login</Button>
                 </div>
-                <div className="platform-image w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+                <div className="platform-image w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto md:mx-0">
                   <School className="w-8 h-8 text-blue-600" />
                 </div>
               </div>
@@ -170,9 +170,9 @@ function Home() {
       </section>
 
       {/* Diferencial Section */}
-      <section className="diferencial py-16">
+      <section className="diferencial py-8 md:py-12 lg:py-16">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-slate-900 mb-12">O que nos torna únicos</h2>
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-8 md:mb-12">O que nos torna únicos</h2>
           <div className="diferencial-grid grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <Card className="diferencial-item p-6 hover:shadow-lg transition-all hover:-translate-y-1">
               <div className="diferencial-icon w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
@@ -244,12 +244,12 @@ function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="features-section bg-slate-50 py-16">
+      <section className="features-section bg-slate-50 py-8 md:py-12 lg:py-16">
         <div className="container mx-auto px-4">
-          <h2 className="section-title text-4xl font-bold text-center text-slate-900 mb-4">
+          <h2 className="section-title text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-4">
             Recursos que Transformam o Aprendizado
           </h2>
-          <p className="section-subtitle text-xl text-center text-slate-600 mb-12">
+          <p className="section-subtitle text-lg md:text-xl text-center text-slate-600 mb-8 md:mb-12">
             Ferramentas desenvolvidas com base em pesquisas pedagógicas e tecnologia de ponta
           </p>
           <div className="features-grid grid md:grid-cols-2 lg:grid-cols-4 gap-8">

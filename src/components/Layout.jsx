@@ -1,7 +1,12 @@
 import { Link } from 'react-router-dom'
-import { PenTool } from 'lucide-react'
+import { PenTool, Menu } from 'lucide-react'
+import { useState } from 'react'
+import { Button } from '@/components/ui/button.jsx'
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet.jsx'
 
 function Layout({ children }) {
+  const [isOpen, setIsOpen] = useState(false)
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       {/* Header */}
@@ -13,6 +18,8 @@ function Layout({ children }) {
             </div>
             <span className="text-2xl font-bold text-slate-900">Escrita360</span>
           </Link>
+
+          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-6">
             <Link to="/" className="text-slate-700 hover:text-blue-600 transition-colors">Home</Link>
             <Link to="/para-quem" className="text-slate-700 hover:text-blue-600 transition-colors">Para Quem</Link>
@@ -20,6 +27,55 @@ function Layout({ children }) {
             <Link to="/precos" className="text-slate-700 hover:text-blue-600 transition-colors">Preços</Link>
             <Link to="/contato" className="text-slate-700 hover:text-blue-600 transition-colors">Contato</Link>
           </div>
+
+          {/* Mobile Navigation */}
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="md:hidden">
+                <Menu className="h-6 w-6" />
+                <span className="sr-only">Toggle menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+              <nav className="flex flex-col gap-4">
+                <Link
+                  to="/"
+                  className="text-lg font-medium text-slate-700 hover:text-blue-600 transition-colors"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Home
+                </Link>
+                <Link
+                  to="/para-quem"
+                  className="text-lg font-medium text-slate-700 hover:text-blue-600 transition-colors"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Para Quem
+                </Link>
+                <Link
+                  to="/recursos"
+                  className="text-lg font-medium text-slate-700 hover:text-blue-600 transition-colors"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Recursos
+                </Link>
+                <Link
+                  to="/precos"
+                  className="text-lg font-medium text-slate-700 hover:text-blue-600 transition-colors"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Preços
+                </Link>
+                <Link
+                  to="/contato"
+                  className="text-lg font-medium text-slate-700 hover:text-blue-600 transition-colors"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Contato
+                </Link>
+              </nav>
+            </SheetContent>
+          </Sheet>
         </nav>
       </header>
 
@@ -29,7 +85,7 @@ function Layout({ children }) {
       </main>
 
       {/* Footer */}
-      <footer className="bg-slate-900 text-white py-12">
+      <footer className="bg-slate-900 text-white py-8 md:py-12">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>

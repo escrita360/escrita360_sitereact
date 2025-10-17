@@ -143,12 +143,12 @@ function Precos() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-20">
+      <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-12 md:py-16 lg:py-20">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-5xl font-bold mb-6">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
             Planos que se adaptam à sua necessidade
           </h1>
-          <p className="text-xl text-blue-100 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto">
             Escolha o plano ideal para transformar o processo de escrita e alcance resultados extraordinários
           </p>
         </div>
@@ -174,7 +174,7 @@ function Precos() {
       </section>
 
       {/* Pricing Grid */}
-      <section className="py-16">
+      <section className="py-8 md:py-12 lg:py-16">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {plans.map((plan, index) => (
@@ -228,9 +228,9 @@ function Precos() {
       </section>
 
       {/* Comparison Table */}
-      <section className="py-16 bg-slate-50">
+      <section className="py-8 md:py-12 lg:py-16 bg-slate-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-slate-900 mb-4">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-4">
             Comparação Detalhada de Planos
           </h2>
           <div className="max-w-6xl mx-auto">
@@ -277,12 +277,12 @@ function Precos() {
       </section>
 
       {/* Success Stories */}
-      <section className="py-16">
+      <section className="py-8 md:py-12 lg:py-16">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-slate-900 mb-4">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-4">
             Histórias de Sucesso
           </h2>
-          <p className="text-xl text-center text-slate-600 mb-12 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-center text-slate-600 mb-8 md:mb-12 max-w-2xl mx-auto">
             Veja como nossos usuários transformaram sua escrita e alcançaram seus objetivos
           </p>
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -309,12 +309,12 @@ function Precos() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 bg-slate-50">
+      <section className="py-8 md:py-12 lg:py-16 bg-slate-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-slate-900 mb-4">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-4">
             Perguntas Frequentes
           </h2>
-          <p className="text-xl text-center text-slate-600 mb-12 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-center text-slate-600 mb-8 md:mb-12 max-w-2xl mx-auto">
             Tire suas dúvidas sobre nossos planos e funcionalidades
           </p>
           <div className="max-w-3xl mx-auto">
@@ -335,12 +335,12 @@ function Precos() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+      <section className="py-8 md:py-12 lg:py-16 bg-gradient-to-r from-blue-600 to-blue-800 text-white">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-6">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6">
             Pronto para revolucionar a escrita?
           </h2>
-          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
             Comece gratuitamente e veja a diferença que a autorregulação faz no desenvolvimento da escrita.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
