@@ -1,16 +1,10 @@
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent } from '@/components/ui/card.jsx'
 import { Check, X, PenTool, Brain, TrendingUp, GraduationCap, School, Edit, FileText, CheckCircle, Bot, RotateCcw, Trophy, Heart, Target, BarChart, Users, UserCheck, BookOpen, Award } from 'lucide-react'
-import Banner from '../../banner/banner.jsx'
 
 function Home() {
   return (
     <div>
-      {/* Banners Section */}
-      <section className="container mx-auto px-4 py-8">
-        <Banner />
-      </section>
-
       {/* Hero Section */}
       <section className="hero bg-gradient-to-br from-blue-50 to-white py-20">
         <div className="container mx-auto px-4">
