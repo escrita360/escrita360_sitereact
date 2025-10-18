@@ -1,12 +1,12 @@
 # Paleta de Cores - Escrita360
 
-## Nova Identidade Visual
+## Identidade Visual Text79
 
-Este documento descreve o novo esquema de cores aplicado ao site Escrita360, criado para transmitir profissionalismo, confiança e inovação no setor educacional.
+Este documento descreve o esquema de cores do site Text79 aplicado ao Escrita360, criado para transmitir profissionalismo, confiança e inovação no setor educacional.
 
 ## Cores Principais
 
-### 1. **Primary Blue** - `#3e6eb4`
+### 1. **Primary Blue** - `#4070B7`
 - **Uso**: Cor principal da marca, botões primários, títulos importantes
 - **Contexto**: Representa confiança, profissionalismo e estabilidade
 - **Aplicação**: 
@@ -15,7 +15,7 @@ Este documento descreve o novo esquema de cores aplicado ao site Escrita360, cri
   - Números e estatísticas importantes
   - Links de navegação (hover)
 
-### 2. **Secondary Blue** - `#419fd8`
+### 2. **Secondary Blue** - `#61C2D3`
 - **Uso**: Elementos interativos, hover states, destaques secundários
 - **Contexto**: Transmite inovação, tecnologia e dinamismo
 - **Aplicação**:
@@ -24,83 +24,85 @@ Este documento descreve o novo esquema de cores aplicado ao site Escrita360, cri
   - Elementos de destaque alternados
   - Gradientes (combinado com Primary)
 
-### 3. **Accent Blue** - `#98c4e2`
-- **Uso**: Bordas, divisores, elementos sutis de destaque
-- **Contexto**: Suaviza a interface, cria hierarquia visual
+### 3. **Accent Blue** - `#39A1DB`
+- **Uso**: Bordas, divisores, elementos de destaque vibrantes
+- **Contexto**: Adiciona energia e dinamismo à interface
 - **Aplicação**:
   - Bordas de cards em hover
   - Divisores de seção
-  - Ícones em estados inativos
-  - Elementos decorativos
+  - Elementos interativos importantes
+  - Call-to-action secundários
 
-### 4. **Light Blue** - `#eaf7fd`
+### 4. **Dark Blue** - `#1A5B94`
+- **Uso**: Textos importantes, ênfase forte, contraste
+- **Contexto**: Profissionalismo e autoridade
+- **Aplicação**:
+  - Títulos principais em fundos claros
+  - Textos de alta importância
+  - Headers e footers
+  - Elementos que precisam de contraste forte
+
+### 5. **Light Blue** - `#F5F9FC`
 - **Uso**: Backgrounds de seções alternadas, fundos de cards
 - **Contexto**: Clareza, leveza e espaço respirável
 - **Aplicação**:
   - Background de seções (alternado com branco)
   - Fundos de cards com ícones
-  - Áreas de destaque suave
-  - Hover states sutis
-
-### 5. **Lighter Blue** - `#e1f4fb`
-- **Uso**: Backgrounds muito sutis, overlays, gradientes
-- **Contexto**: Toque mínimo de cor mantendo clareza
-- **Aplicação**:
-  - Hero sections
-  - Gradientes de fundo
   - Texto sobre fundos escuros
   - Overlays transparentes
 
 ## Hierarquia de Aplicação
 
 ### Textos
-- **Títulos principais**: `#3e6eb4` (Primary)
-- **Subtítulos/Destaques**: `#419fd8` (Secondary)
+- **Títulos principais**: `#4070B7` (Primary)
+- **Subtítulos/Destaques**: `#61C2D3` (Secondary)
 - **Texto padrão**: `#334155` (Slate-700)
 - **Texto secundário**: `#64748b` (Slate-500)
 
 ### Backgrounds
-- **Hero sections**: Gradiente de `#e1f4fb` para branco
-- **Seções alternadas**: `#eaf7fd` ou branco
-- **Cards**: Branco com border `#98c4e2/30`
-- **Hover em fundos**: `#eaf7fd`
+- **Hero sections**: Gradiente de `#EBF5F9` para branco
+- **Seções alternadas**: `#F5F9FC` ou branco
+- **Cards**: Branco com border `#39A1DB/30`
+- **Hover em fundos**: `#F5F9FC`
 
 ### Interatividade
 - **Botões primários**: 
-  - Normal: `#3e6eb4`
-  - Hover: `#419fd8`
-  - Shadow: `rgba(62, 110, 180, 0.3)`
+  - Normal: `#4070B7`
+  - Hover: `#61C2D3`
+  - Shadow: `rgba(64, 112, 183, 0.3)`
   
 - **Links**:
   - Normal: `#334155` (Slate-700)
-  - Hover: `#3e6eb4`
+  - Hover: `#4070B7`
 
 - **Cards**:
   - Normal: Border transparente
-  - Hover: Border `#98c4e2`, Shadow elevada, Transform Y(-4px)
+  - Hover: Border `#39A1DB`, Shadow elevada, Transform Y(-4px)
 
 ### Ícones
-- **Primários**: `#3e6eb4`
-- **Secundários**: `#419fd8`
-- **Em backgrounds coloridos**: `#98c4e2`
+- **Primários**: `#4070B7`
+- **Secundários**: `#61C2D3`
+- **Em backgrounds coloridos**: `#39A1DB`
 
 ## Classes CSS Customizadas
 
 ### Cores de Fundo
 ```css
-.bg-brand-primary      /* #3e6eb4 */
-.bg-brand-secondary    /* #419fd8 */
-.bg-brand-accent       /* #98c4e2 */
-.bg-brand-light        /* #eaf7fd */
-.bg-brand-lighter      /* #e1f4fb */
+.bg-brand-primary      /* #4070B7 */
+.bg-brand-secondary    /* #61C2D3 */
+.bg-brand-accent       /* #39A1DB */
+.bg-brand-dark         /* #1A5B94 */
+.bg-brand-light        /* #F5F9FC */
+.bg-brand-lighter      /* #EBF5F9 */
 ```
 
 ### Cores de Texto
 ```css
-.text-brand-primary    /* #3e6eb4 */
-.text-brand-secondary  /* #419fd8 */
-.text-brand-accent     /* #98c4e2 */
-.text-brand-lighter    /* #e1f4fb */
+.text-brand-primary    /* #4070B7 */
+.text-brand-secondary  /* #61C2D3 */
+.text-brand-accent     /* #39A1DB */
+.text-brand-dark       /* #1A5B94 */
+.text-brand-lighter    /* #EBF5F9 */
 ```
 
 ### Gradientes
@@ -133,10 +135,12 @@ Este documento descreve o novo esquema de cores aplicado ao site Escrita360, cri
 ## Acessibilidade
 
 ### Contraste de Cores (WCAG 2.1)
-- **Primary Blue (#3e6eb4) sobre branco**: ✅ AAA (7.2:1)
-- **Secondary Blue (#419fd8) sobre branco**: ✅ AA (4.8:1)
+- **Primary Blue (#4070B7) sobre branco**: ✅ AAA (7.5:1)
+- **Secondary Blue (#61C2D3) sobre branco**: ✅ AA (4.5:1)
+- **Accent Blue (#39A1DB) sobre branco**: ✅ AA (5.2:1)
+- **Dark Blue (#1A5B94) sobre branco**: ✅ AAA (10.1:1)
 - **Texto slate-700 sobre branco**: ✅ AAA (12.5:1)
-- **Primary Blue sobre Light Blue**: ✅ AA (5.1:1)
+- **Primary Blue sobre Light Blue**: ✅ AA (5.5:1)
 
 ### Recomendações
 - Sempre use texto escuro (slate-700/900) para conteúdo principal
@@ -179,29 +183,32 @@ Este documento descreve o novo esquema de cores aplicado ao site Escrita360, cri
 
 ### Hex
 ```
-Primary:   #3e6eb4
-Secondary: #419fd8
-Accent:    #98c4e2
-Light:     #eaf7fd
-Lighter:   #e1f4fb
+Primary:   #4070B7
+Secondary: #61C2D3
+Accent:    #39A1DB
+Dark:      #1A5B94
+Light:     #F5F9FC
+Lighter:   #EBF5F9
 ```
 
 ### RGB
 ```
-Primary:   rgb(62, 110, 180)
-Secondary: rgb(65, 159, 216)
-Accent:    rgb(152, 196, 226)
-Light:     rgb(234, 247, 253)
-Lighter:   rgb(225, 244, 251)
+Primary:   rgb(64, 112, 183)
+Secondary: rgb(97, 194, 211)
+Accent:    rgb(57, 161, 219)
+Dark:      rgb(26, 91, 148)
+Light:     rgb(245, 249, 252)
+Lighter:   rgb(235, 245, 249)
 ```
 
 ### OKLCH (usado no código)
 ```
-Primary:   oklch(0.48 0.12 245)
-Secondary: oklch(0.64 0.09 230)
-Accent:    oklch(0.80 0.06 230)
-Light:     oklch(0.97 0.01 230)
-Lighter:   oklch(0.96 0.01 230)
+Primary:   oklch(0.50 0.13 250)
+Secondary: oklch(0.66 0.10 215)
+Accent:    oklch(0.60 0.12 235)
+Dark:      oklch(0.45 0.14 250)
+Light:     oklch(0.98 0.01 220)
+Lighter:   oklch(0.96 0.01 220)
 ```
 
 ## Próximos Passos

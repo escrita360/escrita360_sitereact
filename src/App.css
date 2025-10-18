@@ -41,12 +41,13 @@
 
 :root {
 --radius: 0.625rem;
-  /* Brand Colors - Escrita360 */
-  --brand-primary: #3e6eb4;      /* Primary Blue - Main brand color */
-  --brand-secondary: #419fd8;    /* Secondary Blue - Interactive elements */
-  --brand-accent: #98c4e2;       /* Accent Blue - Highlights and hover states */
-  --brand-light: #eaf7fd;        /* Light Blue - Backgrounds and subtle elements */
-  --brand-lighter: #e1f4fb;      /* Lighter Blue - Very subtle backgrounds */
+  /* Brand Colors - Text79 (Site Atual) */
+  --brand-primary: #4070B7;      /* Primary Blue - Main brand color */
+  --brand-secondary: #61C2D3;    /* Secondary Blue - Interactive elements */
+  --brand-accent: #39A1DB;       /* Accent Blue - Highlights and hover states */
+  --brand-dark: #1A5B94;         /* Dark Blue - Strong emphasis */
+  --brand-light: #F5F9FC;        /* Light Blue - Backgrounds and subtle elements */
+  --brand-lighter: #EBF5F9;      /* Lighter Blue - Very subtle backgrounds */
   
   /* Semantic Color System */
   --foreground: oklch(0.145 0 0);
@@ -54,31 +55,31 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.48 0.12 245);          /* #3e6eb4 in oklch */
+  --primary: oklch(0.50 0.13 250);          /* #4070B7 in oklch */
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.64 0.09 230);        /* #419fd8 in oklch */
+  --secondary: oklch(0.66 0.10 215);        /* #61C2D3 in oklch */
   --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.96 0.01 230);            /* #e1f4fb in oklch */
+  --muted: oklch(0.96 0.01 220);            /* #EBF5F9 in oklch */
   --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.80 0.06 230);           /* #98c4e2 in oklch */
+  --accent: oklch(0.60 0.12 235);           /* #39A1DB in oklch */
   --accent-foreground: oklch(0.145 0 0);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.93 0.01 230);
-  --input: oklch(0.93 0.01 230);
-  --ring: oklch(0.64 0.09 230);
-  --chart-1: oklch(0.48 0.12 245);
-  --chart-2: oklch(0.64 0.09 230);
-  --chart-3: oklch(0.80 0.06 230);
-  --chart-4: oklch(0.75 0.08 230);
-  --chart-5: oklch(0.55 0.10 240);
+  --border: oklch(0.93 0.01 220);
+  --input: oklch(0.93 0.01 220);
+  --ring: oklch(0.60 0.12 235);
+  --chart-1: oklch(0.50 0.13 250);
+  --chart-2: oklch(0.66 0.10 215);
+  --chart-3: oklch(0.60 0.12 235);
+  --chart-4: oklch(0.45 0.14 250);
+  --chart-5: oklch(0.55 0.12 240);
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.48 0.12 245);
+  --sidebar-primary: oklch(0.50 0.13 250);
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.96 0.01 230);
+  --sidebar-accent: oklch(0.96 0.01 220);
   --sidebar-accent-foreground: oklch(0.145 0 0);
-  --sidebar-border: oklch(0.93 0.01 230);
-  --sidebar-ring: oklch(0.64 0.09 230);
+  --sidebar-border: oklch(0.93 0.01 220);
+  --sidebar-ring: oklch(0.60 0.12 235);
 }
 
 .dark {
@@ -130,12 +131,14 @@
 .bg-brand-primary { background-color: var(--brand-primary) !important; }
 .bg-brand-secondary { background-color: var(--brand-secondary) !important; }
 .bg-brand-accent { background-color: var(--brand-accent) !important; }
+.bg-brand-dark { background-color: var(--brand-dark) !important; }
 .bg-brand-light { background-color: var(--brand-light) !important; }
 .bg-brand-lighter { background-color: var(--brand-lighter) !important; }
 
 .text-brand-primary { color: var(--brand-primary) !important; }
 .text-brand-secondary { color: var(--brand-secondary) !important; }
 .text-brand-accent { color: var(--brand-accent) !important; }
+.text-brand-dark { color: var(--brand-dark) !important; }
 .text-brand-lighter { color: var(--brand-lighter) !important; }
 
 .border-brand-primary { border-color: var(--brand-primary) !important; }
@@ -169,7 +172,7 @@
 
 .btn-brand-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(62, 110, 180, 0.3);
+  box-shadow: 0 10px 25px rgba(64, 112, 183, 0.3);
 }
 
 /* Card Enhancement */
@@ -180,7 +183,7 @@
 
 .card-brand-hover:hover {
   border-color: var(--brand-accent);
-  box-shadow: 0 10px 30px rgba(62, 110, 180, 0.15);
+  box-shadow: 0 10px 30px rgba(64, 112, 183, 0.15);
   transform: translateY(-4px);
 }
 
