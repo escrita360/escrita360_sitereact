@@ -13,10 +13,10 @@ function Layout({ children }) {
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
         <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <img src={logo} alt="Escrita360" className="h-10 w-auto" />
-            <span className="text-2xl font-bold text-slate-900">Escrita360</span>
-          </Link>
+                <Link to="/" className="flex items-center gap-2 font-bold text-2xl text-slate-900">
+                    <img src={logo} alt="Logo Escrita360" className="h-16 w-auto" />
+                  <span className="sr-only">Escrita360</span>
+                </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-6">
@@ -88,9 +88,9 @@ function Layout({ children }) {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <Link to="/" className="flex items-center gap-2 mb-4">
-                <img src={logo} alt="Escrita360" className="h-10 w-auto" />
-                <span className="text-2xl font-bold">Escrita360</span>
+              <Link to="/" className="mb-4 block flex items-center gap-2">
+                <img src={logo} alt="Logo Escrita360" className="h-16 w-auto" style={{ filter: 'brightness(0) invert(1)' }} />
+                  {/* Removido texto 'Escrita' */}
               </Link>
               <p className="text-slate-400">
                 A plataforma mais completa para o desenvolvimento da escrita
@@ -125,7 +125,7 @@ function Layout({ children }) {
             </div>
           </div>
           <div className="border-t border-slate-800 pt-8 text-center text-slate-400">
-            <p>&copy; 2025 Escrita360. Todos os direitos reservados.</p>
+            <p>&copy; 2025. Todos os direitos reservados.</p>
           </div>
         </div>
       </footer>
