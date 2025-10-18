@@ -41,36 +41,44 @@
 
 :root {
 --radius: 0.625rem;
+  /* Brand Colors - Escrita360 */
+  --brand-primary: #3e6eb4;      /* Primary Blue - Main brand color */
+  --brand-secondary: #419fd8;    /* Secondary Blue - Interactive elements */
+  --brand-accent: #98c4e2;       /* Accent Blue - Highlights and hover states */
+  --brand-light: #eaf7fd;        /* Light Blue - Backgrounds and subtle elements */
+  --brand-lighter: #e1f4fb;      /* Lighter Blue - Very subtle backgrounds */
+  
+  /* Semantic Color System */
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
+  --primary: oklch(0.48 0.12 245);          /* #3e6eb4 in oklch */
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
+  --secondary: oklch(0.64 0.09 230);        /* #419fd8 in oklch */
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.96 0.01 230);            /* #e1f4fb in oklch */
   --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --accent: oklch(0.80 0.06 230);           /* #98c4e2 in oklch */
+  --accent-foreground: oklch(0.145 0 0);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
+  --border: oklch(0.93 0.01 230);
+  --input: oklch(0.93 0.01 230);
+  --ring: oklch(0.64 0.09 230);
+  --chart-1: oklch(0.48 0.12 245);
+  --chart-2: oklch(0.64 0.09 230);
+  --chart-3: oklch(0.80 0.06 230);
+  --chart-4: oklch(0.75 0.08 230);
+  --chart-5: oklch(0.55 0.10 240);
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary: oklch(0.48 0.12 245);
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar-accent: oklch(0.96 0.01 230);
+  --sidebar-accent-foreground: oklch(0.145 0 0);
+  --sidebar-border: oklch(0.93 0.01 230);
+  --sidebar-ring: oklch(0.64 0.09 230);
 }
 
 .dark {
@@ -117,6 +125,26 @@
     color: var(--color-foreground);
   }
 }
+
+/* Custom Brand Color Utilities */
+.bg-brand-primary { background-color: var(--brand-primary) !important; }
+.bg-brand-secondary { background-color: var(--brand-secondary) !important; }
+.bg-brand-accent { background-color: var(--brand-accent) !important; }
+.bg-brand-light { background-color: var(--brand-light) !important; }
+.bg-brand-lighter { background-color: var(--brand-lighter) !important; }
+
+.text-brand-primary { color: var(--brand-primary) !important; }
+.text-brand-secondary { color: var(--brand-secondary) !important; }
+.text-brand-accent { color: var(--brand-accent) !important; }
+
+.border-brand-primary { border-color: var(--brand-primary) !important; }
+.border-brand-accent { border-color: var(--brand-accent) !important; }
+
+.hover\:bg-brand-primary:hover { background-color: var(--brand-primary) !important; }
+.hover\:bg-brand-secondary:hover { background-color: var(--brand-secondary) !important; }
+.hover\:text-brand-primary:hover { color: var(--brand-primary) !important; }
+.hover\:text-brand-secondary:hover { color: var(--brand-secondary) !important; }
+.hover\:border-brand-accent:hover { border-color: var(--brand-accent) !important; }
 
 /* Custom styles for smooth scrolling */
 html {

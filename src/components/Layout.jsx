@@ -20,11 +20,11 @@ function Layout({ children }) {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-6">
-            <Link to="/" className="text-slate-700 hover:text-blue-600 transition-colors">Home</Link>
-            <Link to="/para-quem" className="text-slate-700 hover:text-blue-600 transition-colors">Para Quem</Link>
-            <Link to="/recursos" className="text-slate-700 hover:text-blue-600 transition-colors">Recursos</Link>
-            <Link to="/precos" className="text-slate-700 hover:text-blue-600 transition-colors">Preços</Link>
-            <Link to="/contato" className="text-slate-700 hover:text-blue-600 transition-colors">Contato</Link>
+            <Link to="/" className="text-slate-700 hover:text-brand-primary transition-colors">Home</Link>
+            <Link to="/para-quem" className="text-slate-700 hover:text-brand-primary transition-colors">Para Quem</Link>
+            <Link to="/recursos" className="text-slate-700 hover:text-brand-primary transition-colors">Recursos</Link>
+            <Link to="/precos" className="text-slate-700 hover:text-brand-primary transition-colors">Preços</Link>
+            <Link to="/contato" className="text-slate-700 hover:text-brand-primary transition-colors">Contato</Link>
           </div>
 
           {/* Mobile Navigation */}
@@ -39,35 +39,35 @@ function Layout({ children }) {
               <nav className="flex flex-col gap-4">
                 <Link
                   to="/"
-                  className="text-lg font-medium text-slate-700 hover:text-blue-600 transition-colors"
+                  className="text-lg font-medium text-slate-700 hover:text-brand-primary transition-colors"
                   onClick={() => setIsOpen(false)}
                 >
                   Home
                 </Link>
                 <Link
                   to="/para-quem"
-                  className="text-lg font-medium text-slate-700 hover:text-blue-600 transition-colors"
+                  className="text-lg font-medium text-slate-700 hover:text-brand-primary transition-colors"
                   onClick={() => setIsOpen(false)}
                 >
                   Para Quem
                 </Link>
                 <Link
                   to="/recursos"
-                  className="text-lg font-medium text-slate-700 hover:text-blue-600 transition-colors"
+                  className="text-lg font-medium text-slate-700 hover:text-brand-primary transition-colors"
                   onClick={() => setIsOpen(false)}
                 >
                   Recursos
                 </Link>
                 <Link
                   to="/precos"
-                  className="text-lg font-medium text-slate-700 hover:text-blue-600 transition-colors"
+                  className="text-lg font-medium text-slate-700 hover:text-brand-primary transition-colors"
                   onClick={() => setIsOpen(false)}
                 >
                   Preços
                 </Link>
                 <Link
                   to="/contato"
-                  className="text-lg font-medium text-slate-700 hover:text-blue-600 transition-colors"
+                  className="text-lg font-medium text-slate-700 hover:text-brand-primary transition-colors"
                   onClick={() => setIsOpen(false)}
                 >
                   Contato

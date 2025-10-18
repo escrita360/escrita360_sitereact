@@ -6,7 +6,7 @@ function Home() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="hero bg-gradient-to-br from-blue-50 to-white py-12 md:py-16 lg:py-20">
+      <section className="hero bg-gradient-to-br from-brand-lighter to-white py-12 md:py-16 lg:py-20">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="hero-content">
@@ -17,17 +17,17 @@ function Home() {
                 Plataforma adaptativa de escrita autorregulada e avaliação inteligente
               </h2>
               <div className="hero-buttons">
-                <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-6 md:px-8 py-4 md:py-6 text-base md:text-lg">
+                <Button size="lg" className="bg-brand-primary hover:bg-brand-secondary text-white px-6 md:px-8 py-4 md:py-6 text-base md:text-lg shadow-lg hover:shadow-xl transition-all">
                   Entre em contato
                 </Button>
               </div>
             </div>
             <div className="hero-image flex justify-center">
-              <Card className="p-8 shadow-2xl bg-white/80 backdrop-blur-sm">
+              <Card className="p-8 shadow-2xl bg-white/80 backdrop-blur-sm border-brand-accent">
                 <div className="flex gap-8 items-center justify-center">
-                  <Edit className="w-16 h-16 text-blue-600" />
-                  <Brain className="w-16 h-16 text-blue-600" />
-                  <TrendingUp className="w-16 h-16 text-blue-600" />
+                  <Edit className="w-16 h-16 text-brand-primary" />
+                  <Brain className="w-16 h-16 text-brand-secondary" />
+                  <TrendingUp className="w-16 h-16 text-brand-accent" />
                 </div>
               </Card>
             </div>
@@ -36,40 +36,40 @@ function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className="stats bg-slate-100 py-8 md:py-12 lg:py-16">
+      <section className="stats bg-brand-light py-8 md:py-12 lg:py-16">
         <div className="container mx-auto px-4">
           <h2 className="section-title text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-8 md:mb-12">
             Eficiência educacional na prática
           </h2>
           <div className="stats-grid grid md:grid-cols-4 gap-8">
-            <Card className="stat-item text-center p-6 hover:shadow-lg transition-shadow">
+            <Card className="stat-item text-center p-6 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/30">
               <CardContent className="pt-6">
-                <Edit className="w-12 h-12 text-blue-600 mx-auto mb-4" />
-                <div className="stat-number text-4xl font-bold text-blue-600 mb-2 counter" data-target="50">0</div>
+                <Edit className="w-12 h-12 text-brand-primary mx-auto mb-4" />
+                <div className="stat-number text-4xl font-bold text-brand-primary mb-2 counter" data-target="50">0</div>
                 <div className="stat-label text-sm text-slate-600 mb-2">Mil+</div>
                 <p className="stat-description text-slate-700">Redações corrigidas com autorregulação</p>
               </CardContent>
             </Card>
-            <Card className="stat-item text-center p-6 hover:shadow-lg transition-shadow">
+            <Card className="stat-item text-center p-6 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/30">
               <CardContent className="pt-6">
-                <School className="w-12 h-12 text-blue-600 mx-auto mb-4" />
-                <div className="stat-number text-4xl font-bold text-blue-600 mb-2 counter" data-target="200">0</div>
+                <School className="w-12 h-12 text-brand-secondary mx-auto mb-4" />
+                <div className="stat-number text-4xl font-bold text-brand-secondary mb-2 counter" data-target="200">0</div>
                 <div className="stat-label text-sm text-slate-600 mb-2">+</div>
                 <p className="stat-description text-slate-700">Instituições públicas e privadas</p>
               </CardContent>
             </Card>
-            <Card className="stat-item text-center p-6 hover:shadow-lg transition-shadow">
+            <Card className="stat-item text-center p-6 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/30">
               <CardContent className="pt-6">
-                <GraduationCap className="w-12 h-12 text-blue-600 mx-auto mb-4" />
-                <div className="stat-number text-4xl font-bold text-blue-600 mb-2 counter" data-target="15">0</div>
+                <GraduationCap className="w-12 h-12 text-brand-primary mx-auto mb-4" />
+                <div className="stat-number text-4xl font-bold text-brand-primary mb-2 counter" data-target="15">0</div>
                 <div className="stat-label text-sm text-slate-600 mb-2">Mil+</div>
                 <p className="stat-description text-slate-700">Estudantes desenvolvendo autonomia</p>
               </CardContent>
             </Card>
-            <Card className="stat-item text-center p-6 hover:shadow-lg transition-shadow">
+            <Card className="stat-item text-center p-6 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/30">
               <CardContent className="pt-6">
-                <TrendingUp className="w-12 h-12 text-blue-600 mx-auto mb-4" />
-                <div className="stat-number text-4xl font-bold text-blue-600 mb-2">+25%</div>
+                <TrendingUp className="w-12 h-12 text-brand-secondary mx-auto mb-4" />
+                <div className="stat-number text-4xl font-bold text-brand-secondary mb-2">+25%</div>
                 <div className="stat-label text-sm text-slate-600 mb-2"></div>
                 <p className="stat-description text-slate-700">De melhoria na escrita em poucos meses</p>
               </CardContent>
@@ -82,7 +82,7 @@ function Home() {
       <section className="about-platform container mx-auto px-4 py-8 md:py-12 lg:py-16">
         <div className="max-w-4xl mx-auto text-center">
           <p className="about-text text-lg text-slate-700 leading-relaxed">
-            O <span className="font-bold text-blue-600">Escrita360</span> é a plataforma mais completa de escrita autorregulada e avaliação inteligente,
+            O <span className="font-bold text-brand-primary">Escrita360</span> é a plataforma mais completa de escrita autorregulada e avaliação inteligente,
             projetada para levar estudantes, professores e escolas para o próximo nível com Inteligência Artificial.
             Com soluções inovadoras e tecnologia de ponta, oferecemos uma experiência educacional única, que engaja
             os estudantes na jornada completa de desenvolvimento da escrita, empodera professores com dados valiosos
@@ -93,17 +93,17 @@ function Home() {
       </section>
 
       {/* Platforms Section */}
-      <section className="platforms-section bg-slate-50 py-8 md:py-12 lg:py-16">
+      <section className="platforms-section bg-brand-lighter py-8 md:py-12 lg:py-16">
         <div className="container mx-auto px-4">
           <h2 className="section-title text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-8 md:mb-12">
             Conheça nossas Plataformas
           </h2>
 
           <div className="grid lg:grid-cols-2 gap-8 mb-8">
-            <Card className="platform-card platform-left p-6 md:p-8 hover:shadow-lg transition-shadow">
+            <Card className="platform-card platform-left p-6 md:p-8 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/30">
               <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 mb-6">
-                <div className="platform-image w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto md:mx-0">
-                  <UserCheck className="w-8 h-8 text-blue-600" />
+                <div className="platform-image w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mx-auto md:mx-0">
+                  <UserCheck className="w-8 h-8 text-brand-primary" />
                 </div>
                 <div className="platform-content text-center md:text-left">
                   <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-2">Estudantes</h3>
@@ -128,16 +128,16 @@ function Home() {
                   </p>
                   <Button variant="outline" className="mt-4">Acesse a Plataforma</Button>
                 </div>
-                <div className="platform-image w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto md:mx-0">
-                  <UserCheck className="w-8 h-8 text-blue-600" />
+                <div className="platform-image w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mx-auto md:mx-0">
+                  <UserCheck className="w-8 h-8 text-brand-secondary" />
                 </div>
               </div>
             </Card>
 
-            <Card className="platform-card platform-left p-6 md:p-8 hover:shadow-lg transition-shadow">
+            <Card className="platform-card platform-left p-6 md:p-8 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/30">
               <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 mb-6">
-                <div className="platform-image w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto md:mx-0">
-                  <Users className="w-8 h-8 text-blue-600" />
+                <div className="platform-image w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mx-auto md:mx-0">
+                  <Users className="w-8 h-8 text-brand-primary" />
                 </div>
                 <div className="platform-content text-center md:text-left">
                   <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-2">Famílias</h3>
@@ -145,12 +145,12 @@ function Home() {
                     As famílias acompanham o desempenho dos estudantes, a proficiência de aprendizagem
                     e o engajamento em tempo real através de dashboards intuitivos e relatórios detalhados.
                   </p>
-                  <Button variant="outline" className="mt-4">Acesse a Plataforma</Button>
+                  <Button variant="outline" className="mt-4 border-brand-primary text-brand-primary hover:bg-brand-light">Acesse a Plataforma</Button>
                 </div>
               </div>
             </Card>
 
-            <Card className="platform-card platform-right p-6 md:p-8 hover:shadow-lg transition-shadow">
+            <Card className="platform-card platform-right p-6 md:p-8 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/30">
               <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 mb-6">
                 <div className="platform-content text-center md:text-left">
                   <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-2">Escolas e Gestores</h3>
@@ -158,10 +158,10 @@ function Home() {
                     A plataforma dos gestores oferece flexibilização curricular e relatórios em tempo real,
                     para uma gestão eficaz do engajamento e aprendizagem dos seus estudantes, turmas e escolas.
                   </p>
-                  <Button variant="outline" className="mt-4">Acesso Exclusivo - Consulte seu Login</Button>
+                  <Button variant="outline" className="mt-4 border-brand-primary text-brand-primary hover:bg-brand-light">Acesso Exclusivo - Consulte seu Login</Button>
                 </div>
-                <div className="platform-image w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto md:mx-0">
-                  <School className="w-8 h-8 text-blue-600" />
+                <div className="platform-image w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mx-auto md:mx-0">
+                  <School className="w-8 h-8 text-brand-secondary" />
                 </div>
               </div>
             </Card>
@@ -174,9 +174,9 @@ function Home() {
         <div className="container mx-auto px-4">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-8 md:mb-12">O que nos torna únicos</h2>
           <div className="diferencial-grid grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card className="diferencial-item p-6 hover:shadow-lg transition-all hover:-translate-y-1">
-              <div className="diferencial-icon w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                <Brain className="w-6 h-6 text-blue-600" />
+            <Card className="diferencial-item p-6 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/20">
+              <div className="diferencial-icon w-12 h-12 bg-brand-light rounded-full flex items-center justify-center mb-4">
+                <Brain className="w-6 h-6 text-brand-primary" />
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-2">Escrita Autorregulada no Centro</h3>
               <p className="text-slate-700">
@@ -185,9 +185,9 @@ function Home() {
               </p>
             </Card>
 
-            <Card className="diferencial-item p-6 hover:shadow-lg transition-all hover:-translate-y-1">
-              <div className="diferencial-icon w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                <Heart className="w-6 h-6 text-blue-600" />
+            <Card className="diferencial-item p-6 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/20">
+              <div className="diferencial-icon w-12 h-12 bg-brand-light rounded-full flex items-center justify-center mb-4">
+                <Heart className="w-6 h-6 text-brand-secondary" />
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-2">Painel de Sentimentos</h3>
               <p className="text-slate-700">
@@ -196,9 +196,9 @@ function Home() {
               </p>
             </Card>
 
-            <Card className="diferencial-item p-6 hover:shadow-lg transition-all hover:-translate-y-1">
-              <div className="diferencial-icon w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                <Target className="w-6 h-6 text-blue-600" />
+            <Card className="diferencial-item p-6 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/20">
+              <div className="diferencial-icon w-12 h-12 bg-brand-light rounded-full flex items-center justify-center mb-4">
+                <Target className="w-6 h-6 text-brand-primary" />
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-2">Imersão Total no Processo de Escrita</h3>
               <p className="text-slate-700">
@@ -207,9 +207,9 @@ function Home() {
               </p>
             </Card>
 
-            <Card className="diferencial-item p-6 hover:shadow-lg transition-all hover:-translate-y-1">
-              <div className="diferencial-icon w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                <BarChart className="w-6 h-6 text-blue-600" />
+            <Card className="diferencial-item p-6 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/20">
+              <div className="diferencial-icon w-12 h-12 bg-brand-light rounded-full flex items-center justify-center mb-4">
+                <BarChart className="w-6 h-6 text-brand-secondary" />
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-2">Análise Integrada em Tempo Real</h3>
               <p className="text-slate-700">
@@ -218,9 +218,9 @@ function Home() {
               </p>
             </Card>
 
-            <Card className="diferencial-item p-6 hover:shadow-lg transition-all hover:-translate-y-1">
-              <div className="diferencial-icon w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                <Award className="w-6 h-6 text-blue-600" />
+            <Card className="diferencial-item p-6 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/20">
+              <div className="diferencial-icon w-12 h-12 bg-brand-light rounded-full flex items-center justify-center mb-4">
+                <Award className="w-6 h-6 text-brand-primary" />
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-2">Uso de rubricas e evolução por níveis</h3>
               <p className="text-slate-700">
@@ -229,9 +229,9 @@ function Home() {
               </p>
             </Card>
 
-            <Card className="diferencial-item p-6 hover:shadow-lg transition-all hover:-translate-y-1">
-              <div className="diferencial-icon w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                <Bot className="w-6 h-6 text-blue-600" />
+            <Card className="diferencial-item p-6 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/20">
+              <div className="diferencial-icon w-12 h-12 bg-brand-light rounded-full flex items-center justify-center mb-4">
+                <Bot className="w-6 h-6 text-brand-secondary" />
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-2">IA como Assistente</h3>
               <p className="text-slate-700">
@@ -244,7 +244,7 @@ function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="features-section bg-slate-50 py-8 md:py-12 lg:py-16">
+      <section className="features-section bg-brand-light py-8 md:py-12 lg:py-16">
         <div className="container mx-auto px-4">
           <h2 className="section-title text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-4">
             Recursos que Transformam o Aprendizado
@@ -253,54 +253,54 @@ function Home() {
             Ferramentas desenvolvidas com base em pesquisas pedagógicas e tecnologia de ponta
           </p>
           <div className="features-grid grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <Card className="feature-card p-6 hover:shadow-lg transition-all hover:-translate-y-1">
-              <div className="feature-icon-wrapper w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4 mx-auto">
-                <Edit className="w-8 h-8 text-blue-600" />
+            <Card className="feature-card p-6 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/20">
+              <div className="feature-icon-wrapper w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mb-4 mx-auto">
+                <Edit className="w-8 h-8 text-brand-primary" />
               </div>
               <h3 className="text-xl font-bold text-center text-slate-900 mb-2">Editor Inteligente</h3>
               <p className="text-slate-700 text-center mb-4">
                 Escreva com recursos de formatação profissional e sugestões em tempo real que respeitam seu processo criativo.
               </p>
-              <a href="#" className="feature-link text-blue-600 hover:text-blue-700 font-medium flex items-center justify-center gap-2">
+              <a href="#" className="feature-link text-brand-primary hover:text-brand-secondary font-medium flex items-center justify-center gap-2">
                 Saiba mais <TrendingUp className="w-4 h-4" />
               </a>
             </Card>
 
-            <Card className="feature-card p-6 hover:shadow-lg transition-all hover:-translate-y-1">
-              <div className="feature-icon-wrapper w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4 mx-auto">
-                <FileText className="w-8 h-8 text-blue-600" />
+            <Card className="feature-card p-6 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/20">
+              <div className="feature-icon-wrapper w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mb-4 mx-auto">
+                <FileText className="w-8 h-8 text-brand-secondary" />
               </div>
               <h3 className="text-xl font-bold text-center text-slate-900 mb-2">Rubricas Personalizadas</h3>
               <p className="text-slate-700 text-center mb-4">
                 Avalie seu texto com critérios claros e objetivos baseados nas competências do ENEM e vestibulares.
               </p>
-              <a href="#" className="feature-link text-blue-600 hover:text-blue-700 font-medium flex items-center justify-center gap-2">
+              <a href="#" className="feature-link text-brand-primary hover:text-brand-secondary font-medium flex items-center justify-center gap-2">
                 Saiba mais <TrendingUp className="w-4 h-4" />
               </a>
             </Card>
 
-            <Card className="feature-card p-6 hover:shadow-lg transition-all hover:-translate-y-1">
-              <div className="feature-icon-wrapper w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4 mx-auto">
-                <BarChart className="w-8 h-8 text-blue-600" />
+            <Card className="feature-card p-6 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/20">
+              <div className="feature-icon-wrapper w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mb-4 mx-auto">
+                <BarChart className="w-8 h-8 text-brand-primary" />
               </div>
               <h3 className="text-xl font-bold text-center text-slate-900 mb-2">Dashboard Completo</h3>
               <p className="text-slate-700 text-center mb-4">
                 Acompanhe sua evolução com gráficos detalhados e relatórios de desempenho por competência.
               </p>
-              <a href="#" className="feature-link text-blue-600 hover:text-blue-700 font-medium flex items-center justify-center gap-2">
+              <a href="#" className="feature-link text-brand-primary hover:text-brand-secondary font-medium flex items-center justify-center gap-2">
                 Saiba mais <TrendingUp className="w-4 h-4" />
               </a>
             </Card>
 
-            <Card className="feature-card p-6 hover:shadow-lg transition-all hover:-translate-y-1">
-              <div className="feature-icon-wrapper w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4 mx-auto">
-                <Users className="w-8 h-8 text-blue-600" />
+            <Card className="feature-card p-6 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/20">
+              <div className="feature-icon-wrapper w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mb-4 mx-auto">
+                <Users className="w-8 h-8 text-brand-secondary" />
               </div>
               <h3 className="text-xl font-bold text-center text-slate-900 mb-2">Gestão Escolar</h3>
               <p className="text-slate-700 text-center mb-4">
                 Ferramentas completas para professores acompanharem turmas e instituições gerenciarem dados educacionais.
               </p>
-              <a href="#" className="feature-link text-blue-600 hover:text-blue-700 font-medium flex items-center justify-center gap-2">
+              <a href="#" className="feature-link text-brand-primary hover:text-brand-secondary font-medium flex items-center justify-center gap-2">
                 Saiba mais <TrendingUp className="w-4 h-4" />
               </a>
             </Card>
