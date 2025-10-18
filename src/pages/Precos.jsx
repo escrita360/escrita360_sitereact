@@ -141,14 +141,14 @@ function Precos() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-12 md:py-16 lg:py-20">
+      <section className="bg-gradient-to-br from-brand-lighter to-white py-12 md:py-16 lg:py-20">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-slate-900">
             Planos que se adaptam à sua necessidade
           </h1>
-          <p className="text-lg md:text-xl text-brand-lighter max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto">
             Escolha o plano ideal para transformar o processo de escrita e alcance resultados extraordinários
           </p>
         </div>
@@ -335,19 +335,19 @@ function Precos() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-8 md:py-12 lg:py-16 bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+      <section className="py-8 md:py-12 lg:py-16 bg-brand-lighter">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 text-slate-900">
             Pronto para revolucionar a escrita?
           </h2>
-          <p className="text-lg md:text-xl text-brand-lighter mb-8 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-slate-600 mb-8 max-w-2xl mx-auto">
             Comece gratuitamente e veja a diferença que a autorregulação faz no desenvolvimento da escrita.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary" className="bg-white text-brand-primary hover:bg-gray-100">
+            <Button size="lg" variant="secondary" className="bg-brand-primary text-white hover:bg-brand-secondary">
               Começar Grátis
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-brand-primary">
+            <Button size="lg" variant="outline" className="border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white">
               Falar com Especialista
             </Button>
           </div>

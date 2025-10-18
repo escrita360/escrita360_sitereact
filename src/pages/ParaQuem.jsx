@@ -140,15 +140,15 @@ function ParaQuem() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white py-20">
+      <section className="bg-gradient-to-br from-brand-lighter to-white py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-5xl font-bold mb-6">
+            <h1 className="text-5xl font-bold mb-6 text-slate-900">
               Uma solução para todo o ecossistema educacional
             </h1>
-            <p className="text-xl text-brand-lighter leading-relaxed">
+            <p className="text-xl text-slate-600 leading-relaxed">
               Atendemos diferentes públicos com recursos específicos para cada necessidade no processo de desenvolvimento da escrita
             </p>
           </div>
@@ -296,19 +296,19 @@ function ParaQuem() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-blue-700 text-white">
+      <section className="py-20 bg-brand-lighter">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 text-slate-900">
             Encontre a solução perfeita para você
           </h2>
-          <p className="text-lg md:text-xl text-brand-lighter mb-8 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-slate-600 mb-8 max-w-2xl mx-auto">
             Seja estudante, professor, escola ou curso preparatório, temos o plano ideal para transformar o aprendizado da escrita.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary" className="bg-white text-brand-primary hover:bg-slate-50 px-8 py-3 text-lg">
+            <Button size="lg" variant="secondary" className="bg-brand-primary text-white hover:bg-brand-secondary px-8 py-3 text-lg">
               Ver Planos e Preços
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-brand-primary px-8 py-3 text-lg">
+            <Button size="lg" variant="outline" className="border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white px-8 py-3 text-lg">
               Falar com Especialista
             </Button>
           </div>

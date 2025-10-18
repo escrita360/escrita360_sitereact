@@ -319,9 +319,9 @@ function Home() {
           </p>
           <div className="steps-grid grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <Card className="step-item p-6 text-center hover:shadow-lg transition-shadow">
-              <div className="step-number w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mb-4 mx-auto">1</div>
-              <div className="step-icon w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4 mx-auto">
-                <PenTool className="w-8 h-8 text-blue-600" />
+              <div className="step-number w-12 h-12 bg-brand-primary text-white rounded-full flex items-center justify-center text-2xl font-bold mb-4 mx-auto">1</div>
+              <div className="step-icon w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mb-4 mx-auto">
+                <PenTool className="w-8 h-8 text-brand-primary" />
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-2">Planejamento</h3>
               <p className="text-slate-700">
@@ -330,9 +330,9 @@ function Home() {
             </Card>
 
             <Card className="step-item p-6 text-center hover:shadow-lg transition-shadow">
-              <div className="step-number w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mb-4 mx-auto">2</div>
-              <div className="step-icon w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4 mx-auto">
-                <Edit className="w-8 h-8 text-blue-600" />
+              <div className="step-number w-12 h-12 bg-brand-primary text-white rounded-full flex items-center justify-center text-2xl font-bold mb-4 mx-auto">2</div>
+              <div className="step-icon w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mb-4 mx-auto">
+                <Edit className="w-8 h-8 text-brand-primary" />
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-2">Escrita</h3>
               <p className="text-slate-700">
@@ -341,9 +341,9 @@ function Home() {
             </Card>
 
             <Card className="step-item p-6 text-center hover:shadow-lg transition-shadow">
-              <div className="step-number w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mb-4 mx-auto">3</div>
-              <div className="step-icon w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4 mx-auto">
-                <CheckCircle className="w-8 h-8 text-blue-600" />
+              <div className="step-number w-12 h-12 bg-brand-primary text-white rounded-full flex items-center justify-center text-2xl font-bold mb-4 mx-auto">3</div>
+              <div className="step-icon w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mb-4 mx-auto">
+                <CheckCircle className="w-8 h-8 text-brand-primary" />
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-2">Autoavaliação</h3>
               <p className="text-slate-700">
@@ -352,9 +352,9 @@ function Home() {
             </Card>
 
             <Card className="step-item p-6 text-center hover:shadow-lg transition-shadow">
-              <div className="step-number w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mb-4 mx-auto">4</div>
-              <div className="step-icon w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4 mx-auto">
-                <Bot className="w-8 h-8 text-blue-600" />
+              <div className="step-number w-12 h-12 bg-brand-primary text-white rounded-full flex items-center justify-center text-2xl font-bold mb-4 mx-auto">4</div>
+              <div className="step-icon w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mb-4 mx-auto">
+                <Bot className="w-8 h-8 text-brand-primary" />
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-2">Feedback IA</h3>
               <p className="text-slate-700">
@@ -363,9 +363,9 @@ function Home() {
             </Card>
 
             <Card className="step-item p-6 text-center hover:shadow-lg transition-shadow">
-              <div className="step-number w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mb-4 mx-auto">5</div>
-              <div className="step-icon w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4 mx-auto">
-                <RotateCcw className="w-8 h-8 text-blue-600" />
+              <div className="step-number w-12 h-12 bg-brand-primary text-white rounded-full flex items-center justify-center text-2xl font-bold mb-4 mx-auto">5</div>
+              <div className="step-icon w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mb-4 mx-auto">
+                <RotateCcw className="w-8 h-8 text-brand-primary" />
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-2">Reescrita</h3>
               <p className="text-slate-700">
@@ -374,9 +374,9 @@ function Home() {
             </Card>
 
             <Card className="step-item p-6 text-center hover:shadow-lg transition-shadow">
-              <div className="step-number w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mb-4 mx-auto">6</div>
-              <div className="step-icon w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4 mx-auto">
-                <Trophy className="w-8 h-8 text-blue-600" />
+              <div className="step-number w-12 h-12 bg-brand-primary text-white rounded-full flex items-center justify-center text-2xl font-bold mb-4 mx-auto">6</div>
+              <div className="step-icon w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mb-4 mx-auto">
+                <Trophy className="w-8 h-8 text-brand-primary" />
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-2">Evolução</h3>
               <p className="text-slate-700">
@@ -395,23 +395,23 @@ function Home() {
           </h2>
           <div className="partners-grid grid md:grid-cols-5 gap-8">
             <Card className="partner-logo p-6 text-center hover:shadow-lg transition-shadow">
-              <School className="w-12 h-12 text-blue-600 mx-auto mb-2" />
+              <School className="w-12 h-12 text-brand-primary mx-auto mb-2" />
               <span className="text-slate-700 font-medium">Colégio Exemplo</span>
             </Card>
             <Card className="partner-logo p-6 text-center hover:shadow-lg transition-shadow">
-              <GraduationCap className="w-12 h-12 text-blue-600 mx-auto mb-2" />
+              <GraduationCap className="w-12 h-12 text-brand-primary mx-auto mb-2" />
               <span className="text-slate-700 font-medium">Escola Nacional</span>
             </Card>
             <Card className="partner-logo p-6 text-center hover:shadow-lg transition-shadow">
-              <BookOpen className="w-12 h-12 text-blue-600 mx-auto mb-2" />
+              <BookOpen className="w-12 h-12 text-brand-primary mx-auto mb-2" />
               <span className="text-slate-700 font-medium">Instituto Educacional</span>
             </Card>
             <Card className="partner-logo p-6 text-center hover:shadow-lg transition-shadow">
-              <Users className="w-12 h-12 text-blue-600 mx-auto mb-2" />
+              <Users className="w-12 h-12 text-brand-primary mx-auto mb-2" />
               <span className="text-slate-700 font-medium">Colégio Avançado</span>
             </Card>
             <Card className="partner-logo p-6 text-center hover:shadow-lg transition-shadow">
-              <School className="w-12 h-12 text-blue-600 mx-auto mb-2" />
+              <School className="w-12 h-12 text-brand-primary mx-auto mb-2" />
               <span className="text-slate-700 font-medium">Rede de Ensino</span>
             </Card>
           </div>
@@ -435,7 +435,7 @@ function Home() {
                     <thead>
                       <tr className="border-b">
                         <th className="text-left p-4 font-bold text-slate-900">Recursos</th>
-                        <th className="text-center p-4 font-bold text-blue-600">Escrita360</th>
+                        <th className="text-center p-4 font-bold text-brand-primary">Escrita360</th>
                         <th className="text-center p-4 font-bold text-slate-600">Outras Plataformas</th>
                       </tr>
                     </thead>
@@ -475,18 +475,18 @@ function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="cta bg-gradient-to-r from-blue-600 to-blue-800 py-16">
+      <section className="cta bg-brand-lighter py-16">
         <div className="container mx-auto px-4">
-          <div className="cta-content text-center text-white max-w-4xl mx-auto">
-            <h2 className="text-4xl font-bold mb-6">Escrita360: muito além da correção automática</h2>
-            <p className="text-xl mb-6 leading-relaxed">
+          <div className="cta-content text-center max-w-4xl mx-auto">
+            <h2 className="text-4xl font-bold mb-6 text-slate-900">Escrita360: muito além da correção automática</h2>
+            <p className="text-xl mb-6 leading-relaxed text-slate-700">
               Uma jornada completa de escrita autorregulada que garante autonomia e evolução ao aluno, oferece recursos que otimizam o tempo do professor e disponibiliza dashboards personalizados para a escola, alinhados à preparação para o ENEM.
             </p>
-            <p className="text-lg mb-8 leading-relaxed">
+            <p className="text-lg mb-8 leading-relaxed text-slate-600">
               A plataforma valoriza o processo formativo de escrever, revisar e reescrever. A IA atua apenas na etapa final, como suporte complementar, fortalecendo o aprendizado e não substituindo o percurso formativo.
             </p>
             <div className="cta-buttons">
-              <Button size="lg" className="bg-white text-blue-600 hover:bg-slate-100 px-8 py-6 text-lg font-semibold">
+              <Button size="lg" className="bg-brand-primary hover:bg-brand-secondary text-white px-8 py-6 text-lg font-semibold">
                 Agendar Demonstração
               </Button>
             </div>

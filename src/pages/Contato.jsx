@@ -10,13 +10,13 @@ import { Mail, Phone, MapPin, MessageSquare, Clock, Calendar, Gift, Handshake, G
 
 function Contato() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-20">
+      <section className="bg-gradient-to-br from-brand-lighter to-white py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-5xl font-bold mb-6">Vamos conversar?</h1>
-            <p className="text-xl opacity-90">
+            <h1 className="text-5xl font-bold mb-6 text-slate-900">Vamos conversar?</h1>
+            <p className="text-xl text-slate-600">
               Estamos prontos para ajudar você a transformar o processo de escrita. Entre em contato conosco!
             </p>
           </div>
@@ -357,14 +357,14 @@ function Contato() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+      <section className="bg-brand-lighter py-16">
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold mb-4">Prefere começar por conta própria?</h2>
-            <p className="text-xl opacity-90 mb-8">
+            <h2 className="text-3xl font-bold mb-4 text-slate-900">Prefere começar por conta própria?</h2>
+            <p className="text-xl text-slate-600 mb-8">
               Crie sua conta gratuita agora e comece a transformar sua escrita imediatamente.
             </p>
-            <Button size="lg" className="bg-white text-brand-primary hover:bg-slate-100">
+            <Button size="lg" className="bg-brand-primary text-white hover:bg-brand-secondary">
               Criar Conta Grátis
             </Button>
           </div>

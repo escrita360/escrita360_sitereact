@@ -277,14 +277,14 @@ function Recursos() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-20">
+      <section className="bg-gradient-to-br from-brand-lighter to-white text-slate-900 py-20">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
             Recursos que transformam o aprendizado da escrita
           </h1>
-          <p className="text-xl md:text-2xl text-brand-lighter max-w-3xl mx-auto">
+          <p className="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto">
             Ferramentas completas e inovadoras para cada etapa da jornada de desenvolvimento da escrita autorregulada
           </p>
         </div>
@@ -351,17 +351,17 @@ function Recursos() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+      <section className="bg-brand-lighter py-16">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-slate-900">
             Pronto para transformar a escrita na sua instituição?
           </h2>
-          <p className="text-xl text-brand-lighter mb-8 max-w-2xl mx-auto">
+          <p className="text-xl text-slate-600 mb-8 max-w-2xl mx-auto">
             Experimente gratuitamente todos os recursos e veja o impacto na autonomia e qualidade da escrita dos seus alunos.
           </p>
           <Button
             size="lg"
-            className="bg-white text-brand-primary hover:bg-brand-light px-8 py-4 text-lg font-semibold"
+            className="bg-brand-primary hover:bg-brand-secondary text-white px-8 py-4 text-lg font-semibold"
           >
             Começar Agora
           </Button>
