@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom'
-import { PenTool, Menu } from 'lucide-react'
+import { Menu } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button.jsx'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet.jsx'
+import logo from '@/assets/logo2.svg'
 
 function Layout({ children }) {
   const [isOpen, setIsOpen] = useState(false)
@@ -13,9 +14,7 @@ function Layout({ children }) {
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
         <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-              <PenTool className="w-6 h-6 text-white" />
-            </div>
+            <img src={logo} alt="Escrita360" className="h-10 w-auto" />
             <span className="text-2xl font-bold text-slate-900">Escrita360</span>
           </Link>
 
@@ -90,9 +89,7 @@ function Layout({ children }) {
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <Link to="/" className="flex items-center gap-2 mb-4">
-                <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                  <PenTool className="w-6 h-6 text-white" />
-                </div>
+                <img src={logo} alt="Escrita360" className="h-10 w-auto" />
                 <span className="text-2xl font-bold">Escrita360</span>
               </Link>
               <p className="text-slate-400">
