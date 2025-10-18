@@ -11,20 +11,20 @@ function Layout({ children }) {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 animate-fade-in-down">
         <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
-                <Link to="/" className="flex items-center gap-2 font-bold text-2xl text-slate-900">
-                    <img src={logo} alt="Logo Escrita360" className="h-16 w-auto" />
+                <Link to="/" className="flex items-center gap-2 font-bold text-2xl text-slate-900 logo-animate">
+                    <img src={logo} alt="Logo Escrita360" className="h-16 w-auto transition-transform duration-500 hover:scale-110" />
                   <span className="sr-only">Escrita360</span>
                 </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-6">
-            <Link to="/" className="text-slate-700 hover:text-brand-primary transition-colors">Home</Link>
-            <Link to="/para-quem" className="text-slate-700 hover:text-brand-primary transition-colors">Para Quem</Link>
-            <Link to="/recursos" className="text-slate-700 hover:text-brand-primary transition-colors">Recursos</Link>
-            <Link to="/precos" className="text-slate-700 hover:text-brand-primary transition-colors">Preços</Link>
-            <Link to="/contato" className="text-slate-700 hover:text-brand-primary transition-colors">Contato</Link>
+            <Link to="/" className="text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105">Home</Link>
+            <Link to="/para-quem" className="text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105">Para Quem</Link>
+            <Link to="/recursos" className="text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105">Recursos</Link>
+            <Link to="/precos" className="text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105">Preços</Link>
+            <Link to="/contato" className="text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105">Contato</Link>
           </div>
 
           {/* Mobile Navigation */}
@@ -79,7 +79,7 @@ function Layout({ children }) {
       </header>
 
       {/* Main Content */}
-      <main>
+      <main className="animate-fade-in">
         {children}
       </main>
 
@@ -89,7 +89,7 @@ function Layout({ children }) {
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <Link to="/" className="mb-4 block flex items-center gap-2">
-                <img src={logo} alt="Logo Escrita360" className="h-16 w-auto" style={{ filter: 'brightness(0) invert(1)' }} />
+                <img src={logo} alt="Logo Escrita360" className="h-16 w-auto transition-transform duration-500 hover:scale-110" style={{ filter: 'brightness(0) invert(1)' }} />
                   {/* Removido texto 'Escrita' */}
               </Link>
               <p className="text-slate-400">

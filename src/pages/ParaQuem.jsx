@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent } from '@/components/ui/card.jsx'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
+import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
 import {
   GraduationCap,
   BookOpen,
@@ -18,6 +19,9 @@ import {
 } from 'lucide-react'
 
 function ParaQuem() {
+  const heroRef = useScrollAnimation()
+  const tabsRef = useScrollAnimation()
+  
   const audiences = [
     {
       id: 'estudantes',

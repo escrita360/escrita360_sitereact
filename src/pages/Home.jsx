@@ -1,15 +1,20 @@
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent } from '@/components/ui/card.jsx'
 import { Check, X, PenTool, Brain, TrendingUp, GraduationCap, School, Edit, FileText, CheckCircle, Bot, RotateCcw, Trophy, Heart, Target, BarChart, Users, UserCheck, BookOpen, Award } from 'lucide-react'
+import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
 
 function Home() {
+  const heroRef = useScrollAnimation()
+  const statsRef = useScrollAnimation()
+  const aboutRef = useScrollAnimation()
+
   return (
     <div>
       {/* Hero Section */}
-      <section className="hero bg-gradient-to-br from-brand-lighter to-white py-12 md:py-16 lg:py-20">
+      <section ref={heroRef} className="hero bg-gradient-to-br from-brand-lighter to-white py-12 md:py-16 lg:py-20 animate-on-scroll">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="hero-content">
+            <div className="hero-content animate-fade-in-left">
               <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-slate-900 mb-6 leading-tight">
                 A Inteligência Artificial e Inovação potencializando o Aprendizado da Escrita
               </h1>
@@ -17,17 +22,17 @@ function Home() {
                 Plataforma adaptativa de escrita autorregulada e avaliação inteligente
               </h2>
               <div className="hero-buttons">
-                <Button size="lg" className="bg-brand-primary hover:bg-brand-secondary text-white px-6 md:px-8 py-4 md:py-6 text-base md:text-lg shadow-lg hover:shadow-xl transition-all">
+                <Button size="lg" className="bg-brand-primary hover:bg-brand-secondary text-white px-6 md:px-8 py-4 md:py-6 text-base md:text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105">
                   Entre em contato
                 </Button>
               </div>
             </div>
-            <div className="hero-image flex justify-center">
-              <Card className="p-8 shadow-2xl bg-white/80 backdrop-blur-sm border-brand-accent">
+            <div className="hero-image flex justify-center animate-fade-in-right delay-200">
+              <Card className="p-8 shadow-2xl bg-white/80 backdrop-blur-sm border-brand-accent hover-lift">
                 <div className="flex gap-8 items-center justify-center">
-                  <Edit className="w-16 h-16 text-brand-primary" />
-                  <Brain className="w-16 h-16 text-brand-secondary" />
-                  <TrendingUp className="w-16 h-16 text-brand-accent" />
+                  <Edit className="w-16 h-16 text-brand-primary animate-float" />
+                  <Brain className="w-16 h-16 text-brand-secondary animate-float delay-300" />
+                  <TrendingUp className="w-16 h-16 text-brand-accent animate-float delay-500" />
                 </div>
               </Card>
             </div>
@@ -36,39 +41,39 @@ function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className="stats bg-brand-light py-8 md:py-12 lg:py-16">
+      <section ref={statsRef} className="stats bg-brand-light py-8 md:py-12 lg:py-16 animate-on-scroll">
         <div className="container mx-auto px-4">
-          <h2 className="section-title text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-8 md:mb-12">
+          <h2 className="section-title text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-8 md:mb-12 animate-fade-in-up">
             Eficiência educacional na prática
           </h2>
           <div className="stats-grid grid md:grid-cols-4 gap-8">
-            <Card className="stat-item text-center p-6 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/30">
+            <Card className="stat-item text-center p-6 hover-lift border-brand-accent/30 animate-fade-in-up delay-100">
               <CardContent className="pt-6">
-                <Edit className="w-12 h-12 text-brand-primary mx-auto mb-4" />
-                <div className="stat-number text-4xl font-bold text-brand-primary mb-2 counter" data-target="50">0</div>
+                <Edit className="w-12 h-12 text-brand-primary mx-auto mb-4 animate-pulse-glow" />
+                <div className="stat-number text-4xl font-bold text-brand-primary mb-2 counter" data-target="50">50</div>
                 <div className="stat-label text-sm text-slate-600 mb-2">Mil+</div>
                 <p className="stat-description text-slate-700">Redações corrigidas com autorregulação</p>
               </CardContent>
             </Card>
-            <Card className="stat-item text-center p-6 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/30">
+            <Card className="stat-item text-center p-6 hover-lift border-brand-accent/30 animate-fade-in-up delay-200">
               <CardContent className="pt-6">
-                <School className="w-12 h-12 text-brand-secondary mx-auto mb-4" />
-                <div className="stat-number text-4xl font-bold text-brand-secondary mb-2 counter" data-target="200">0</div>
+                <School className="w-12 h-12 text-brand-secondary mx-auto mb-4 animate-pulse-glow" />
+                <div className="stat-number text-4xl font-bold text-brand-secondary mb-2 counter" data-target="200">200</div>
                 <div className="stat-label text-sm text-slate-600 mb-2">+</div>
                 <p className="stat-description text-slate-700">Instituições públicas e privadas</p>
               </CardContent>
             </Card>
-            <Card className="stat-item text-center p-6 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/30">
+            <Card className="stat-item text-center p-6 hover-lift border-brand-accent/30 animate-fade-in-up delay-300">
               <CardContent className="pt-6">
-                <GraduationCap className="w-12 h-12 text-brand-primary mx-auto mb-4" />
-                <div className="stat-number text-4xl font-bold text-brand-primary mb-2 counter" data-target="15">0</div>
+                <GraduationCap className="w-12 h-12 text-brand-primary mx-auto mb-4 animate-pulse-glow" />
+                <div className="stat-number text-4xl font-bold text-brand-primary mb-2 counter" data-target="15">15</div>
                 <div className="stat-label text-sm text-slate-600 mb-2">Mil+</div>
                 <p className="stat-description text-slate-700">Estudantes desenvolvendo autonomia</p>
               </CardContent>
             </Card>
-            <Card className="stat-item text-center p-6 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/30">
+            <Card className="stat-item text-center p-6 hover-lift border-brand-accent/30 animate-fade-in-up delay-400">
               <CardContent className="pt-6">
-                <TrendingUp className="w-12 h-12 text-brand-secondary mx-auto mb-4" />
+                <TrendingUp className="w-12 h-12 text-brand-secondary mx-auto mb-4 animate-pulse-glow" />
                 <div className="stat-number text-4xl font-bold text-brand-secondary mb-2">+25%</div>
                 <div className="stat-label text-sm text-slate-600 mb-2"></div>
                 <p className="stat-description text-slate-700">De melhoria na escrita em poucos meses</p>
@@ -79,8 +84,8 @@ function Home() {
       </section>
 
       {/* About Section */}
-      <section className="about-platform container mx-auto px-4 py-8 md:py-12 lg:py-16">
-        <div className="max-w-4xl mx-auto text-center">
+      <section ref={aboutRef} className="about-platform container mx-auto px-4 py-8 md:py-12 lg:py-16 animate-on-scroll">
+        <div className="max-w-4xl mx-auto text-center animate-fade-in-up">
           <p className="about-text text-lg text-slate-700 leading-relaxed">
             O <span className="font-bold text-brand-primary">Escrita360</span> é a plataforma mais completa de escrita autorregulada e avaliação inteligente,
             projetada para levar estudantes, professores e escolas para o próximo nível com Inteligência Artificial.

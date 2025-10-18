@@ -1,4 +1,5 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
+import { AnimatePresence, motion } from 'framer-motion'
 import Layout from './components/Layout.jsx'
 import Home from './pages/Home.jsx'
 import ParaQuem from './pages/ParaQuem.jsx'
@@ -8,14 +9,99 @@ import Contato from './pages/Contato.jsx'
 import './App.css'
 
 function App() {
+  const location = useLocation()
+
+  const pageVariants = {
+    initial: {
+      opacity: 0,
+      y: 20
+    },
+    in: {
+      opacity: 1,
+      y: 0
+    },
+    out: {
+      opacity: 0,
+      y: -20
+    }
+  }
+
+  const pageTransition = {
+    type: 'tween',
+    ease: 'anticipate',
+    duration: 0.4
+  }
+
   return (
-    <Routes>
-      <Route path="/" element={<Layout><Home /></Layout>} />
-      <Route path="/para-quem" element={<Layout><ParaQuem /></Layout>} />
-      <Route path="/recursos" element={<Layout><Recursos /></Layout>} />
-      <Route path="/precos" element={<Layout><Precos /></Layout>} />
-      <Route path="/contato" element={<Layout><Contato /></Layout>} />
-    </Routes>
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={
+          <Layout>
+            <motion.div
+              initial="initial"
+              animate="in"
+              exit="out"
+              variants={pageVariants}
+              transition={pageTransition}
+            >
+              <Home />
+            </motion.div>
+          </Layout>
+        } />
+        <Route path="/para-quem" element={
+          <Layout>
+            <motion.div
+              initial="initial"
+              animate="in"
+              exit="out"
+              variants={pageVariants}
+              transition={pageTransition}
+            >
+              <ParaQuem />
+            </motion.div>
+          </Layout>
+        } />
+        <Route path="/recursos" element={
+          <Layout>
+            <motion.div
+              initial="initial"
+              animate="in"
+              exit="out"
+              variants={pageVariants}
+              transition={pageTransition}
+            >
+              <Recursos />
+            </motion.div>
+          </Layout>
+        } />
+        <Route path="/precos" element={
+          <Layout>
+            <motion.div
+              initial="initial"
+              animate="in"
+              exit="out"
+              variants={pageVariants}
+              transition={pageTransition}
+            >
+              <Precos />
+            </motion.div>
+          </Layout>
+        } />
+        <Route path="/contato" element={
+          <Layout>
+            <motion.div
+              initial="initial"
+              animate="in"
+              exit="out"
+              variants={pageVariants}
+              transition={pageTransition}
+            >
+              <Contato />
+            </motion.div>
+          </Layout>
+        } />
+      </Routes>
+    </AnimatePresence>
   )
 }
 

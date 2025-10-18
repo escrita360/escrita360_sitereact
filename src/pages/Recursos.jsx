@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card.jsx'
 import { Button } from '@/components/ui/button.jsx'
+import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
 import {
   List,
   Target,
@@ -23,6 +24,8 @@ import {
 
 function Recursos() {
   const [activeTab, setActiveTab] = useState('estudantes')
+  const heroRef = useScrollAnimation()
+  const tabsRef = useScrollAnimation()
 
   const tabs = [
     { id: 'estudantes', label: 'Para Estudantes', icon: '👨‍🎓' },
@@ -279,31 +282,32 @@ function Recursos() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-brand-lighter to-white text-slate-900 py-20">
+      <section ref={heroRef} className="bg-gradient-to-br from-brand-lighter to-white text-slate-900 py-20 animate-on-scroll">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 animate-fade-in-up">
             Recursos que transformam o aprendizado da escrita
           </h1>
-          <p className="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto">
+          <p className="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto animate-fade-in-up delay-200">
             Ferramentas completas e inovadoras para cada etapa da jornada de desenvolvimento da escrita autorregulada
           </p>
         </div>
       </section>
 
       {/* Resource Categories Tabs */}
-      <section className="py-16">
+      <section ref={tabsRef} className="py-16 animate-on-scroll">
         <div className="container mx-auto px-4">
           {/* Tabs */}
-          <div className="flex flex-wrap justify-center gap-4 mb-12 sticky top-20 z-40 bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-sm">
-            {tabs.map((tab) => (
+          <div className="flex flex-wrap justify-center gap-4 mb-12 sticky top-20 z-40 bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-sm animate-fade-in-down">
+            {tabs.map((tab, index) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${
+                className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:scale-105 ${
                   activeTab === tab.id
-                    ? 'bg-brand-primary text-white shadow-lg'
+                    ? 'bg-brand-primary text-white shadow-lg scale-105'
                     : 'bg-white text-slate-700 border border-slate-200 hover:border-brand-accent hover:shadow-md'
                 }`}
+                style={{ animationDelay: `${index * 100}ms` }}
               >
                 <span className="text-lg">{tab.icon}</span>
                 {tab.label}
@@ -312,7 +316,7 @@ function Recursos() {
           </div>
 
           {/* Category Content */}
-          <div className="text-center mb-12">
+          <div className="text-center mb-12 animate-fade-in-up">
             <h2 className="text-3xl font-bold text-slate-900 mb-4">
               {getCurrentTitle()}
             </h2>
@@ -324,9 +328,12 @@ function Recursos() {
           {/* Resources Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {getCurrentResources().map((recurso, index) => (
-              <Card key={index} className="p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-0 shadow-lg">
+              <Card 
+                key={index} 
+                className={`p-6 hover-lift border-0 shadow-lg animate-scale-in delay-${Math.min(index * 100, 800)}`}
+              >
                 <CardContent className="pt-6">
-                  <div className="flex items-center justify-center w-16 h-16 bg-brand-light rounded-lg mb-6 mx-auto">
+                  <div className="flex items-center justify-center w-16 h-16 bg-brand-light rounded-lg mb-6 mx-auto transition-transform duration-500 hover:rotate-12 hover:scale-110">
                     {recurso.icon}
                   </div>
                   <h3 className="text-xl font-bold text-slate-900 mb-4 text-center">
@@ -337,7 +344,7 @@ function Recursos() {
                   </p>
                   <ul className="space-y-3">
                     {recurso.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-center gap-3">
+                      <li key={featureIndex} className="flex items-center gap-3 animate-fade-in-left" style={{ animationDelay: `${(index * 100) + (featureIndex * 50)}ms` }}>
                         <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
                         <span className="text-slate-700">{feature}</span>
                       </li>
@@ -351,7 +358,7 @@ function Recursos() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-brand-lighter py-16">
+      <section className="bg-brand-lighter py-16 animate-fade-in-up">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6 text-slate-900">
             Pronto para transformar a escrita na sua instituição?
@@ -361,7 +368,7 @@ function Recursos() {
           </p>
           <Button
             size="lg"
-            className="bg-brand-primary hover:bg-brand-secondary text-white px-8 py-4 text-lg font-semibold"
+            className="bg-brand-primary hover:bg-brand-secondary text-white px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-110 hover:shadow-xl"
           >
             Começar Agora
           </Button>

@@ -6,17 +6,22 @@ import { Label } from '@/components/ui/label.jsx'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select.jsx'
 import { Checkbox } from '@/components/ui/checkbox.jsx'
 import { Separator } from '@/components/ui/separator.jsx'
+import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
 import { Mail, Phone, MapPin, MessageSquare, Clock, Calendar, Gift, Handshake, GraduationCap, Headphones, Send, Facebook, Instagram, MessageCircle, Rocket, BookOpen, HelpCircle, CalendarDays } from 'lucide-react'
 
 function Contato() {
+  const heroRef = useScrollAnimation()
+  const formRef = useScrollAnimation()
+  const contactRef = useScrollAnimation()
+  
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-brand-lighter to-white py-20">
+      <section ref={heroRef} className="bg-gradient-to-br from-brand-lighter to-white py-20 animate-on-scroll">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-5xl font-bold mb-6 text-slate-900">Vamos conversar?</h1>
-            <p className="text-xl text-slate-600">
+            <h1 className="text-5xl font-bold mb-6 text-slate-900 animate-fade-in-up">Vamos conversar?</h1>
+            <p className="text-xl text-slate-600 animate-fade-in-up delay-200">
               Estamos prontos para ajudar você a transformar o processo de escrita. Entre em contato conosco!
             </p>
           </div>
@@ -24,11 +29,11 @@ function Contato() {
       </section>
 
       {/* Contact Main Section */}
-      <section className="py-16">
+      <section ref={formRef} className="py-16 animate-on-scroll">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 max-w-7xl mx-auto">
             {/* Contact Form */}
-            <Card className="p-8 shadow-lg">
+            <Card className="p-8 shadow-lg hover-lift animate-fade-in-left">
               <CardHeader>
                 <CardTitle className="text-2xl text-slate-900">Envie sua mensagem</CardTitle>
                 <p className="text-slate-600">Preencha o formulário abaixo e retornaremos em até 24 horas</p>

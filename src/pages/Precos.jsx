@@ -7,9 +7,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar.jsx'
 import { Check, X, Quote, Star } from 'lucide-react'
 import React, { useState } from 'react'
+import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
 
 function Precos() {
   const [isYearly, setIsYearly] = useState(false)
+  const heroRef = useScrollAnimation()
+  const plansRef = useScrollAnimation()
+  const comparisonRef = useScrollAnimation()
 
   const plans = [
     {
