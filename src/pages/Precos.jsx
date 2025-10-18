@@ -148,7 +148,7 @@ function Precos() {
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
             Planos que se adaptam à sua necessidade
           </h1>
-          <p className="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-brand-lighter max-w-2xl mx-auto">
             Escolha o plano ideal para transformar o processo de escrita e alcance resultados extraordinários
           </p>
         </div>
@@ -158,15 +158,15 @@ function Precos() {
       <section className="py-8 bg-white border-b">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center gap-4">
-            <span className={`text-lg ${!isYearly ? 'font-bold text-blue-600' : 'text-gray-600'}`}>
+            <span className={`text-lg ${!isYearly ? 'font-bold text-brand-primary' : 'text-gray-600'}`}>
               Mensal
             </span>
             <Switch
               checked={isYearly}
               onCheckedChange={setIsYearly}
-              className="data-[state=checked]:bg-blue-600"
+              className="data-[state=checked]:bg-brand-primary"
             />
-            <span className={`text-lg ${isYearly ? 'font-bold text-blue-600' : 'text-gray-600'}`}>
+            <span className={`text-lg ${isYearly ? 'font-bold text-brand-primary' : 'text-gray-600'}`}>
               Anual <small className="text-green-600 font-medium">(Economize 30%)</small>
             </span>
           </div>
@@ -178,10 +178,10 @@ function Precos() {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {plans.map((plan, index) => (
-              <Card key={index} className={`relative ${plan.popular ? 'border-2 border-blue-600 shadow-xl' : 'hover:shadow-xl'} transition-shadow`}>
+              <Card key={index} className={`relative ${plan.popular ? 'border-2 border-brand-primary shadow-xl' : 'hover:shadow-xl'} transition-shadow`}>
                 {plan.popular && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <Badge className="bg-blue-600 text-white px-4 py-1">
+                    <Badge className="bg-brand-primary text-white px-4 py-1">
                       Mais Escolhido
                     </Badge>
                   </div>
@@ -194,8 +194,8 @@ function Precos() {
                   </div>
                   <h3 className="text-2xl font-bold text-slate-900">{plan.name}</h3>
                   <div className="my-4">
-                    <span className="text-4xl font-bold text-blue-600">R$</span>
-                    <span className="text-5xl font-bold text-blue-600">
+                    <span className="text-4xl font-bold text-brand-primary">R$</span>
+                    <span className="text-5xl font-bold text-brand-primary">
                       {isYearly ? plan.yearlyPrice : plan.monthlyPrice}
                     </span>
                     <span className="text-slate-600">
@@ -239,7 +239,7 @@ function Precos() {
                 <TableRow>
                   <TableHead className="w-1/3">Recursos</TableHead>
                   <TableHead className="text-center">Gratuito</TableHead>
-                  <TableHead className="text-center bg-blue-50">Professor</TableHead>
+                  <TableHead className="text-center bg-brand-light">Professor</TableHead>
                   <TableHead className="text-center">Escola</TableHead>
                 </TableRow>
               </TableHeader>
@@ -254,7 +254,7 @@ function Precos() {
                         row.free
                       )}
                     </TableCell>
-                    <TableCell className="text-center bg-blue-50">
+                    <TableCell className="text-center bg-brand-light">
                       {typeof row.professor === 'boolean' ? (
                         row.professor ? <Check className="w-5 h-5 text-green-600 mx-auto" /> : <X className="w-5 h-5 text-gray-400 mx-auto" />
                       ) : (
@@ -289,7 +289,7 @@ function Precos() {
             {successStories.map((story, index) => (
               <Card key={index} className="hover:shadow-xl transition-shadow">
                 <CardContent className="p-6">
-                  <Quote className="w-8 h-8 text-blue-600 mb-4" />
+                  <Quote className="w-8 h-8 text-brand-primary mb-4" />
                   <p className="text-slate-700 mb-6 italic">"{story.quote}"</p>
                   <div className="flex items-center gap-3">
                     <Avatar>
@@ -340,14 +340,14 @@ function Precos() {
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6">
             Pronto para revolucionar a escrita?
           </h2>
-          <p className="text-lg md:text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-brand-lighter mb-8 max-w-2xl mx-auto">
             Comece gratuitamente e veja a diferença que a autorregulação faz no desenvolvimento da escrita.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary" className="bg-white text-blue-600 hover:bg-gray-100">
+            <Button size="lg" variant="secondary" className="bg-white text-brand-primary hover:bg-gray-100">
               Começar Grátis
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600">
+            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-brand-primary">
               Falar com Especialista
             </Button>
           </div>

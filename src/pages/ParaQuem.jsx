@@ -148,7 +148,7 @@ function ParaQuem() {
             <h1 className="text-5xl font-bold mb-6">
               Uma solução para todo o ecossistema educacional
             </h1>
-            <p className="text-xl text-blue-100 leading-relaxed">
+            <p className="text-xl text-brand-lighter leading-relaxed">
               Atendemos diferentes públicos com recursos específicos para cada necessidade no processo de desenvolvimento da escrita
             </p>
           </div>
@@ -184,17 +184,17 @@ function ParaQuem() {
               const IconComponent = audience.icon
               return (
                 <TabsContent key={audience.id} value={audience.id} className="mt-8">
-                  <Card className={`p-8 ${audience.featured ? 'border-blue-200 bg-gradient-to-br from-blue-50 to-white' : ''}`}>
+                  <Card className={`p-8 ${audience.featured ? 'border-brand-accent bg-gradient-to-br from-brand-lighter to-white' : ''}`}>
                     <CardContent className="pt-6">
                       <div className="flex items-start gap-8">
                         <div className="flex-shrink-0">
-                          <div className={`w-20 h-20 rounded-full flex items-center justify-center ${audience.featured ? 'bg-blue-100' : 'bg-blue-50'}`}>
-                            <IconComponent className={`w-10 h-10 ${audience.featured ? 'text-blue-600' : 'text-blue-600'}`} />
+                          <div className={`w-20 h-20 rounded-full flex items-center justify-center ${audience.featured ? 'bg-brand-light' : 'bg-brand-light'}`}>
+                            <IconComponent className={`w-10 h-10 ${audience.featured ? 'text-brand-primary' : 'text-brand-primary'}`} />
                           </div>
                         </div>
                         <div className="flex-1">
                           <h2 className="text-3xl font-bold text-slate-900 mb-2">{audience.title}</h2>
-                          <p className="text-lg text-blue-600 mb-6">{audience.subtitle}</p>
+                          <p className="text-lg text-brand-primary mb-6">{audience.subtitle}</p>
 
                           <p className="text-slate-700 text-lg mb-8 leading-relaxed">
                             {audience.description}
@@ -205,7 +205,7 @@ function ParaQuem() {
                             <div className="grid grid-cols-3 gap-6 mb-8">
                               {audience.stats.map((stat, index) => (
                                 <div key={index} className="text-center">
-                                  <div className="text-3xl font-bold text-blue-600 mb-2">{stat.number}</div>
+                                  <div className="text-3xl font-bold text-brand-primary mb-2">{stat.number}</div>
                                   <div className="text-slate-600">{stat.label}</div>
                                 </div>
                               ))}
@@ -219,8 +219,8 @@ function ParaQuem() {
                                 const FeatureIcon = feature.icon
                                 return (
                                   <div key={index} className="text-center">
-                                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                                      <FeatureIcon className="w-6 h-6 text-blue-600" />
+                                    <div className="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center mx-auto mb-3">
+                                      <FeatureIcon className="w-6 h-6 text-brand-primary" />
                                     </div>
                                     <h4 className="font-semibold text-slate-900 mb-1">{feature.title}</h4>
                                     <p className="text-sm text-slate-600">{feature.desc}</p>
@@ -243,7 +243,7 @@ function ParaQuem() {
                           {/* Tags */}
                           <div className="flex flex-wrap gap-2 mb-8">
                             {audience.tags.map((tag, index) => (
-                              <Badge key={index} variant="outline" className="text-blue-600 border-blue-200">
+                              <Badge key={index} variant="outline" className="text-brand-primary border-brand-accent">
                                 {tag}
                               </Badge>
                             ))}
@@ -252,7 +252,7 @@ function ParaQuem() {
                           {/* CTA */}
                           <Button
                             size="lg"
-                            className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg"
+                            className="bg-brand-primary hover:bg-brand-secondary text-white px-8 py-3 text-lg"
                           >
                             {audience.cta}
                           </Button>
@@ -280,8 +280,8 @@ function ParaQuem() {
                 <Card key={index} className="p-6 hover:shadow-xl transition-shadow">
                   <CardContent className="pt-6">
                     <div className="text-center">
-                      <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <StoryIcon className="w-8 h-8 text-blue-600" />
+                      <div className="w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mx-auto mb-4">
+                        <StoryIcon className="w-8 h-8 text-brand-primary" />
                       </div>
                       <h3 className="text-xl font-bold text-slate-900 mb-3">{story.title}</h3>
                       <p className="text-slate-600 mb-4">{story.description}</p>
@@ -301,14 +301,14 @@ function ParaQuem() {
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6">
             Encontre a solução perfeita para você
           </h2>
-          <p className="text-lg md:text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-brand-lighter mb-8 max-w-2xl mx-auto">
             Seja estudante, professor, escola ou curso preparatório, temos o plano ideal para transformar o aprendizado da escrita.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary" className="bg-white text-blue-600 hover:bg-slate-50 px-8 py-3 text-lg">
+            <Button size="lg" variant="secondary" className="bg-white text-brand-primary hover:bg-slate-50 px-8 py-3 text-lg">
               Ver Planos e Preços
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600 px-8 py-3 text-lg">
+            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-brand-primary px-8 py-3 text-lg">
               Falar com Especialista
             </Button>
           </div>

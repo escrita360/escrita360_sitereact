@@ -104,11 +104,11 @@ function Contato() {
                     <Checkbox id="aceito" required />
                     <Label htmlFor="aceito" className="text-sm leading-relaxed">
                       Aceito receber comunicações da Escrita360 e concordo com a{' '}
-                      <a href="#" className="text-blue-600 hover:underline">Política de Privacidade</a>
+                      <a href="#" className="text-brand-primary hover:underline">Política de Privacidade</a>
                     </Label>
                   </div>
 
-                  <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                  <Button className="w-full bg-brand-primary hover:bg-brand-secondary text-white">
                     <Send className="w-4 h-4 mr-2" />
                     Enviar Mensagem
                   </Button>
@@ -125,8 +125,8 @@ function Contato() {
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <Mail className="w-6 h-6 text-blue-600" />
+                    <div className="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center flex-shrink-0">
+                      <Mail className="w-6 h-6 text-brand-primary" />
                     </div>
                     <div>
                       <h4 className="font-semibold text-slate-900">E-mail</h4>
@@ -150,8 +150,8 @@ function Contato() {
                   </div>
 
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <Phone className="w-6 h-6 text-blue-600" />
+                    <div className="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center flex-shrink-0">
+                      <Phone className="w-6 h-6 text-brand-primary" />
                     </div>
                     <div>
                       <h4 className="font-semibold text-slate-900">Telefone</h4>
@@ -225,8 +225,8 @@ function Contato() {
             <Card className="p-6 shadow-lg hover:shadow-xl transition-shadow">
               <CardContent className="pt-0">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Clock className="w-6 h-6 text-blue-600" />
+                  <div className="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center flex-shrink-0">
+                    <Clock className="w-6 h-6 text-brand-primary" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-slate-900 mb-2">Qual o tempo de resposta?</h3>
@@ -239,8 +239,8 @@ function Contato() {
             <Card className="p-6 shadow-lg hover:shadow-xl transition-shadow">
               <CardContent className="pt-0">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Calendar className="w-6 h-6 text-blue-600" />
+                  <div className="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center flex-shrink-0">
+                    <Calendar className="w-6 h-6 text-brand-primary" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-slate-900 mb-2">Como agendar uma demonstração?</h3>
@@ -267,8 +267,8 @@ function Contato() {
             <Card className="p-6 shadow-lg hover:shadow-xl transition-shadow">
               <CardContent className="pt-0">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Handshake className="w-6 h-6 text-blue-600" />
+                  <div className="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center flex-shrink-0">
+                    <Handshake className="w-6 h-6 text-brand-primary" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-slate-900 mb-2">Oferecem consultoria?</h3>
@@ -281,8 +281,8 @@ function Contato() {
             <Card className="p-6 shadow-lg hover:shadow-xl transition-shadow">
               <CardContent className="pt-0">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <GraduationCap className="w-6 h-6 text-blue-600" />
+                  <div className="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center flex-shrink-0">
+                    <GraduationCap className="w-6 h-6 text-brand-primary" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-slate-900 mb-2">Há treinamento disponível?</h3>
@@ -295,8 +295,8 @@ function Contato() {
             <Card className="p-6 shadow-lg hover:shadow-xl transition-shadow">
               <CardContent className="pt-0">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Headphones className="w-6 h-6 text-blue-600" />
+                  <div className="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center flex-shrink-0">
+                    <Headphones className="w-6 h-6 text-brand-primary" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-slate-900 mb-2">Como funciona o suporte?</h3>
@@ -319,8 +319,8 @@ function Contato() {
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             <Card className="p-6 shadow-lg hover:shadow-xl transition-shadow text-center">
               <CardContent className="pt-0">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <MapPin className="w-8 h-8 text-blue-600" />
+                <div className="w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mx-auto mb-4">
+                  <MapPin className="w-8 h-8 text-brand-primary" />
                 </div>
                 <h3 className="text-xl font-semibold text-slate-900 mb-2">São Paulo - SP</h3>
                 <p className="text-slate-600">Av. Paulista, 1000 - Sala 500</p>
@@ -331,8 +331,8 @@ function Contato() {
 
             <Card className="p-6 shadow-lg hover:shadow-xl transition-shadow text-center">
               <CardContent className="pt-0">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <MapPin className="w-8 h-8 text-blue-600" />
+                <div className="w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mx-auto mb-4">
+                  <MapPin className="w-8 h-8 text-brand-primary" />
                 </div>
                 <h3 className="text-xl font-semibold text-slate-900 mb-2">Rio de Janeiro - RJ</h3>
                 <p className="text-slate-600">Av. Rio Branco, 200 - Sala 300</p>
@@ -343,8 +343,8 @@ function Contato() {
 
             <Card className="p-6 shadow-lg hover:shadow-xl transition-shadow text-center">
               <CardContent className="pt-0">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <MapPin className="w-8 h-8 text-blue-600" />
+                <div className="w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mx-auto mb-4">
+                  <MapPin className="w-8 h-8 text-brand-primary" />
                 </div>
                 <h3 className="text-xl font-semibold text-slate-900 mb-2">Brasília - DF</h3>
                 <p className="text-slate-600">SCS Q. 01, Bloco A - Sala 100</p>
@@ -364,7 +364,7 @@ function Contato() {
             <p className="text-xl opacity-90 mb-8">
               Crie sua conta gratuita agora e comece a transformar sua escrita imediatamente.
             </p>
-            <Button size="lg" className="bg-white text-blue-600 hover:bg-slate-100">
+            <Button size="lg" className="bg-white text-brand-primary hover:bg-slate-100">
               Criar Conta Grátis
             </Button>
           </div>
