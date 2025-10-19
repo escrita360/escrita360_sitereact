@@ -3,6 +3,7 @@ import { Menu } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button.jsx'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet.jsx'
+import ChatBot from '@/components/ChatBot.jsx'
 import logo from '@/assets/logo2.svg'
 
 function Layout({ children }) {
@@ -129,6 +130,9 @@ function Layout({ children }) {
           </div>
         </div>
       </footer>
+
+      {/* ChatBot Flutuante */}
+      <ChatBot />
     </div>
   )
 }
