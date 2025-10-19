@@ -32,7 +32,7 @@ function Precos() {
         { text: 'Estratégias autorreguladas', included: true }
       ],
       buttonText: 'Começar Grátis',
-      buttonVariant: 'outline'
+      buttonVariant: 'default'
     },
     {
       name: 'Professor',
@@ -77,7 +77,7 @@ function Precos() {
         { text: 'SLA garantido', included: true }
       ],
       buttonText: 'Agendar Demonstração',
-      buttonVariant: 'outline'
+      buttonVariant: 'default'
     }
   ]
 
@@ -182,7 +182,7 @@ function Precos() {
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {plans.map((plan, index) => (
-              <Card key={index} className={`relative hover-lift animate-scale-in delay-${index * 200} ${plan.popular ? 'border-2 border-brand-primary shadow-xl' : 'hover:shadow-xl'} transition-all`}>
+              <Card key={index} className={`relative hover-lift animate-scale-in delay-${index * 200} ${plan.popular ? 'border-2 border-brand-primary shadow-xl' : 'hover:shadow-xl'} transition-all flex flex-col`}>
                 {plan.popular && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 animate-float">
                     <Badge className="bg-brand-primary text-white px-4 py-1">
@@ -208,8 +208,8 @@ function Precos() {
                   </div>
                   <p className="text-slate-600 text-sm">{plan.description}</p>
                 </CardHeader>
-                <CardContent>
-                  <ul className="space-y-3 mb-8">
+                <CardContent className="flex flex-col h-full">
+                  <ul className="space-y-3 mb-8 flex-grow">
                     {plan.features.map((feature, featureIndex) => (
                       <li key={featureIndex} className="flex items-start gap-2">
                         <Check className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
@@ -218,7 +218,7 @@ function Precos() {
                     ))}
                   </ul>
                   <Button
-                    className="w-full transition-all duration-300 hover:scale-105"
+                    className="w-full transition-all duration-300 hover:scale-105 mt-auto"
                     variant={plan.buttonVariant}
                     size="lg"
                   >
