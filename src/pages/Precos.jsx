@@ -8,12 +8,20 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar.jsx'
 import { Check, X, Quote, Star } from 'lucide-react'
 import React, { useState } from 'react'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
+import PagamentoDialog from './Pagamento.jsx'
 
 function Precos() {
   const [isYearly, setIsYearly] = useState(false)
+  const [isPagamentoOpen, setIsPagamentoOpen] = useState(false)
+  const [selectedPlan, setSelectedPlan] = useState(null)
   const heroRef = useScrollAnimation()
   const plansRef = useScrollAnimation()
   const comparisonRef = useScrollAnimation()
+
+  const handleOpenPagamento = (plan) => {
+    setSelectedPlan(plan)
+    setIsPagamentoOpen(true)
+  }
 
   const plans = [
     {
@@ -221,6 +229,7 @@ function Precos() {
                     className="w-full transition-all duration-300 hover:scale-105 mt-auto"
                     variant={plan.buttonVariant}
                     size="lg"
+                    onClick={() => handleOpenPagamento(plan)}
                   >
                     {plan.buttonText}
                   </Button>
@@ -334,17 +343,31 @@ function Precos() {
               <div className="grid grid-cols-4 gap-0 bg-slate-50 p-6 border-t border-slate-200">
                 <div className="p-2"></div>
                 <div className="p-2 text-center">
-                  <Button variant="outline" size="sm" className="w-full hover:bg-slate-900 hover:text-white transition-colors">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full hover:bg-slate-900 hover:text-white transition-colors"
+                    onClick={() => handleOpenPagamento(plans[0])}
+                  >
                     Assinar Plano
                   </Button>
                 </div>
                 <div className="p-2 text-center">
-                  <Button size="sm" className="w-full bg-brand-primary hover:bg-brand-secondary text-white transition-all hover:scale-105 shadow-md">
+                  <Button 
+                    size="sm" 
+                    className="w-full bg-brand-primary hover:bg-brand-secondary text-white transition-all hover:scale-105 shadow-md"
+                    onClick={() => handleOpenPagamento(plans[1])}
+                  >
                     Assinar Plano
                   </Button>
                 </div>
                 <div className="p-2 text-center">
-                  <Button variant="outline" size="sm" className="w-full hover:bg-slate-900 hover:text-white transition-colors">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full hover:bg-slate-900 hover:text-white transition-colors"
+                    onClick={() => handleOpenPagamento(plans[2])}
+                  >
                     Assinar Plano
                   </Button>
                 </div>
@@ -403,6 +426,7 @@ function Precos() {
                         : 'hover:bg-slate-900 hover:text-white'
                     }`}
                     variant={plan.popular ? 'default' : 'outline'}
+                    onClick={() => handleOpenPagamento(plan)}
                   >
                     {plan.buttonText}
                   </Button>
@@ -488,7 +512,12 @@ function Precos() {
             Comece gratuitamente e veja a diferença que a autorregulação faz no desenvolvimento da escrita.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up delay-300">
-            <Button size="lg" variant="secondary" className="bg-brand-primary text-white hover:bg-brand-secondary transition-all duration-300 hover:scale-105">
+            <Button 
+              size="lg" 
+              variant="secondary" 
+              className="bg-brand-primary text-white hover:bg-brand-secondary transition-all duration-300 hover:scale-105"
+              onClick={() => handleOpenPagamento(plans[1])}
+            >
               Assinar
             </Button>
             <Button size="lg" variant="outline" className="border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-all duration-300 hover:scale-105 [&:hover]:!text-white">
@@ -497,6 +526,14 @@ function Precos() {
           </div>
         </div>
       </section>
+
+      {/* Modal de Pagamento */}
+      <PagamentoDialog
+        isOpen={isPagamentoOpen}
+        onClose={() => setIsPagamentoOpen(false)}
+        selectedPlan={selectedPlan}
+        isYearly={isYearly}
+      />
     </div>
   )
 }
