@@ -146,8 +146,8 @@ function ParaQuem() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-brand-lighter to-white py-20">
-        <div className="container mx-auto px-4">
+      <section className="bg-white py-20">
+        <div className="container mx-auto px-4 max-w-7xl">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-5xl font-bold mb-6 text-slate-900">
               Uma solução para todo o ecossistema educacional
@@ -160,8 +160,8 @@ function ParaQuem() {
       </section>
 
       {/* Target Audience Tabs Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
+      <section className="py-20 bg-slate-50">
+        <div className="container mx-auto px-4 max-w-7xl">
           <Tabs defaultValue="estudantes" className="w-full">
             {/* Navigation Tabs */}
             <TabsList className="grid w-full grid-cols-4 mb-12 bg-slate-100 p-2 rounded-xl">
@@ -188,7 +188,7 @@ function ParaQuem() {
               const IconComponent = audience.icon
               return (
                 <TabsContent key={audience.id} value={audience.id} className="mt-8">
-                  <Card className={`p-8 ${audience.featured ? 'border-brand-accent bg-gradient-to-br from-brand-lighter to-white' : ''}`}>
+                  <Card className={`p-8 ${audience.featured ? 'border-brand-accent bg-slate-50' : ''}`}>
                     <CardContent className="pt-6">
                       <div className="flex items-start gap-8">
                         <div className="flex-shrink-0">
@@ -272,8 +272,8 @@ function ParaQuem() {
       </section>
 
       {/* Success Stories */}
-      <section className="py-20 bg-slate-50">
-        <div className="container mx-auto px-4">
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4 max-w-7xl">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-8 md:mb-12">
             Histórias de Sucesso
           </h2>
@@ -300,8 +300,8 @@ function ParaQuem() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-brand-lighter">
-        <div className="container mx-auto px-4 text-center">
+      <section className="py-20 bg-slate-50">
+        <div className="container mx-auto px-4 max-w-7xl text-center">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 text-slate-900">
             Encontre a solução perfeita para você
           </h2>

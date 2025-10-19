@@ -282,8 +282,8 @@ function Recursos() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section ref={heroRef} className="bg-gradient-to-br from-brand-lighter to-white text-slate-900 py-20 animate-on-scroll">
-        <div className="container mx-auto px-4 text-center">
+      <section ref={heroRef} className="bg-white text-slate-900 py-20 animate-on-scroll">
+        <div className="container mx-auto px-4 max-w-7xl text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6 animate-fade-in-up">
             Recursos que transformam o aprendizado da escrita
           </h1>
@@ -294,8 +294,8 @@ function Recursos() {
       </section>
 
       {/* Resource Categories Tabs */}
-      <section ref={tabsRef} className="py-16 animate-on-scroll">
-        <div className="container mx-auto px-4">
+      <section ref={tabsRef} className="py-16 bg-slate-50 animate-on-scroll">
+        <div className="container mx-auto px-4 max-w-7xl">
           {/* Tabs */}
           <div className="flex flex-wrap justify-center gap-4 mb-12 sticky top-20 z-40 bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-sm animate-fade-in-down">
             {tabs.map((tab, index) => (
@@ -358,8 +358,8 @@ function Recursos() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-brand-lighter py-16 animate-fade-in-up">
-        <div className="container mx-auto px-4 text-center">
+      <section className="bg-white py-16 animate-fade-in-up">
+        <div className="container mx-auto px-4 max-w-7xl text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6 text-slate-900">
             Pronto para transformar a escrita na sua instituição?
           </h2>

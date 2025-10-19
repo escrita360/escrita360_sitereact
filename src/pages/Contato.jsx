@@ -17,8 +17,8 @@ function Contato() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section ref={heroRef} className="bg-gradient-to-br from-brand-lighter to-white py-20 animate-on-scroll">
-        <div className="container mx-auto px-4">
+      <section ref={heroRef} className="bg-white py-20 animate-on-scroll">
+        <div className="container mx-auto px-4 max-w-7xl">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-5xl font-bold mb-6 text-slate-900 animate-fade-in-up">Vamos conversar?</h1>
             <p className="text-xl text-slate-600 animate-fade-in-up delay-200">
@@ -29,8 +29,8 @@ function Contato() {
       </section>
 
       {/* Contact Main Section */}
-      <section ref={formRef} className="py-16 animate-on-scroll">
-        <div className="container mx-auto px-4">
+      <section ref={formRef} className="py-16 bg-slate-50 animate-on-scroll">
+        <div className="container mx-auto px-4 max-w-7xl">
           <div className="grid lg:grid-cols-2 gap-12 max-w-7xl mx-auto">
             {/* Contact Form */}
             <Card className="p-8 shadow-lg hover-lift animate-fade-in-left">
@@ -219,8 +219,8 @@ function Contato() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 bg-slate-50">
-        <div className="container mx-auto px-4">
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-slate-900 mb-4">Perguntas Frequentes</h2>
             <p className="text-xl text-slate-600">Encontre respostas rápidas antes de entrar em contato</p>
@@ -315,8 +315,8 @@ function Contato() {
       </section>
 
       {/* Locations Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
+      <section className="py-16 bg-slate-50">
+        <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-slate-900 mb-4">Nossos Escritórios</h2>
           </div>
@@ -362,8 +362,8 @@ function Contato() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-brand-lighter py-16">
-        <div className="container mx-auto px-4 text-center">
+      <section className="bg-white py-16">
+        <div className="container mx-auto px-4 max-w-7xl text-center">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-3xl font-bold mb-4 text-slate-900">Prefere começar por conta própria?</h2>
             <p className="text-xl text-slate-600 mb-8">

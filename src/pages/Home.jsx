@@ -11,10 +11,10 @@ function Home() {
   return (
     <div>
       {/* Hero Section */}
-      <section ref={heroRef} className="hero bg-gradient-to-br from-brand-lighter to-white py-12 md:py-16 lg:py-20 animate-on-scroll">
-        <div className="container mx-auto px-4">
+      <section ref={heroRef} className="hero bg-white py-12 md:py-16 lg:py-20 animate-on-scroll">
+        <div className="container mx-auto px-4 max-w-7xl">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="hero-content animate-fade-in-left">
+            <div className="hero-content animate-fade-in-left text-center lg:text-left">
               <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-slate-900 mb-6 leading-tight">
                 A Inteligência Artificial e Inovação potencializando o Aprendizado da Escrita
               </h1>
@@ -41,8 +41,8 @@ function Home() {
       </section>
 
       {/* Stats Section */}
-      <section ref={statsRef} className="stats bg-brand-light py-8 md:py-12 lg:py-16 animate-on-scroll">
-        <div className="container mx-auto px-4">
+      <section ref={statsRef} className="stats bg-slate-50 py-8 md:py-12 lg:py-16 animate-on-scroll">
+        <div className="container mx-auto px-4 max-w-7xl">
           <h2 className="section-title text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-8 md:mb-12 animate-fade-in-up">
             Eficiência educacional na prática
           </h2>
@@ -84,9 +84,10 @@ function Home() {
       </section>
 
       {/* About Section */}
-      <section ref={aboutRef} className="about-platform container mx-auto px-4 py-8 md:py-12 lg:py-16 animate-on-scroll">
-        <div className="max-w-4xl mx-auto text-center animate-fade-in-up">
-          <p className="about-text text-lg text-slate-700 leading-relaxed">
+      <section ref={aboutRef} className="about-platform bg-white py-8 md:py-12 lg:py-16 animate-on-scroll">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="text-center animate-fade-in-up">
+            <p className="about-text text-lg text-slate-700 leading-relaxed">
             O <span className="font-bold text-brand-primary">Escrita360</span> é a plataforma mais completa de escrita autorregulada e avaliação inteligente,
             projetada para levar estudantes, professores e escolas para o próximo nível com Inteligência Artificial.
             Com soluções inovadoras e tecnologia de ponta, oferecemos uma experiência educacional única, que engaja
@@ -94,12 +95,13 @@ function Home() {
             e oferece às escolas dashboards completos para gestão pedagógica, promovendo a aprendizagem significativa
             que impulsiona o sucesso acadêmico.
           </p>
+          </div>
         </div>
       </section>
 
       {/* Platforms Section */}
-      <section className="platforms-section bg-brand-lighter py-8 md:py-12 lg:py-16">
-        <div className="container mx-auto px-4">
+      <section className="platforms-section bg-slate-50 py-8 md:py-12 lg:py-16">
+        <div className="container mx-auto px-4 max-w-7xl">
           <h2 className="section-title text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-8 md:mb-12">
             Conheça nossas Plataformas
           </h2>
@@ -175,8 +177,8 @@ function Home() {
       </section>
 
       {/* Diferencial Section */}
-      <section className="diferencial py-8 md:py-12 lg:py-16">
-        <div className="container mx-auto px-4">
+      <section className="diferencial bg-white py-8 md:py-12 lg:py-16">
+        <div className="container mx-auto px-4 max-w-7xl">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-8 md:mb-12">O que nos torna únicos</h2>
           <div className="diferencial-grid grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <Card className="diferencial-item p-6 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/20">
@@ -249,8 +251,8 @@ function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="features-section bg-brand-light py-8 md:py-12 lg:py-16">
-        <div className="container mx-auto px-4">
+      <section className="features-section bg-slate-50 py-8 md:py-12 lg:py-16">
+        <div className="container mx-auto px-4 max-w-7xl">
           <h2 className="section-title text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-4">
             Recursos que Transformam o Aprendizado
           </h2>
@@ -314,8 +316,8 @@ function Home() {
       </section>
 
       {/* How It Works Section */}
-      <section className="how-it-works py-16">
-        <div className="container mx-auto px-4">
+      <section className="how-it-works bg-white py-16">
+        <div className="container mx-auto px-4 max-w-7xl">
           <h2 className="section-title text-4xl font-bold text-center text-slate-900 mb-4">
             Como Funciona o Escrita360
           </h2>
@@ -424,8 +426,8 @@ function Home() {
       </section>
 
       {/* Comparison Section */}
-      <section className="comparison-section py-16">
-        <div className="container mx-auto px-4">
+      <section className="comparison-section bg-white py-16">
+        <div className="container mx-auto px-4 max-w-7xl">
           <h2 className="section-title text-4xl font-bold text-center text-slate-900 mb-4">
             Por que escolher o Escrita360?
           </h2>
@@ -480,8 +482,8 @@ function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="cta bg-brand-lighter py-16">
-        <div className="container mx-auto px-4">
+      <section className="cta bg-slate-50 py-16">
+        <div className="container mx-auto px-4 max-w-7xl">
           <div className="cta-content text-center max-w-4xl mx-auto">
             <h2 className="text-4xl font-bold mb-6 text-slate-900">Escrita360: muito além da correção automática</h2>
             <p className="text-xl mb-6 leading-relaxed text-slate-700">

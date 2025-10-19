@@ -147,8 +147,8 @@ function Precos() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-brand-lighter to-white py-12 md:py-16 lg:py-20">
-        <div className="container mx-auto px-4 text-center">
+      <section className="bg-white py-12 md:py-16 lg:py-20">
+        <div className="container mx-auto px-4 max-w-7xl text-center">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-slate-900">
             Planos que se adaptam à sua necessidade
           </h1>
@@ -159,8 +159,8 @@ function Precos() {
       </section>
 
       {/* Pricing Toggle */}
-      <section className="py-8 bg-white border-b">
-        <div className="container mx-auto px-4">
+      <section className="py-8 bg-slate-50 border-b">
+        <div className="container mx-auto px-4 max-w-7xl">
           <div className="flex items-center justify-center gap-4">
             <span className={`text-lg ${!isYearly ? 'font-bold text-brand-primary' : 'text-gray-600'}`}>
               Mensal
@@ -178,8 +178,8 @@ function Precos() {
       </section>
 
       {/* Pricing Grid */}
-      <section className="py-8 md:py-12 lg:py-16">
-        <div className="container mx-auto px-4">
+      <section className="py-8 md:py-12 lg:py-16 bg-white">
+        <div className="container mx-auto px-4 max-w-7xl">
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {plans.map((plan, index) => (
               <Card key={index} className={`relative ${plan.popular ? 'border-2 border-brand-primary shadow-xl' : 'hover:shadow-xl'} transition-shadow`}>
@@ -233,7 +233,7 @@ function Precos() {
 
       {/* Comparison Table */}
       <section className="py-8 md:py-12 lg:py-16 bg-slate-50">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 max-w-7xl">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-4">
             Comparação Detalhada de Planos
           </h2>
@@ -281,8 +281,8 @@ function Precos() {
       </section>
 
       {/* Success Stories */}
-      <section className="py-8 md:py-12 lg:py-16">
-        <div className="container mx-auto px-4">
+      <section className="py-8 md:py-12 lg:py-16 bg-white">
+        <div className="container mx-auto px-4 max-w-7xl">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-4">
             Histórias de Sucesso
           </h2>
@@ -314,7 +314,7 @@ function Precos() {
 
       {/* FAQ Section */}
       <section className="py-8 md:py-12 lg:py-16 bg-slate-50">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 max-w-7xl">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-4">
             Perguntas Frequentes
           </h2>
@@ -339,8 +339,8 @@ function Precos() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-8 md:py-12 lg:py-16 bg-brand-lighter">
-        <div className="container mx-auto px-4 text-center">
+      <section className="py-8 md:py-12 lg:py-16 bg-white">
+        <div className="container mx-auto px-4 max-w-7xl text-center">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 text-slate-900">
             Pronto para revolucionar a escrita?
           </h2>
