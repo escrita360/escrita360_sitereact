@@ -1,13 +1,19 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { Menu } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button.jsx'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet.jsx'
+import { cn } from '@/lib/utils'
 import ChatBot from '@/components/ChatBot.jsx'
 import logo from '@/assets/logo2.svg'
 
 function Layout({ children }) {
   const [isOpen, setIsOpen] = useState(false)
+  const location = useLocation()
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [location.pathname])
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
@@ -21,12 +27,12 @@ function Layout({ children }) {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-6">
-            <Link to="/" className="text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105">Home</Link>
-            <Link to="/para-quem" className="text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105">Para Quem</Link>
-            <Link to="/recursos" className="text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105">Recursos</Link>
-            <Link to="/precos" className="text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105">Preços</Link>
-            <Link to="/contato" className="text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105">Contato</Link>
-            <Button asChild>
+            <Link to="/" className={cn("text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105", location.pathname === "/" ? "border-b-2 border-brand-primary pb-1" : "")}>Home</Link>
+            <Link to="/para-quem" className={cn("text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105", location.pathname === "/para-quem" ? "border-b-2 border-brand-primary pb-1" : "")}>Para Quem</Link>
+            <Link to="/recursos" className={cn("text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105", location.pathname === "/recursos" ? "border-b-2 border-brand-primary pb-1" : "")}>Recursos</Link>
+            <Link to="/precos" className={cn("text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105", location.pathname === "/precos" ? "border-b-2 border-brand-primary pb-1" : "")}>Preços</Link>
+            <Link to="/contato" className={cn("text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105", location.pathname === "/contato" ? "border-b-2 border-brand-primary pb-1" : "")}>Contato</Link>
+            <Button asChild size="lg" className="bg-[var(--brand-primary)] text-white hover:bg-[var(--brand-dark)]">
               <Link to="/login">Entrar</Link>
             </Button>
           </div>
@@ -43,40 +49,40 @@ function Layout({ children }) {
               <nav className="flex flex-col gap-4">
                 <Link
                   to="/"
-                  className="text-lg font-medium text-slate-700 hover:text-brand-primary transition-colors"
+                  className={cn("text-lg font-medium text-slate-700 hover:text-brand-primary transition-colors", location.pathname === "/" ? "border-b-2 border-brand-primary pb-1" : "")}
                   onClick={() => setIsOpen(false)}
                 >
                   Home
                 </Link>
                 <Link
                   to="/para-quem"
-                  className="text-lg font-medium text-slate-700 hover:text-brand-primary transition-colors"
+                  className={cn("text-lg font-medium text-slate-700 hover:text-brand-primary transition-colors", location.pathname === "/para-quem" ? "border-b-2 border-brand-primary pb-1" : "")}
                   onClick={() => setIsOpen(false)}
                 >
                   Para Quem
                 </Link>
                 <Link
                   to="/recursos"
-                  className="text-lg font-medium text-slate-700 hover:text-brand-primary transition-colors"
+                  className={cn("text-lg font-medium text-slate-700 hover:text-brand-primary transition-colors", location.pathname === "/recursos" ? "border-b-2 border-brand-primary pb-1" : "")}
                   onClick={() => setIsOpen(false)}
                 >
                   Recursos
                 </Link>
                 <Link
                   to="/precos"
-                  className="text-lg font-medium text-slate-700 hover:text-brand-primary transition-colors"
+                  className={cn("text-lg font-medium text-slate-700 hover:text-brand-primary transition-colors", location.pathname === "/precos" ? "border-b-2 border-brand-primary pb-1" : "")}
                   onClick={() => setIsOpen(false)}
                 >
                   Preços
                 </Link>
                 <Link
                   to="/contato"
-                  className="text-lg font-medium text-slate-700 hover:text-brand-primary transition-colors"
+                  className={cn("text-lg font-medium text-slate-700 hover:text-brand-primary transition-colors", location.pathname === "/contato" ? "border-b-2 border-brand-primary pb-1" : "")}
                   onClick={() => setIsOpen(false)}
                 >
                   Contato
                 </Link>
-                <Button asChild className="mt-4 w-full">
+                <Button asChild className="mt-4 w-full bg-[var(--brand-primary)] text-white hover:bg-[var(--brand-dark)]">
                   <Link to="/login" onClick={() => setIsOpen(false)}>Entrar</Link>
                 </Button>
               </nav>
