@@ -31,7 +31,7 @@ function Precos() {
         { text: 'Painel de sentimentos', included: true },
         { text: 'Estratégias autorreguladas', included: true }
       ],
-      buttonText: 'Começar Grátis',
+      buttonText: 'Assinar',
       buttonVariant: 'default'
     },
     {
@@ -53,7 +53,7 @@ function Precos() {
         { text: 'Habilidades BNCC', included: true },
         { text: 'Acompanhamento em tempo real', included: true }
       ],
-      buttonText: 'Escolher Professor',
+      buttonText: 'Assinar',
       buttonVariant: 'default'
     },
     {
@@ -76,7 +76,7 @@ function Precos() {
         { text: 'API completa', included: true },
         { text: 'SLA garantido', included: true }
       ],
-      buttonText: 'Agendar Demonstração',
+      buttonText: 'Assinar',
       buttonVariant: 'default'
     }
   ]
@@ -374,7 +374,7 @@ function Precos() {
                   <div className="space-y-3">
                     {comparisonData.map((row, rowIndex) => {
                       const value = planIndex === 0 ? row.free : planIndex === 1 ? row.professor : row.escola
-                      retuorn (
+                      return (
                         <div key={rowIndex} className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
                           <span className="text-sm text-slate-700 flex-1">{row.feature}</span>
                           <div className="ml-4">
@@ -489,7 +489,7 @@ function Precos() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up delay-300">
             <Button size="lg" variant="secondary" className="bg-brand-primary text-white hover:bg-brand-secondary transition-all duration-300 hover:scale-105">
-              Começar Grátis
+              Assinar
             </Button>
             <Button size="lg" variant="outline" className="border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-all duration-300 hover:scale-105 [&:hover]:!text-white">
               Falar com Especialista
