@@ -10,9 +10,9 @@ import {
 } from "@/components/ui/carousel.jsx"
 import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
 import {
-  GraduationCap,
-  BookOpen,
-  School,
+  UserCircle,
+  Presentation,
+  Building2,
   Trophy,
   Clock,
   TrendingUp,
@@ -21,7 +21,7 @@ import {
   Users,
   Shield,
   Award,
-  FileText
+  BookMarked
 } from 'lucide-react'
 
 function ParaQuem() {
@@ -31,7 +31,7 @@ function ParaQuem() {
   const audiences = [
     {
       id: 'estudantes',
-      icon: GraduationCap,
+      icon: UserCircle,
       title: 'Para Estudantes',
       subtitle: 'Desenvolva autonomia e excelência na escrita',
       description: 'Para redações escolares e preparação para o ENEM, desenvolvendo autonomia na escrita e melhorando notas através da autorregulação. A plataforma acompanha você em cada etapa do processo de escrita.',
@@ -49,7 +49,7 @@ function ParaQuem() {
     },
     {
       id: 'professores',
-      icon: BookOpen,
+      icon: Presentation,
       title: 'Para Professores',
       subtitle: 'Otimize seu tempo e potencialize o aprendizado',
       description: 'Reduza sua carga de trabalho com ferramentas de correção assistida e acompanhamento automatizado. Foque no que realmente importa: o desenvolvimento dos seus alunos.',
@@ -72,7 +72,7 @@ function ParaQuem() {
     },
     {
       id: 'escolas',
-      icon: School,
+      icon: Building2,
       title: 'Para Escolas',
       subtitle: 'Transforme a cultura de escrita na sua instituição',
       description: 'Instituições que querem oferecer uma imersão completa no processo de escrita autoral, com foco na autorregulação da aprendizagem e dashboards gerenciais completos. Solução escalável para toda a instituição.',
@@ -99,7 +99,7 @@ function ParaQuem() {
     },
     {
       id: 'cursos-prep',
-      icon: FileText,
+      icon: BookMarked,
       title: 'Para Cursos Preparatórios',
       subtitle: 'Maximize resultados e aprove mais alunos',
       description: 'Presencial ou online, oferecendo cursos preparatórios para ENEM com otimização do tempo dos professores e relatórios detalhados. Aumente suas taxas de aprovação com metodologia comprovada.',
@@ -184,8 +184,13 @@ function ParaQuem() {
                       <CardContent className="pt-6">
                         <div className="flex items-start gap-8">
                           <div className="flex-shrink-0">
-                            <div className={`w-20 h-20 rounded-full flex items-center justify-center bg-brand-light`}>
-                              <IconComponent className="w-10 h-10 text-brand-primary animate-pulse-glow" />
+                            <div className={`w-20 h-20 rounded-2xl flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 ${
+                              audience.id === 'estudantes' ? 'bg-gradient-to-br from-brand-primary to-brand-accent' :
+                              audience.id === 'professores' ? 'bg-gradient-to-br from-brand-secondary to-brand-accent' :
+                              audience.id === 'escolas' ? 'bg-gradient-to-br from-brand-accent to-brand-primary' :
+                              'bg-gradient-to-br from-brand-dark to-brand-primary'
+                            }`}>
+                              <IconComponent className="w-10 h-10 text-white drop-shadow-md" strokeWidth={1.5} />
                             </div>
                           </div>
                           <div className="flex-1">
@@ -219,9 +224,9 @@ function ParaQuem() {
                                 {audience.gridFeatures.map((feature, index) => {
                                   const FeatureIcon = feature.icon
                                   return (
-                                    <div key={index} className="text-center">
-                                      <div className="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center mx-auto mb-3">
-                                        <FeatureIcon className="w-6 h-6 text-brand-primary" />
+                                    <div key={index} className="text-center group">
+                                      <div className="w-14 h-14 bg-gradient-to-br from-brand-primary to-brand-accent rounded-xl flex items-center justify-center mx-auto mb-3 shadow-md transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg">
+                                        <FeatureIcon className="w-7 h-7 text-white" strokeWidth={1.5} />
                                       </div>
                                       <h4 className="font-semibold text-slate-900 mb-1">{feature.title}</h4>
                                       <p className="text-sm text-slate-600">{feature.desc}</p>
@@ -282,8 +287,13 @@ function ParaQuem() {
                 <Card key={index} className={`p-6 hover-lift animate-fade-in-up delay-${index * 100}`}>
                   <CardContent className="pt-6">
                     <div className="text-center">
-                      <div className="w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mx-auto mb-4">
-                        <StoryIcon className="w-8 h-8 text-brand-primary animate-float" />
+                      <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg transition-all duration-300 hover:scale-110 ${
+                        index === 0 ? 'bg-gradient-to-br from-yellow-400 to-orange-500' :
+                        index === 1 ? 'bg-gradient-to-br from-brand-secondary to-brand-accent' :
+                        index === 2 ? 'bg-gradient-to-br from-green-400 to-emerald-600' :
+                        'bg-gradient-to-br from-purple-500 to-pink-600'
+                      }`}>
+                        <StoryIcon className="w-8 h-8 text-white drop-shadow-md" strokeWidth={1.5} />
                       </div>
                       <h3 className="text-xl font-bold text-slate-900 mb-3">{story.title}</h3>
                       <p className="text-slate-600 mb-4">{story.description}</p>

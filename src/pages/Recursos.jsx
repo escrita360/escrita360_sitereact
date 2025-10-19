@@ -19,7 +19,10 @@ import {
   PieChart,
   Link,
   Palette,
-  Headphones
+  Headphones,
+  GraduationCap,
+  Presentation,
+  Building2
 } from 'lucide-react'
 
 function Recursos() {
@@ -28,9 +31,9 @@ function Recursos() {
   const tabsRef = useScrollAnimation()
 
   const tabs = [
-    { id: 'estudantes', label: 'Para Estudantes', icon: '👨‍🎓' },
-    { id: 'professores', label: 'Para Professores', icon: '👨‍🏫' },
-    { id: 'escolas', label: 'Para Escolas', icon: '🏫' }
+    { id: 'estudantes', label: 'Para Estudantes', icon: <GraduationCap className="w-5 h-5" /> },
+    { id: 'professores', label: 'Para Professores', icon: <Presentation className="w-5 h-5" /> },
+    { id: 'escolas', label: 'Para Escolas', icon: <Building2 className="w-5 h-5" /> }
   ]
 
   const recursosEstudantes = [
@@ -309,7 +312,7 @@ function Recursos() {
                 }`}
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                <span className="text-lg animate-float" style={{ animationDelay: `${index * 150}ms` }}>{tab.icon}</span>
+                <span className="animate-float" style={{ animationDelay: `${index * 150}ms` }}>{tab.icon}</span>
                 {tab.label}
               </button>
             ))}
