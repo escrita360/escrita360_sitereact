@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent } from '@/components/ui/card.jsx'
 import { Check, X, PenTool, Brain, TrendingUp, GraduationCap, School, Edit, FileText, CheckCircle, Bot, RotateCcw, Trophy, Heart, Target, BarChart, Users, UserCheck, BookOpen, Award } from 'lucide-react'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
+import logo from '@/assets/logo2.svg'
 
 function Home() {
   const heroRef = useScrollAnimation()
@@ -442,7 +443,9 @@ function Home() {
                     <thead>
                       <tr className="border-b">
                         <th className="text-left p-4 font-bold text-slate-900">Recursos</th>
-                        <th className="text-center p-4 font-bold text-brand-primary">Escrita360</th>
+                        <th className="text-center p-4">
+                          <img src={logo} alt="Escrita360" className="h-8 mx-auto" />
+                        </th>
                         <th className="text-center p-4 font-bold text-slate-600">Outras Plataformas</th>
                       </tr>
                     </thead>
