@@ -26,6 +26,9 @@ function Layout({ children }) {
             <Link to="/recursos" className="text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105">Recursos</Link>
             <Link to="/precos" className="text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105">Preços</Link>
             <Link to="/contato" className="text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105">Contato</Link>
+            <Button asChild>
+              <Link to="/login">Entrar</Link>
+            </Button>
           </div>
 
           {/* Mobile Navigation */}
@@ -73,6 +76,9 @@ function Layout({ children }) {
                 >
                   Contato
                 </Link>
+                <Button asChild className="mt-4 w-full">
+                  <Link to="/login" onClick={() => setIsOpen(false)}>Entrar</Link>
+                </Button>
               </nav>
             </SheetContent>
           </Sheet>
