@@ -335,17 +335,17 @@ function Precos() {
                 <div className="p-2"></div>
                 <div className="p-2 text-center">
                   <Button variant="outline" size="sm" className="w-full hover:bg-slate-900 hover:text-white transition-colors">
-                    Começar Grátis
+                    Assinar Plano
                   </Button>
                 </div>
                 <div className="p-2 text-center">
                   <Button size="sm" className="w-full bg-brand-primary hover:bg-brand-secondary text-white transition-all hover:scale-105 shadow-md">
-                    Escolher Professor
+                    Assinar Plano
                   </Button>
                 </div>
                 <div className="p-2 text-center">
                   <Button variant="outline" size="sm" className="w-full hover:bg-slate-900 hover:text-white transition-colors">
-                    Agendar Demo
+                    Assinar Plano
                   </Button>
                 </div>
               </div>
@@ -374,7 +374,7 @@ function Precos() {
                   <div className="space-y-3">
                     {comparisonData.map((row, rowIndex) => {
                       const value = planIndex === 0 ? row.free : planIndex === 1 ? row.professor : row.escola
-                      return (
+                      retuorn (
                         <div key={rowIndex} className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
                           <span className="text-sm text-slate-700 flex-1">{row.feature}</span>
                           <div className="ml-4">
