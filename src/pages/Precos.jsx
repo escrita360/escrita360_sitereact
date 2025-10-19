@@ -351,7 +351,7 @@ function Precos() {
             <Button size="lg" variant="secondary" className="bg-brand-primary text-white hover:bg-brand-secondary transition-all duration-300 hover:scale-105">
               Começar Grátis
             </Button>
-            <Button size="lg" variant="outline" className="border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white transition-all duration-300 hover:scale-105">
+            <Button size="lg" variant="outline" className="border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-all duration-300 hover:scale-105 [&:hover]:!text-white">
               Falar com Especialista
             </Button>
           </div>

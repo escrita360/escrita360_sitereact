@@ -175,13 +175,13 @@ function Contato() {
                 <CardContent>
                   <div className="flex gap-4">
                     <Button variant="outline" size="icon" className="w-12 h-12 transition-all hover:scale-110 hover:rotate-6">
-                      <Facebook className="w-5 h-5" />
+                      <Facebook className="w-5 h-5 text-brand-primary" />
                     </Button>
                     <Button variant="outline" size="icon" className="w-12 h-12 transition-all hover:scale-110 hover:rotate-6">
-                      <Instagram className="w-5 h-5" />
+                      <Instagram className="w-5 h-5 text-brand-primary" />
                     </Button>
                     <Button variant="outline" size="icon" className="w-12 h-12 transition-all hover:scale-110 hover:rotate-6">
-                      <MessageCircle className="w-5 h-5" />
+                      <MessageCircle className="w-5 h-5 text-brand-primary" />
                     </Button>
                   </div>
                 </CardContent>
@@ -195,19 +195,19 @@ function Contato() {
                 <CardContent>
                   <div className="grid grid-cols-2 gap-3">
                     <Button variant="outline" className="h-auto p-4 flex flex-col items-center gap-2 transition-all hover:scale-105">
-                      <Rocket className="w-5 h-5 animate-float" />
+                      <Rocket className="w-5 h-5 text-brand-primary animate-float" />
                       <span className="text-sm">Começar Grátis</span>
                     </Button>
                     <Button variant="outline" className="h-auto p-4 flex flex-col items-center gap-2 transition-all hover:scale-105">
-                      <BookOpen className="w-5 h-5 animate-float" style={{animationDelay: '200ms'}} />
+                      <BookOpen className="w-5 h-5 text-brand-primary animate-float" style={{animationDelay: '200ms'}} />
                       <span className="text-sm">Ver Recursos</span>
                     </Button>
                     <Button variant="outline" className="h-auto p-4 flex flex-col items-center gap-2 transition-all hover:scale-105">
-                      <HelpCircle className="w-5 h-5 animate-float" style={{animationDelay: '400ms'}} />
+                      <HelpCircle className="w-5 h-5 text-brand-primary animate-float" style={{animationDelay: '400ms'}} />
                       <span className="text-sm">Central de Ajuda</span>
                     </Button>
                     <Button variant="outline" className="h-auto p-4 flex flex-col items-center gap-2 transition-all hover:scale-105">
-                      <CalendarDays className="w-5 h-5 animate-float" style={{animationDelay: '600ms'}} />
+                      <CalendarDays className="w-5 h-5 text-brand-primary animate-float" style={{animationDelay: '600ms'}} />
                       <span className="text-sm">Agendar Demo</span>
                     </Button>
                   </div>
