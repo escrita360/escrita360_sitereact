@@ -250,7 +250,7 @@ function Pagamento() {
                       </div>
                     </div>
 
-                    <Button type="submit" className="w-full bg-brand-primary hover:bg-brand-secondary h-12" disabled={isProcessing}>
+                    <Button type="submit" className="w-full bg-brand-primary hover:bg-brand-secondary text-white h-12" disabled={isProcessing}>
                       {isProcessing ? (
                         <><div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2" />Processando...</>
                       ) : (
