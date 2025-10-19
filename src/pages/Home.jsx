@@ -102,15 +102,15 @@ function Home() {
       {/* Platforms Section */}
       <section className="platforms-section bg-slate-50 py-8 md:py-12 lg:py-16">
         <div className="container mx-auto px-4 max-w-7xl">
-          <h2 className="section-title text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-8 md:mb-12">
+          <h2 className="section-title text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-8 md:mb-12 animate-fade-in-up">
             Conheça nossas Plataformas
           </h2>
 
           <div className="grid lg:grid-cols-2 gap-8 mb-8">
-            <Card className="platform-card platform-left p-6 md:p-8 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/30">
+            <Card className="platform-card platform-left p-6 md:p-8 hover-lift border-brand-accent/30 animate-fade-in-left delay-100">
               <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 mb-6">
                 <div className="platform-image w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mx-auto md:mx-0">
-                  <UserCheck className="w-8 h-8 text-brand-primary" />
+                  <UserCheck className="w-8 h-8 text-brand-primary animate-pulse-glow" />
                 </div>
                 <div className="platform-content text-center md:text-left">
                   <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-2">Estudantes</h3>
@@ -119,12 +119,12 @@ function Home() {
                     vivenciando todo o processo de planejamento, escrita, autoavaliação e reescrita com
                     recursos que promovem autorregulação e senso crítico.
                   </p>
-                  <Button variant="outline" className="mt-4">Acesse a Plataforma</Button>
+                  <Button variant="outline" className="mt-4 transition-all hover:scale-105">Acesse a Plataforma</Button>
                 </div>
               </div>
             </Card>
 
-            <Card className="platform-card platform-right p-6 md:p-8 hover:shadow-lg transition-shadow">
+            <Card className="platform-card platform-right p-6 md:p-8 hover-lift animate-fade-in-right delay-200">
               <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 mb-6">
                 <div className="platform-content text-center md:text-left">
                   <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-2">Professores</h3>
@@ -133,18 +133,18 @@ function Home() {
                     atividades personalizadas e acompanhamento individual, baseadas nas competências do ENEM
                     e alinhadas à BNCC.
                   </p>
-                  <Button variant="outline" className="mt-4">Acesse a Plataforma</Button>
+                  <Button variant="outline" className="mt-4 transition-all hover:scale-105">Acesse a Plataforma</Button>
                 </div>
                 <div className="platform-image w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mx-auto md:mx-0">
-                  <UserCheck className="w-8 h-8 text-brand-secondary" />
+                  <UserCheck className="w-8 h-8 text-brand-secondary animate-pulse-glow" />
                 </div>
               </div>
             </Card>
 
-            <Card className="platform-card platform-left p-6 md:p-8 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/30">
+            <Card className="platform-card platform-left p-6 md:p-8 hover-lift border-brand-accent/30 animate-fade-in-left delay-300">
               <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 mb-6">
                 <div className="platform-image w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mx-auto md:mx-0">
-                  <Users className="w-8 h-8 text-brand-primary" />
+                  <Users className="w-8 h-8 text-brand-primary animate-pulse-glow" />
                 </div>
                 <div className="platform-content text-center md:text-left">
                   <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-2">Famílias</h3>
@@ -152,12 +152,12 @@ function Home() {
                     As famílias acompanham o desempenho dos estudantes, a proficiência de aprendizagem
                     e o engajamento em tempo real através de dashboards intuitivos e relatórios detalhados.
                   </p>
-                  <Button variant="outline" className="mt-4 border-brand-primary text-brand-primary hover:bg-brand-light">Acesse a Plataforma</Button>
+                  <Button variant="outline" className="mt-4 border-brand-primary text-brand-primary hover:bg-brand-light transition-all hover:scale-105">Acesse a Plataforma</Button>
                 </div>
               </div>
             </Card>
 
-            <Card className="platform-card platform-right p-6 md:p-8 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/30">
+            <Card className="platform-card platform-right p-6 md:p-8 hover-lift border-brand-accent/30 animate-fade-in-right delay-400">
               <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 mb-6">
                 <div className="platform-content text-center md:text-left">
                   <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-2">Escolas e Gestores</h3>
@@ -165,10 +165,10 @@ function Home() {
                     A plataforma dos gestores oferece flexibilização curricular e relatórios em tempo real,
                     para uma gestão eficaz do engajamento e aprendizagem dos seus estudantes, turmas e escolas.
                   </p>
-                  <Button variant="outline" className="mt-4 border-brand-primary text-brand-primary hover:bg-brand-light">Acesso Exclusivo - Consulte seu Login</Button>
+                  <Button variant="outline" className="mt-4 border-brand-primary text-brand-primary hover:bg-brand-light transition-all hover:scale-105">Acesso Exclusivo - Consulte seu Login</Button>
                 </div>
                 <div className="platform-image w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mx-auto md:mx-0">
-                  <School className="w-8 h-8 text-brand-secondary" />
+                  <School className="w-8 h-8 text-brand-secondary animate-pulse-glow" />
                 </div>
               </div>
             </Card>
@@ -179,11 +179,11 @@ function Home() {
       {/* Diferencial Section */}
       <section className="diferencial bg-white py-8 md:py-12 lg:py-16">
         <div className="container mx-auto px-4 max-w-7xl">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-8 md:mb-12">O que nos torna únicos</h2>
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-8 md:mb-12 animate-fade-in-up">O que nos torna únicos</h2>
           <div className="diferencial-grid grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card className="diferencial-item p-6 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/20">
+            <Card className="diferencial-item p-6 hover-lift border-brand-accent/20 animate-scale-in delay-100">
               <div className="diferencial-icon w-12 h-12 bg-brand-light rounded-full flex items-center justify-center mb-4">
-                <Brain className="w-6 h-6 text-brand-primary" />
+                <Brain className="w-6 h-6 text-brand-primary animate-pulse-glow" />
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-2">Escrita Autorregulada no Centro</h3>
               <p className="text-slate-700">
@@ -192,9 +192,9 @@ function Home() {
               </p>
             </Card>
 
-            <Card className="diferencial-item p-6 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/20">
+            <Card className="diferencial-item p-6 hover-lift border-brand-accent/20 animate-scale-in delay-200">
               <div className="diferencial-icon w-12 h-12 bg-brand-light rounded-full flex items-center justify-center mb-4">
-                <Heart className="w-6 h-6 text-brand-secondary" />
+                <Heart className="w-6 h-6 text-brand-secondary animate-pulse-glow" />
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-2">Painel de Sentimentos</h3>
               <p className="text-slate-700">
@@ -203,9 +203,9 @@ function Home() {
               </p>
             </Card>
 
-            <Card className="diferencial-item p-6 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/20">
+            <Card className="diferencial-item p-6 hover-lift border-brand-accent/20 animate-scale-in delay-300">
               <div className="diferencial-icon w-12 h-12 bg-brand-light rounded-full flex items-center justify-center mb-4">
-                <Target className="w-6 h-6 text-brand-primary" />
+                <Target className="w-6 h-6 text-brand-primary animate-pulse-glow" />
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-2">Imersão Total no Processo de Escrita</h3>
               <p className="text-slate-700">
@@ -214,9 +214,9 @@ function Home() {
               </p>
             </Card>
 
-            <Card className="diferencial-item p-6 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/20">
+            <Card className="diferencial-item p-6 hover-lift border-brand-accent/20 animate-scale-in delay-400">
               <div className="diferencial-icon w-12 h-12 bg-brand-light rounded-full flex items-center justify-center mb-4">
-                <BarChart className="w-6 h-6 text-brand-secondary" />
+                <BarChart className="w-6 h-6 text-brand-secondary animate-pulse-glow" />
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-2">Análise Integrada em Tempo Real</h3>
               <p className="text-slate-700">
@@ -225,9 +225,9 @@ function Home() {
               </p>
             </Card>
 
-            <Card className="diferencial-item p-6 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/20">
+            <Card className="diferencial-item p-6 hover-lift border-brand-accent/20 animate-scale-in delay-500">
               <div className="diferencial-icon w-12 h-12 bg-brand-light rounded-full flex items-center justify-center mb-4">
-                <Award className="w-6 h-6 text-brand-primary" />
+                <Award className="w-6 h-6 text-brand-primary animate-pulse-glow" />
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-2">Uso de rubricas e evolução por níveis</h3>
               <p className="text-slate-700">
@@ -236,9 +236,9 @@ function Home() {
               </p>
             </Card>
 
-            <Card className="diferencial-item p-6 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/20">
+            <Card className="diferencial-item p-6 hover-lift border-brand-accent/20 animate-scale-in delay-600">
               <div className="diferencial-icon w-12 h-12 bg-brand-light rounded-full flex items-center justify-center mb-4">
-                <Bot className="w-6 h-6 text-brand-secondary" />
+                <Bot className="w-6 h-6 text-brand-secondary animate-pulse-glow" />
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-2">IA como Assistente</h3>
               <p className="text-slate-700">
@@ -253,61 +253,61 @@ function Home() {
       {/* Features Section */}
       <section className="features-section bg-slate-50 py-8 md:py-12 lg:py-16">
         <div className="container mx-auto px-4 max-w-7xl">
-          <h2 className="section-title text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-4">
+          <h2 className="section-title text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-4 animate-fade-in-up">
             Recursos que Transformam o Aprendizado
           </h2>
-          <p className="section-subtitle text-lg md:text-xl text-center text-slate-600 mb-8 md:mb-12">
+          <p className="section-subtitle text-lg md:text-xl text-center text-slate-600 mb-8 md:mb-12 animate-fade-in-up delay-200">
             Ferramentas desenvolvidas com base em pesquisas pedagógicas e tecnologia de ponta
           </p>
           <div className="features-grid grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <Card className="feature-card p-6 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/20">
+            <Card className="feature-card p-6 hover-lift border-brand-accent/20 animate-scale-in delay-100">
               <div className="feature-icon-wrapper w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mb-4 mx-auto">
-                <Edit className="w-8 h-8 text-brand-primary" />
+                <Edit className="w-8 h-8 text-brand-primary animate-pulse-glow" />
               </div>
               <h3 className="text-xl font-bold text-center text-slate-900 mb-2">Editor Inteligente</h3>
               <p className="text-slate-700 text-center mb-4">
                 Escreva com recursos de formatação profissional e sugestões em tempo real que respeitam seu processo criativo.
               </p>
-              <a href="#" className="feature-link text-brand-primary hover:text-brand-secondary font-medium flex items-center justify-center gap-2">
-                Saiba mais <TrendingUp className="w-4 h-4" />
-              </a>
-            </Card>
+                <a href="#" className="feature-link text-brand-primary hover:text-brand-secondary font-medium flex items-center justify-center gap-2 transition-all hover:scale-105">
+                  Saiba mais <TrendingUp className="w-4 h-4" />
+                </a>
+              </Card>
 
-            <Card className="feature-card p-6 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/20">
+            <Card className="feature-card p-6 hover-lift border-brand-accent/20 animate-scale-in delay-200">
               <div className="feature-icon-wrapper w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mb-4 mx-auto">
-                <FileText className="w-8 h-8 text-brand-secondary" />
+                <FileText className="w-8 h-8 text-brand-secondary animate-pulse-glow" />
               </div>
               <h3 className="text-xl font-bold text-center text-slate-900 mb-2">Rubricas Personalizadas</h3>
               <p className="text-slate-700 text-center mb-4">
                 Avalie seu texto com critérios claros e objetivos baseados nas competências do ENEM e vestibulares.
               </p>
-              <a href="#" className="feature-link text-brand-primary hover:text-brand-secondary font-medium flex items-center justify-center gap-2">
-                Saiba mais <TrendingUp className="w-4 h-4" />
-              </a>
-            </Card>
+                <a href="#" className="feature-link text-brand-primary hover:text-brand-secondary font-medium flex items-center justify-center gap-2 transition-all hover:scale-105">
+                  Saiba mais <TrendingUp className="w-4 h-4" />
+                </a>
+              </Card>
 
-            <Card className="feature-card p-6 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/20">
+            <Card className="feature-card p-6 hover-lift border-brand-accent/20 animate-scale-in delay-300">
               <div className="feature-icon-wrapper w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mb-4 mx-auto">
-                <BarChart className="w-8 h-8 text-brand-primary" />
+                <BarChart className="w-8 h-8 text-brand-primary animate-pulse-glow" />
               </div>
               <h3 className="text-xl font-bold text-center text-slate-900 mb-2">Dashboard Completo</h3>
               <p className="text-slate-700 text-center mb-4">
                 Acompanhe sua evolução com gráficos detalhados e relatórios de desempenho por competência.
               </p>
-              <a href="#" className="feature-link text-brand-primary hover:text-brand-secondary font-medium flex items-center justify-center gap-2">
-                Saiba mais <TrendingUp className="w-4 h-4" />
-              </a>
-            </Card>
+                <a href="#" className="feature-link text-brand-primary hover:text-brand-secondary font-medium flex items-center justify-center gap-2 transition-all hover:scale-105">
+                  Saiba mais <TrendingUp className="w-4 h-4" />
+                </a>
+              </Card>
 
-            <Card className="feature-card p-6 hover:shadow-lg transition-all hover:-translate-y-1 border-brand-accent/20">
+            <Card className="feature-card p-6 hover-lift border-brand-accent/20 animate-scale-in delay-400">
               <div className="feature-icon-wrapper w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mb-4 mx-auto">
-                <Users className="w-8 h-8 text-brand-secondary" />
+                <Users className="w-8 h-8 text-brand-secondary animate-pulse-glow" />
               </div>
               <h3 className="text-xl font-bold text-center text-slate-900 mb-2">Gestão Escolar</h3>
               <p className="text-slate-700 text-center mb-4">
                 Ferramentas completas para professores acompanharem turmas e instituições gerenciarem dados educacionais.
               </p>
-              <a href="#" className="feature-link text-brand-primary hover:text-brand-secondary font-medium flex items-center justify-center gap-2">
+              <a href="#" className="feature-link text-brand-primary hover:text-brand-secondary font-medium flex items-center justify-center gap-2 transition-all hover:scale-105">
                 Saiba mais <TrendingUp className="w-4 h-4" />
               </a>
             </Card>
@@ -318,17 +318,17 @@ function Home() {
       {/* How It Works Section */}
       <section className="how-it-works bg-white py-16">
         <div className="container mx-auto px-4 max-w-7xl">
-          <h2 className="section-title text-4xl font-bold text-center text-slate-900 mb-4">
+          <h2 className="section-title text-4xl font-bold text-center text-slate-900 mb-4 animate-fade-in-up">
             Como Funciona o Escrita360
           </h2>
-          <p className="section-subtitle text-xl text-center text-slate-600 mb-12">
+          <p className="section-subtitle text-xl text-center text-slate-600 mb-12 animate-fade-in-up delay-200">
             Um processo simples que respeita sua autonomia
           </p>
           <div className="steps-grid grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card className="step-item p-6 text-center hover:shadow-lg transition-shadow">
-              <div className="step-number w-12 h-12 bg-brand-primary text-white rounded-full flex items-center justify-center text-2xl font-bold mb-4 mx-auto">1</div>
+            <Card className="step-item p-6 text-center hover-lift animate-scale-in delay-100">
+              <div className="step-number w-12 h-12 bg-brand-primary text-white rounded-full flex items-center justify-center text-2xl font-bold mb-4 mx-auto animate-float">1</div>
               <div className="step-icon w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mb-4 mx-auto">
-                <PenTool className="w-8 h-8 text-brand-primary" />
+                <PenTool className="w-8 h-8 text-brand-primary animate-pulse-glow" />
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-2">Planejamento</h3>
               <p className="text-slate-700">

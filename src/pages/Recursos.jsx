@@ -35,7 +35,7 @@ function Recursos() {
 
   const recursosEstudantes = [
     {
-      icon: <List className="w-8 h-8 text-brand-primary" />,
+      icon: <List className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
       title: 'Lista de Acrônimos Inteligentes',
       description: 'Sistema completo de acrônimos específicos para cada fase do processo de escrita: planejamento, produção e autoavaliação. Ajuda a memorizar e aplicar estratégias eficazes.',
       features: [
@@ -46,7 +46,7 @@ function Recursos() {
       ]
     },
     {
-      icon: <Target className="w-8 h-8 text-brand-primary" />,
+      icon: <Target className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
       title: 'Planejamento de Metas Estruturado',
       description: 'Organize seu processo de escrita com um sistema avançado de metas e prazos, permitindo acompanhar seu progresso de forma visual e motivadora.',
       features: [
@@ -57,7 +57,7 @@ function Recursos() {
       ]
     },
     {
-      icon: <Settings className="w-8 h-8 text-brand-primary" />,
+      icon: <Settings className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
       title: 'Estratégias Autorreguladas',
       description: 'Aplique estratégias comprovadas de autorregulação em cada fase da escrita, com técnicas de curto, médio e longo prazo adaptadas ao seu ritmo.',
       features: [
@@ -68,7 +68,7 @@ function Recursos() {
       ]
     },
     {
-      icon: <Smile className="w-8 h-8 text-brand-primary" />,
+      icon: <Smile className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
       title: 'Painel de Sentimentos',
       description: 'Recurso exclusivo para acompanhamento das competências socioemocionais durante o processo de escrita, auxiliando na regulação de crenças e motivação.',
       features: [
@@ -79,7 +79,7 @@ function Recursos() {
       ]
     },
     {
-      icon: <CheckCircle className="w-8 h-8 text-brand-primary" />,
+      icon: <CheckCircle className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
       title: 'Autoavaliação Estruturada',
       description: 'Sistema de rubricas detalhadas alinhadas às habilidades da BNCC e competências do ENEM, permitindo que você avalie seu próprio trabalho com critérios objetivos.',
       features: [
@@ -90,7 +90,7 @@ function Recursos() {
       ]
     },
     {
-      icon: <Edit className="w-8 h-8 text-brand-primary" />,
+      icon: <Edit className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
       title: 'Módulo de Escrita Completo',
       description: 'Ambiente de escrita com acompanhamento desde o parágrafo-padrão até a redação completa, com ferramentas de análise textual e sugestões contextuais.',
       features: [
@@ -104,7 +104,7 @@ function Recursos() {
 
   const recursosProfessores = [
     {
-      icon: <Cloud className="w-8 h-8 text-brand-primary" />,
+      icon: <Cloud className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
       title: 'Plataforma 100% Online',
       description: 'Ambiente totalmente automatizado na nuvem com acesso a todos os recursos estudantis, permitindo acompanhamento em tempo real de qualquer lugar.',
       features: [
@@ -115,7 +115,7 @@ function Recursos() {
       ]
     },
     {
-      icon: <BookOpen className="w-8 h-8 text-brand-primary" />,
+      icon: <BookOpen className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
       title: 'Habilidades da BNCC',
       description: 'Lista completa de habilidades da BNCC integrada à plataforma, facilitando o planejamento pedagógico e alinhamento curricular.',
       features: [
@@ -126,7 +126,7 @@ function Recursos() {
       ]
     },
     {
-      icon: <Eye className="w-8 h-8 text-brand-primary" />,
+      icon: <Eye className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
       title: 'Acompanhamento em Tempo Real',
       description: 'Monitore o progresso individual e coletivo das turmas com dashboards dinâmicos que atualizam automaticamente.',
       features: [
@@ -137,7 +137,7 @@ function Recursos() {
       ]
     },
     {
-      icon: <ClipboardCheck className="w-8 h-8 text-brand-primary" />,
+      icon: <ClipboardCheck className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
       title: 'Sistema de Avaliação Docente',
       description: 'Ferramenta estruturada de avaliação alinhada à BNCC e competências ENEM, com critérios personalizáveis e feedback eficiente.',
       features: [
@@ -148,7 +148,7 @@ function Recursos() {
       ]
     },
     {
-      icon: <BarChart3 className="w-8 h-8 text-brand-primary" />,
+      icon: <BarChart3 className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
       title: 'Relatórios Detalhados',
       description: 'Geração automática de relatórios individuais e coletivos com análises estatísticas e insights sobre o desenvolvimento das turmas.',
       features: [
@@ -159,7 +159,7 @@ function Recursos() {
       ]
     },
     {
-      icon: <Users className="w-8 h-8 text-brand-primary" />,
+      icon: <Users className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
       title: 'Gestão de Turmas',
       description: 'Organize e gerencie múltiplas turmas com facilidade, atribua tarefas, acompanhe entregas e mantenha comunicação eficiente.',
       features: [
@@ -173,7 +173,7 @@ function Recursos() {
 
   const recursosEscolas = [
     {
-      icon: <HandHeart className="w-8 h-8 text-brand-primary" />,
+      icon: <HandHeart className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
       title: 'Suporte Completo para Professores',
       description: 'Redução significativa da carga de trabalho docente com automação inteligente e ferramentas de apoio pedagógico.',
       features: [
@@ -184,7 +184,7 @@ function Recursos() {
       ]
     },
     {
-      icon: <PieChart className="w-8 h-8 text-brand-primary" />,
+      icon: <PieChart className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
       title: 'Dashboards Administrativos',
       description: 'Painéis gerenciais personalizados com visualização de redações produzidas, habilidades trabalhadas e métricas institucionais.',
       features: [
@@ -195,7 +195,7 @@ function Recursos() {
       ]
     },
     {
-      icon: <Users className="w-8 h-8 text-brand-primary" />,
+      icon: <Users className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
       title: 'Desenvolvimento da Autorregulação',
       description: 'Plataforma focada no desenvolvimento autônomo dos estudantes, promovendo habilidades para toda a vida.',
       features: [
@@ -206,7 +206,7 @@ function Recursos() {
       ]
     },
     {
-      icon: <Link className="w-8 h-8 text-brand-primary" />,
+      icon: <Link className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
       title: 'Integração com LMS',
       description: 'Integração perfeita com sistemas de gestão de aprendizagem existentes, mantendo todos os dados sincronizados.',
       features: [
@@ -217,7 +217,7 @@ function Recursos() {
       ]
     },
     {
-      icon: <Palette className="w-8 h-8 text-brand-primary" />,
+      icon: <Palette className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
       title: 'White-Label Disponível',
       description: 'Personalize a plataforma com a identidade visual da sua instituição, criando uma experiência única para seus alunos.',
       features: [
@@ -228,7 +228,7 @@ function Recursos() {
       ]
     },
     {
-      icon: <Headphones className="w-8 h-8 text-brand-primary" />,
+      icon: <Headphones className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
       title: 'Suporte Dedicado 24/7',
       description: 'Equipe especializada disponível em tempo integral para garantir o sucesso da implementação e uso contínuo da plataforma.',
       features: [
@@ -302,14 +302,14 @@ function Recursos() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:scale-105 ${
+                className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:scale-105 animate-fade-in-up ${
                   activeTab === tab.id
                     ? 'bg-brand-primary text-white shadow-lg scale-105'
                     : 'bg-white text-slate-700 border border-slate-200 hover:border-brand-accent hover:shadow-md'
                 }`}
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                <span className="text-lg">{tab.icon}</span>
+                <span className="text-lg animate-float" style={{ animationDelay: `${index * 150}ms` }}>{tab.icon}</span>
                 {tab.label}
               </button>
             ))}
@@ -333,7 +333,7 @@ function Recursos() {
                 className={`p-6 hover-lift border-0 shadow-lg animate-scale-in delay-${Math.min(index * 100, 800)}`}
               >
                 <CardContent className="pt-6">
-                  <div className="flex items-center justify-center w-16 h-16 bg-brand-light rounded-lg mb-6 mx-auto transition-transform duration-500 hover:rotate-12 hover:scale-110">
+                  <div className="flex items-center justify-center w-16 h-16 bg-brand-light rounded-lg mb-6 mx-auto transition-transform duration-500 hover:rotate-12 hover:scale-110 animate-float" style={{ animationDelay: `${index * 100}ms` }}>
                     {recurso.icon}
                   </div>
                   <h3 className="text-xl font-bold text-slate-900 mb-4 text-center">

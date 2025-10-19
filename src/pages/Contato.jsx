@@ -35,8 +35,8 @@ function Contato() {
             {/* Contact Form */}
             <Card className="p-8 shadow-lg hover-lift animate-fade-in-left">
               <CardHeader>
-                <CardTitle className="text-2xl text-slate-900">Envie sua mensagem</CardTitle>
-                <p className="text-slate-600">Preencha o formulário abaixo e retornaremos em até 24 horas</p>
+                <CardTitle className="text-2xl text-slate-900 animate-fade-in-up">Envie sua mensagem</CardTitle>
+                <p className="text-slate-600 animate-fade-in-up delay-100">Preencha o formulário abaixo e retornaremos em até 24 horas</p>
               </CardHeader>
               <CardContent>
                 <form className="space-y-6">
@@ -113,8 +113,8 @@ function Contato() {
                     </Label>
                   </div>
 
-                  <Button className="w-full bg-brand-primary hover:bg-brand-secondary text-white">
-                    <Send className="w-4 h-4 mr-2" />
+                  <Button className="w-full bg-brand-primary hover:bg-brand-secondary text-white transition-all duration-300 hover:scale-105">
+                    <Send className="w-4 h-4 mr-2 animate-float" />
                     Enviar Mensagem
                   </Button>
                 </form>
@@ -122,16 +122,16 @@ function Contato() {
             </Card>
 
             {/* Contact Info */}
-            <div className="space-y-6">
+            <div className="space-y-6 animate-fade-in-right">
               {/* Contact Methods */}
-              <Card className="p-6 shadow-lg">
+              <Card className="p-6 shadow-lg hover-lift animate-scale-in delay-200">
                 <CardHeader>
                   <CardTitle className="text-xl text-slate-900">Outras formas de contato</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center flex-shrink-0">
-                      <Mail className="w-6 h-6 text-brand-primary" />
+                      <Mail className="w-6 h-6 text-brand-primary animate-pulse-glow" />
                     </div>
                     <div>
                       <h4 className="font-semibold text-slate-900">E-mail</h4>
@@ -142,13 +142,13 @@ function Contato() {
 
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <MessageCircle className="w-6 h-6 text-green-600" />
+                      <MessageCircle className="w-6 h-6 text-green-600 animate-pulse-glow" />
                     </div>
                     <div>
                       <h4 className="font-semibold text-slate-900">WhatsApp</h4>
                       <p className="text-slate-600">(11) 99999-9999</p>
                       <p className="text-sm text-slate-500">Atendimento: Seg-Sex, 9h-18h</p>
-                      <Button variant="outline" size="sm" className="mt-2">
+                      <Button variant="outline" size="sm" className="mt-2 transition-all hover:scale-105">
                         Iniciar Conversa
                       </Button>
                     </div>
@@ -156,7 +156,7 @@ function Contato() {
 
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center flex-shrink-0">
-                      <Phone className="w-6 h-6 text-brand-primary" />
+                      <Phone className="w-6 h-6 text-brand-primary animate-pulse-glow" />
                     </div>
                     <div>
                       <h4 className="font-semibold text-slate-900">Telefone</h4>
@@ -168,19 +168,19 @@ function Contato() {
               </Card>
 
               {/* Social Media */}
-              <Card className="p-6 shadow-lg">
+              <Card className="p-6 shadow-lg hover-lift animate-scale-in delay-300">
                 <CardHeader>
                   <CardTitle className="text-xl text-slate-900">Siga-nos nas redes sociais</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex gap-4">
-                    <Button variant="outline" size="icon" className="w-12 h-12">
+                    <Button variant="outline" size="icon" className="w-12 h-12 transition-all hover:scale-110 hover:rotate-6">
                       <Facebook className="w-5 h-5" />
                     </Button>
-                    <Button variant="outline" size="icon" className="w-12 h-12">
+                    <Button variant="outline" size="icon" className="w-12 h-12 transition-all hover:scale-110 hover:rotate-6">
                       <Instagram className="w-5 h-5" />
                     </Button>
-                    <Button variant="outline" size="icon" className="w-12 h-12">
+                    <Button variant="outline" size="icon" className="w-12 h-12 transition-all hover:scale-110 hover:rotate-6">
                       <MessageCircle className="w-5 h-5" />
                     </Button>
                   </div>
@@ -188,26 +188,26 @@ function Contato() {
               </Card>
 
               {/* Quick Actions */}
-              <Card className="p-6 shadow-lg">
+              <Card className="p-6 shadow-lg hover-lift animate-scale-in delay-400">
                 <CardHeader>
                   <CardTitle className="text-xl text-slate-900">Ações rápidas</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-2 gap-3">
-                    <Button variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
-                      <Rocket className="w-5 h-5" />
+                    <Button variant="outline" className="h-auto p-4 flex flex-col items-center gap-2 transition-all hover:scale-105">
+                      <Rocket className="w-5 h-5 animate-float" />
                       <span className="text-sm">Começar Grátis</span>
                     </Button>
-                    <Button variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
-                      <BookOpen className="w-5 h-5" />
+                    <Button variant="outline" className="h-auto p-4 flex flex-col items-center gap-2 transition-all hover:scale-105">
+                      <BookOpen className="w-5 h-5 animate-float" style={{animationDelay: '200ms'}} />
                       <span className="text-sm">Ver Recursos</span>
                     </Button>
-                    <Button variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
-                      <HelpCircle className="w-5 h-5" />
+                    <Button variant="outline" className="h-auto p-4 flex flex-col items-center gap-2 transition-all hover:scale-105">
+                      <HelpCircle className="w-5 h-5 animate-float" style={{animationDelay: '400ms'}} />
                       <span className="text-sm">Central de Ajuda</span>
                     </Button>
-                    <Button variant="outline" className="h-auto p-4 flex flex-col items-center gap-2">
-                      <CalendarDays className="w-5 h-5" />
+                    <Button variant="outline" className="h-auto p-4 flex flex-col items-center gap-2 transition-all hover:scale-105">
+                      <CalendarDays className="w-5 h-5 animate-float" style={{animationDelay: '600ms'}} />
                       <span className="text-sm">Agendar Demo</span>
                     </Button>
                   </div>
@@ -219,19 +219,19 @@ function Contato() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 bg-white">
+      <section ref={contactRef} className="py-16 bg-white animate-on-scroll">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">Perguntas Frequentes</h2>
-            <p className="text-xl text-slate-600">Encontre respostas rápidas antes de entrar em contato</p>
+            <h2 className="text-3xl font-bold text-slate-900 mb-4 animate-fade-in-up">Perguntas Frequentes</h2>
+            <p className="text-xl text-slate-600 animate-fade-in-up delay-200">Encontre respostas rápidas antes de entrar em contato</p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            <Card className="p-6 shadow-lg hover:shadow-xl transition-shadow">
+            <Card className="p-6 shadow-lg hover-lift animate-fade-in-up delay-100">
               <CardContent className="pt-0">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center flex-shrink-0">
-                    <Clock className="w-6 h-6 text-brand-primary" />
+                    <Clock className="w-6 h-6 text-brand-primary animate-pulse-glow" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-slate-900 mb-2">Qual o tempo de resposta?</h3>
@@ -241,11 +241,11 @@ function Contato() {
               </CardContent>
             </Card>
 
-            <Card className="p-6 shadow-lg hover:shadow-xl transition-shadow">
+            <Card className="p-6 shadow-lg hover-lift animate-fade-in-up delay-200">
               <CardContent className="pt-0">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center flex-shrink-0">
-                    <Calendar className="w-6 h-6 text-brand-primary" />
+                    <Calendar className="w-6 h-6 text-brand-primary animate-pulse-glow" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-slate-900 mb-2">Como agendar uma demonstração?</h3>
@@ -255,11 +255,11 @@ function Contato() {
               </CardContent>
             </Card>
 
-            <Card className="p-6 shadow-lg hover:shadow-xl transition-shadow">
+            <Card className="p-6 shadow-lg hover-lift animate-fade-in-up delay-300">
               <CardContent className="pt-0">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Gift className="w-6 h-6 text-green-600" />
+                    <Gift className="w-6 h-6 text-green-600 animate-pulse-glow" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-slate-900 mb-2">O teste é realmente grátis?</h3>
@@ -269,11 +269,11 @@ function Contato() {
               </CardContent>
             </Card>
 
-            <Card className="p-6 shadow-lg hover:shadow-xl transition-shadow">
+            <Card className="p-6 shadow-lg hover-lift animate-fade-in-up delay-400">
               <CardContent className="pt-0">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center flex-shrink-0">
-                    <Handshake className="w-6 h-6 text-brand-primary" />
+                    <Handshake className="w-6 h-6 text-brand-primary animate-pulse-glow" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-slate-900 mb-2">Oferecem consultoria?</h3>
@@ -283,11 +283,11 @@ function Contato() {
               </CardContent>
             </Card>
 
-            <Card className="p-6 shadow-lg hover:shadow-xl transition-shadow">
+            <Card className="p-6 shadow-lg hover-lift animate-fade-in-up delay-500">
               <CardContent className="pt-0">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center flex-shrink-0">
-                    <GraduationCap className="w-6 h-6 text-brand-primary" />
+                    <GraduationCap className="w-6 h-6 text-brand-primary animate-pulse-glow" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-slate-900 mb-2">Há treinamento disponível?</h3>
@@ -297,11 +297,11 @@ function Contato() {
               </CardContent>
             </Card>
 
-            <Card className="p-6 shadow-lg hover:shadow-xl transition-shadow">
+            <Card className="p-6 shadow-lg hover-lift animate-fade-in-up delay-600">
               <CardContent className="pt-0">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center flex-shrink-0">
-                    <Headphones className="w-6 h-6 text-brand-primary" />
+                    <Headphones className="w-6 h-6 text-brand-primary animate-pulse-glow" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-slate-900 mb-2">Como funciona o suporte?</h3>
@@ -318,14 +318,14 @@ function Contato() {
       <section className="py-16 bg-slate-50">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">Nossos Escritórios</h2>
+            <h2 className="text-3xl font-bold text-slate-900 mb-4 animate-fade-in-up">Nossos Escritórios</h2>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <Card className="p-6 shadow-lg hover:shadow-xl transition-shadow text-center">
+            <Card className="p-6 shadow-lg hover-lift text-center animate-fade-in-up delay-100">
               <CardContent className="pt-0">
                 <div className="w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mx-auto mb-4">
-                  <MapPin className="w-8 h-8 text-brand-primary" />
+                  <MapPin className="w-8 h-8 text-brand-primary animate-float" />
                 </div>
                 <h3 className="text-xl font-semibold text-slate-900 mb-2">São Paulo - SP</h3>
                 <p className="text-slate-600">Av. Paulista, 1000 - Sala 500</p>
@@ -334,10 +334,10 @@ function Contato() {
               </CardContent>
             </Card>
 
-            <Card className="p-6 shadow-lg hover:shadow-xl transition-shadow text-center">
+            <Card className="p-6 shadow-lg hover-lift text-center animate-fade-in-up delay-200">
               <CardContent className="pt-0">
                 <div className="w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mx-auto mb-4">
-                  <MapPin className="w-8 h-8 text-brand-primary" />
+                  <MapPin className="w-8 h-8 text-brand-primary animate-float" style={{animationDelay: '300ms'}} />
                 </div>
                 <h3 className="text-xl font-semibold text-slate-900 mb-2">Rio de Janeiro - RJ</h3>
                 <p className="text-slate-600">Av. Rio Branco, 200 - Sala 300</p>
@@ -346,10 +346,10 @@ function Contato() {
               </CardContent>
             </Card>
 
-            <Card className="p-6 shadow-lg hover:shadow-xl transition-shadow text-center">
+            <Card className="p-6 shadow-lg hover-lift text-center animate-fade-in-up delay-300">
               <CardContent className="pt-0">
                 <div className="w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mx-auto mb-4">
-                  <MapPin className="w-8 h-8 text-brand-primary" />
+                  <MapPin className="w-8 h-8 text-brand-primary animate-float" style={{animationDelay: '600ms'}} />
                 </div>
                 <h3 className="text-xl font-semibold text-slate-900 mb-2">Brasília - DF</h3>
                 <p className="text-slate-600">SCS Q. 01, Bloco A - Sala 100</p>
@@ -365,11 +365,11 @@ function Contato() {
       <section className="bg-white py-16">
         <div className="container mx-auto px-4 max-w-7xl text-center">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold mb-4 text-slate-900">Prefere começar por conta própria?</h2>
-            <p className="text-xl text-slate-600 mb-8">
+            <h2 className="text-3xl font-bold mb-4 text-slate-900 animate-fade-in-up">Prefere começar por conta própria?</h2>
+            <p className="text-xl text-slate-600 mb-8 animate-fade-in-up delay-200">
               Crie sua conta gratuita agora e comece a transformar sua escrita imediatamente.
             </p>
-            <Button size="lg" className="bg-brand-primary text-white hover:bg-brand-secondary">
+            <Button size="lg" className="bg-brand-primary text-white hover:bg-brand-secondary transition-all duration-300 hover:scale-105 animate-fade-in-up delay-300">
               Criar Conta Grátis
             </Button>
           </div>

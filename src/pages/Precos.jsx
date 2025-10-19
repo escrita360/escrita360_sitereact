@@ -147,12 +147,12 @@ function Precos() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-white py-12 md:py-16 lg:py-20">
+      <section ref={heroRef} className="bg-white py-12 md:py-16 lg:py-20 animate-on-scroll">
         <div className="container mx-auto px-4 max-w-7xl text-center">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-slate-900">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-slate-900 animate-fade-in-up">
             Planos que se adaptam à sua necessidade
           </h1>
-          <p className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto animate-fade-in-up delay-200">
             Escolha o plano ideal para transformar o processo de escrita e alcance resultados extraordinários
           </p>
         </div>
@@ -161,7 +161,7 @@ function Precos() {
       {/* Pricing Toggle */}
       <section className="py-8 bg-slate-50 border-b">
         <div className="container mx-auto px-4 max-w-7xl">
-          <div className="flex items-center justify-center gap-4">
+          <div className="flex items-center justify-center gap-4 animate-fade-in-up">
             <span className={`text-lg ${!isYearly ? 'font-bold text-brand-primary' : 'text-gray-600'}`}>
               Mensal
             </span>
@@ -178,13 +178,13 @@ function Precos() {
       </section>
 
       {/* Pricing Grid */}
-      <section className="py-8 md:py-12 lg:py-16 bg-white">
+      <section ref={plansRef} className="py-8 md:py-12 lg:py-16 bg-white animate-on-scroll">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {plans.map((plan, index) => (
-              <Card key={index} className={`relative ${plan.popular ? 'border-2 border-brand-primary shadow-xl' : 'hover:shadow-xl'} transition-shadow`}>
+              <Card key={index} className={`relative hover-lift animate-scale-in delay-${index * 200} ${plan.popular ? 'border-2 border-brand-primary shadow-xl' : 'hover:shadow-xl'} transition-all`}>
                 {plan.popular && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 animate-float">
                     <Badge className="bg-brand-primary text-white px-4 py-1">
                       Mais Escolhido
                     </Badge>
@@ -218,7 +218,7 @@ function Precos() {
                     ))}
                   </ul>
                   <Button
-                    className="w-full"
+                    className="w-full transition-all duration-300 hover:scale-105"
                     variant={plan.buttonVariant}
                     size="lg"
                   >
@@ -232,12 +232,12 @@ function Precos() {
       </section>
 
       {/* Comparison Table */}
-      <section className="py-8 md:py-12 lg:py-16 bg-slate-50">
+      <section ref={comparisonRef} className="py-8 md:py-12 lg:py-16 bg-slate-50 animate-on-scroll">
         <div className="container mx-auto px-4 max-w-7xl">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-4">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-4 animate-fade-in-up">
             Comparação Detalhada de Planos
           </h2>
-          <div className="max-w-6xl mx-auto">
+          <div className="max-w-6xl mx-auto animate-fade-in-up delay-200">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -283,17 +283,17 @@ function Precos() {
       {/* Success Stories */}
       <section className="py-8 md:py-12 lg:py-16 bg-white">
         <div className="container mx-auto px-4 max-w-7xl">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-4">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-4 animate-fade-in-up">
             Histórias de Sucesso
           </h2>
-          <p className="text-lg md:text-xl text-center text-slate-600 mb-8 md:mb-12 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-center text-slate-600 mb-8 md:mb-12 max-w-2xl mx-auto animate-fade-in-up delay-200">
             Veja como nossos usuários transformaram sua escrita e alcançaram seus objetivos
           </p>
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {successStories.map((story, index) => (
-              <Card key={index} className="hover:shadow-xl transition-shadow">
+              <Card key={index} className={`hover-lift animate-fade-in-up delay-${index * 200}`}>
                 <CardContent className="p-6">
-                  <Quote className="w-8 h-8 text-brand-primary mb-4" />
+                  <Quote className="w-8 h-8 text-brand-primary mb-4 animate-pulse-glow" />
                   <p className="text-slate-700 mb-6 italic">"{story.quote}"</p>
                   <div className="flex items-center gap-3">
                     <Avatar>
@@ -315,16 +315,16 @@ function Precos() {
       {/* FAQ Section */}
       <section className="py-8 md:py-12 lg:py-16 bg-slate-50">
         <div className="container mx-auto px-4 max-w-7xl">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-4">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-4 animate-fade-in-up">
             Perguntas Frequentes
           </h2>
-          <p className="text-lg md:text-xl text-center text-slate-600 mb-8 md:mb-12 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-center text-slate-600 mb-8 md:mb-12 max-w-2xl mx-auto animate-fade-in-up delay-200">
             Tire suas dúvidas sobre nossos planos e funcionalidades
           </p>
           <div className="max-w-3xl mx-auto">
-            <Accordion type="single" collapsible className="space-y-4">
+            <Accordion type="single" collapsible className="space-y-4 animate-fade-in-up delay-300">
               {faqs.map((faq, index) => (
-                <AccordionItem key={index} value={`item-${index}`} className="bg-white rounded-lg border">
+                <AccordionItem key={index} value={`item-${index}`} className="bg-white rounded-lg border hover-lift">
                   <AccordionTrigger className="px-6 py-4 hover:no-underline">
                     <span className="text-left font-medium">{faq.question}</span>
                   </AccordionTrigger>
@@ -341,17 +341,17 @@ function Precos() {
       {/* CTA Section */}
       <section className="py-8 md:py-12 lg:py-16 bg-white">
         <div className="container mx-auto px-4 max-w-7xl text-center">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 text-slate-900">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 text-slate-900 animate-fade-in-up">
             Pronto para revolucionar a escrita?
           </h2>
-          <p className="text-lg md:text-xl text-slate-600 mb-8 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-slate-600 mb-8 max-w-2xl mx-auto animate-fade-in-up delay-200">
             Comece gratuitamente e veja a diferença que a autorregulação faz no desenvolvimento da escrita.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary" className="bg-brand-primary text-white hover:bg-brand-secondary">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up delay-300">
+            <Button size="lg" variant="secondary" className="bg-brand-primary text-white hover:bg-brand-secondary transition-all duration-300 hover:scale-105">
               Começar Grátis
             </Button>
-            <Button size="lg" variant="outline" className="border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white">
+            <Button size="lg" variant="outline" className="border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white transition-all duration-300 hover:scale-105">
               Falar com Especialista
             </Button>
           </div>

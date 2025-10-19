@@ -146,13 +146,13 @@ function ParaQuem() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-white py-20">
+      <section ref={heroRef} className="bg-white py-20 animate-on-scroll">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-5xl font-bold mb-6 text-slate-900">
+            <h1 className="text-5xl font-bold mb-6 text-slate-900 animate-fade-in-up">
               Uma solução para todo o ecossistema educacional
             </h1>
-            <p className="text-xl text-slate-600 leading-relaxed">
+            <p className="text-xl text-slate-600 leading-relaxed animate-fade-in-up delay-200">
               Atendemos diferentes públicos com recursos específicos para cada necessidade no processo de desenvolvimento da escrita
             </p>
           </div>
@@ -160,20 +160,20 @@ function ParaQuem() {
       </section>
 
       {/* Target Audience Tabs Section */}
-      <section className="py-20 bg-slate-50">
+      <section ref={tabsRef} className="py-20 bg-slate-50 animate-on-scroll">
         <div className="container mx-auto px-4 max-w-7xl">
           <Tabs defaultValue="estudantes" className="w-full">
             {/* Navigation Tabs */}
-            <TabsList className="grid w-full grid-cols-4 mb-12 bg-slate-100 p-2 rounded-xl">
-              {audiences.map((audience) => {
+            <TabsList className="grid w-full grid-cols-4 mb-12 bg-slate-100 p-2 rounded-xl animate-fade-in-up">
+              {audiences.map((audience, index) => {
                 const IconComponent = audience.icon
                 return (
                   <TabsTrigger
                     key={audience.id}
                     value={audience.id}
-                    className="flex flex-col items-center gap-2 py-4 px-6 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-md transition-all"
+                    className={`flex flex-col items-center gap-2 py-4 px-6 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-md transition-all hover:scale-105 animate-fade-in-up delay-${index * 100}`}
                   >
-                    <IconComponent className="w-6 h-6" />
+                    <IconComponent className="w-6 h-6 animate-float" style={{animationDelay: `${index * 200}ms`}} />
                     <span className="text-sm font-medium">{audience.title.split(' ')[1]}</span>
                     {audience.id === 'escolas' && (
                       <Badge variant="secondary" className="text-xs">Popular</Badge>
@@ -188,19 +188,19 @@ function ParaQuem() {
               const IconComponent = audience.icon
               return (
                 <TabsContent key={audience.id} value={audience.id} className="mt-8">
-                  <Card className={`p-8 ${audience.featured ? 'border-brand-accent bg-slate-50' : ''}`}>
+                  <Card className={`p-8 hover-lift animate-scale-in ${audience.featured ? 'border-brand-accent bg-slate-50' : ''}`}>
                     <CardContent className="pt-6">
                       <div className="flex items-start gap-8">
                         <div className="flex-shrink-0">
                           <div className={`w-20 h-20 rounded-full flex items-center justify-center ${audience.featured ? 'bg-brand-light' : 'bg-brand-light'}`}>
-                            <IconComponent className={`w-10 h-10 ${audience.featured ? 'text-brand-primary' : 'text-brand-primary'}`} />
+                            <IconComponent className={`w-10 h-10 animate-pulse-glow ${audience.featured ? 'text-brand-primary' : 'text-brand-primary'}`} />
                           </div>
                         </div>
                         <div className="flex-1">
-                          <h2 className="text-3xl font-bold text-slate-900 mb-2">{audience.title}</h2>
-                          <p className="text-lg text-brand-primary mb-6">{audience.subtitle}</p>
+                          <h2 className="text-3xl font-bold text-slate-900 mb-2 animate-fade-in-right">{audience.title}</h2>
+                          <p className="text-lg text-brand-primary mb-6 animate-fade-in-right delay-100">{audience.subtitle}</p>
 
-                          <p className="text-slate-700 text-lg mb-8 leading-relaxed">
+                          <p className="text-slate-700 text-lg mb-8 leading-relaxed animate-fade-in-right delay-200">
                             {audience.description}
                           </p>
 
@@ -274,18 +274,18 @@ function ParaQuem() {
       {/* Success Stories */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4 max-w-7xl">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-8 md:mb-12">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-8 md:mb-12 animate-fade-in-up">
             Histórias de Sucesso
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {successStories.map((story, index) => {
               const StoryIcon = story.icon
               return (
-                <Card key={index} className="p-6 hover:shadow-xl transition-shadow">
+                <Card key={index} className={`p-6 hover-lift animate-fade-in-up delay-${index * 100}`}>
                   <CardContent className="pt-6">
                     <div className="text-center">
                       <div className="w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mx-auto mb-4">
-                        <StoryIcon className="w-8 h-8 text-brand-primary" />
+                        <StoryIcon className="w-8 h-8 text-brand-primary animate-float" />
                       </div>
                       <h3 className="text-xl font-bold text-slate-900 mb-3">{story.title}</h3>
                       <p className="text-slate-600 mb-4">{story.description}</p>
@@ -302,17 +302,17 @@ function ParaQuem() {
       {/* CTA Section */}
       <section className="py-20 bg-slate-50">
         <div className="container mx-auto px-4 max-w-7xl text-center">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 text-slate-900">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 text-slate-900 animate-fade-in-up">
             Encontre a solução perfeita para você
           </h2>
-          <p className="text-lg md:text-xl text-slate-600 mb-8 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-slate-600 mb-8 max-w-2xl mx-auto animate-fade-in-up delay-200">
             Seja estudante, professor, escola ou curso preparatório, temos o plano ideal para transformar o aprendizado da escrita.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary" className="bg-brand-primary text-white hover:bg-brand-secondary px-8 py-3 text-lg">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up delay-300">
+            <Button size="lg" variant="secondary" className="bg-brand-primary text-white hover:bg-brand-secondary px-8 py-3 text-lg transition-all hover:scale-105">
               Ver Planos e Preços
             </Button>
-            <Button size="lg" variant="outline" className="border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white px-8 py-3 text-lg">
+            <Button size="lg" variant="outline" className="border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white px-8 py-3 text-lg transition-all hover:scale-105">
               Falar com Especialista
             </Button>
           </div>
