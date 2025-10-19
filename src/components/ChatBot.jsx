@@ -43,13 +43,13 @@ function ChatBot() {
       {/* Botão Flutuante */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 w-28 h-28 rounded-full bg-brand-primary hover:bg-brand-secondary text-white shadow-lg transition-all duration-300 flex items-center justify-center group hover:scale-110"
+        className="fixed bottom-6 right-6 z-50 w-20 h-20 rounded-full bg-brand-primary hover:bg-brand-secondary text-white shadow-lg transition-all duration-300 flex items-center justify-center group hover:scale-110"
         aria-label="Abrir chat"
       >
         {isOpen ? (
-          <X className="w-12 h-12" />
+          <X className="w-8 h-8" />
         ) : (
-          <img src={robo} alt="Chat Bot" className="w-48 h-48 group-hover:animate-bounce" style={{ filter: 'brightness(0) invert(1)' }} />
+          <img src={robo} alt="Chat Bot" className="w-16 h-16 group-hover:animate-bounce" style={{ filter: 'brightness(0) invert(1)' }} />
         )}
       </button>
 
@@ -57,9 +57,9 @@ function ChatBot() {
       {isOpen && (
         <div className="fixed bottom-24 right-6 z-50 w-[350px] h-[500px] animate-fade-in-up">
           <Card className="h-full flex flex-col shadow-2xl bg-white">
-            <CardHeader className="bg-blue-600 text-white rounded-t-lg">
+            <CardHeader className="bg-brand-primary text-white rounded-t-lg">
               <CardTitle className="flex items-center gap-2">
-                <MessageCircle className="w-5 h-5" />
+                <img src={robo} alt="Chat Bot" className="w-20 h-20" style={{ filter: 'brightness(0) invert(1)' }} />
                 Chat de Suporte
               </CardTitle>
             </CardHeader>
@@ -75,7 +75,7 @@ function ChatBot() {
                       <div
                         className={`max-w-[80%] rounded-lg px-4 py-2 ${
                           message.sender === 'user'
-                            ? 'bg-blue-600 text-white'
+                            ? 'bg-brand-primary text-white'
                             : 'bg-slate-100 text-slate-900'
                         }`}
                       >
@@ -96,7 +96,7 @@ function ChatBot() {
                     onChange={(e) => setInputMessage(e.target.value)}
                     className="flex-1"
                   />
-                  <Button type="submit" size="icon" className="bg-blue-600 hover:bg-blue-700">
+                  <Button type="submit" size="icon" className="bg-brand-primary hover:bg-brand-secondary">
                     <Send className="w-4 h-4" />
                   </Button>
                 </div>
