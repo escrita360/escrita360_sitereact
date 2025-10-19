@@ -232,50 +232,190 @@ function Precos() {
       </section>
 
       {/* Comparison Table */}
-      <section ref={comparisonRef} className="py-8 md:py-12 lg:py-16 bg-slate-50 animate-on-scroll">
+      <section ref={comparisonRef} className="py-8 md:py-12 lg:py-16 bg-gradient-to-b from-slate-50 to-white animate-on-scroll">
         <div className="container mx-auto px-4 max-w-7xl">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-4 animate-fade-in-up">
-            Comparação Detalhada de Planos
-          </h2>
-          <div className="max-w-6xl mx-auto animate-fade-in-up delay-200">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-1/3">Recursos</TableHead>
-                  <TableHead className="text-center">Gratuito</TableHead>
-                  <TableHead className="text-center bg-brand-light">Professor</TableHead>
-                  <TableHead className="text-center">Escola</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {comparisonData.map((row, index) => (
-                  <TableRow key={index}>
-                    <TableCell className="font-medium">{row.feature}</TableCell>
-                    <TableCell className="text-center">
-                      {typeof row.free === 'boolean' ? (
-                        row.free ? <Check className="w-5 h-5 text-green-600 mx-auto" /> : <X className="w-5 h-5 text-gray-400 mx-auto" />
+          <div className="text-center mb-12 animate-fade-in-up">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">
+              Comparação Detalhada de Planos
+            </h2>
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+              Veja todas as funcionalidades e escolha o plano ideal para suas necessidades
+            </p>
+          </div>
+          
+          {/* Desktop View */}
+          <div className="hidden lg:block max-w-7xl mx-auto animate-fade-in-up delay-200">
+            <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
+              {/* Header */}
+              <div className="grid grid-cols-4 gap-0 border-b border-slate-200 bg-slate-50">
+                <div className="p-6">
+                  <h3 className="text-lg font-bold text-slate-900">Recursos</h3>
+                </div>
+                <div className="p-6 text-center border-l border-slate-200">
+                  <div className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-slate-100 mb-2">
+                    <span className="text-sm font-semibold text-slate-700">Gratuito</span>
+                  </div>
+                </div>
+                <div className="p-6 text-center border-l border-slate-200 bg-gradient-to-br from-blue-50 to-cyan-50 relative">
+                  <div className="absolute top-2 right-2">
+                    <Badge className="bg-brand-primary text-white text-xs">Popular</Badge>
+                  </div>
+                  <div className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-brand-primary text-white mb-2">
+                    <span className="text-sm font-semibold">Professor</span>
+                  </div>
+                </div>
+                <div className="p-6 text-center border-l border-slate-200">
+                  <div className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-slate-900 text-white mb-2">
+                    <span className="text-sm font-semibold">Escola</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Rows */}
+              {comparisonData.map((row, index) => (
+                <div 
+                  key={index} 
+                  className={`grid grid-cols-4 gap-0 hover:bg-slate-50 transition-colors duration-200 ${
+                    index !== comparisonData.length - 1 ? 'border-b border-slate-100' : ''
+                  }`}
+                >
+                  <div className="p-5 flex items-center">
+                    <span className="text-sm font-medium text-slate-700">{row.feature}</span>
+                  </div>
+                  <div className="p-5 flex items-center justify-center border-l border-slate-100">
+                    {typeof row.free === 'boolean' ? (
+                      row.free ? (
+                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-green-100">
+                          <Check className="w-5 h-5 text-green-600" />
+                        </div>
                       ) : (
-                        row.free
-                      )}
-                    </TableCell>
-                    <TableCell className="text-center bg-brand-light">
-                      {typeof row.professor === 'boolean' ? (
-                        row.professor ? <Check className="w-5 h-5 text-green-600 mx-auto" /> : <X className="w-5 h-5 text-gray-400 mx-auto" />
+                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100">
+                          <X className="w-5 h-5 text-slate-400" />
+                        </div>
+                      )
+                    ) : (
+                      <span className="text-sm text-slate-600 font-medium">{row.free}</span>
+                    )}
+                  </div>
+                  <div className="p-5 flex items-center justify-center border-l border-slate-100 bg-gradient-to-br from-blue-50/30 to-cyan-50/30">
+                    {typeof row.professor === 'boolean' ? (
+                      row.professor ? (
+                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-green-100">
+                          <Check className="w-5 h-5 text-green-600" />
+                        </div>
                       ) : (
-                        row.professor
-                      )}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {typeof row.escola === 'boolean' ? (
-                        row.escola ? <Check className="w-5 h-5 text-green-600 mx-auto" /> : <X className="w-5 h-5 text-gray-400 mx-auto" />
+                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100">
+                          <X className="w-5 h-5 text-slate-400" />
+                        </div>
+                      )
+                    ) : (
+                      <span className="text-sm text-slate-700 font-medium">{row.professor}</span>
+                    )}
+                  </div>
+                  <div className="p-5 flex items-center justify-center border-l border-slate-100">
+                    {typeof row.escola === 'boolean' ? (
+                      row.escola ? (
+                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-green-100">
+                          <Check className="w-5 h-5 text-green-600" />
+                        </div>
                       ) : (
-                        row.escola
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100">
+                          <X className="w-5 h-5 text-slate-400" />
+                        </div>
+                      )
+                    ) : (
+                      <span className="text-sm text-slate-600 font-medium">{row.escola}</span>
+                    )}
+                  </div>
+                </div>
+              ))}
+
+              {/* Footer CTAs */}
+              <div className="grid grid-cols-4 gap-0 bg-slate-50 p-6 border-t border-slate-200">
+                <div className="p-2"></div>
+                <div className="p-2 text-center">
+                  <Button variant="outline" size="sm" className="w-full hover:bg-slate-900 hover:text-white transition-colors">
+                    Começar Grátis
+                  </Button>
+                </div>
+                <div className="p-2 text-center">
+                  <Button size="sm" className="w-full bg-brand-primary hover:bg-brand-secondary text-white transition-all hover:scale-105 shadow-md">
+                    Escolher Professor
+                  </Button>
+                </div>
+                <div className="p-2 text-center">
+                  <Button variant="outline" size="sm" className="w-full hover:bg-slate-900 hover:text-white transition-colors">
+                    Agendar Demo
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile View */}
+          <div className="lg:hidden space-y-6 animate-fade-in-up delay-200">
+            {plans.map((plan, planIndex) => (
+              <Card key={planIndex} className={`overflow-hidden ${plan.popular ? 'border-2 border-brand-primary shadow-lg' : 'border border-slate-200'}`}>
+                <CardHeader className={`${plan.popular ? 'bg-gradient-to-br from-blue-50 to-cyan-50' : 'bg-slate-50'} p-6`}>
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="text-xl font-bold text-slate-900">{plan.name}</h3>
+                    {plan.popular && (
+                      <Badge className="bg-brand-primary text-white">Popular</Badge>
+                    )}
+                  </div>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-3xl font-bold text-brand-primary">
+                      R$ {isYearly ? plan.yearlyPrice : plan.monthlyPrice}
+                    </span>
+                    <span className="text-slate-600">/mês</span>
+                  </div>
+                </CardHeader>
+                <CardContent className="p-6">
+                  <div className="space-y-3">
+                    {comparisonData.map((row, rowIndex) => {
+                      const value = planIndex === 0 ? row.free : planIndex === 1 ? row.professor : row.escola
+                      return (
+                        <div key={rowIndex} className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
+                          <span className="text-sm text-slate-700 flex-1">{row.feature}</span>
+                          <div className="ml-4">
+                            {typeof value === 'boolean' ? (
+                              value ? (
+                                <div className="flex items-center justify-center w-6 h-6 rounded-full bg-green-100">
+                                  <Check className="w-4 h-4 text-green-600" />
+                                </div>
+                              ) : (
+                                <div className="flex items-center justify-center w-6 h-6 rounded-full bg-slate-100">
+                                  <X className="w-4 h-4 text-slate-400" />
+                                </div>
+                              )
+                            ) : (
+                              <span className="text-sm text-slate-600 font-medium">{value}</span>
+                            )}
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                  <Button 
+                    className={`w-full mt-6 transition-all ${
+                      plan.popular 
+                        ? 'bg-brand-primary hover:bg-brand-secondary text-white shadow-md hover:scale-105' 
+                        : 'hover:bg-slate-900 hover:text-white'
+                    }`}
+                    variant={plan.popular ? 'default' : 'outline'}
+                  >
+                    {plan.buttonText}
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Info Footer */}
+          <div className="mt-8 text-center animate-fade-in-up delay-300">
+            <p className="text-sm text-slate-500">
+              Todos os planos incluem atualizações gratuitas e acesso às novas funcionalidades
+            </p>
           </div>
         </div>
       </section>
