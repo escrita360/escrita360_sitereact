@@ -8,19 +8,17 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar.jsx'
 import { Check, X, Quote, Star } from 'lucide-react'
 import React, { useState } from 'react'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
-import PagamentoDialog from './Pagamento.jsx'
+import { useNavigate } from 'react-router-dom'
 
 function Precos() {
   const [isYearly, setIsYearly] = useState(false)
-  const [isPagamentoOpen, setIsPagamentoOpen] = useState(false)
-  const [selectedPlan, setSelectedPlan] = useState(null)
+  const navigate = useNavigate()
   const heroRef = useScrollAnimation()
   const plansRef = useScrollAnimation()
   const comparisonRef = useScrollAnimation()
 
   const handleOpenPagamento = (plan) => {
-    setSelectedPlan(plan)
-    setIsPagamentoOpen(true)
+    navigate('/pagamento', { state: { selectedPlan: plan, isYearly } })
   }
 
   const plans = [
@@ -526,14 +524,6 @@ function Precos() {
           </div>
         </div>
       </section>
-
-      {/* Modal de Pagamento */}
-      <PagamentoDialog
-        isOpen={isPagamentoOpen}
-        onClose={() => setIsPagamentoOpen(false)}
-        selectedPlan={selectedPlan}
-        isYearly={isYearly}
-      />
     </div>
   )
 }

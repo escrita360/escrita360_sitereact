@@ -6,6 +6,7 @@ import ParaQuem from './pages/ParaQuem.jsx'
 import Recursos from './pages/Recursos.jsx'
 import Precos from './pages/Precos.jsx'
 import Contato from './pages/Contato.jsx'
+import Pagamento from './pages/Pagamento.jsx'
 import './App.css'
 
 function App() {
@@ -97,6 +98,19 @@ function App() {
               transition={pageTransition}
             >
               <Contato />
+            </motion.div>
+          </Layout>
+        } />
+        <Route path="/pagamento" element={
+          <Layout>
+            <motion.div
+              initial="initial"
+              animate="in"
+              exit="out"
+              variants={pageVariants}
+              transition={pageTransition}
+            >
+              <Pagamento />
             </motion.div>
           </Layout>
         } />
