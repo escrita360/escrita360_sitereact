@@ -49,7 +49,7 @@ function ChatBot() {
         {isOpen ? (
           <X className="w-8 h-8" />
         ) : (
-          <img src={robo} alt="Chat Bot" className="w-16 h-16 group-hover:animate-bounce" style={{ filter: 'brightness(0) invert(1)' }} />
+          <img src={robo} alt="Chat Bot" className="w-20 h-20 group-hover:animate-bounce" style={{ filter: 'brightness(0) invert(1)' }} />
         )}
       </button>
 
@@ -96,7 +96,7 @@ function ChatBot() {
                     onChange={(e) => setInputMessage(e.target.value)}
                     className="flex-1"
                   />
-                  <Button type="submit" size="icon" className="bg-brand-primary hover:bg-brand-secondary">
+                  <Button type="submit" size="icon" className="bg-brand-primary hover:bg-brand-secondary text-white">
                     <Send className="w-4 h-4" />
                   </Button>
                 </div>
