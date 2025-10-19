@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 import { Input } from '@/components/ui/input.jsx'
 import { ScrollArea } from '@/components/ui/scroll-area.jsx'
+import robo from '@/assets/robo.svg'
 
 function ChatBot() {
   const [isOpen, setIsOpen] = useState(false)
@@ -42,20 +43,20 @@ function ChatBot() {
       {/* Botão Flutuante */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg transition-all duration-300 flex items-center justify-center group hover:scale-110"
+        className="fixed bottom-6 right-6 z-50 w-28 h-28 rounded-full bg-brand-primary hover:bg-brand-secondary text-white shadow-lg transition-all duration-300 flex items-center justify-center group hover:scale-110"
         aria-label="Abrir chat"
       >
         {isOpen ? (
-          <X className="w-6 h-6" />
+          <X className="w-12 h-12" />
         ) : (
-          <MessageCircle className="w-6 h-6 group-hover:animate-bounce" />
+          <img src={robo} alt="Chat Bot" className="w-48 h-48 group-hover:animate-bounce" style={{ filter: 'brightness(0) invert(1)' }} />
         )}
       </button>
 
       {/* Janela do Chat */}
       {isOpen && (
         <div className="fixed bottom-24 right-6 z-50 w-[350px] h-[500px] animate-fade-in-up">
-          <Card className="h-full flex flex-col shadow-2xl">
+          <Card className="h-full flex flex-col shadow-2xl bg-white">
             <CardHeader className="bg-blue-600 text-white rounded-t-lg">
               <CardTitle className="flex items-center gap-2">
                 <MessageCircle className="w-5 h-5" />
