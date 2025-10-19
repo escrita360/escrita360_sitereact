@@ -1,7 +1,13 @@
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent } from '@/components/ui/card.jsx'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel.jsx"
 import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
 import {
   GraduationCap,
@@ -159,118 +165,110 @@ function ParaQuem() {
         </div>
       </section>
 
-      {/* Target Audience Tabs Section */}
+      {/* Target Audience Carousel Section */}
       <section ref={tabsRef} className="py-20 bg-slate-50 animate-on-scroll">
         <div className="container mx-auto px-4 max-w-7xl">
-          <Tabs defaultValue="estudantes" className="w-full">
-            {/* Navigation Tabs */}
-            <TabsList className="grid w-full grid-cols-4 mb-12 bg-slate-100 p-2 rounded-xl animate-fade-in-up">
-              {audiences.map((audience, index) => {
+          <Carousel
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+            className="w-full"
+          >
+            <CarouselContent>
+              {audiences.map((audience) => {
                 const IconComponent = audience.icon
                 return (
-                  <TabsTrigger
-                    key={audience.id}
-                    value={audience.id}
-                    className={`flex flex-col items-center gap-2 py-4 px-6 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-md transition-all hover:scale-105 animate-fade-in-up delay-${index * 100}`}
-                  >
-                    <IconComponent className="w-6 h-6 animate-float" style={{animationDelay: `${index * 200}ms`}} />
-                    <span className="text-sm font-medium">{audience.title.split(' ')[1]}</span>
-                    {audience.id === 'escolas' && (
-                      <Badge variant="secondary" className="text-xs">Popular</Badge>
-                    )}
-                  </TabsTrigger>
-                )
-              })}
-            </TabsList>
-
-            {/* Tab Contents */}
-            {audiences.map((audience) => {
-              const IconComponent = audience.icon
-              return (
-                <TabsContent key={audience.id} value={audience.id} className="mt-8">
-                  <Card className={`p-8 hover-lift animate-scale-in ${audience.featured ? 'border-brand-accent bg-slate-50' : ''}`}>
-                    <CardContent className="pt-6">
-                      <div className="flex items-start gap-8">
-                        <div className="flex-shrink-0">
-                          <div className={`w-20 h-20 rounded-full flex items-center justify-center ${audience.featured ? 'bg-brand-light' : 'bg-brand-light'}`}>
-                            <IconComponent className={`w-10 h-10 animate-pulse-glow ${audience.featured ? 'text-brand-primary' : 'text-brand-primary'}`} />
+                  <CarouselItem key={audience.id}>
+                    <Card className={`p-8 hover-lift animate-scale-in ${audience.featured ? 'border-brand-accent bg-slate-50' : ''}`}>
+                      <CardContent className="pt-6">
+                        <div className="flex items-start gap-8">
+                          <div className="flex-shrink-0">
+                            <div className={`w-20 h-20 rounded-full flex items-center justify-center bg-brand-light`}>
+                              <IconComponent className="w-10 h-10 text-brand-primary animate-pulse-glow" />
+                            </div>
                           </div>
-                        </div>
-                        <div className="flex-1">
-                          <h2 className="text-3xl font-bold text-slate-900 mb-2 animate-fade-in-right">{audience.title}</h2>
-                          <p className="text-lg text-brand-primary mb-6 animate-fade-in-right delay-100">{audience.subtitle}</p>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <h2 className="text-3xl font-bold text-slate-900 animate-fade-in-right">{audience.title}</h2>
+                              {audience.id === 'escolas' && (
+                                <Badge variant="secondary" className="text-xs bg-brand-accent text-white">Popular</Badge>
+                              )}
+                            </div>
+                            <p className="text-lg text-brand-primary mb-6 animate-fade-in-right delay-100">{audience.subtitle}</p>
 
-                          <p className="text-slate-700 text-lg mb-8 leading-relaxed animate-fade-in-right delay-200">
-                            {audience.description}
-                          </p>
+                            <p className="text-slate-700 text-lg mb-8 leading-relaxed animate-fade-in-right delay-200">
+                              {audience.description}
+                            </p>
 
-                          {/* Stats for Professores and Cursos Prep */}
-                          {audience.stats && (
-                            <div className="grid grid-cols-3 gap-6 mb-8">
-                              {audience.stats.map((stat, index) => (
-                                <div key={index} className="text-center">
-                                  <div className="text-3xl font-bold text-brand-primary mb-2">{stat.number}</div>
-                                  <div className="text-slate-600">{stat.label}</div>
+                            {/* Stats for Professores and Cursos Prep */}
+                            {audience.stats && (
+                              <div className="grid grid-cols-3 gap-6 mb-8">
+                                {audience.stats.map((stat, index) => (
+                                  <div key={index} className="text-center">
+                                    <div className="text-3xl font-bold text-brand-primary mb-2">{stat.number}</div>
+                                    <div className="text-slate-600">{stat.label}</div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+
+                            {/* Grid Features for Escolas */}
+                            {audience.gridFeatures && (
+                              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+                                {audience.gridFeatures.map((feature, index) => {
+                                  const FeatureIcon = feature.icon
+                                  return (
+                                    <div key={index} className="text-center">
+                                      <div className="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center mx-auto mb-3">
+                                        <FeatureIcon className="w-6 h-6 text-brand-primary" />
+                                      </div>
+                                      <h4 className="font-semibold text-slate-900 mb-1">{feature.title}</h4>
+                                      <p className="text-sm text-slate-600">{feature.desc}</p>
+                                    </div>
+                                  )
+                                })}
+                              </div>
+                            )}
+
+                            {/* Features */}
+                            <div className="grid md:grid-cols-2 gap-6 mb-8">
+                              {audience.features.map((feature, index) => (
+                                <div key={index} className="flex items-center gap-3">
+                                  <CheckCircle className="w-5 h-5 text-brand-secondary flex-shrink-0" />
+                                  <span className="text-slate-700">{feature}</span>
                                 </div>
                               ))}
                             </div>
-                          )}
-
-                          {/* Grid Features for Escolas */}
-                          {audience.gridFeatures && (
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-                              {audience.gridFeatures.map((feature, index) => {
-                                const FeatureIcon = feature.icon
-                                return (
-                                  <div key={index} className="text-center">
-                                    <div className="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center mx-auto mb-3">
-                                      <FeatureIcon className="w-6 h-6 text-brand-primary" />
-                                    </div>
-                                    <h4 className="font-semibold text-slate-900 mb-1">{feature.title}</h4>
-                                    <p className="text-sm text-slate-600">{feature.desc}</p>
-                                  </div>
-                                )
-                              })}
+                            {/* Tags */}
+                            <div className="flex flex-wrap gap-2 mb-8">
+                              {audience.tags.map((tag, index) => (
+                                <Badge key={index} variant="outline" className="text-brand-primary border-brand-accent">
+                                  {tag}
+                                </Badge>
+                              ))}
                             </div>
-                          )}
 
-                          {/* Features */}
-                          <div className="grid md:grid-cols-2 gap-6 mb-8">
-                            {audience.features.map((feature, index) => (
-                              <div key={index} className="flex items-center gap-3">
-                                <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
-                                <span className="text-slate-700">{feature}</span>
-                              </div>
-                            ))}
+                            {/* CTA */}
+                            <Button
+                              size="lg"
+                              className="bg-brand-primary hover:bg-brand-secondary text-white px-8 py-3 text-lg"
+                            >
+                              {audience.cta}
+                            </Button>
                           </div>
-
-                          {/* Tags */}
-                          <div className="flex flex-wrap gap-2 mb-8">
-                            {audience.tags.map((tag, index) => (
-                              <Badge key={index} variant="outline" className="text-brand-primary border-brand-accent">
-                                {tag}
-                              </Badge>
-                            ))}
-                          </div>
-
-                          {/* CTA */}
-                          <Button
-                            size="lg"
-                            className="bg-brand-primary hover:bg-brand-secondary text-white px-8 py-3 text-lg"
-                          >
-                            {audience.cta}
-                          </Button>
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-              )
-            })}
-          </Tabs>
+                      </CardContent>
+                    </Card>
+                  </CarouselItem>
+                )
+              })}
+            </CarouselContent>
+            <CarouselPrevious className="left-4 border-brand-primary text-brand-primary hover:bg-brand-light hover:text-brand-primary" />
+            <CarouselNext className="right-4 border-brand-primary text-brand-primary hover:bg-brand-light hover:text-brand-primary" />
+          </Carousel>
         </div>
       </section>
-
       {/* Success Stories */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4 max-w-7xl">

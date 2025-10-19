@@ -39,7 +39,7 @@ function ChatBot() {
   }
 
   return (
-    <>
+    <div>
       {/* Botão Flutuante */}
       <button
         onClick={() => setIsOpen(!isOpen)}
@@ -105,7 +105,7 @@ function ChatBot() {
           </Card>
         </div>
       )}
-    </>
+    </div>
   )
 }
 

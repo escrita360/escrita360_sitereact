@@ -1,5 +1,5 @@
 import { Routes, Route, useLocation } from 'react-router-dom'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion' // eslint-disable-line no-unused-vars
 import Layout from './components/Layout.jsx'
 import Home from './pages/Home.jsx'
 import ParaQuem from './pages/ParaQuem.jsx'
