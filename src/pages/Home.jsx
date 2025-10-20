@@ -3,6 +3,7 @@ import { Card, CardContent } from '@/components/ui/card.jsx'
 import { Check, X, PenTool, Brain, TrendingUp, GraduationCap, School, Edit, FileText, CheckCircle, Bot, RotateCcw, Trophy, Heart, Target, BarChart, Users, UserCheck, BookOpen, Award } from 'lucide-react'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
 import logo from '@/assets/logo2.svg'
+import robo from '@/assets/robo.svg'
 
 function Home() {
   const heroRef = useScrollAnimation()
@@ -12,9 +13,9 @@ function Home() {
   return (
     <div>
       {/* Hero Section */}
-      <section ref={heroRef} className="hero bg-white py-12 md:py-16 lg:py-20 animate-on-scroll">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <section ref={heroRef} className="hero bg-white animate-on-scroll">
+        <div className="container mx-auto max-w-7xl">
+          <div className="grid lg:grid-cols-2 items-center">
             <div className="hero-content animate-fade-in-left text-center lg:text-left">
               <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-slate-900 mb-6 leading-tight">
                 A Inteligência Artificial e Inovação potencializando o Aprendizado da Escrita
@@ -29,13 +30,11 @@ function Home() {
               </div>
             </div>
             <div className="hero-image flex justify-center animate-fade-in-right delay-200">
-              <Card className="p-8 shadow-2xl bg-white/80 backdrop-blur-sm border-brand-accent hover-lift">
-                <div className="flex gap-8 items-center justify-center">
-                  <Edit className="w-16 h-16 text-brand-primary animate-float" />
-                  <Brain className="w-16 h-16 text-brand-secondary animate-float delay-300" />
-                  <TrendingUp className="w-16 h-16 text-brand-accent animate-float delay-500" />
-                </div>
-              </Card>
+                <img 
+                  src={robo} 
+                  alt="Robô Escrita360" 
+                  className="w-320 h-320 animate-float hover:scale-110 transition-transform duration-500"
+                />
             </div>
           </div>
         </div>
