@@ -7,6 +7,8 @@ import Recursos from './pages/Recursos.jsx'
 import Precos from './pages/Precos.jsx'
 import Contato from './pages/Contato.jsx'
 import Pagamento from './pages/Pagamento.jsx'
+import PagamentoSucesso from './pages/PagamentoSucesso.jsx'
+import PagamentoCancelado from './pages/PagamentoCancelado.jsx'
 import './App.css'
 
 function App() {
@@ -111,6 +113,32 @@ function App() {
               transition={pageTransition}
             >
               <Pagamento />
+            </motion.div>
+          </Layout>
+        } />
+        <Route path="/payment/success" element={
+          <Layout>
+            <motion.div
+              initial="initial"
+              animate="in"
+              exit="out"
+              variants={pageVariants}
+              transition={pageTransition}
+            >
+              <PagamentoSucesso />
+            </motion.div>
+          </Layout>
+        } />
+        <Route path="/payment/cancel" element={
+          <Layout>
+            <motion.div
+              initial="initial"
+              animate="in"
+              exit="out"
+              variants={pageVariants}
+              transition={pageTransition}
+            >
+              <PagamentoCancelado />
             </motion.div>
           </Layout>
         } />

@@ -4,9 +4,11 @@ import { Label } from '@/components/ui/label.jsx'
 import { Card, CardContent } from '@/components/ui/card.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
 import { Separator } from '@/components/ui/separator.jsx'
-import { CreditCard, Lock, Calendar, User, Shield, CheckCircle2, ArrowLeft } from 'lucide-react'
+import { CreditCard, Lock, Calendar, User, Shield, CheckCircle2, ArrowLeft, AlertCircle } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { paymentService } from '@/services/payment'
+import { authService } from '@/services/auth'
 
 function Pagamento() {
   const navigate = useNavigate()
@@ -14,6 +16,8 @@ function Pagamento() {
   const { selectedPlan, isYearly } = location.state || {}
   const [isProcessing, setIsProcessing] = useState(false)
   const [paymentSuccess, setPaymentSuccess] = useState(false)
+  const [paymentError, setPaymentError] = useState('')
+  const [transactionData, setTransactionData] = useState(null)
   const [formData, setFormData] = useState({
     cardNumber: '',
     cardName: '',
@@ -111,12 +115,57 @@ function Pagamento() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (!validateForm()) return
+    
     setIsProcessing(true)
-    setTimeout(() => {
+    setPaymentError('')
+
+    try {
+      // Verifica se o usuário está autenticado
+      const isAuthenticated = authService.isAuthenticated()
+      
+      // Se não estiver autenticado, primeiro cria a conta
+      if (!isAuthenticated) {
+        // Gera uma senha temporária
+        const tempPassword = Math.random().toString(36).slice(-8) + 'A1!'
+        
+        try {
+          await authService.register(formData.email, tempPassword, formData.cardName)
+          console.log('✅ Conta criada com sucesso!')
+        } catch (error) {
+          // Se o usuário já existe, tenta fazer login
+          console.log('Usuário pode já existir:', error.message)
+          // Continua mesmo assim para criar a sessão de checkout
+        }
+      }
+
+      // Mapeia o nome do plano para o ID do backend
+      const planIdMap = {
+        'Básico': 'basic',
+        'Profissional': 'pro',
+        'Premium': 'premium',
+        'Empresarial': 'enterprise'
+      }
+      
+      const planId = planIdMap[selectedPlan.name] || 'basic'
+      
+      // Cria a sessão de checkout e redireciona para o Stripe
+      await paymentService.redirectToCheckout({
+        planId,
+        isYearly
+      })
+      
+      // Se chegou aqui, a URL pode não ter sido retornada
+      // Normalmente o usuário seria redirecionado antes deste ponto
+      
+    } catch (error) {
+      console.error('Erro ao processar pagamento:', error)
+      setPaymentError(
+        error.response?.data?.error || 
+        error.message || 
+        'Erro ao processar pagamento. Tente novamente.'
+      )
       setIsProcessing(false)
-      setPaymentSuccess(true)
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-    }, 2000)
+    }
   }
 
   const handleGoBack = () => navigate('/precos')
@@ -156,6 +205,18 @@ function Pagamento() {
               Complete os dados do plano <span className="font-semibold text-brand-primary">{selectedPlan.name}</span>
             </p>
           </div>
+
+          {paymentError && (
+            <div className="mb-6 max-w-4xl mx-auto">
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-medium text-red-900">Erro no Pagamento</p>
+                  <p className="text-sm text-red-700 mt-1">{paymentError}</p>
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="grid lg:grid-cols-5 gap-8">
             <div className="lg:col-span-3">
@@ -360,6 +421,12 @@ function Pagamento() {
                     <span className="text-slate-600">E-mail</span>
                     <span className="font-medium">{formData.email}</span>
                   </div>
+                  {transactionData?.transaction_id && (
+                    <div className="flex justify-between">
+                      <span className="text-slate-600">ID da Transação</span>
+                      <span className="font-mono text-xs">{transactionData.transaction_id}</span>
+                    </div>
+                  )}
                 </div>
                 <Separator />
                 <div className="bg-blue-50 p-5 rounded-lg text-left">
