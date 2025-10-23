@@ -18,7 +18,7 @@ function Home() {
           <div className="grid lg:grid-cols-2 items-center gap-8">
             <div className="hero-content animate-fade-in-left text-center lg:text-left">
               <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-slate-900 mb-6 leading-tight">
-                A Inteligência Artificial e Inovação potencializando o Aprendizado da Escrita
+                Inovamos para oferecer a plataforma mais completa para o desenvolvimento da escrita, unindo autorregulação e inteligência artificial.
               </h1>
               <h2 className="hero-subtitle text-lg md:text-xl text-slate-600 mb-8">
                 Plataforma adaptativa de escrita autorregulada e avaliação inteligente
