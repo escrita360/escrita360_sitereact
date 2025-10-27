@@ -314,53 +314,6 @@ function Contato() {
         </div>
       </section>
 
-      {/* Locations Section */}
-      <section className="py-16 bg-slate-50">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4 animate-fade-in-up">Nossos Escritórios</h2>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <Card className="p-6 shadow-lg hover-lift text-center animate-fade-in-up delay-100">
-              <CardContent className="pt-0">
-                <div className="w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mx-auto mb-4">
-                  <MapPin className="w-8 h-8 text-brand-primary animate-float" />
-                </div>
-                <h3 className="text-xl font-semibold text-slate-900 mb-2">São Paulo - SP</h3>
-                <p className="text-slate-600">Av. Paulista, 1000 - Sala 500</p>
-                <p className="text-slate-600">Bela Vista, São Paulo - SP</p>
-                <p className="text-slate-600">CEP: 01310-100</p>
-              </CardContent>
-            </Card>
-
-            <Card className="p-6 shadow-lg hover-lift text-center animate-fade-in-up delay-200">
-              <CardContent className="pt-0">
-                <div className="w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mx-auto mb-4">
-                  <MapPin className="w-8 h-8 text-brand-primary animate-float" style={{animationDelay: '300ms'}} />
-                </div>
-                <h3 className="text-xl font-semibold text-slate-900 mb-2">Rio de Janeiro - RJ</h3>
-                <p className="text-slate-600">Av. Rio Branco, 200 - Sala 300</p>
-                <p className="text-slate-600">Centro, Rio de Janeiro - RJ</p>
-                <p className="text-slate-600">CEP: 20040-000</p>
-              </CardContent>
-            </Card>
-
-            <Card className="p-6 shadow-lg hover-lift text-center animate-fade-in-up delay-300">
-              <CardContent className="pt-0">
-                <div className="w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mx-auto mb-4">
-                  <MapPin className="w-8 h-8 text-brand-primary animate-float" style={{animationDelay: '600ms'}} />
-                </div>
-                <h3 className="text-xl font-semibold text-slate-900 mb-2">Brasília - DF</h3>
-                <p className="text-slate-600">SCS Q. 01, Bloco A - Sala 100</p>
-                <p className="text-slate-600">Asa Sul, Brasília - DF</p>
-                <p className="text-slate-600">CEP: 70300-000</p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
       <section className="bg-white py-16">
         <div className="container mx-auto px-4 max-w-7xl text-center">
