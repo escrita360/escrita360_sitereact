@@ -209,7 +209,6 @@ function Home() {
                     vivenciando todo o processo de planejamento, escrita, autoavaliação e reescrita com
                     recursos que promovem autorregulação e senso crítico.
                   </p>
-                  <Button variant="outline" className="mt-4 transition-all hover:scale-105">Acesse a Plataforma</Button>
                 </div>
               </div>
             </Card>
@@ -223,7 +222,6 @@ function Home() {
                     atividades personalizadas e acompanhamento individual, baseadas nas competências do ENEM
                     e alinhadas à BNCC.
                   </p>
-                  <Button variant="outline" className="mt-4 transition-all hover:scale-105">Acesse a Plataforma</Button>
                 </div>
                 <div className="platform-image w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mx-auto md:mx-0">
                   <UserCheck className="w-8 h-8 text-brand-secondary animate-pulse-glow" />
@@ -242,7 +240,6 @@ function Home() {
                     As famílias acompanham o desempenho dos estudantes, a proficiência de aprendizagem
                     e o engajamento em tempo real através de dashboards intuitivos e relatórios detalhados.
                   </p>
-                  <Button variant="outline" className="mt-4 border-brand-primary text-brand-primary hover:bg-brand-light transition-all hover:scale-105">Acesse a Plataforma</Button>
                 </div>
               </div>
             </Card>
@@ -255,7 +252,6 @@ function Home() {
                     A plataforma dos gestores oferece flexibilização curricular e relatórios em tempo real,
                     para uma gestão eficaz do engajamento e aprendizagem dos seus estudantes, turmas e escolas.
                   </p>
-                  <Button variant="outline" className="mt-4 border-brand-primary text-brand-primary hover:bg-brand-light transition-all hover:scale-105">Acesso Exclusivo - Consulte seu Login</Button>
                 </div>
                 <div className="platform-image w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mx-auto md:mx-0">
                   <School className="w-8 h-8 text-brand-secondary animate-pulse-glow" />
@@ -606,16 +602,6 @@ function Home() {
                 <Heart className="w-6 h-6 text-brand-primary" />
                 <span>Suporte pedagógico</span>
               </div>
-            </div>
-            <div className="cta-buttons flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-brand-primary hover:bg-brand-secondary text-white px-8 py-6 text-lg font-semibold">
-                <GraduationCap className="w-5 h-5 mr-2" />
-                Começar Grátis Agora
-              </Button>
-              <Button size="lg" variant="outline" className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-slate-900 px-8 py-6 text-lg font-semibold">
-                <span className="mr-2">📅</span>
-                Agendar Demonstração
-              </Button>
             </div>
           </div>
         </div>
