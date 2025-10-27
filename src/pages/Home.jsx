@@ -28,16 +28,6 @@ function Home() {
               <p className="hero-description text-lg md:text-xl text-slate-600 mb-8 leading-relaxed">
                 Revisão como apoio, não como atalho, respeitando o processo de aprendizagem. A correção complementar com Inteligência Artificial valoriza o processo de reescrita e garante que o aprendizado esteja no centro da experiência.
               </p>
-              <div className="hero-buttons flex gap-4 justify-center lg:justify-start">
-                <Button size="lg" className="bg-brand-primary hover:bg-brand-secondary text-white px-6 md:px-8 py-4 md:py-6 text-base md:text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105">
-                  <GraduationCap className="w-5 h-5 mr-2" />
-                  Começar Gratuitamente
-                </Button>
-                <Button size="lg" variant="outline" className="border-brand-primary text-brand-primary hover:bg-brand-light px-6 md:px-8 py-4 md:py-6 text-base md:text-lg">
-                  <span className="w-5 h-5 mr-2">▶</span>
-                  Ver Como Funciona
-                </Button>
-              </div>
               <div className="hero-stats flex gap-8 justify-center lg:justify-start mt-8">
                 <div className="stat text-center">
                   <strong className="block text-slate-900 font-bold">Processo</strong>
