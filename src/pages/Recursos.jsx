@@ -288,10 +288,10 @@ function Recursos() {
       <section ref={heroRef} className="bg-white text-slate-900 py-20 animate-on-scroll">
         <div className="container mx-auto px-4 max-w-7xl text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6 animate-fade-in-up">
-            Recursos que transformam o aprendizado da escrita
+            Principais Recursos da Plataforma
           </h1>
           <p className="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto animate-fade-in-up delay-200">
-            Ferramentas completas e inovadoras para cada etapa da jornada de desenvolvimento da escrita autorregulada
+            Veja os principais recursos disponíveis na plataforma
           </p>
         </div>
       </section>

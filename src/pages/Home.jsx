@@ -17,16 +17,40 @@ function Home() {
         <div className="container mx-auto max-w-7xl">
           <div className="grid lg:grid-cols-2 items-center gap-8">
             <div className="hero-content animate-fade-in-left text-center lg:text-left">
+              <div className="hero-badge mb-4">
+                <span className="inline-block bg-brand-light text-brand-primary px-4 py-2 rounded-full text-sm font-medium">
+                  Escrita360 — Muito além da correção automática para o Enem.
+                </span>
+              </div>
               <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-slate-900 mb-6 leading-tight">
-                Inovamos para oferecer a plataforma mais completa para o desenvolvimento da escrita, unindo autorregulação e inteligência artificial.
+                A solução definitiva para <span className="bg-gradient-to-r from-brand-primary to-brand-secondary bg-clip-text text-transparent">IA no momento certo</span>
               </h1>
-              <h2 className="hero-subtitle text-lg md:text-xl text-slate-600 mb-8">
-                Plataforma adaptativa de escrita autorregulada e avaliação inteligente
-              </h2>
-              <div className="hero-buttons">
+              <p className="hero-description text-lg md:text-xl text-slate-600 mb-8 leading-relaxed">
+                Revisão como apoio, não como atalho, respeitando o processo de aprendizagem. A correção complementar com Inteligência Artificial valoriza o processo de reescrita e garante que o aprendizado esteja no centro da experiência.
+              </p>
+              <div className="hero-buttons flex gap-4 justify-center lg:justify-start">
                 <Button size="lg" className="bg-brand-primary hover:bg-brand-secondary text-white px-6 md:px-8 py-4 md:py-6 text-base md:text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105">
-                  Entre em contato
+                  <GraduationCap className="w-5 h-5 mr-2" />
+                  Começar Gratuitamente
                 </Button>
+                <Button size="lg" variant="outline" className="border-brand-primary text-brand-primary hover:bg-brand-light px-6 md:px-8 py-4 md:py-6 text-base md:text-lg">
+                  <span className="w-5 h-5 mr-2">▶</span>
+                  Ver Como Funciona
+                </Button>
+              </div>
+              <div className="hero-stats flex gap-8 justify-center lg:justify-start mt-8">
+                <div className="stat text-center">
+                  <strong className="block text-slate-900 font-bold">Processo</strong>
+                  <span className="text-slate-600">Autorregulado</span>
+                </div>
+                <div className="stat text-center">
+                  <strong className="block text-slate-900 font-bold">IA</strong>
+                  <span className="text-slate-600">Complementar</span>
+                </div>
+                <div className="stat text-center">
+                  <strong className="block text-slate-900 font-bold">Foco</strong>
+                  <span className="text-slate-600">Aprendizagem</span>
+                </div>
               </div>
             </div>
             <div className="hero-image flex justify-center animate-fade-in-right delay-200">
@@ -95,6 +119,82 @@ function Home() {
             e oferece às escolas dashboards completos para gestão pedagógica, promovendo a aprendizagem significativa
             que impulsiona o sucesso acadêmico.
           </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Differential Section */}
+      <section className="differential bg-slate-50 py-8 md:py-12 lg:py-16">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="section-header text-center mb-8 md:mb-12">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">O Diferencial do Escrita360</h2>
+            <p className="text-lg md:text-xl text-slate-600">Uma abordagem revolucionária para o aprendizado da escrita</p>
+          </div>
+          <div className="differential-content space-y-6">
+            <div className="differential-text">
+              <p className="text-lg text-slate-700 leading-relaxed mb-6">
+                Diferente de outras plataformas que apenas corrigem textos prontos, o <strong>Escrita360</strong> coloca a escrita autorregulada no centro do processo. Proporciona uma experiência completa de imersão na escrita da redação, desde o planejamento até a autoavaliação, transformando essa prática de escrita em um percurso iterativo e formativo, construído por meio de rascunhos, revisões e reescritas.
+              </p>
+              
+              <div className="focus-points bg-white p-6 rounded-lg shadow-sm mb-6">
+                <h3 className="text-xl font-bold text-slate-900 mb-4">O foco é:</h3>
+                <ul className="space-y-3">
+                  <li className="flex items-start">
+                    <Check className="w-6 h-6 text-brand-primary mr-3 mt-0.5 flex-shrink-0" />
+                    <span className="text-slate-700">Otimizar o tempo dos professores diante do alto volume de correções</span>
+                  </li>
+                  <li className="flex items-start">
+                    <Check className="w-6 h-6 text-brand-primary mr-3 mt-0.5 flex-shrink-0" />
+                    <span className="text-slate-700">Desenvolver a habilidade escrita dos estudantes, com autonomia, autorregulação e compreensão das próprias dificuldades na escrita</span>
+                  </li>
+                </ul>
+              </div>
+              
+              <div className="ai-approach bg-brand-light p-6 rounded-lg">
+                <p className="text-lg text-slate-800 leading-relaxed">
+                  <strong>Aqui, a Inteligência Artificial entra nesse processo no momento certo: ela não corrige por você, corrige com você!</strong> Não se trata só do texto final, porque a IA garante qualidade. O que importa é a jornada de escrever e reescrever.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Platform Differences Section */}
+      <section className="platform-differences bg-white py-8 md:py-12 lg:py-16">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <div className="section-header text-center mb-8 md:mb-12">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Qual a Diferença das Demais Plataformas</h2>
+            <p className="text-lg md:text-xl text-slate-600">Oferece mais que correção, uma jornada autorregulada de escrita</p>
+          </div>
+          <div className="differences-grid grid md:grid-cols-3 gap-8">
+            <Card className="difference-card p-6 hover-lift border-brand-accent/30 animate-scale-in delay-100">
+              <div className="difference-icon w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mb-4 mx-auto">
+                <Edit className="w-8 h-8 text-brand-primary animate-pulse-glow" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3 text-center">Módulo de Escrita Completo</h3>
+              <p className="text-slate-700 text-center">
+                Oferece módulo de escrita com recursos que orientam a escrita desde o início, otimizando o tempo dos professores e potencializando o desempenho dos alunos.
+              </p>
+            </Card>
+            <Card className="difference-card p-6 hover-lift border-brand-accent/30 animate-scale-in delay-200">
+              <div className="difference-icon w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mb-4 mx-auto">
+                <TrendingUp className="w-8 h-8 text-brand-secondary animate-pulse-glow" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3 text-center">Análise Integrada Durante a Elaboração</h3>
+              <p className="text-slate-700 text-center">
+                Diferentes tipos de análise integrada durante a elaboração da redação, acompanhando o progresso de cada aluno com acesso às redações produzidas.
+              </p>
+            </Card>
+            <Card className="difference-card p-6 hover-lift border-brand-accent/30 animate-scale-in delay-300">
+              <div className="difference-icon w-16 h-16 bg-brand-light rounded-full flex items-center justify-center mb-4 mx-auto">
+                <BarChart className="w-8 h-8 text-brand-primary animate-pulse-glow" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3 text-center">Evolução por Níveis de Desempenho</h3>
+              <p className="text-slate-700 text-center">
+                Acompanhamento do progresso através de gráficos e dados qualitativos, com acesso à evolução dos alunos baseada nos critérios de avaliação das habilidades da BNCC e competências do ENEM.
+              </p>
+            </Card>
           </div>
         </div>
       </section>
@@ -483,19 +583,47 @@ function Home() {
         </div>
       </section>
 
+      {/* Platform Summary Section */}
+      <section className="platform-summary bg-brand-light py-8 md:py-12 lg:py-16">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="summary-content text-center">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-6">O Escrita360 oferece muito mais que uma correção</h2>
+            <p className="text-lg md:text-xl text-slate-700 leading-relaxed">
+              É uma jornada completa de escrita autorregulada, que garante ao aluno autonomia e evolução. Ao professor, recursos para otimizar o tempo, avaliar com clareza e acompanhar o progresso de cada estudante. À escola, Dashboards personalizados que auxiliam no acompanhamento do desenvolvimento da produção escrita dos alunos e preparação para a redação do ENEM.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
-      <section className="cta bg-slate-50 py-16">
+      <section className="cta bg-slate-900 py-12 md:py-16">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="cta-content text-center max-w-4xl mx-auto">
-            <h2 className="text-4xl font-bold mb-6 text-slate-900">Escrita360: muito além da correção automática</h2>
-            <p className="text-xl mb-6 leading-relaxed text-slate-700">
-              Uma jornada completa de escrita autorregulada que garante autonomia e evolução ao aluno, oferece recursos que otimizam o tempo do professor e disponibiliza dashboards personalizados para a escola, alinhados à preparação para o ENEM.
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">Transforme o Ensino de Redação em sua Escola</h2>
+            <p className="text-lg md:text-xl mb-8 leading-relaxed text-slate-200">
+              Junte-se a mais de 500 professores que já revolucionaram suas aulas com nossa metodologia
             </p>
-            <p className="text-lg mb-8 leading-relaxed text-slate-600">
-              A plataforma valoriza o processo formativo de escrever, revisar e reescrever. A IA atua apenas na etapa final, como suporte complementar, fortalecendo o aprendizado e não substituindo o percurso formativo.
-            </p>
-            <div className="cta-buttons">
+            <div className="cta-benefits flex flex-wrap justify-center gap-6 mb-8">
+              <div className="cta-benefit flex items-center gap-2 text-white">
+                <Trophy className="w-6 h-6 text-brand-primary" />
+                <span>Implementação em 24h</span>
+              </div>
+              <div className="cta-benefit flex items-center gap-2 text-white">
+                <Users className="w-6 h-6 text-brand-primary" />
+                <span>Treinamento incluído</span>
+              </div>
+              <div className="cta-benefit flex items-center gap-2 text-white">
+                <Heart className="w-6 h-6 text-brand-primary" />
+                <span>Suporte pedagógico</span>
+              </div>
+            </div>
+            <div className="cta-buttons flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="bg-brand-primary hover:bg-brand-secondary text-white px-8 py-6 text-lg font-semibold">
+                <GraduationCap className="w-5 h-5 mr-2" />
+                Começar Grátis Agora
+              </Button>
+              <Button size="lg" variant="outline" className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-slate-900 px-8 py-6 text-lg font-semibold">
+                <span className="mr-2">📅</span>
                 Agendar Demonstração
               </Button>
             </div>

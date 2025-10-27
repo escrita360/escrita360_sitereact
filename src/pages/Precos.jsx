@@ -125,28 +125,36 @@ function Precos() {
 
   const faqs = [
     {
-      question: "Posso experimentar gratuitamente?",
-      answer: "Sim! O plano gratuito permite que você experimente toda a metodologia de escrita autorregulada com 3 correções por mês. Não é necessário cartão de crédito."
+      question: "Como funciona a análise automática das redações?",
+      answer: "Nossa IA analisa sua redação seguindo exatamente os critérios do ENEM. Ela avalia cada uma das 5 competências, identifica erros gramaticais, problemas de estrutura e oferece sugestões específicas de melhoria com exemplos práticos."
     },
     {
-      question: "Como funciona o plano anual?",
-      answer: "Ao optar pelo plano anual, você economiza 30% e faz um único pagamento no início do período. É possível parcelar em até 12x sem juros."
+      question: "Quantas redações posso corrigir por mês?",
+      answer: "No plano Estudante você tem apenas o modo de autocorreção. O plano Professor oferece análises ilimitadas para você e seus alunos. Já o plano Escola não possui limites de uso para toda a instituição."
     },
     {
-      question: "Posso cancelar a qualquer momento?",
-      answer: "Sim, você pode cancelar sua assinatura a qualquer momento. No plano mensal, a cobrança é interrompida imediatamente. No anual, você continua usando até o fim do período contratado."
+      question: "Posso usar para outros vestibulares além do ENEM?",
+      answer: "Sim! Embora nosso foco principal seja o ENEM, os critérios de avaliação servem para a maioria dos vestibulares brasileiros. A plataforma ajuda a desenvolver habilidades fundamentais de escrita argumentativa."
     },
     {
-      question: "Posso fazer upgrade do meu plano?",
-      answer: "No plano Professor, você pode fazer upgrade a qualquer momento. Também oferecemos planos customizados para professores que precisam de mais vagas."
+      question: "O que significa \"histórico é local\" no plano Estudante?",
+      answer: "No plano Estudante, suas redações e histórico ficam salvos apenas no seu dispositivo (navegador). Para backup na nuvem, sincronização entre dispositivos e relatórios avançados, recomendamos os planos pagos."
     },
     {
-      question: "O plano Escola inclui treinamento?",
-      answer: "Sim! O plano Escola inclui treinamento personalizado para toda a equipe pedagógica, além de consultoria contínua e material de apoio."
+      question: "Como funciona o dashboard para professores?",
+      answer: "Professores podem criar turmas, acompanhar o progresso individual de cada aluno, visualizar estatísticas da turma, identificar dificuldades comuns e gerar relatórios detalhados para reuniões pedagógicas."
     },
     {
-      question: "A plataforma integra com outros sistemas?",
-      answer: "Nossa API permite integração com principais plataformas de gestão de aprendizagem (Moodle, Canvas, Google Classroom, etc). Nossa equipe técnica auxilia na implementação."
+      question: "Meus dados e redações ficam seguros?",
+      answer: "Sim! Utilizamos criptografia de ponta para proteger todas as suas redações e dados pessoais. Seus textos nunca são compartilhados com terceiros e você tem controle total sobre suas informações."
+    },
+    {
+      question: "Posso cancelar minha assinatura a qualquer momento?",
+      answer: "Claro! Você pode cancelar sua assinatura a qualquer momento sem taxas. Após o cancelamento, você continuará tendo acesso até o fim do período já pago, incluindo seu histórico de redações."
+    },
+    {
+      question: "Como escolas podem integrar a plataforma em suas aulas?",
+      answer: "Oferecemos suporte completo para implementação em escolas, incluindo treinamento para professores, integração com sistemas existentes e relatórios administrativos. Nossa equipe pedagógica ajuda no planejamento da implementação."
     }
   ]
 
@@ -156,10 +164,10 @@ function Precos() {
       <section ref={heroRef} className="bg-white py-12 md:py-16 lg:py-20 animate-on-scroll">
         <div className="container mx-auto px-4 max-w-7xl text-center">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-slate-900 animate-fade-in-up">
-            Planos que se adaptam à sua necessidade
+            Planos Flexíveis para Cada Necessidade
           </h1>
           <p className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto animate-fade-in-up delay-200">
-            Escolha o plano ideal para transformar o processo de escrita e alcance resultados extraordinários
+            Comece gratuitamente e evolua conforme sua demanda
           </p>
         </div>
       </section>
@@ -234,6 +242,49 @@ function Precos() {
                 </CardContent>
               </Card>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Guarantee Section */}
+      <section className="py-8 bg-white">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <Card className="border-2 border-brand-primary/20 shadow-lg hover-lift">
+            <CardContent className="p-8">
+              <div className="flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
+                <div className="w-20 h-20 bg-brand-light rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg className="w-10 h-10 text-brand-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-2xl font-bold text-slate-900 mb-2">Garantia de 30 dias</h3>
+                  <p className="text-lg text-slate-600">
+                    Teste sem riscos. Se não ficar satisfeito, devolvemos 100% do valor pago.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
+      <section className="py-8 md:py-12 lg:py-16 bg-slate-50">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Como Funciona o Escrita360</h2>
+            <p className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto">A plataforma prioriza o processo formativo de escrever e reescrever</p>
+          </div>
+          
+          <div className="max-w-4xl mx-auto mb-12">
+            <Card className="bg-gradient-to-br from-brand-light to-white border-2 border-brand-primary/20 shadow-lg">
+              <CardContent className="p-8">
+                <p className="text-lg text-slate-700 leading-relaxed text-center">
+                  A plataforma prioriza o processo formativo de escrever e reescrever, a correção automática com IA só aparece no final, como suporte complementar. <strong className="text-brand-primary">IA como última etapa: revisão que fortalece o aprendizado.</strong>
+                </p>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
@@ -481,7 +532,7 @@ function Precos() {
             Perguntas Frequentes
           </h2>
           <p className="text-lg md:text-xl text-center text-slate-600 mb-8 md:mb-12 max-w-2xl mx-auto animate-fade-in-up delay-200">
-            Tire suas dúvidas sobre nossos planos e funcionalidades
+            Tire suas dúvidas sobre o Escrita360
           </p>
           <div className="max-w-3xl mx-auto">
             <Accordion type="single" collapsible className="space-y-4 animate-fade-in-up delay-300">

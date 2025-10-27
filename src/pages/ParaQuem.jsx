@@ -32,9 +32,9 @@ function ParaQuem() {
     {
       id: 'estudantes',
       icon: UserCircle,
-      title: 'Para Estudantes',
+      title: 'Estudantes',
       subtitle: 'Desenvolva autonomia e excelência na escrita',
-      description: 'Para redações escolares e preparação para o ENEM, desenvolvendo autonomia na escrita e melhorando notas através da autorregulação. A plataforma acompanha você em cada etapa do processo de escrita.',
+      description: 'Para redações escolares e para se preparar para o Enem, ajudando alunos a melhorarem suas notas no Enem.',
       features: [
         'Aprenda no seu próprio ritmo',
         'Feedback detalhado ENEM',
@@ -48,34 +48,11 @@ function ParaQuem() {
       ctaLink: '/precos'
     },
     {
-      id: 'professores',
-      icon: Presentation,
-      title: 'Para Professores',
-      subtitle: 'Otimize seu tempo e potencialize o aprendizado',
-      description: 'Reduza sua carga de trabalho com ferramentas de correção assistida e acompanhamento automatizado. Foque no que realmente importa: o desenvolvimento dos seus alunos.',
-      stats: [
-        { number: '70%', label: 'Redução no tempo' },
-        { number: '30+', label: 'Alunos gerenciados' },
-        { number: '100%', label: 'Automatizado' }
-      ],
-      features: [
-        'Economize até 70% do tempo',
-        'Acompanhe 30 alunos facilmente',
-        'Dashboards completos',
-        'Relatórios automáticos',
-        'Integração com BNCC',
-        'Banco de comentários'
-      ],
-      tags: ['Professores Independentes', 'Tutores', 'Ensino Remoto'],
-      cta: 'Ver Plano Professor',
-      ctaLink: '/precos'
-    },
-    {
       id: 'escolas',
       icon: Building2,
-      title: 'Para Escolas',
+      title: 'Escolas',
       subtitle: 'Transforme a cultura de escrita na sua instituição',
-      description: 'Instituições que querem oferecer uma imersão completa no processo de escrita autoral, com foco na autorregulação da aprendizagem e dashboards gerenciais completos. Solução escalável para toda a instituição.',
+      description: 'Instituições que querem oferecer uma imersão completa no processo de escrita autoral, com foco na autorregulação da aprendizagem.',
       gridFeatures: [
         { icon: TrendingUp, title: 'Gestão Completa', desc: 'Visão 360° do desempenho' },
         { icon: Users, title: 'Escalabilidade', desc: 'Cresce com sua instituição' },
@@ -100,9 +77,9 @@ function ParaQuem() {
     {
       id: 'cursos-prep',
       icon: BookMarked,
-      title: 'Para Cursos Preparatórios',
+      title: 'Cursos Preparatórios',
       subtitle: 'Maximize resultados e aprove mais alunos',
-      description: 'Presencial ou online, oferecendo cursos preparatórios para ENEM com otimização do tempo dos professores e relatórios detalhados. Aumente suas taxas de aprovação com metodologia comprovada.',
+      description: 'Presencial ou com plataforma de ensino online que oferece cursos preparatórios para Enem, otimizando o tempo dos professores e potencializando o desempenho dos alunos.',
       stats: [
         { number: '+25%', label: 'Melhoria nas notas' },
         { number: '80%', label: 'Satisfação' },
@@ -156,10 +133,10 @@ function ParaQuem() {
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-5xl font-bold mb-6 text-slate-900 animate-fade-in-up">
-              Uma solução para todo o ecossistema educacional
+              Para Quem é o Escrita360?
             </h1>
             <p className="text-xl text-slate-600 leading-relaxed animate-fade-in-up delay-200">
-              Atendemos diferentes públicos com recursos específicos para cada necessidade no processo de desenvolvimento da escrita
+              A solução definitiva para estudantes e escolas que desejam a IA no momento certo
             </p>
           </div>
         </div>
