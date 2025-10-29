@@ -22,7 +22,7 @@ function Home() {
                   Escrita360 — Muito além da correção automática para o Enem.
                 </span>
               </div>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-6 leading-tight">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl mb-6 leading-tight">
                 <span style={{ color: '#2b7475', fontWeight: 'normal' }}>Inovamos para oferecer a plataforma mais completa </span>
                 <span style={{ color: '#569e9d', fontWeight: 'bold' }}>para o desenvolvimento da escrita, </span>
                 <span style={{ color: '#569e9d', fontWeight: 'normal' }}>unindo </span>

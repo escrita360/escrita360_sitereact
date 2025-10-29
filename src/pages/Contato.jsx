@@ -87,7 +87,7 @@ function Contato() {
                       <SelectContent>
                         <SelectItem value="demonstracao">Solicitar Demonstração</SelectItem>
                         <SelectItem value="duvidas">Dúvidas sobre a Plataforma</SelectItem>
-                        <SelectItem value="precos">Informações sobre Preços</SelectItem>
+                        <SelectItem value="planos">Informações sobre Planos</SelectItem>
                         <SelectItem value="suporte">Suporte Técnico</SelectItem>
                         <SelectItem value="parceria">Proposta de Parceria</SelectItem>
                         <SelectItem value="outro">Outro Assunto</SelectItem>

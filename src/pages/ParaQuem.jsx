@@ -285,7 +285,7 @@ function ParaQuem() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up delay-300">
             <Button size="lg" variant="secondary" className="bg-brand-primary text-white hover:bg-brand-secondary px-8 py-3 text-lg transition-all hover:scale-105">
-              Ver Planos e Preços
+              Ver Planos 
             </Button>
             <Button size="lg" variant="outline" className="border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white hover:border-brand-primary px-8 py-3 text-lg transition-all hover:scale-105 [&:hover]:!text-white">
               Falar com Especialista

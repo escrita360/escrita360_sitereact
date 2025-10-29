@@ -30,7 +30,7 @@ function Layout({ children }) {
             <Link to="/" className={cn("text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105", location.pathname === "/" ? "border-b-2 border-brand-primary pb-1" : "")}>Home</Link>
             <Link to="/para-quem" className={cn("text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105", location.pathname === "/para-quem" ? "border-b-2 border-brand-primary pb-1" : "")}>Para Quem</Link>
             <Link to="/recursos" className={cn("text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105", location.pathname === "/recursos" ? "border-b-2 border-brand-primary pb-1" : "")}>Recursos</Link>
-            <Link to="/precos" className={cn("text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105", location.pathname === "/precos" ? "border-b-2 border-brand-primary pb-1" : "")}>Preços</Link>
+            <Link to="/planos" className={cn("text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105", location.pathname === "/planos" ? "border-b-2 border-brand-primary pb-1" : "")}>Planos</Link>
             <Link to="/contato" className={cn("text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105", location.pathname === "/contato" ? "border-b-2 border-brand-primary pb-1" : "")}>Contato</Link>
             <Button asChild size="lg" className="bg-[var(--brand-primary)] text-white hover:bg-[var(--brand-dark)]">
               <Link to="/login">Entrar</Link>
@@ -73,7 +73,7 @@ function Layout({ children }) {
                   className={cn("text-lg font-medium text-slate-700 hover:text-brand-primary transition-colors", location.pathname === "/precos" ? "border-b-2 border-brand-primary pb-1" : "")}
                   onClick={() => setIsOpen(false)}
                 >
-                  Preços
+                  Planos
                 </Link>
                 <Link
                   to="/contato"
