@@ -4,17 +4,38 @@ import { Badge } from '@/components/ui/badge.jsx'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion.jsx'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table.jsx'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar.jsx'
-import { Check, X, Quote, Star } from 'lucide-react'
-import React, { useState } from 'react'
+import { Check, X, Quote, Star, ChevronDown } from 'lucide-react'
+import React, { useState, useRef, useEffect } from 'react'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
 import { useNavigate } from 'react-router-dom'
 
 function Precos() {
   const [selectedAudience, setSelectedAudience] = useState('estudantes') // estudantes, professores, escolas
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const dropdownRef = useRef(null)
   const navigate = useNavigate()
   const heroRef = useScrollAnimation()
   const plansRef = useScrollAnimation()
   const comparisonRef = useScrollAnimation()
+
+  const audiences = [
+    { key: 'estudantes', label: 'Estudantes', icon: '🎓' },
+    { key: 'professores', label: 'Professores Independentes', icon: '👨‍🏫' },
+    { key: 'escolas', label: 'Escolas', icon: '🏫' }
+  ]
+
+  const selectedAudienceData = audiences.find(a => a.key === selectedAudience)
+
+  // Fechar dropdown ao clicar fora
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   const handleOpenPagamento = (plan) => {
     navigate('/pagamento', { state: { selectedPlan: plan, audience: selectedAudience } })
@@ -303,32 +324,66 @@ function Precos() {
 
   return (
     <div className="min-h-screen">
-      {/* Audience Selection */}
-      <section className="py-6 bg-slate-50 border-b">
+      {/* Audience Selection Dropdown */}
+      <section className="py-6 bg-white border-b sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 max-w-7xl">
-          <div className="text-center mb-6">
-            <h2 className="text-xl md:text-2xl font-bold text-slate-900 mb-2">Escolha seu perfil</h2>
-            <p className="text-slate-600">Planos específicos para cada necessidade</p>
-          </div>
-          <div className="flex flex-wrap justify-center gap-2 md:gap-4">
-            {[
-              { key: 'estudantes', label: 'Estudantes', icon: '🎓' },
-              { key: 'professores', label: 'Professores', icon: '👨‍🏫' },
-              { key: 'escolas', label: 'Escolas', icon: '🏫' }
-            ].map((audience) => (
+          <div className="flex justify-center items-center gap-4">
+            {/* Dropdown Menu */}
+            <div className="relative" ref={dropdownRef}>
               <button
-                key={audience.key}
-                onClick={() => setSelectedAudience(audience.key)}
-                className={`px-4 py-3 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 ${
-                  selectedAudience === audience.key
-                    ? 'bg-brand-primary text-white shadow-md'
-                    : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
-                }`}
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="flex items-center gap-3 px-6 py-3 bg-white border-2 border-slate-300 rounded-lg hover:border-brand-primary transition-all duration-200 shadow-sm hover:shadow-md min-w-[280px] justify-between"
               >
-                <span>{audience.icon}</span>
-                {audience.label}
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">{selectedAudienceData?.icon}</span>
+                  <span className="font-semibold text-slate-700 text-lg">
+                    {selectedAudienceData?.label}
+                  </span>
+                </div>
+                <ChevronDown 
+                  className={`w-5 h-5 text-slate-600 transition-transform duration-200 ${
+                    isDropdownOpen ? 'rotate-180' : ''
+                  }`}
+                />
               </button>
-            ))}
+
+              {/* Dropdown Menu */}
+              {isDropdownOpen && (
+                <div className="absolute top-full left-0 mt-2 w-full bg-white border border-slate-200 rounded-lg shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                  {audiences.map((audience) => (
+                    <button
+                      key={audience.key}
+                      onClick={() => {
+                        setSelectedAudience(audience.key)
+                        setIsDropdownOpen(false)
+                      }}
+                      className={`w-full flex items-center gap-3 px-6 py-4 hover:bg-slate-50 transition-colors ${
+                        selectedAudience === audience.key
+                          ? 'bg-blue-50 border-l-4 border-brand-primary'
+                          : 'border-l-4 border-transparent'
+                      }`}
+                    >
+                      <span className="text-2xl">{audience.icon}</span>
+                      <span className={`font-medium text-left ${
+                        selectedAudience === audience.key
+                          ? 'text-brand-primary'
+                          : 'text-slate-700'
+                      }`}>
+                        {audience.label}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* FAQ Link */}
+            <a 
+              href="#faq" 
+              className="px-6 py-3 font-semibold text-slate-700 hover:text-brand-primary transition-colors text-lg"
+            >
+              FAQ
+            </a>
           </div>
         </div>
       </section>
@@ -763,7 +818,7 @@ function Precos() {
               size="lg" 
               variant="secondary" 
               className="bg-brand-primary text-white hover:bg-brand-secondary transition-all duration-300 hover:scale-105"
-              onClick={() => handleOpenPagamento(plans[1])}
+              onClick={() => handleOpenPagamento(currentPlans.find(plan => plan.popular) || currentPlans[0])}
             >
               Assinar
             </Button>
