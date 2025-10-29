@@ -6,12 +6,12 @@ export function PageHero({ title, titleHighlight, subtitle, audienceType }) {
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="grid lg:grid-cols-2 gap-8 items-center">
           {/* Conteúdo do texto */}
-          <div className="text-center lg:text-left animate-fade-in-left">
+          <div className="text-center animate-fade-in-left">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
               <span className="text-slate-900">{title} </span>
               {titleHighlight && <span className="text-brand-primary">{titleHighlight}</span>}
             </h1>
-            <p className="text-lg md:text-xl text-slate-600 max-w-2xl animate-fade-in-up delay-200">
+            <p className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto animate-fade-in-up delay-200">
               {subtitle}
             </p>
           </div>
