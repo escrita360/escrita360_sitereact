@@ -80,7 +80,7 @@ function Precos() {
   // Planos para professores
   const teacherPlans = [
     {
-      name: 'Plano Básico',
+      name: 'Plano Básico Mensal',
       badge: 'Para começar',
       monthlyPrice: 49,
       yearlyPrice: 49,
@@ -102,7 +102,7 @@ function Precos() {
       buttonVariant: 'default'
     },
     {
-      name: 'Plano Profissional',
+      name: 'Plano Profissional Mensal',
       badge: 'Mais escolhido',
       monthlyPrice: 130,
       yearlyPrice: 130,
@@ -122,6 +122,50 @@ function Precos() {
         { text: 'Acesso por 30 dias', included: true }
       ],
       buttonText: 'Escolher Profissional',
+      buttonVariant: 'default'
+    },
+    {
+      name: 'Plano Trimestral',
+      badge: 'Economia garantida',
+      monthlyPrice: 340,
+      yearlyPrice: 340,
+      description: 'Plano Híbrido (Plataforma + créditos de IA)',
+      credits: 250,
+      features: [
+        { text: 'Módulo de escrita digital autorregulada', included: true },
+        { text: 'Banco de estratégias para escrita', included: true },
+        { text: 'Sugestão de temas', included: true },
+        { text: 'Recursos de apoio autorregulatório', included: true },
+        { text: 'Insights para melhoria da escrita', included: true },
+        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
+        { text: 'Rubricas qualitativas para (auto)avaliação', included: true },
+        { text: '250 análises detalhadas de redações por IA', included: true, highlighted: true },
+        { text: 'Correção por foto ou digitada', included: true },
+        { text: 'Acesso por 90 dias', included: true }
+      ],
+      buttonText: 'Escolher Trimestral',
+      buttonVariant: 'default'
+    },
+    {
+      name: 'Plano Semestral',
+      badge: 'Melhor investimento',
+      monthlyPrice: 620,
+      yearlyPrice: 620,
+      description: 'Plano Híbrido (Plataforma + créditos de IA)',
+      credits: 500,
+      features: [
+        { text: 'Módulo de escrita digital autorregulada', included: true },
+        { text: 'Banco de estratégias para escrita', included: true },
+        { text: 'Sugestão de temas', included: true },
+        { text: 'Recursos de apoio autorregulatório', included: true },
+        { text: 'Insights para melhoria da escrita', included: true },
+        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
+        { text: 'Rubricas qualitativas para (auto)avaliação', included: true },
+        { text: '500 análises detalhadas de redações por IA', included: true, highlighted: true },
+        { text: 'Correção por foto ou digitada', included: true },
+        { text: 'Acesso por 180 dias', included: true }
+      ],
+      buttonText: 'Escolher Semestral',
       buttonVariant: 'default'
     }
   ]
@@ -154,8 +198,8 @@ function Precos() {
     }
   ]
 
-  // Pacotes de créditos
-  const creditPackages = [
+  // Pacotes de créditos para estudantes
+  const studentCreditPackages = [
     {
       name: 'Pacote 1',
       credits: 5,
@@ -179,6 +223,60 @@ function Precos() {
       features: ['Análises detalhadas por IA', 'Validade de 30 dias', 'Suporte incluído', 'Melhor custo-benefício']
     }
   ]
+
+  // Pacotes de créditos para professores
+  const teacherCreditPackages = [
+    {
+      name: 'Pacote 1',
+      credits: 50,
+      price: 135,
+      description: '50 créditos para usar em até 30 dias',
+      features: ['Análises detalhadas por IA', 'Validade de 30 dias', 'Suporte incluído']
+    },
+    {
+      name: 'Pacote 2',
+      credits: 150,
+      price: 350,
+      description: '150 créditos para usar em até 30 dias',
+      popular: true,
+      features: ['Análises detalhadas por IA', 'Validade de 30 dias', 'Suporte incluído', 'Melhor custo-benefício']
+    }
+  ]
+
+  // Pacotes de créditos para escolas
+  const schoolCreditPackages = [
+    {
+      name: 'Pacote Institucional 1',
+      credits: 500,
+      price: 1350,
+      description: '500 créditos para usar em até 90 dias',
+      features: ['Análises detalhadas por IA', 'Validade de 90 dias', 'Suporte prioritário', 'Relatórios institucionais']
+    },
+    {
+      name: 'Pacote Institucional 2',
+      credits: 1500,
+      price: 3500,
+      description: '1500 créditos para usar em até 90 dias',
+      popular: true,
+      features: ['Análises detalhadas por IA', 'Validade de 90 dias', 'Suporte prioritário', 'Relatórios institucionais', 'Melhor custo-benefício']
+    }
+  ]
+
+  // Selecionar pacotes de créditos baseado no público alvo
+  const getCurrentCreditPackages = () => {
+    switch (selectedAudience) {
+      case 'estudantes':
+        return studentCreditPackages
+      case 'professores':
+        return teacherCreditPackages
+      case 'escolas':
+        return schoolCreditPackages
+      default:
+        return studentCreditPackages
+    }
+  }
+
+  const creditPackages = getCurrentCreditPackages()
 
   // Modelos de assinatura para escolas
   const schoolModels = [
@@ -244,15 +342,15 @@ function Precos() {
 
   // Dados de comparação específicos para professores
   const teacherComparisonData = [
-    { feature: 'Módulo de escrita autorregulada', basico: true, profissional: true },
-    { feature: 'Banco de estratégias para escrita', basico: true, profissional: true },
-    { feature: 'Sugestão de temas', basico: true, profissional: true },
-    { feature: 'Recursos de apoio autorregulatório', basico: true, profissional: true },
-    { feature: 'Revisor integrado ilimitado', basico: true, profissional: true },
-    { feature: 'Rubricas qualitativas', basico: true, profissional: true },
-    { feature: 'Correção por foto/digitada', basico: true, profissional: true },
-    { feature: 'Análises por IA', basico: '20 créditos', profissional: '100 créditos' },
-    { feature: 'Período de acesso', basico: '30 dias', profissional: '30 dias' }
+    { feature: 'Módulo de escrita autorregulada', basico: true, profissional: true, trimestral: true, semestral: true },
+    { feature: 'Banco de estratégias para escrita', basico: true, profissional: true, trimestral: true, semestral: true },
+    { feature: 'Sugestão de temas', basico: true, profissional: true, trimestral: true, semestral: true },
+    { feature: 'Recursos de apoio autorregulatório', basico: true, profissional: true, trimestral: true, semestral: true },
+    { feature: 'Revisor integrado ilimitado', basico: true, profissional: true, trimestral: true, semestral: true },
+    { feature: 'Rubricas qualitativas', basico: true, profissional: true, trimestral: true, semestral: true },
+    { feature: 'Correção por foto/digitada', basico: true, profissional: true, trimestral: true, semestral: true },
+    { feature: 'Análises por IA', basico: '20 créditos', profissional: '100 créditos', trimestral: '250 créditos', semestral: '500 créditos' },
+    { feature: 'Período de acesso', basico: '30 dias', profissional: '30 dias', trimestral: '90 dias', semestral: '180 dias' }
   ]
 
   const faqs = [
@@ -328,7 +426,7 @@ function Precos() {
       <section ref={plansRef} className="py-8 md:py-12 lg:py-16 bg-white animate-on-scroll">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className={`grid gap-8 max-w-6xl mx-auto ${
-            selectedAudience === 'professores' ? 'md:grid-cols-2 max-w-5xl' : 
+            selectedAudience === 'professores' ? 'md:grid-cols-2 lg:grid-cols-2' : 
             'md:grid-cols-2 max-w-5xl'
           }`}>
             {currentPlans.map((plan, index) => (
@@ -367,7 +465,8 @@ function Precos() {
                           {plan.monthlyPrice}
                         </span>
                         <span className="text-slate-600">
-                          {plan.name.includes('Trimestral') ? '/3 meses' : '/mês'}
+                          {plan.name.includes('Trimestral') ? '/3 meses' : 
+                           plan.name.includes('Semestral') ? '/6 meses' : '/mês'}
                         </span>
                       </>
                     )}
@@ -447,21 +546,27 @@ function Precos() {
         </section>
       )}
 
-      {/* Credit Packages Section - For students and teachers */}
-      {(selectedAudience === 'estudantes' || selectedAudience === 'professores') && (
+      {/* Credit Packages Section - For all audiences */}
+      {(selectedAudience === 'estudantes' || selectedAudience === 'professores' || selectedAudience === 'escolas') && (
         <section className="py-8 md:py-12 lg:py-16 bg-white">
           <div className="container mx-auto px-4 max-w-7xl">
             <div className="text-center mb-12">
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Pacotes de Créditos</h2>
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">
+                {selectedAudience === 'escolas' ? 'Pacotes de Créditos para Escolas' : 'Pacotes de Créditos'}
+              </h2>
               <p className="text-lg text-slate-600 max-w-3xl mx-auto">
                 {selectedAudience === 'estudantes' 
                   ? 'Para quem já tem acesso à plataforma e precisa de mais análises com IA'
-                  : 'Para professores que precisam de mais análises além do plano contratado'
+                  : selectedAudience === 'professores'
+                  ? 'Para professores que precisam de mais análises além do plano contratado'
+                  : 'Créditos de IA para análises detalhadas das redações dos estudantes'
                 }
               </p>
             </div>
             
-            <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <div className={`grid gap-8 max-w-5xl mx-auto ${
+              selectedAudience === 'escolas' ? 'md:grid-cols-2' : 'md:grid-cols-3'
+            }`}>
               {creditPackages.map((pkg, index) => (
                 <Card key={index} className={`hover-lift ${pkg.popular ? 'border-2 border-green-500 shadow-xl' : 'hover:shadow-xl'} transition-all`}>
                   {pkg.popular && (
@@ -474,7 +579,10 @@ function Precos() {
                     <div className="my-4">
                       <span className="text-3xl font-bold text-brand-primary">R$ {pkg.price}</span>
                     </div>
-                    <p className="text-slate-600 text-sm">{pkg.credits} créditos • {pkg.description}</p>
+                    <p className="text-slate-600 text-sm">
+                      <strong>{pkg.credits} créditos</strong>
+                    </p>
+                    <p className="text-slate-600 text-xs mt-1">{pkg.description}</p>
                   </CardHeader>
                   <CardContent>
                     <ul className="space-y-2 mb-6">
@@ -498,8 +606,10 @@ function Precos() {
                 <CardContent className="p-6">
                   <h4 className="text-lg font-bold text-slate-900 mb-3">Como funcionam os créditos?</h4>
                   <p className="text-slate-600 mb-4">
-                    Cada crédito equivale a uma análise completa e detalhada da sua redação pela nossa IA especializada. 
-                    Os créditos têm validade de 30 dias a partir da data de compra.
+                    {selectedAudience === 'escolas' 
+                      ? 'Cada crédito equivale a uma análise completa e detalhada da redação de um estudante pela nossa IA especializada. Os créditos têm validade de 90 dias a partir da data de compra e podem ser compartilhados entre os professores da instituição.'
+                      : 'Cada crédito equivale a uma análise completa e detalhada da sua redação pela nossa IA especializada. Os créditos têm validade de 30 dias a partir da data de compra.'
+                    }
                   </p>
                   <div className="grid md:grid-cols-3 gap-4 text-left">
                     <div className="text-center">
@@ -612,26 +722,34 @@ function Precos() {
 
           {/* Teacher Comparison */}
           {selectedAudience === 'professores' && (
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-6xl mx-auto overflow-x-auto">
               <Card className="overflow-hidden shadow-xl">
-                <div className="grid grid-cols-3 gap-0 bg-slate-50 border-b border-slate-200">
+                <div className="grid grid-cols-5 gap-0 bg-slate-50 border-b border-slate-200">
                   <div className="p-4 text-center">
                     <h3 className="font-bold text-slate-900">Recursos</h3>
                   </div>
                   <div className="p-4 text-center border-l border-slate-200">
-                    <h3 className="font-bold text-slate-900">Plano Básico</h3>
+                    <h3 className="font-bold text-slate-900">Básico</h3>
                     <p className="text-sm text-slate-600">R$ 49/mês</p>
                   </div>
                   <div className="p-4 text-center border-l border-slate-200 bg-gradient-to-br from-blue-50 to-cyan-50">
                     <div className="flex items-center justify-center mb-1">
                       <Badge className="bg-brand-primary text-white text-xs mr-2">Popular</Badge>
                     </div>
-                    <h3 className="font-bold text-slate-900">Plano Profissional</h3>
+                    <h3 className="font-bold text-slate-900">Profissional</h3>
                     <p className="text-sm text-slate-600">R$ 130/mês</p>
+                  </div>
+                  <div className="p-4 text-center border-l border-slate-200">
+                    <h3 className="font-bold text-slate-900">Trimestral</h3>
+                    <p className="text-sm text-slate-600">R$ 340/3 meses</p>
+                  </div>
+                  <div className="p-4 text-center border-l border-slate-200">
+                    <h3 className="font-bold text-slate-900">Semestral</h3>
+                    <p className="text-sm text-slate-600">R$ 620/6 meses</p>
                   </div>
                 </div>
                 {teacherComparisonData.map((row, index) => (
-                  <div key={index} className={`grid grid-cols-3 gap-0 ${index % 2 === 0 ? 'bg-white' : 'bg-slate-50'} hover:bg-slate-100 transition-colors`}>
+                  <div key={index} className={`grid grid-cols-5 gap-0 ${index % 2 === 0 ? 'bg-white' : 'bg-slate-50'} hover:bg-slate-100 transition-colors`}>
                     <div className="p-4 flex items-center">
                       <span className="text-sm font-medium text-slate-700">{row.feature}</span>
                     </div>
@@ -647,6 +765,20 @@ function Precos() {
                         <Check className="w-5 h-5 text-green-600" />
                       ) : (
                         <span className="text-sm text-slate-700 font-medium">{row.profissional}</span>
+                      )}
+                    </div>
+                    <div className="p-4 flex items-center justify-center border-l border-slate-100">
+                      {typeof row.trimestral === 'boolean' ? (
+                        <Check className="w-5 h-5 text-green-600" />
+                      ) : (
+                        <span className="text-sm text-slate-600 font-medium">{row.trimestral}</span>
+                      )}
+                    </div>
+                    <div className="p-4 flex items-center justify-center border-l border-slate-100">
+                      {typeof row.semestral === 'boolean' ? (
+                        <Check className="w-5 h-5 text-green-600" />
+                      ) : (
+                        <span className="text-sm text-slate-600 font-medium">{row.semestral}</span>
                       )}
                     </div>
                   </div>
