@@ -3,39 +3,27 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion.jsx'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table.jsx'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar.jsx'
-import { Check, X, Quote, Star, ChevronDown } from 'lucide-react'
-import React, { useState, useRef, useEffect } from 'react'
+import { Check, X, Star } from 'lucide-react'
+import React, { useState, useEffect } from 'react'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 function Precos() {
-  const [selectedAudience, setSelectedAudience] = useState('estudantes') // estudantes, professores, escolas
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-  const dropdownRef = useRef(null)
+  const [searchParams] = useSearchParams()
+  const audienceFromUrl = searchParams.get('audience') || 'estudantes'
+  const [selectedAudience, setSelectedAudience] = useState(audienceFromUrl)
   const navigate = useNavigate()
   const heroRef = useScrollAnimation()
   const plansRef = useScrollAnimation()
   const comparisonRef = useScrollAnimation()
 
-  const audiences = [
-    { key: 'estudantes', label: 'Estudantes', icon: '🎓' },
-    { key: 'professores', label: 'Professores Independentes', icon: '👨‍🏫' },
-    { key: 'escolas', label: 'Escolas', icon: '🏫' }
-  ]
-
-  const selectedAudienceData = audiences.find(a => a.key === selectedAudience)
-
-  // Fechar dropdown ao clicar fora
+  // Atualizar quando a URL mudar
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsDropdownOpen(false)
-      }
+    const urlAudience = searchParams.get('audience')
+    if (urlAudience && urlAudience !== selectedAudience) {
+      setSelectedAudience(urlAudience)
     }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
+  }, [searchParams])
 
   const handleOpenPagamento = (plan) => {
     navigate('/pagamento', { state: { selectedPlan: plan, audience: selectedAudience } })
@@ -266,27 +254,6 @@ function Precos() {
     { feature: 'Período de acesso', basico: '30 dias', profissional: '30 dias' }
   ]
 
-  const successStories = [
-    {
-      quote: "O Escrita360 foi fundamental na minha aprovação em Medicina na USP. Melhorei minha nota de redação de 680 para 920 pontos em apenas 4 meses. A metodologia de autorregulação me ensinou a revisar meus textos de forma crítica e independente.",
-      author: "Ana Carolina Silva",
-      role: "Estudante de Medicina",
-      avatar: "/placeholder-avatar-1.jpg"
-    },
-    {
-      quote: "Como professor, economizo horas de correção e consigo acompanhar o desenvolvimento de cada aluno individualmente. Os relatórios detalhados facilitam muito a identificação de dificuldades específicas e o planejamento de intervenções pedagógicas.",
-      author: "Prof. Roberto Santos",
-      role: "Professor de Língua Portuguesa",
-      avatar: "/placeholder-avatar-2.jpg"
-    },
-    {
-      quote: "Nossa escola implementou a plataforma e os resultados são impressionantes. A média das notas de redação dos nossos alunos aumentou 35% no primeiro ano. O acompanhamento em tempo real nos permite intervir rapidamente quando necessário.",
-      author: "Dra. Maria Fernandes",
-      role: "Diretora Pedagógica",
-      avatar: "/placeholder-avatar-3.jpg"
-    }
-  ]
-
   const faqs = [
     {
       question: "Como funciona a análise automática das redações?",
@@ -324,70 +291,6 @@ function Precos() {
 
   return (
     <div className="min-h-screen">
-      {/* Audience Selection Dropdown */}
-      <section className="py-6 bg-white border-b sticky top-0 z-50 shadow-sm">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <div className="flex justify-center items-center gap-4">
-            {/* Dropdown Menu */}
-            <div className="relative" ref={dropdownRef}>
-              <button
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center gap-3 px-6 py-3 bg-white border-2 border-slate-300 rounded-lg hover:border-brand-primary transition-all duration-200 shadow-sm hover:shadow-md min-w-[280px] justify-between"
-              >
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl">{selectedAudienceData?.icon}</span>
-                  <span className="font-semibold text-slate-700 text-lg">
-                    {selectedAudienceData?.label}
-                  </span>
-                </div>
-                <ChevronDown 
-                  className={`w-5 h-5 text-slate-600 transition-transform duration-200 ${
-                    isDropdownOpen ? 'rotate-180' : ''
-                  }`}
-                />
-              </button>
-
-              {/* Dropdown Menu */}
-              {isDropdownOpen && (
-                <div className="absolute top-full left-0 mt-2 w-full bg-white border border-slate-200 rounded-lg shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
-                  {audiences.map((audience) => (
-                    <button
-                      key={audience.key}
-                      onClick={() => {
-                        setSelectedAudience(audience.key)
-                        setIsDropdownOpen(false)
-                      }}
-                      className={`w-full flex items-center gap-3 px-6 py-4 hover:bg-slate-50 transition-colors ${
-                        selectedAudience === audience.key
-                          ? 'bg-blue-50 border-l-4 border-brand-primary'
-                          : 'border-l-4 border-transparent'
-                      }`}
-                    >
-                      <span className="text-2xl">{audience.icon}</span>
-                      <span className={`font-medium text-left ${
-                        selectedAudience === audience.key
-                          ? 'text-brand-primary'
-                          : 'text-slate-700'
-                      }`}>
-                        {audience.label}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* FAQ Link */}
-            <a 
-              href="#faq" 
-              className="px-6 py-3 font-semibold text-slate-700 hover:text-brand-primary transition-colors text-lg"
-            >
-              FAQ
-            </a>
-          </div>
-        </div>
-      </section>
-
       {/* Hero Section */}
       <section ref={heroRef} className="bg-white py-12 md:py-16 lg:py-20 animate-on-scroll">
         <div className="container mx-auto px-4 max-w-7xl text-center">
@@ -742,38 +645,6 @@ function Precos() {
             <p className="text-sm text-slate-500">
               Todos os planos incluem atualizações gratuitas e acesso às novas funcionalidades
             </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Success Stories */}
-      <section className="py-8 md:py-12 lg:py-16 bg-white">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-4 animate-fade-in-up">
-            Histórias de Sucesso
-          </h2>
-          <p className="text-lg md:text-xl text-center text-slate-600 mb-8 md:mb-12 max-w-2xl mx-auto animate-fade-in-up delay-200">
-            Veja como nossos usuários transformaram sua escrita e alcançaram seus objetivos
-          </p>
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {successStories.map((story, index) => (
-              <Card key={index} className={`hover-lift animate-fade-in-up delay-${index * 200}`}>
-                <CardContent className="p-6">
-                  <Quote className="w-8 h-8 text-brand-primary mb-4 animate-pulse-glow" />
-                  <p className="text-slate-700 mb-6 italic">"{story.quote}"</p>
-                  <div className="flex items-center gap-3">
-                    <Avatar>
-                      <AvatarImage src={story.avatar} alt={story.author} />
-                      <AvatarFallback>{story.author.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="font-semibold text-slate-900">{story.author}</p>
-                      <p className="text-sm text-slate-600">{story.role}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
           </div>
         </div>
       </section>

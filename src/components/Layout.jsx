@@ -1,6 +1,6 @@
-import { Link, useLocation } from 'react-router-dom'
-import { Menu } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Menu, ChevronDown, GraduationCap, School, UserCheck } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button.jsx'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet.jsx'
 import { cn } from '@/lib/utils'
@@ -9,11 +9,36 @@ import logo from '@/assets/logo2.svg'
 
 function Layout({ children }) {
   const [isOpen, setIsOpen] = useState(false)
+  const [isPlansDropdownOpen, setIsPlansDropdownOpen] = useState(false)
+  const plansDropdownRef = useRef(null)
   const location = useLocation()
+  const navigate = useNavigate()
+
+  const plansOptions = [
+    { key: 'estudantes', label: 'Estudantes', icon: GraduationCap },
+    { key: 'professores', label: 'Professores Independentes', icon: UserCheck },
+    { key: 'escolas', label: 'Escolas', icon: School }
+  ]
 
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [location.pathname])
+
+  // Fechar dropdown ao clicar fora
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (plansDropdownRef.current && !plansDropdownRef.current.contains(event.target)) {
+        setIsPlansDropdownOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  const handlePlanSelect = (planKey) => {
+    setIsPlansDropdownOpen(false)
+    navigate(`/precos?audience=${planKey}`)
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
@@ -30,7 +55,46 @@ function Layout({ children }) {
             <Link to="/" className={cn("text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105", location.pathname === "/" ? "border-b-2 border-brand-primary pb-1" : "")}>Home</Link>
             <Link to="/para-quem" className={cn("text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105", location.pathname === "/para-quem" ? "border-b-2 border-brand-primary pb-1" : "")}>Para Quem</Link>
             <Link to="/recursos" className={cn("text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105", location.pathname === "/recursos" ? "border-b-2 border-brand-primary pb-1" : "")}>Recursos</Link>
-            <Link to="/precos" className={cn("text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105", location.pathname === "/precos" ? "border-b-2 border-brand-primary pb-1" : "")}>Planos</Link>
+            
+            {/* Planos Dropdown */}
+            <div className="relative" ref={plansDropdownRef}>
+              <button
+                onClick={() => setIsPlansDropdownOpen(!isPlansDropdownOpen)}
+                className={cn(
+                  "flex items-center gap-1 text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105",
+                  location.pathname === "/precos" ? "border-b-2 border-brand-primary pb-1" : ""
+                )}
+              >
+                Planos
+                <ChevronDown 
+                  className={`w-4 h-4 transition-transform duration-200 ${
+                    isPlansDropdownOpen ? 'rotate-180' : ''
+                  }`}
+                />
+              </button>
+
+              {/* Dropdown Menu */}
+              {isPlansDropdownOpen && (
+                <div className="absolute top-full left-0 mt-2 w-64 bg-white border border-slate-200 rounded-lg shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 z-50">
+                  {plansOptions.map((option) => {
+                    const IconComponent = option.icon
+                    return (
+                      <button
+                        key={option.key}
+                        onClick={() => handlePlanSelect(option.key)}
+                        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-colors text-left border-l-4 border-transparent hover:border-brand-primary"
+                      >
+                        <IconComponent className="w-5 h-5 text-brand-primary" />
+                        <span className="font-medium text-slate-700">
+                          {option.label}
+                        </span>
+                      </button>
+                    )
+                  })}
+                </div>
+              )}
+            </div>
+
             <Link to="/contato" className={cn("text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105", location.pathname === "/contato" ? "border-b-2 border-brand-primary pb-1" : "")}>Contato</Link>
             <Button asChild size="lg" className="bg-[var(--brand-primary)] text-white hover:bg-[var(--brand-dark)]">
               <Link to="/login">Entrar</Link>
@@ -68,16 +132,33 @@ function Layout({ children }) {
                 >
                   Recursos
                 </Link>
-                <Link
-                  to="/precos"
-                  className={cn("text-lg font-medium text-slate-700 hover:text-brand-primary transition-colors", location.pathname === "/precos" ? "border-b-2 border-brand-primary pb-1" : "")}
-                  onClick={() => setIsOpen(false)}
-                >
-                  Planos
-                </Link>
+                
+                {/* Planos Section Mobile */}
+                <div className="border-t pt-2 mt-2">
+                  <p className="text-xs font-semibold text-slate-500 mb-2 px-2">PLANOS</p>
+                  {plansOptions.map((option) => {
+                    const IconComponent = option.icon
+                    return (
+                      <button
+                        key={option.key}
+                        onClick={() => {
+                          handlePlanSelect(option.key)
+                          setIsOpen(false)
+                        }}
+                        className="w-full flex items-center gap-3 px-2 py-2 hover:bg-slate-50 rounded-md transition-colors text-left"
+                      >
+                        <IconComponent className="w-5 h-5 text-brand-primary" />
+                        <span className="text-base font-medium text-slate-700">
+                          {option.label}
+                        </span>
+                      </button>
+                    )
+                  })}
+                </div>
+
                 <Link
                   to="/contato"
-                  className={cn("text-lg font-medium text-slate-700 hover:text-brand-primary transition-colors", location.pathname === "/contato" ? "border-b-2 border-brand-primary pb-1" : "")}
+                  className={cn("text-lg font-medium text-slate-700 hover:text-brand-primary transition-colors border-t pt-4", location.pathname === "/contato" ? "border-b-2 border-brand-primary pb-1" : "")}
                   onClick={() => setIsOpen(false)}
                 >
                   Contato
