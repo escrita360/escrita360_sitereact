@@ -22,10 +22,11 @@ function Home() {
                   Escrita360 — Muito além da correção automática para o Enem.
                 </span>
               </div>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-6 leading-tight">
-                <span style={{ color: '#2b7475' }}>Inovamos para oferecer a plataforma mais completa </span>
-                <span style={{ color: '#569e9d' }}>para o desenvolvimento da escrita, unindo </span>
-                <span style={{ color: '#659bb3' }}>autorregulação e inteligência artificial.</span>
+              <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-6 leading-tight">
+                <span style={{ color: '#2b7475', fontWeight: 'normal' }}>Inovamos para oferecer a plataforma mais completa </span>
+                <span style={{ color: '#569e9d', fontWeight: 'bold' }}>para o desenvolvimento da escrita, </span>
+                <span style={{ color: '#569e9d', fontWeight: 'normal' }}>unindo </span>
+                <span style={{ color: '#659bb3', fontWeight: 'normal' }}>autorregulação e inteligência artificial.</span>
               </h1>
               <p className="hero-description text-lg md:text-xl text-slate-600 mb-8 leading-relaxed">
                 Revisão como apoio, não como atalho, respeitando o processo de aprendizagem. A correção complementar com Inteligência Artificial valoriza o processo de reescrita e garante que o aprendizado esteja no centro da experiência.
