@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox.jsx'
 import { Separator } from '@/components/ui/separator.jsx'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
+import { PageHero } from '@/components/PageHero.jsx'
 import { Mail, Phone, MapPin, MessageSquare, Clock, Calendar, Gift, Handshake, GraduationCap, Headphones, Send, Facebook, Instagram, MessageCircle, Rocket, BookOpen, HelpCircle, CalendarDays } from 'lucide-react'
 
 function Contato() {
@@ -14,19 +15,24 @@ function Contato() {
   const formRef = useScrollAnimation()
   const contactRef = useScrollAnimation()
   
+  const getHeroContent = () => {
+    return {
+      title: 'Vamos',
+      titleHighlight: 'Conversar?',
+      subtitle: 'Estamos prontos para ajudar você a transformar o processo de escrita. Entre em contato conosco e tire suas dúvidas!'
+    }
+  }
+
+  const heroContent = getHeroContent()
+  
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section ref={heroRef} className="bg-white py-20 animate-on-scroll">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-5xl font-bold mb-6 text-slate-900 animate-fade-in-up">Vamos conversar?</h1>
-            <p className="text-xl text-slate-600 animate-fade-in-up delay-200">
-              Estamos prontos para ajudar você a transformar o processo de escrita. Entre em contato conosco!
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHero 
+        title={heroContent.title}
+        titleHighlight={heroContent.titleHighlight}
+        subtitle={heroContent.subtitle}
+      />
 
       {/* Contact Main Section */}
       <section ref={formRef} className="py-16 bg-slate-50 animate-on-scroll">

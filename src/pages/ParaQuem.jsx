@@ -9,6 +9,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel.jsx"
 import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
+import { PageHero } from '@/components/PageHero.jsx'
 import {
   UserCircle,
   Presentation,
@@ -126,21 +127,24 @@ function ParaQuem() {
     }
   ]
 
+  const getHeroContent = () => {
+    return {
+      title: 'Para Quem é o',
+      titleHighlight: 'Escrita360?',
+      subtitle: 'Descubra como nossa plataforma pode transformar o aprendizado de escrita para estudantes, professores, escolas e cursos preparatórios.'
+    }
+  }
+
+  const heroContent = getHeroContent()
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section ref={heroRef} className="bg-white py-20 animate-on-scroll">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-5xl font-bold mb-6 text-slate-900 animate-fade-in-up">
-              Para Quem é o Escrita360?
-            </h1>
-            <p className="text-xl text-slate-600 leading-relaxed animate-fade-in-up delay-200">
-              A solução definitiva para estudantes e escolas que desejam a IA no momento certo
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHero 
+        title={heroContent.title}
+        titleHighlight={heroContent.titleHighlight}
+        subtitle={heroContent.subtitle}
+      />
 
       {/* Target Audience Carousel Section */}
       <section ref={tabsRef} className="py-20 bg-slate-50 animate-on-scroll">

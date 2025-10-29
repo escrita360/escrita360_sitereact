@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card.jsx'
 import { Button } from '@/components/ui/button.jsx'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
+import { PageHero } from '@/components/PageHero.jsx'
 import {
   List,
   Target,
@@ -282,19 +283,24 @@ function Recursos() {
     }
   }
 
+  const getHeroContent = () => {
+    return {
+      title: 'Recursos da',
+      titleHighlight: 'Plataforma',
+      subtitle: 'Descubra todas as ferramentas e funcionalidades que vão transformar o processo de escrita e aprendizagem.'
+    }
+  }
+
+  const heroContent = getHeroContent()
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section ref={heroRef} className="bg-white text-slate-900 py-20 animate-on-scroll">
-        <div className="container mx-auto px-4 max-w-7xl text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 animate-fade-in-up">
-            Principais Recursos da Plataforma
-          </h1>
-          <p className="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto animate-fade-in-up delay-200">
-            Veja os principais recursos disponíveis na plataforma
-          </p>
-        </div>
-      </section>
+      <PageHero 
+        title={heroContent.title}
+        titleHighlight={heroContent.titleHighlight}
+        subtitle={heroContent.subtitle}
+      />
 
       {/* Resource Categories Tabs */}
       <section ref={tabsRef} className="py-16 bg-slate-50 animate-on-scroll">

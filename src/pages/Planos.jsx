@@ -7,6 +7,7 @@ import { Check, X, Star } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { PageHero } from '@/components/PageHero.jsx'
 
 function Precos() {
   const [searchParams] = useSearchParams()
@@ -289,23 +290,39 @@ function Precos() {
     }
   ]
 
+  // Conteúdo do hero baseado no público selecionado
+  const getHeroContent = () => {
+    if (selectedAudience === 'estudantes') {
+      return {
+        title: 'Planos para',
+        titleHighlight: 'Estudantes',
+        subtitle: 'Desenvolva suas habilidades de escrita para o ENEM e vestibulares. Aprenda no seu ritmo com nossa metodologia autorregulada.'
+      }
+    } else if (selectedAudience === 'professores') {
+      return {
+        title: 'Planos para',
+        titleHighlight: 'Professores',
+        subtitle: 'Escolha o plano que acompanha seu fluxo de redações, com correções ilimitadas na própria plataforma e créditos de IA.'
+      }
+    } else {
+      return {
+        title: 'Planos para',
+        titleHighlight: 'Escolas',
+        subtitle: 'Escolha o plano de adesão que melhor se adapta às necessidades de produção e correção de sua instituição.'
+      }
+    }
+  }
+
+  const heroContent = getHeroContent()
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section ref={heroRef} className="bg-white py-12 md:py-16 lg:py-20 animate-on-scroll">
-        <div className="container mx-auto px-4 max-w-7xl text-center">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-slate-900 animate-fade-in-up">
-            {selectedAudience === 'estudantes' && 'Planos para Estudantes'}
-            {selectedAudience === 'professores' && 'Planos para Professores Independentes'}
-            {selectedAudience === 'escolas' && 'Planos para Escolas'}
-          </h1>
-          <p className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto animate-fade-in-up delay-200">
-            {selectedAudience === 'estudantes' && 'Desenvolva suas habilidades de escrita para o ENEM e vestibulares. Aprenda no seu ritmo com nossa metodologia autorregulada.'}
-            {selectedAudience === 'professores' && 'Escolha o plano que acompanha seu fluxo de redações, com correções ilimitadas na própria plataforma e créditos de IA.'}
-            {selectedAudience === 'escolas' && 'Escolha o plano de adesão que melhor se adapta às necessidades de produção e correção de sua instituição.'}
-          </p>
-        </div>
-      </section>
+      <PageHero 
+        title={heroContent.title}
+        titleHighlight={heroContent.titleHighlight}
+        subtitle={heroContent.subtitle}
+      />
 
       {/* Pricing Grid */}
       <section ref={plansRef} className="py-8 md:py-12 lg:py-16 bg-white animate-on-scroll">

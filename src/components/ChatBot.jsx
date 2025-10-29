@@ -55,7 +55,7 @@ function ChatBot() {
 
       {/* Janela do Chat */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 z-50 w-[350px] h-[500px] animate-fade-in-up">
+        <div className="fixed bottom-24 right-6 z-50 w-[450px] h-[600px] animate-fade-in-up">
           <Card className="h-full flex flex-col shadow-2xl bg-white">
             <CardHeader className="bg-brand-primary text-white rounded-t-lg">
               <CardTitle className="flex items-center gap-2">
