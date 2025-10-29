@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardHeader } from '@/components/ui/card.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
-import { Switch } from '@/components/ui/switch.jsx'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion.jsx'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table.jsx'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar.jsx'
@@ -11,83 +10,15 @@ import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
 import { useNavigate } from 'react-router-dom'
 
 function Precos() {
-  const [isYearly, setIsYearly] = useState(false)
-  const [selectedAudience, setSelectedAudience] = useState('geral') // geral, estudantes, professores, escolas
+  const [selectedAudience, setSelectedAudience] = useState('estudantes') // estudantes, professores, escolas
   const navigate = useNavigate()
   const heroRef = useScrollAnimation()
   const plansRef = useScrollAnimation()
   const comparisonRef = useScrollAnimation()
 
   const handleOpenPagamento = (plan) => {
-    navigate('/pagamento', { state: { selectedPlan: plan, isYearly, audience: selectedAudience } })
+    navigate('/pagamento', { state: { selectedPlan: plan, audience: selectedAudience } })
   }
-
-  // Planos gerais (visão atual)
-  const generalPlans = [
-    {
-      name: 'Gratuito',
-      badge: 'Ideal para começar',
-      monthlyPrice: 0,
-      yearlyPrice: 0,
-      description: 'Perfeito para experimentar nossa metodologia de escrita autorregulada',
-      features: [
-        { text: '3 correções por mês', included: true },
-        { text: 'Processo completo de escrita', included: true },
-        { text: 'Análise das 5 competências', included: true },
-        { text: 'Banco de temas limitado', included: true },
-        { text: 'Relatórios básicos', included: true },
-        { text: 'Painel de sentimentos', included: true },
-        { text: 'Estratégias autorreguladas', included: true }
-      ],
-      buttonText: 'Assinar',
-      buttonVariant: 'default'
-    },
-    {
-      name: 'Professor',
-      badge: 'Solução completa',
-      monthlyPrice: 47,
-      yearlyPrice: 33,
-      description: 'Ideal para professores independentes e pequenas turmas',
-      popular: true,
-      features: [
-        { text: 'Até 30 alunos', included: true },
-        { text: 'Correções ilimitadas', included: true },
-        { text: 'Dashboard completo', included: true },
-        { text: 'Relatórios detalhados', included: true },
-        { text: 'Banco completo de temas', included: true },
-        { text: 'Suporte prioritário', included: true },
-        { text: 'Treinamento incluído', included: true },
-        { text: 'Gestão de turmas', included: true },
-        { text: 'Habilidades BNCC', included: true },
-        { text: 'Acompanhamento em tempo real', included: true }
-      ],
-      buttonText: 'Assinar',
-      buttonVariant: 'default'
-    },
-    {
-      name: 'Escola',
-      badge: 'Máximo resultado',
-      monthlyPrice: 197,
-      yearlyPrice: 138,
-      description: 'Solução completa para instituições de ensino de todos os tamanhos',
-      features: [
-        { text: 'Usuários ilimitados', included: true },
-        { text: 'Múltiplos professores', included: true },
-        { text: 'Dashboards administrativos', included: true },
-        { text: 'Relatórios institucionais', included: true },
-        { text: 'White-label disponível', included: true },
-        { text: 'Integração com LMS', included: true },
-        { text: 'Suporte dedicado 24/7', included: true },
-        { text: 'Consultoria pedagógica', included: true },
-        { text: 'Gerente de conta exclusivo', included: true },
-        { text: 'Treinamento personalizado', included: true },
-        { text: 'API completa', included: true },
-        { text: 'SLA garantido', included: true }
-      ],
-      buttonText: 'Assinar',
-      buttonVariant: 'default'
-    }
-  ]
 
   // Planos para estudantes
   const studentPlans = [
@@ -268,7 +199,7 @@ function Precos() {
       case 'escolas':
         return schoolPlans
       default:
-        return generalPlans
+        return studentPlans
     }
   }
 
@@ -381,7 +312,6 @@ function Precos() {
           </div>
           <div className="flex flex-wrap justify-center gap-2 md:gap-4">
             {[
-              { key: 'geral', label: 'Visão Geral', icon: '📊' },
               { key: 'estudantes', label: 'Estudantes', icon: '🎓' },
               { key: 'professores', label: 'Professores', icon: '👨‍🏫' },
               { key: 'escolas', label: 'Escolas', icon: '🏫' }
@@ -410,43 +340,19 @@ function Precos() {
             {selectedAudience === 'estudantes' && 'Planos para Estudantes'}
             {selectedAudience === 'professores' && 'Planos para Professores Independentes'}
             {selectedAudience === 'escolas' && 'Planos para Escolas'}
-            {selectedAudience === 'geral' && 'Planos Flexíveis para Cada Necessidade'}
           </h1>
           <p className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto animate-fade-in-up delay-200">
             {selectedAudience === 'estudantes' && 'Desenvolva suas habilidades de escrita para o ENEM e vestibulares. Aprenda no seu ritmo com nossa metodologia autorregulada.'}
             {selectedAudience === 'professores' && 'Escolha o plano que acompanha seu fluxo de redações, com correções ilimitadas na própria plataforma e créditos de IA.'}
             {selectedAudience === 'escolas' && 'Escolha o plano de adesão que melhor se adapta às necessidades de produção e correção de sua instituição.'}
-            {selectedAudience === 'geral' && 'Comece gratuitamente e evolua conforme sua demanda'}
           </p>
         </div>
       </section>
-
-      {/* Pricing Toggle - Only for general view */}
-      {selectedAudience === 'geral' && (
-        <section className="py-8 bg-slate-50 border-b">
-          <div className="container mx-auto px-4 max-w-7xl">
-            <div className="flex items-center justify-center gap-4 animate-fade-in-up">
-              <span className={`text-lg ${!isYearly ? 'font-bold text-brand-primary' : 'text-gray-600'}`}>
-                Mensal
-              </span>
-              <Switch
-                checked={isYearly}
-                onCheckedChange={setIsYearly}
-                className="data-[state=checked]:bg-brand-primary"
-              />
-              <span className={`text-lg ${isYearly ? 'font-bold text-brand-primary' : 'text-gray-600'}`}>
-                Anual <small className="text-green-600 font-medium">(Economize 30%)</small>
-              </span>
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* Pricing Grid */}
       <section ref={plansRef} className="py-8 md:py-12 lg:py-16 bg-white animate-on-scroll">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className={`grid gap-8 max-w-6xl mx-auto ${
-            selectedAudience === 'geral' ? 'md:grid-cols-3' : 
             selectedAudience === 'professores' ? 'md:grid-cols-2 max-w-5xl' : 
             'md:grid-cols-2 max-w-5xl'
           }`}>
@@ -483,7 +389,7 @@ function Precos() {
                       <>
                         <span className="text-4xl font-bold text-brand-primary">R$</span>
                         <span className="text-5xl font-bold text-brand-primary">
-                          {selectedAudience === 'geral' ? (isYearly ? plan.yearlyPrice : plan.monthlyPrice) : plan.monthlyPrice}
+                          {plan.monthlyPrice}
                         </span>
                         <span className="text-slate-600">
                           {plan.name.includes('Trimestral') ? '/3 meses' : '/mês'}
@@ -672,142 +578,17 @@ function Precos() {
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-12 animate-fade-in-up">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">
-              {selectedAudience === 'geral' && 'Comparação Detalhada de Planos'}
               {selectedAudience === 'estudantes' && 'Comparação: Planos para Estudantes'}
               {selectedAudience === 'professores' && 'Comparação: Planos para Professores'}
               {selectedAudience === 'escolas' && 'Comparação: Recursos Disponíveis'}
             </h2>
             <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-              {selectedAudience === 'geral' && 'Veja todas as funcionalidades e escolha o plano ideal para suas necessidades'}
               {(selectedAudience === 'estudantes' || selectedAudience === 'professores') && 'Compare os recursos incluídos em cada plano'}
               {selectedAudience === 'escolas' && 'Recursos disponíveis no Plano Híbrido 360'}
             </p>
           </div>
           
-          {/* Desktop View */}
-          {selectedAudience === 'geral' && (
-            <div className="hidden lg:block max-w-7xl mx-auto animate-fade-in-up delay-200">
-              <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
-                {/* Header */}
-                <div className="grid grid-cols-4 gap-0 border-b border-slate-200 bg-slate-50">
-                  <div className="p-6">
-                    <h3 className="text-lg font-bold text-slate-900">Recursos</h3>
-                  </div>
-                  <div className="p-6 text-center border-l border-slate-200">
-                    <div className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-slate-100 mb-2">
-                      <span className="text-sm font-semibold text-slate-700">Gratuito</span>
-                    </div>
-                  </div>
-                  <div className="p-6 text-center border-l border-slate-200 bg-gradient-to-br from-blue-50 to-cyan-50 relative">
-                    <div className="absolute top-2 right-2">
-                      <Badge className="bg-brand-primary text-white text-xs">Popular</Badge>
-                    </div>
-                    <div className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-brand-primary text-white mb-2">
-                      <span className="text-sm font-semibold">Professor</span>
-                    </div>
-                  </div>
-                  <div className="p-6 text-center border-l border-slate-200">
-                    <div className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-slate-900 text-white mb-2">
-                      <span className="text-sm font-semibold">Escola</span>
-                    </div>
-                  </div>
-                </div>
 
-                {/* Rows */}
-                {comparisonData.map((row, index) => (
-                  <div 
-                    key={index} 
-                    className={`grid grid-cols-4 gap-0 hover:bg-slate-50 transition-colors duration-200 ${
-                      index !== comparisonData.length - 1 ? 'border-b border-slate-100' : ''
-                    }`}
-                  >
-                    <div className="p-5 flex items-center">
-                      <span className="text-sm font-medium text-slate-700">{row.feature}</span>
-                    </div>
-                    <div className="p-5 flex items-center justify-center border-l border-slate-100">
-                      {typeof row.free === 'boolean' ? (
-                        row.free ? (
-                          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-green-100">
-                            <Check className="w-5 h-5 text-green-600" />
-                          </div>
-                        ) : (
-                          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100">
-                            <X className="w-5 h-5 text-slate-400" />
-                          </div>
-                        )
-                      ) : (
-                        <span className="text-sm text-slate-600 font-medium">{row.free}</span>
-                      )}
-                    </div>
-                    <div className="p-5 flex items-center justify-center border-l border-slate-100 bg-gradient-to-br from-blue-50/30 to-cyan-50/30">
-                      {typeof row.professor === 'boolean' ? (
-                        row.professor ? (
-                          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-green-100">
-                            <Check className="w-5 h-5 text-green-600" />
-                          </div>
-                        ) : (
-                          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100">
-                            <X className="w-5 h-5 text-slate-400" />
-                          </div>
-                        )
-                      ) : (
-                        <span className="text-sm text-slate-700 font-medium">{row.professor}</span>
-                      )}
-                    </div>
-                    <div className="p-5 flex items-center justify-center border-l border-slate-100">
-                      {typeof row.escola === 'boolean' ? (
-                        row.escola ? (
-                          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-green-100">
-                            <Check className="w-5 h-5 text-green-600" />
-                          </div>
-                        ) : (
-                          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100">
-                            <X className="w-5 h-5 text-slate-400" />
-                          </div>
-                        )
-                      ) : (
-                        <span className="text-sm text-slate-600 font-medium">{row.escola}</span>
-                      )}
-                    </div>
-                  </div>
-                ))}
-
-                {/* Footer CTAs */}
-                <div className="grid grid-cols-4 gap-0 bg-slate-50 p-6 border-t border-slate-200">
-                  <div className="p-2"></div>
-                  <div className="p-2 text-center">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="w-full hover:bg-slate-900 hover:text-white transition-colors"
-                      onClick={() => handleOpenPagamento(generalPlans[0])}
-                    >
-                      Assinar Plano
-                    </Button>
-                  </div>
-                  <div className="p-2 text-center">
-                    <Button 
-                      size="sm" 
-                      className="w-full bg-brand-primary hover:bg-brand-secondary text-white transition-all hover:scale-105 shadow-md"
-                      onClick={() => handleOpenPagamento(generalPlans[1])}
-                    >
-                      Assinar Plano
-                    </Button>
-                  </div>
-                  <div className="p-2 text-center">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="w-full hover:bg-slate-900 hover:text-white transition-colors"
-                      onClick={() => handleOpenPagamento(generalPlans[2])}
-                    >
-                      Assinar Plano
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
 
           {/* Student Comparison */}
           {selectedAudience === 'estudantes' && (
@@ -899,67 +680,7 @@ function Precos() {
             </div>
           )}
 
-          {/* Mobile View - Only for general */}
-          {selectedAudience === 'geral' && (
-            <div className="lg:hidden space-y-6 animate-fade-in-up delay-200">
-              {generalPlans.map((plan, planIndex) => (
-                <Card key={planIndex} className={`overflow-hidden ${plan.popular ? 'border-2 border-brand-primary shadow-lg' : 'border border-slate-200'}`}>
-                  <CardHeader className={`${plan.popular ? 'bg-gradient-to-br from-blue-50 to-cyan-50' : 'bg-slate-50'} p-6`}>
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-xl font-bold text-slate-900">{plan.name}</h3>
-                      {plan.popular && (
-                        <Badge className="bg-brand-primary text-white">Popular</Badge>
-                      )}
-                    </div>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-3xl font-bold text-brand-primary">
-                        R$ {isYearly ? plan.yearlyPrice : plan.monthlyPrice}
-                      </span>
-                      <span className="text-slate-600">/mês</span>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="p-6">
-                    <div className="space-y-3">
-                      {comparisonData.map((row, rowIndex) => {
-                        const value = planIndex === 0 ? row.free : planIndex === 1 ? row.professor : row.escola
-                        return (
-                          <div key={rowIndex} className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
-                            <span className="text-sm text-slate-700 flex-1">{row.feature}</span>
-                            <div className="ml-4">
-                              {typeof value === 'boolean' ? (
-                                value ? (
-                                  <div className="flex items-center justify-center w-6 h-6 rounded-full bg-green-100">
-                                    <Check className="w-4 h-4 text-green-600" />
-                                  </div>
-                                ) : (
-                                  <div className="flex items-center justify-center w-6 h-6 rounded-full bg-slate-100">
-                                    <X className="w-4 h-4 text-slate-400" />
-                                  </div>
-                                )
-                              ) : (
-                                <span className="text-sm text-slate-600 font-medium">{value}</span>
-                              )}
-                            </div>
-                          </div>
-                        )
-                      })}
-                    </div>
-                    <Button 
-                      className={`w-full mt-6 transition-all ${
-                        plan.popular 
-                          ? 'bg-brand-primary hover:bg-brand-secondary text-white shadow-md hover:scale-105' 
-                          : 'hover:bg-slate-900 hover:text-white'
-                      }`}
-                      variant={plan.popular ? 'default' : 'outline'}
-                      onClick={() => handleOpenPagamento(plan)}
-                    >
-                      {plan.buttonText}
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
+
 
           {/* Info Footer */}
           <div className="mt-8 text-center animate-fade-in-up delay-300">
