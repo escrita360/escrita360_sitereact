@@ -12,16 +12,18 @@ import { useNavigate } from 'react-router-dom'
 
 function Precos() {
   const [isYearly, setIsYearly] = useState(false)
+  const [selectedAudience, setSelectedAudience] = useState('geral') // geral, estudantes, professores, escolas
   const navigate = useNavigate()
   const heroRef = useScrollAnimation()
   const plansRef = useScrollAnimation()
   const comparisonRef = useScrollAnimation()
 
   const handleOpenPagamento = (plan) => {
-    navigate('/pagamento', { state: { selectedPlan: plan, isYearly } })
+    navigate('/pagamento', { state: { selectedPlan: plan, isYearly, audience: selectedAudience } })
   }
 
-  const plans = [
+  // Planos gerais (visão atual)
+  const generalPlans = [
     {
       name: 'Gratuito',
       badge: 'Ideal para começar',
@@ -87,6 +89,191 @@ function Precos() {
     }
   ]
 
+  // Planos para estudantes
+  const studentPlans = [
+    {
+      name: 'Plano Mensal',
+      badge: 'Acesso imediato',
+      monthlyPrice: 49,
+      yearlyPrice: 49,
+      description: 'Plano Híbrido (Uso da plataforma + créditos de IA)',
+      credits: 20,
+      features: [
+        { text: 'Módulo de escrita digital autorregulada', included: true },
+        { text: 'Banco de estratégias para escrita', included: true },
+        { text: 'Sugestão de temas', included: true },
+        { text: 'Recursos de apoio autorregulatório', included: true },
+        { text: 'Insights para melhoria da escrita', included: true },
+        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
+        { text: 'Rubricas qualitativas para (auto)avaliação', included: true },
+        { text: '20 análises detalhadas de redações do ENEM por IA', included: true, highlighted: true },
+        { text: 'Acesso por 30 dias', included: true }
+      ],
+      buttonText: 'Escolher Mensal',
+      buttonVariant: 'default'
+    },
+    {
+      name: 'Plano Trimestral',
+      badge: 'Melhor custo-benefício',
+      monthlyPrice: 120,
+      yearlyPrice: 120,
+      description: 'Plano Híbrido (Uso da plataforma + créditos de IA)',
+      credits: 50,
+      popular: true,
+      features: [
+        { text: 'Módulo de escrita digital autorregulada', included: true },
+        { text: 'Banco de estratégias para escrita', included: true },
+        { text: 'Sugestão de temas', included: true },
+        { text: 'Recursos de apoio autorregulatório', included: true },
+        { text: 'Insights para melhoria da escrita', included: true },
+        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
+        { text: 'Rubricas qualitativas para (auto)avaliação', included: true },
+        { text: '50 análises detalhadas de redações do ENEM por IA', included: true, highlighted: true },
+        { text: 'Acesso por 90 dias', included: true }
+      ],
+      buttonText: 'Escolher Trimestral',
+      buttonVariant: 'default'
+    }
+  ]
+
+  // Planos para professores
+  const teacherPlans = [
+    {
+      name: 'Plano Básico',
+      badge: 'Para começar',
+      monthlyPrice: 49,
+      yearlyPrice: 49,
+      description: 'Plano Híbrido (Plataforma + créditos de IA)',
+      credits: 20,
+      features: [
+        { text: 'Módulo de escrita digital autorregulada', included: true },
+        { text: 'Banco de estratégias para escrita', included: true },
+        { text: 'Sugestão de temas', included: true },
+        { text: 'Recursos de apoio autorregulatório', included: true },
+        { text: 'Insights para melhoria da escrita', included: true },
+        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
+        { text: 'Rubricas qualitativas para (auto)avaliação', included: true },
+        { text: '20 análises detalhadas de redações por IA', included: true, highlighted: true },
+        { text: 'Correção por foto ou digitada', included: true },
+        { text: 'Acesso por 30 dias', included: true }
+      ],
+      buttonText: 'Escolher Básico',
+      buttonVariant: 'default'
+    },
+    {
+      name: 'Plano Profissional',
+      badge: 'Mais escolhido',
+      monthlyPrice: 130,
+      yearlyPrice: 130,
+      description: 'Plano Híbrido (Plataforma + créditos de IA)',
+      credits: 100,
+      popular: true,
+      features: [
+        { text: 'Módulo de escrita digital autorregulada', included: true },
+        { text: 'Banco de estratégias para escrita', included: true },
+        { text: 'Sugestão de temas', included: true },
+        { text: 'Recursos de apoio autorregulatório', included: true },
+        { text: 'Insights para melhoria da escrita', included: true },
+        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
+        { text: 'Rubricas qualitativas para (auto)avaliação', included: true },
+        { text: '100 análises detalhadas de redações por IA', included: true, highlighted: true },
+        { text: 'Correção por foto ou digitada', included: true },
+        { text: 'Acesso por 30 dias', included: true }
+      ],
+      buttonText: 'Escolher Profissional',
+      buttonVariant: 'default'
+    }
+  ]
+
+  // Planos para escolas
+  const schoolPlans = [
+    {
+      name: 'Plano Híbrido 360',
+      badge: 'Institucional completo',
+      monthlyPrice: 295,
+      yearlyPrice: 295,
+      description: 'Integração total entre os módulos Professor e Aluno',
+      consultation: true, // preço sob consulta
+      features: [
+        { text: 'Módulo de escrita digital autorregulada', included: true },
+        { text: 'Banco de estratégias para escrita', included: true },
+        { text: 'Sugestão de temas', included: true },
+        { text: 'Recursos de apoio autorregulatório', included: true },
+        { text: 'Insights para melhoria da escrita', included: true },
+        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
+        { text: 'Rubricas qualitativas para (auto)avaliação', included: true },
+        { text: 'Correção por foto ou digitada', included: true },
+        { text: 'Dashboard institucional completo', included: true },
+        { text: 'Integração Professor-Aluno total', included: true },
+        { text: 'Relatórios automáticos (autoavaliação, sentimentos, IA)', included: true },
+        { text: 'O acesso permanece ativo durante o período letivo', included: true, highlighted: true }
+      ],
+      buttonText: 'Solicitar Proposta Personalizada',
+      buttonVariant: 'default'
+    }
+  ]
+
+  // Pacotes de créditos
+  const creditPackages = [
+    {
+      name: 'Pacote 1',
+      credits: 5,
+      price: 20,
+      description: '5 créditos para usar em até 30 dias',
+      features: ['Análises detalhadas por IA', 'Validade de 30 dias', 'Suporte incluído']
+    },
+    {
+      name: 'Pacote 2',
+      credits: 10,
+      price: 35,
+      description: '10 créditos para usar em até 30 dias',
+      features: ['Análises detalhadas por IA', 'Validade de 30 dias', 'Suporte incluído']
+    },
+    {
+      name: 'Pacote 3',
+      credits: 25,
+      price: 80,
+      description: '25 créditos para usar em até 30 dias',
+      popular: true,
+      features: ['Análises detalhadas por IA', 'Validade de 30 dias', 'Suporte incluído', 'Melhor custo-benefício']
+    }
+  ]
+
+  // Modelos de assinatura para escolas
+  const schoolModels = [
+    {
+      title: 'Assinatura Institucional',
+      focus: 'Facilitar o trabalho dos professores e otimizar a correção das redações realizadas em sala de aula e das provas de redação realizadas na escola.',
+      description: 'A escola adquire Planos Híbridos (plataforma + créditos de IA), disponíveis nas versões mensal, semestral ou anual, para os professores de Língua Portuguesa ou demais docentes envolvidos na produção e correção de redações e adquire pacotes adicionais de créditos, conforme a demanda de correções dos estudantes.',
+      number: 1
+    },
+    {
+      title: 'Assinatura Compartilhada (Escola + Família)',
+      focus: 'Implementar o uso da plataforma de forma completa, fomentar a autorregulação da aprendizagem, otimizar o processo de correção das redações e acompanhar o desenvolvimento das habilidades de escrita dos estudantes por meio de métricas e dados de desempenho.',
+      description: 'Nesse modelo, os pais adquirem a assinatura da plataforma e a escola adquire o Plano Híbrido 360 (integração total entre os módulos Professor e Aluno) e os créditos de IA necessários para as correções das atividades e provas de redação realizadas na escola. A instituição tem acesso a todos os recursos da Plataforma e um Dashboard institucional que centraliza o acompanhamento pedagógico.',
+      benefits: 'Esse modelo fortalece o engajamento entre escola e família, permitindo que os pais acompanhem de forma contínua a evolução das habilidades de escrita dos estudantes.',
+      consultation: true,
+      number: 2,
+      highlighted: true
+    }
+  ]
+
+  // Selecionar planos baseado no público alvo
+  const getCurrentPlans = () => {
+    switch (selectedAudience) {
+      case 'estudantes':
+        return studentPlans
+      case 'professores':
+        return teacherPlans
+      case 'escolas':
+        return schoolPlans
+      default:
+        return generalPlans
+    }
+  }
+
+  const currentPlans = getCurrentPlans()
+
   const comparisonData = [
     { feature: 'Correções por mês', free: '3', professor: 'Ilimitadas', escola: 'Ilimitadas' },
     { feature: 'Número de alunos', free: '1', professor: 'Até 30', escola: 'Ilimitados' },
@@ -100,6 +287,31 @@ function Precos() {
     { feature: 'Suporte prioritário', free: false, professor: true, escola: true },
     { feature: 'Integração com LMS', free: false, professor: false, escola: true },
     { feature: 'API completa', free: false, professor: false, escola: true }
+  ]
+
+  // Dados de comparação específicos para estudantes
+  const studentComparisonData = [
+    { feature: 'Módulo de escrita autorregulada', mensal: true, trimestral: true },
+    { feature: 'Banco de estratégias para escrita', mensal: true, trimestral: true },
+    { feature: 'Sugestão de temas', mensal: true, trimestral: true },
+    { feature: 'Recursos de apoio autorregulatório', mensal: true, trimestral: true },
+    { feature: 'Revisor integrado ilimitado', mensal: true, trimestral: true },
+    { feature: 'Rubricas qualitativas', mensal: true, trimestral: true },
+    { feature: 'Análises por IA', mensal: '20 créditos', trimestral: '50 créditos' },
+    { feature: 'Período de acesso', mensal: '30 dias', trimestral: '90 dias' }
+  ]
+
+  // Dados de comparação específicos para professores
+  const teacherComparisonData = [
+    { feature: 'Módulo de escrita autorregulada', basico: true, profissional: true },
+    { feature: 'Banco de estratégias para escrita', basico: true, profissional: true },
+    { feature: 'Sugestão de temas', basico: true, profissional: true },
+    { feature: 'Recursos de apoio autorregulatório', basico: true, profissional: true },
+    { feature: 'Revisor integrado ilimitado', basico: true, profissional: true },
+    { feature: 'Rubricas qualitativas', basico: true, profissional: true },
+    { feature: 'Correção por foto/digitada', basico: true, profissional: true },
+    { feature: 'Análises por IA', basico: '20 créditos', profissional: '100 créditos' },
+    { feature: 'Período de acesso', basico: '30 dias', profissional: '30 dias' }
   ]
 
   const successStories = [
@@ -160,72 +372,131 @@ function Precos() {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section ref={heroRef} className="bg-white py-12 md:py-16 lg:py-20 animate-on-scroll">
-        <div className="container mx-auto px-4 max-w-7xl text-center">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-slate-900 animate-fade-in-up">
-            Planos Flexíveis para Cada Necessidade
-          </h1>
-          <p className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto animate-fade-in-up delay-200">
-            Comece gratuitamente e evolua conforme sua demanda
-          </p>
-        </div>
-      </section>
-
-      {/* Pricing Toggle */}
-      <section className="py-8 bg-slate-50 border-b">
+      {/* Audience Selection */}
+      <section className="py-6 bg-slate-50 border-b">
         <div className="container mx-auto px-4 max-w-7xl">
-          <div className="flex items-center justify-center gap-4 animate-fade-in-up">
-            <span className={`text-lg ${!isYearly ? 'font-bold text-brand-primary' : 'text-gray-600'}`}>
-              Mensal
-            </span>
-            <Switch
-              checked={isYearly}
-              onCheckedChange={setIsYearly}
-              className="data-[state=checked]:bg-brand-primary"
-            />
-            <span className={`text-lg ${isYearly ? 'font-bold text-brand-primary' : 'text-gray-600'}`}>
-              Anual <small className="text-green-600 font-medium">(Economize 30%)</small>
-            </span>
+          <div className="text-center mb-6">
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900 mb-2">Escolha seu perfil</h2>
+            <p className="text-slate-600">Planos específicos para cada necessidade</p>
+          </div>
+          <div className="flex flex-wrap justify-center gap-2 md:gap-4">
+            {[
+              { key: 'geral', label: 'Visão Geral', icon: '📊' },
+              { key: 'estudantes', label: 'Estudantes', icon: '🎓' },
+              { key: 'professores', label: 'Professores', icon: '👨‍🏫' },
+              { key: 'escolas', label: 'Escolas', icon: '🏫' }
+            ].map((audience) => (
+              <button
+                key={audience.key}
+                onClick={() => setSelectedAudience(audience.key)}
+                className={`px-4 py-3 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 ${
+                  selectedAudience === audience.key
+                    ? 'bg-brand-primary text-white shadow-md'
+                    : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
+                }`}
+              >
+                <span>{audience.icon}</span>
+                {audience.label}
+              </button>
+            ))}
           </div>
         </div>
       </section>
 
+      {/* Hero Section */}
+      <section ref={heroRef} className="bg-white py-12 md:py-16 lg:py-20 animate-on-scroll">
+        <div className="container mx-auto px-4 max-w-7xl text-center">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-slate-900 animate-fade-in-up">
+            {selectedAudience === 'estudantes' && 'Planos para Estudantes'}
+            {selectedAudience === 'professores' && 'Planos para Professores Independentes'}
+            {selectedAudience === 'escolas' && 'Planos para Escolas'}
+            {selectedAudience === 'geral' && 'Planos Flexíveis para Cada Necessidade'}
+          </h1>
+          <p className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto animate-fade-in-up delay-200">
+            {selectedAudience === 'estudantes' && 'Desenvolva suas habilidades de escrita para o ENEM e vestibulares. Aprenda no seu ritmo com nossa metodologia autorregulada.'}
+            {selectedAudience === 'professores' && 'Escolha o plano que acompanha seu fluxo de redações, com correções ilimitadas na própria plataforma e créditos de IA.'}
+            {selectedAudience === 'escolas' && 'Escolha o plano de adesão que melhor se adapta às necessidades de produção e correção de sua instituição.'}
+            {selectedAudience === 'geral' && 'Comece gratuitamente e evolua conforme sua demanda'}
+          </p>
+        </div>
+      </section>
+
+      {/* Pricing Toggle - Only for general view */}
+      {selectedAudience === 'geral' && (
+        <section className="py-8 bg-slate-50 border-b">
+          <div className="container mx-auto px-4 max-w-7xl">
+            <div className="flex items-center justify-center gap-4 animate-fade-in-up">
+              <span className={`text-lg ${!isYearly ? 'font-bold text-brand-primary' : 'text-gray-600'}`}>
+                Mensal
+              </span>
+              <Switch
+                checked={isYearly}
+                onCheckedChange={setIsYearly}
+                className="data-[state=checked]:bg-brand-primary"
+              />
+              <span className={`text-lg ${isYearly ? 'font-bold text-brand-primary' : 'text-gray-600'}`}>
+                Anual <small className="text-green-600 font-medium">(Economize 30%)</small>
+              </span>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Pricing Grid */}
       <section ref={plansRef} className="py-8 md:py-12 lg:py-16 bg-white animate-on-scroll">
         <div className="container mx-auto px-4 max-w-7xl">
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {plans.map((plan, index) => (
+          <div className={`grid gap-8 max-w-6xl mx-auto ${
+            selectedAudience === 'geral' ? 'md:grid-cols-3' : 
+            selectedAudience === 'professores' ? 'md:grid-cols-2 max-w-5xl' : 
+            'md:grid-cols-2 max-w-5xl'
+          }`}>
+            {currentPlans.map((plan, index) => (
               <Card key={index} className={`relative hover-lift animate-scale-in delay-${index * 200} ${plan.popular ? 'border-2 border-brand-primary shadow-xl' : 'hover:shadow-xl'} transition-all flex flex-col`}>
                 {plan.popular && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 animate-float">
                     <Badge className="bg-brand-primary text-white px-4 py-1">
-                      Mais Escolhido
+                      {plan.badge}
+                    </Badge>
+                  </div>
+                )}
+                {plan.credits && (
+                  <div className="absolute -top-4 right-4 animate-float">
+                    <Badge className="bg-yellow-500 text-white px-3 py-1">
+                      {plan.credits} créditos IA
                     </Badge>
                   </div>
                 )}
                 <CardHeader className="text-center pb-4">
                   <div className="mb-2">
-                    <Badge variant="secondary" className="text-xs">
+                    {!plan.popular && <Badge variant="secondary" className="text-xs">
                       {plan.badge}
-                    </Badge>
+                    </Badge>}
                   </div>
                   <h3 className="text-2xl font-bold text-slate-900">{plan.name}</h3>
                   <div className="my-4">
-                    <span className="text-4xl font-bold text-brand-primary">R$</span>
-                    <span className="text-5xl font-bold text-brand-primary">
-                      {isYearly ? plan.yearlyPrice : plan.monthlyPrice}
-                    </span>
-                    <span className="text-slate-600">
-                      /{isYearly ? 'mês' : 'mês'}
-                    </span>
+                    {plan.consultation ? (
+                      <div className="text-center">
+                        <span className="text-lg text-slate-600">Valor sob consulta</span>
+                        <p className="text-sm text-slate-500 mt-1">Definido conforme número de alunos e turmas</p>
+                      </div>
+                    ) : (
+                      <>
+                        <span className="text-4xl font-bold text-brand-primary">R$</span>
+                        <span className="text-5xl font-bold text-brand-primary">
+                          {selectedAudience === 'geral' ? (isYearly ? plan.yearlyPrice : plan.monthlyPrice) : plan.monthlyPrice}
+                        </span>
+                        <span className="text-slate-600">
+                          {plan.name.includes('Trimestral') ? '/3 meses' : '/mês'}
+                        </span>
+                      </>
+                    )}
                   </div>
                   <p className="text-slate-600 text-sm">{plan.description}</p>
                 </CardHeader>
                 <CardContent className="flex flex-col h-full">
                   <ul className="space-y-3 mb-8 flex-grow">
                     {plan.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-start gap-2">
+                      <li key={featureIndex} className={`flex items-start gap-2 ${feature.highlighted ? 'font-semibold text-brand-primary' : ''}`}>
                         <Check className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
                         <span className="text-slate-700 text-sm">{feature.text}</span>
                       </li>
@@ -246,28 +517,135 @@ function Precos() {
         </div>
       </section>
 
-      {/* Guarantee Section */}
-      <section className="py-8 bg-white">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <Card className="border-2 border-brand-primary/20 shadow-lg hover-lift">
-            <CardContent className="p-8">
-              <div className="flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
-                <div className="w-20 h-20 bg-brand-light rounded-full flex items-center justify-center flex-shrink-0">
-                  <svg className="w-10 h-10 text-brand-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                  </svg>
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-2xl font-bold text-slate-900 mb-2">Garantia de 30 dias</h3>
-                  <p className="text-lg text-slate-600">
-                    Teste sem riscos. Se não ficar satisfeito, devolvemos 100% do valor pago.
+      {/* School Models Section - Only for schools */}
+      {selectedAudience === 'escolas' && (
+        <section className="py-8 md:py-12 lg:py-16 bg-slate-50">
+          <div className="container mx-auto px-4 max-w-7xl">
+            <div className="text-center mb-12">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Modelos de Assinatura</h2>
+              <p className="text-lg text-slate-600 max-w-3xl mx-auto">
+                Com foco em flexibilidade e integração pedagógica, oferecemos dois modelos de assinatura para instituições de ensino
+              </p>
+            </div>
+            
+            <div className="space-y-8 max-w-5xl mx-auto">
+              {schoolModels.map((model, index) => (
+                <Card key={index} className={`overflow-hidden hover-lift ${model.highlighted ? 'border-2 border-green-500 shadow-xl' : 'border border-slate-200'}`}>
+                  <CardContent className="p-8">
+                    <div className="flex items-start gap-6">
+                      <div className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold flex-shrink-0 ${
+                        model.highlighted ? 'bg-green-500 text-white' : 'bg-brand-primary text-white'
+                      }`}>
+                        {model.number}
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-2xl font-bold text-slate-900 mb-3">{model.title}</h3>
+                        <div className="mb-4">
+                          <strong className="text-slate-700">Foco:</strong> {model.focus}
+                        </div>
+                        <p className="text-slate-600 mb-4 leading-relaxed">{model.description}</p>
+                        {model.benefits && (
+                          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                            <p className="text-green-800 font-medium">{model.benefits}</p>
+                          </div>
+                        )}
+                        {model.consultation && (
+                          <div className="bg-brand-light rounded-lg p-4 text-center">
+                            <p className="text-brand-primary font-semibold">
+                              Valor definido conforme número de alunos e turmas. Entre em contato para receber uma proposta personalizada.
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Credit Packages Section - For students and teachers */}
+      {(selectedAudience === 'estudantes' || selectedAudience === 'professores') && (
+        <section className="py-8 md:py-12 lg:py-16 bg-white">
+          <div className="container mx-auto px-4 max-w-7xl">
+            <div className="text-center mb-12">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Pacotes de Créditos</h2>
+              <p className="text-lg text-slate-600 max-w-3xl mx-auto">
+                {selectedAudience === 'estudantes' 
+                  ? 'Para quem já tem acesso à plataforma e precisa de mais análises com IA'
+                  : 'Para professores que precisam de mais análises além do plano contratado'
+                }
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+              {creditPackages.map((pkg, index) => (
+                <Card key={index} className={`hover-lift ${pkg.popular ? 'border-2 border-green-500 shadow-xl' : 'hover:shadow-xl'} transition-all`}>
+                  {pkg.popular && (
+                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                      <Badge className="bg-green-500 text-white px-4 py-1">Melhor Custo-Benefício</Badge>
+                    </div>
+                  )}
+                  <CardHeader className="text-center pb-4">
+                    <h3 className="text-xl font-bold text-slate-900">{pkg.name}</h3>
+                    <div className="my-4">
+                      <span className="text-3xl font-bold text-brand-primary">R$ {pkg.price}</span>
+                    </div>
+                    <p className="text-slate-600 text-sm">{pkg.credits} créditos • {pkg.description}</p>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-2 mb-6">
+                      {pkg.features.map((feature, featureIndex) => (
+                        <li key={featureIndex} className="flex items-center gap-2">
+                          <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                          <span className="text-slate-700 text-sm">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <Button className="w-full" variant="outline">
+                      Adquirir Pacote
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+            
+            <div className="mt-12 text-center max-w-3xl mx-auto">
+              <Card className="bg-slate-50 border-slate-200">
+                <CardContent className="p-6">
+                  <h4 className="text-lg font-bold text-slate-900 mb-3">Como funcionam os créditos?</h4>
+                  <p className="text-slate-600 mb-4">
+                    Cada crédito equivale a uma análise completa e detalhada da sua redação pela nossa IA especializada. 
+                    Os créditos têm validade de 30 dias a partir da data de compra.
                   </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
+                  <div className="grid md:grid-cols-3 gap-4 text-left">
+                    <div className="text-center">
+                      <div className="w-12 h-12 bg-brand-primary rounded-full flex items-center justify-center mx-auto mb-2">
+                        <span className="text-white font-bold">1</span>
+                      </div>
+                      <p className="text-sm text-slate-700">Envie sua redação</p>
+                    </div>
+                    <div className="text-center">
+                      <div className="w-12 h-12 bg-brand-primary rounded-full flex items-center justify-center mx-auto mb-2">
+                        <span className="text-white font-bold">2</span>
+                      </div>
+                      <p className="text-sm text-slate-700">IA analisa detalhadamente</p>
+                    </div>
+                    <div className="text-center">
+                      <div className="w-12 h-12 bg-brand-primary rounded-full flex items-center justify-center mx-auto mb-2">
+                        <span className="text-white font-bold">3</span>
+                      </div>
+                      <p className="text-sm text-slate-700">Receba feedback completo</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* How It Works Section */}
       <section className="py-8 md:py-12 lg:py-16 bg-slate-50">
@@ -294,195 +672,294 @@ function Precos() {
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-12 animate-fade-in-up">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">
-              Comparação Detalhada de Planos
+              {selectedAudience === 'geral' && 'Comparação Detalhada de Planos'}
+              {selectedAudience === 'estudantes' && 'Comparação: Planos para Estudantes'}
+              {selectedAudience === 'professores' && 'Comparação: Planos para Professores'}
+              {selectedAudience === 'escolas' && 'Comparação: Recursos Disponíveis'}
             </h2>
             <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-              Veja todas as funcionalidades e escolha o plano ideal para suas necessidades
+              {selectedAudience === 'geral' && 'Veja todas as funcionalidades e escolha o plano ideal para suas necessidades'}
+              {(selectedAudience === 'estudantes' || selectedAudience === 'professores') && 'Compare os recursos incluídos em cada plano'}
+              {selectedAudience === 'escolas' && 'Recursos disponíveis no Plano Híbrido 360'}
             </p>
           </div>
           
           {/* Desktop View */}
-          <div className="hidden lg:block max-w-7xl mx-auto animate-fade-in-up delay-200">
-            <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
-              {/* Header */}
-              <div className="grid grid-cols-4 gap-0 border-b border-slate-200 bg-slate-50">
-                <div className="p-6">
-                  <h3 className="text-lg font-bold text-slate-900">Recursos</h3>
-                </div>
-                <div className="p-6 text-center border-l border-slate-200">
-                  <div className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-slate-100 mb-2">
-                    <span className="text-sm font-semibold text-slate-700">Gratuito</span>
+          {selectedAudience === 'geral' && (
+            <div className="hidden lg:block max-w-7xl mx-auto animate-fade-in-up delay-200">
+              <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
+                {/* Header */}
+                <div className="grid grid-cols-4 gap-0 border-b border-slate-200 bg-slate-50">
+                  <div className="p-6">
+                    <h3 className="text-lg font-bold text-slate-900">Recursos</h3>
+                  </div>
+                  <div className="p-6 text-center border-l border-slate-200">
+                    <div className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-slate-100 mb-2">
+                      <span className="text-sm font-semibold text-slate-700">Gratuito</span>
+                    </div>
+                  </div>
+                  <div className="p-6 text-center border-l border-slate-200 bg-gradient-to-br from-blue-50 to-cyan-50 relative">
+                    <div className="absolute top-2 right-2">
+                      <Badge className="bg-brand-primary text-white text-xs">Popular</Badge>
+                    </div>
+                    <div className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-brand-primary text-white mb-2">
+                      <span className="text-sm font-semibold">Professor</span>
+                    </div>
+                  </div>
+                  <div className="p-6 text-center border-l border-slate-200">
+                    <div className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-slate-900 text-white mb-2">
+                      <span className="text-sm font-semibold">Escola</span>
+                    </div>
                   </div>
                 </div>
-                <div className="p-6 text-center border-l border-slate-200 bg-gradient-to-br from-blue-50 to-cyan-50 relative">
-                  <div className="absolute top-2 right-2">
-                    <Badge className="bg-brand-primary text-white text-xs">Popular</Badge>
-                  </div>
-                  <div className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-brand-primary text-white mb-2">
-                    <span className="text-sm font-semibold">Professor</span>
-                  </div>
-                </div>
-                <div className="p-6 text-center border-l border-slate-200">
-                  <div className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-slate-900 text-white mb-2">
-                    <span className="text-sm font-semibold">Escola</span>
-                  </div>
-                </div>
-              </div>
 
-              {/* Rows */}
-              {comparisonData.map((row, index) => (
-                <div 
-                  key={index} 
-                  className={`grid grid-cols-4 gap-0 hover:bg-slate-50 transition-colors duration-200 ${
-                    index !== comparisonData.length - 1 ? 'border-b border-slate-100' : ''
-                  }`}
-                >
-                  <div className="p-5 flex items-center">
-                    <span className="text-sm font-medium text-slate-700">{row.feature}</span>
-                  </div>
-                  <div className="p-5 flex items-center justify-center border-l border-slate-100">
-                    {typeof row.free === 'boolean' ? (
-                      row.free ? (
-                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-green-100">
-                          <Check className="w-5 h-5 text-green-600" />
-                        </div>
+                {/* Rows */}
+                {comparisonData.map((row, index) => (
+                  <div 
+                    key={index} 
+                    className={`grid grid-cols-4 gap-0 hover:bg-slate-50 transition-colors duration-200 ${
+                      index !== comparisonData.length - 1 ? 'border-b border-slate-100' : ''
+                    }`}
+                  >
+                    <div className="p-5 flex items-center">
+                      <span className="text-sm font-medium text-slate-700">{row.feature}</span>
+                    </div>
+                    <div className="p-5 flex items-center justify-center border-l border-slate-100">
+                      {typeof row.free === 'boolean' ? (
+                        row.free ? (
+                          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-green-100">
+                            <Check className="w-5 h-5 text-green-600" />
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100">
+                            <X className="w-5 h-5 text-slate-400" />
+                          </div>
+                        )
                       ) : (
-                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100">
-                          <X className="w-5 h-5 text-slate-400" />
-                        </div>
-                      )
-                    ) : (
-                      <span className="text-sm text-slate-600 font-medium">{row.free}</span>
-                    )}
-                  </div>
-                  <div className="p-5 flex items-center justify-center border-l border-slate-100 bg-gradient-to-br from-blue-50/30 to-cyan-50/30">
-                    {typeof row.professor === 'boolean' ? (
-                      row.professor ? (
-                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-green-100">
-                          <Check className="w-5 h-5 text-green-600" />
-                        </div>
+                        <span className="text-sm text-slate-600 font-medium">{row.free}</span>
+                      )}
+                    </div>
+                    <div className="p-5 flex items-center justify-center border-l border-slate-100 bg-gradient-to-br from-blue-50/30 to-cyan-50/30">
+                      {typeof row.professor === 'boolean' ? (
+                        row.professor ? (
+                          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-green-100">
+                            <Check className="w-5 h-5 text-green-600" />
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100">
+                            <X className="w-5 h-5 text-slate-400" />
+                          </div>
+                        )
                       ) : (
-                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100">
-                          <X className="w-5 h-5 text-slate-400" />
-                        </div>
-                      )
-                    ) : (
-                      <span className="text-sm text-slate-700 font-medium">{row.professor}</span>
-                    )}
-                  </div>
-                  <div className="p-5 flex items-center justify-center border-l border-slate-100">
-                    {typeof row.escola === 'boolean' ? (
-                      row.escola ? (
-                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-green-100">
-                          <Check className="w-5 h-5 text-green-600" />
-                        </div>
+                        <span className="text-sm text-slate-700 font-medium">{row.professor}</span>
+                      )}
+                    </div>
+                    <div className="p-5 flex items-center justify-center border-l border-slate-100">
+                      {typeof row.escola === 'boolean' ? (
+                        row.escola ? (
+                          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-green-100">
+                            <Check className="w-5 h-5 text-green-600" />
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100">
+                            <X className="w-5 h-5 text-slate-400" />
+                          </div>
+                        )
                       ) : (
-                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100">
-                          <X className="w-5 h-5 text-slate-400" />
-                        </div>
-                      )
-                    ) : (
-                      <span className="text-sm text-slate-600 font-medium">{row.escola}</span>
-                    )}
+                        <span className="text-sm text-slate-600 font-medium">{row.escola}</span>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
 
-              {/* Footer CTAs */}
-              <div className="grid grid-cols-4 gap-0 bg-slate-50 p-6 border-t border-slate-200">
-                <div className="p-2"></div>
-                <div className="p-2 text-center">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="w-full hover:bg-slate-900 hover:text-white transition-colors"
-                    onClick={() => handleOpenPagamento(plans[0])}
-                  >
-                    Assinar Plano
-                  </Button>
-                </div>
-                <div className="p-2 text-center">
-                  <Button 
-                    size="sm" 
-                    className="w-full bg-brand-primary hover:bg-brand-secondary text-white transition-all hover:scale-105 shadow-md"
-                    onClick={() => handleOpenPagamento(plans[1])}
-                  >
-                    Assinar Plano
-                  </Button>
-                </div>
-                <div className="p-2 text-center">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="w-full hover:bg-slate-900 hover:text-white transition-colors"
-                    onClick={() => handleOpenPagamento(plans[2])}
-                  >
-                    Assinar Plano
-                  </Button>
+                {/* Footer CTAs */}
+                <div className="grid grid-cols-4 gap-0 bg-slate-50 p-6 border-t border-slate-200">
+                  <div className="p-2"></div>
+                  <div className="p-2 text-center">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full hover:bg-slate-900 hover:text-white transition-colors"
+                      onClick={() => handleOpenPagamento(generalPlans[0])}
+                    >
+                      Assinar Plano
+                    </Button>
+                  </div>
+                  <div className="p-2 text-center">
+                    <Button 
+                      size="sm" 
+                      className="w-full bg-brand-primary hover:bg-brand-secondary text-white transition-all hover:scale-105 shadow-md"
+                      onClick={() => handleOpenPagamento(generalPlans[1])}
+                    >
+                      Assinar Plano
+                    </Button>
+                  </div>
+                  <div className="p-2 text-center">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full hover:bg-slate-900 hover:text-white transition-colors"
+                      onClick={() => handleOpenPagamento(generalPlans[2])}
+                    >
+                      Assinar Plano
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
 
-          {/* Mobile View */}
-          <div className="lg:hidden space-y-6 animate-fade-in-up delay-200">
-            {plans.map((plan, planIndex) => (
-              <Card key={planIndex} className={`overflow-hidden ${plan.popular ? 'border-2 border-brand-primary shadow-lg' : 'border border-slate-200'}`}>
-                <CardHeader className={`${plan.popular ? 'bg-gradient-to-br from-blue-50 to-cyan-50' : 'bg-slate-50'} p-6`}>
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-xl font-bold text-slate-900">{plan.name}</h3>
-                    {plan.popular && (
-                      <Badge className="bg-brand-primary text-white">Popular</Badge>
-                    )}
+          {/* Student Comparison */}
+          {selectedAudience === 'estudantes' && (
+            <div className="max-w-4xl mx-auto">
+              <Card className="overflow-hidden shadow-xl">
+                <div className="grid grid-cols-3 gap-0 bg-slate-50 border-b border-slate-200">
+                  <div className="p-4 text-center">
+                    <h3 className="font-bold text-slate-900">Recursos</h3>
                   </div>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-3xl font-bold text-brand-primary">
-                      R$ {isYearly ? plan.yearlyPrice : plan.monthlyPrice}
-                    </span>
-                    <span className="text-slate-600">/mês</span>
+                  <div className="p-4 text-center border-l border-slate-200">
+                    <h3 className="font-bold text-slate-900">Plano Mensal</h3>
+                    <p className="text-sm text-slate-600">R$ 49/mês</p>
                   </div>
-                </CardHeader>
-                <CardContent className="p-6">
-                  <div className="space-y-3">
-                    {comparisonData.map((row, rowIndex) => {
-                      const value = planIndex === 0 ? row.free : planIndex === 1 ? row.professor : row.escola
-                      return (
-                        <div key={rowIndex} className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
-                          <span className="text-sm text-slate-700 flex-1">{row.feature}</span>
-                          <div className="ml-4">
-                            {typeof value === 'boolean' ? (
-                              value ? (
-                                <div className="flex items-center justify-center w-6 h-6 rounded-full bg-green-100">
-                                  <Check className="w-4 h-4 text-green-600" />
-                                </div>
-                              ) : (
-                                <div className="flex items-center justify-center w-6 h-6 rounded-full bg-slate-100">
-                                  <X className="w-4 h-4 text-slate-400" />
-                                </div>
-                              )
-                            ) : (
-                              <span className="text-sm text-slate-600 font-medium">{value}</span>
-                            )}
-                          </div>
-                        </div>
-                      )
-                    })}
+                  <div className="p-4 text-center border-l border-slate-200 bg-gradient-to-br from-blue-50 to-cyan-50">
+                    <div className="flex items-center justify-center mb-1">
+                      <Badge className="bg-green-500 text-white text-xs mr-2">Popular</Badge>
+                    </div>
+                    <h3 className="font-bold text-slate-900">Plano Trimestral</h3>
+                    <p className="text-sm text-slate-600">R$ 120/3 meses</p>
                   </div>
-                  <Button 
-                    className={`w-full mt-6 transition-all ${
-                      plan.popular 
-                        ? 'bg-brand-primary hover:bg-brand-secondary text-white shadow-md hover:scale-105' 
-                        : 'hover:bg-slate-900 hover:text-white'
-                    }`}
-                    variant={plan.popular ? 'default' : 'outline'}
-                    onClick={() => handleOpenPagamento(plan)}
-                  >
-                    {plan.buttonText}
-                  </Button>
-                </CardContent>
+                </div>
+                {studentComparisonData.map((row, index) => (
+                  <div key={index} className={`grid grid-cols-3 gap-0 ${index % 2 === 0 ? 'bg-white' : 'bg-slate-50'} hover:bg-slate-100 transition-colors`}>
+                    <div className="p-4 flex items-center">
+                      <span className="text-sm font-medium text-slate-700">{row.feature}</span>
+                    </div>
+                    <div className="p-4 flex items-center justify-center border-l border-slate-100">
+                      {typeof row.mensal === 'boolean' ? (
+                        <Check className="w-5 h-5 text-green-600" />
+                      ) : (
+                        <span className="text-sm text-slate-600 font-medium">{row.mensal}</span>
+                      )}
+                    </div>
+                    <div className="p-4 flex items-center justify-center border-l border-slate-100 bg-gradient-to-br from-blue-50/30 to-cyan-50/30">
+                      {typeof row.trimestral === 'boolean' ? (
+                        <Check className="w-5 h-5 text-green-600" />
+                      ) : (
+                        <span className="text-sm text-slate-700 font-medium">{row.trimestral}</span>
+                      )}
+                    </div>
+                  </div>
+                ))}
               </Card>
-            ))}
-          </div>
+            </div>
+          )}
+
+          {/* Teacher Comparison */}
+          {selectedAudience === 'professores' && (
+            <div className="max-w-4xl mx-auto">
+              <Card className="overflow-hidden shadow-xl">
+                <div className="grid grid-cols-3 gap-0 bg-slate-50 border-b border-slate-200">
+                  <div className="p-4 text-center">
+                    <h3 className="font-bold text-slate-900">Recursos</h3>
+                  </div>
+                  <div className="p-4 text-center border-l border-slate-200">
+                    <h3 className="font-bold text-slate-900">Plano Básico</h3>
+                    <p className="text-sm text-slate-600">R$ 49/mês</p>
+                  </div>
+                  <div className="p-4 text-center border-l border-slate-200 bg-gradient-to-br from-blue-50 to-cyan-50">
+                    <div className="flex items-center justify-center mb-1">
+                      <Badge className="bg-brand-primary text-white text-xs mr-2">Popular</Badge>
+                    </div>
+                    <h3 className="font-bold text-slate-900">Plano Profissional</h3>
+                    <p className="text-sm text-slate-600">R$ 130/mês</p>
+                  </div>
+                </div>
+                {teacherComparisonData.map((row, index) => (
+                  <div key={index} className={`grid grid-cols-3 gap-0 ${index % 2 === 0 ? 'bg-white' : 'bg-slate-50'} hover:bg-slate-100 transition-colors`}>
+                    <div className="p-4 flex items-center">
+                      <span className="text-sm font-medium text-slate-700">{row.feature}</span>
+                    </div>
+                    <div className="p-4 flex items-center justify-center border-l border-slate-100">
+                      {typeof row.basico === 'boolean' ? (
+                        <Check className="w-5 h-5 text-green-600" />
+                      ) : (
+                        <span className="text-sm text-slate-600 font-medium">{row.basico}</span>
+                      )}
+                    </div>
+                    <div className="p-4 flex items-center justify-center border-l border-slate-100 bg-gradient-to-br from-blue-50/30 to-cyan-50/30">
+                      {typeof row.profissional === 'boolean' ? (
+                        <Check className="w-5 h-5 text-green-600" />
+                      ) : (
+                        <span className="text-sm text-slate-700 font-medium">{row.profissional}</span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </Card>
+            </div>
+          )}
+
+          {/* Mobile View - Only for general */}
+          {selectedAudience === 'geral' && (
+            <div className="lg:hidden space-y-6 animate-fade-in-up delay-200">
+              {generalPlans.map((plan, planIndex) => (
+                <Card key={planIndex} className={`overflow-hidden ${plan.popular ? 'border-2 border-brand-primary shadow-lg' : 'border border-slate-200'}`}>
+                  <CardHeader className={`${plan.popular ? 'bg-gradient-to-br from-blue-50 to-cyan-50' : 'bg-slate-50'} p-6`}>
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="text-xl font-bold text-slate-900">{plan.name}</h3>
+                      {plan.popular && (
+                        <Badge className="bg-brand-primary text-white">Popular</Badge>
+                      )}
+                    </div>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-3xl font-bold text-brand-primary">
+                        R$ {isYearly ? plan.yearlyPrice : plan.monthlyPrice}
+                      </span>
+                      <span className="text-slate-600">/mês</span>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="p-6">
+                    <div className="space-y-3">
+                      {comparisonData.map((row, rowIndex) => {
+                        const value = planIndex === 0 ? row.free : planIndex === 1 ? row.professor : row.escola
+                        return (
+                          <div key={rowIndex} className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
+                            <span className="text-sm text-slate-700 flex-1">{row.feature}</span>
+                            <div className="ml-4">
+                              {typeof value === 'boolean' ? (
+                                value ? (
+                                  <div className="flex items-center justify-center w-6 h-6 rounded-full bg-green-100">
+                                    <Check className="w-4 h-4 text-green-600" />
+                                  </div>
+                                ) : (
+                                  <div className="flex items-center justify-center w-6 h-6 rounded-full bg-slate-100">
+                                    <X className="w-4 h-4 text-slate-400" />
+                                  </div>
+                                )
+                              ) : (
+                                <span className="text-sm text-slate-600 font-medium">{value}</span>
+                              )}
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                    <Button 
+                      className={`w-full mt-6 transition-all ${
+                        plan.popular 
+                          ? 'bg-brand-primary hover:bg-brand-secondary text-white shadow-md hover:scale-105' 
+                          : 'hover:bg-slate-900 hover:text-white'
+                      }`}
+                      variant={plan.popular ? 'default' : 'outline'}
+                      onClick={() => handleOpenPagamento(plan)}
+                    >
+                      {plan.buttonText}
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
 
           {/* Info Footer */}
           <div className="mt-8 text-center animate-fade-in-up delay-300">
