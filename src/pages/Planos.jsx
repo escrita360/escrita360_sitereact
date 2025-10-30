@@ -26,6 +26,11 @@ function Precos() {
     }
   }, [searchParams])
 
+  // Scroll to top when audience changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [selectedAudience])
+
   const handleOpenPagamento = (plan) => {
     navigate('/pagamento', { state: { selectedPlan: plan, audience: selectedAudience } })
   }
@@ -178,7 +183,6 @@ function Precos() {
       monthlyPrice: 295,
       yearlyPrice: 295,
       description: 'Integração total entre os módulos Professor e Aluno',
-      consultation: true, // preço sob consulta
       features: [
         { text: 'Módulo de escrita digital autorregulada', included: true },
         { text: 'Banco de estratégias para escrita', included: true },
@@ -425,8 +429,9 @@ function Precos() {
       {/* Pricing Grid */}
       <section ref={plansRef} className="py-8 md:py-12 lg:py-16 bg-white animate-on-scroll">
         <div className="container mx-auto px-4 max-w-7xl">
-          <div className={`grid gap-8 max-w-6xl mx-auto ${
-            selectedAudience === 'professores' ? 'md:grid-cols-2 lg:grid-cols-2' : 
+          <div className={`grid gap-8 mx-auto ${
+            selectedAudience === 'escolas' ? 'max-w-2xl' :
+            selectedAudience === 'professores' ? 'md:grid-cols-2 lg:grid-cols-2 max-w-6xl' : 
             'md:grid-cols-2 max-w-5xl'
           }`}>
             {currentPlans.map((plan, index) => (
@@ -564,11 +569,13 @@ function Precos() {
               </p>
             </div>
             
-            <div className={`grid gap-8 max-w-5xl mx-auto ${
-              selectedAudience === 'escolas' ? 'md:grid-cols-2' : 'md:grid-cols-3'
+            <div className={`grid gap-8 mx-auto justify-items-center ${
+              selectedAudience === 'escolas' ? 'md:grid-cols-2 max-w-4xl' : 
+              selectedAudience === 'professores' ? 'md:grid-cols-2 max-w-4xl' :
+              'md:grid-cols-3 max-w-5xl'
             }`}>
               {creditPackages.map((pkg, index) => (
-                <Card key={index} className={`hover-lift ${pkg.popular ? 'border-2 border-green-500 shadow-xl' : 'hover:shadow-xl'} transition-all`}>
+                <Card key={index} className={`relative hover-lift ${pkg.popular ? 'border-2 border-green-500 shadow-xl' : 'hover:shadow-xl'} transition-all`}>
                   {pkg.popular && (
                     <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                       <Badge className="bg-green-500 text-white px-4 py-1">Melhor Custo-Benefício</Badge>
@@ -611,7 +618,7 @@ function Precos() {
                       : 'Cada crédito equivale a uma análise completa e detalhada da sua redação pela nossa IA especializada. Os créditos têm validade de 30 dias a partir da data de compra.'
                     }
                   </p>
-                  <div className="grid md:grid-cols-3 gap-4 text-left">
+                  <div className="grid md:grid-cols-3 gap-4">
                     <div className="text-center">
                       <div className="w-12 h-12 bg-brand-primary rounded-full flex items-center justify-center mx-auto mb-2">
                         <span className="text-white font-bold">1</span>
@@ -678,7 +685,7 @@ function Precos() {
           {/* Student Comparison */}
           {selectedAudience === 'estudantes' && (
             <div className="max-w-4xl mx-auto">
-              <Card className="overflow-hidden shadow-xl">
+              <Card className="overflow-hidden shadow-xl mx-auto">
                 <div className="grid grid-cols-3 gap-0 bg-slate-50 border-b border-slate-200">
                   <div className="p-4 text-center">
                     <h3 className="font-bold text-slate-900">Recursos</h3>
@@ -723,7 +730,7 @@ function Precos() {
           {/* Teacher Comparison */}
           {selectedAudience === 'professores' && (
             <div className="max-w-6xl mx-auto overflow-x-auto">
-              <Card className="overflow-hidden shadow-xl">
+              <Card className="overflow-hidden shadow-xl mx-auto">
                 <div className="grid grid-cols-5 gap-0 bg-slate-50 border-b border-slate-200">
                   <div className="p-4 text-center">
                     <h3 className="font-bold text-slate-900">Recursos</h3>
