@@ -220,7 +220,7 @@ function Layout({ children }) {
               <h3 className="font-bold mb-4">Contato</h3>
               <ul className="space-y-2 text-slate-400">
                 <li><Link to="/contato" className="hover:text-white transition-colors">Suporte</Link></li>
-                <li><Link to="/contato" className="hover:text-white transition-colors">FAQ</Link></li>
+                <li><Link to="/faq" className="hover:text-white transition-colors">FAQ</Link></li>
                 <li><Link to="/contato" className="hover:text-white transition-colors">Blog</Link></li>
                 <li><Link to="/contato" className="hover:text-white transition-colors">Sobre</Link></li>
               </ul>
