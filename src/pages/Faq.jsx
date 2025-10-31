@@ -66,10 +66,10 @@ const categories = [
 const renderAnswer = (answer) => {
   return answer.split('\n').map((line, index) => {
     if (line.startsWith('#### ')) {
-      return <h4 key={index} className='font-semibold text-lg mt-4 mb-2 text-blue-600'>{line.replace('#### ', '')}</h4>;
+      return <h4 key={index} className='font-semibold text-lg mt-4 mb-2' style={{ color: '#39a1db' }}>{line.replace('#### ', '')}</h4>;
     }
     if (line.startsWith('### ')) {
-      return <h3 key={index} className='font-semibold text-xl mt-6 mb-3 text-blue-700'>{line.replace('### ', '')}</h3>;
+      return <h3 key={index} className='font-semibold text-xl mt-6 mb-3' style={{ color: '#39a1db' }}>{line.replace('### ', '')}</h3>;
     }
     if (line.startsWith('- ')) {
       const text = line.replace('- ', '');
@@ -87,7 +87,7 @@ const renderBoldText = (text) => {
   const parts = text.split(/\*\*(.*?)\*\*/);
   return parts.map((part, index) => {
     if (index % 2 === 1) {
-      return <strong key={index} className='text-blue-700 font-semibold'>{part}</strong>;
+      return <strong key={index} className='font-semibold' style={{ color: '#39a1db' }}>{part}</strong>;
     }
     return part;
   });
@@ -169,7 +169,7 @@ export default function Faq() {
         className='text-center mb-12'
         variants={itemVariants}
       >
-        <h1 className='text-4xl font-bold text-blue-600 mb-4'>Dúvidas Frequentes</h1>
+        <h1 className='text-4xl font-bold mb-4' style={{ color: '#39a1db' }}>Dúvidas Frequentes</h1>
         <p className='text-lg text-gray-600 max-w-2xl mx-auto'>
           Encontre respostas para as principais dúvidas sobre a plataforma Escrita360
         </p>
@@ -180,13 +180,17 @@ export default function Faq() {
         variants={itemVariants}
       >
         <div className='relative max-w-md mx-auto'>
-          <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-400 h-4 w-4' />
+          <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4' style={{ color: '#39a1db' }} />
           <Input
             type='text'
             placeholder='Pesquise sua dúvida...'
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className='pl-10 border-blue-200 focus:border-blue-500 focus:ring-blue-500'
+            className='pl-10'
+            style={{
+              borderColor: '#39a1db',
+              '--tw-ring-color': '#39a1db'
+            }}
           />
         </div>
       </motion.div>
@@ -207,11 +211,16 @@ export default function Faq() {
               <Button
                 variant={activeCategory === category.id ? 'default' : 'outline'}
                 onClick={() => setActiveCategory(category.id)}
-                className={`flex flex-col items-center gap-2 h-auto py-4 w-full transition-all ${
-                  activeCategory === category.id
-                    ? 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700'
-                    : 'border-blue-200 text-blue-600 hover:bg-blue-50'
-                }`}
+                className='flex flex-col items-center gap-2 h-auto py-4 w-full transition-all'
+                style={activeCategory === category.id ? {
+                  backgroundColor: '#39a1db',
+                  color: 'white',
+                  borderColor: '#39a1db'
+                } : {
+                  borderColor: '#39a1db',
+                  color: '#39a1db',
+                  backgroundColor: 'transparent'
+                }}
               >
                 <Icon className='h-6 w-6' />
                 <span className='text-sm'>{category.name}</span>
@@ -229,8 +238,8 @@ export default function Faq() {
           <motion.div variants={cardVariants}>
             <Card>
               <CardContent className='text-center py-12'>
-                <Search className='h-12 w-12 text-blue-300 mx-auto mb-4' />
-                <h3 className='text-lg font-semibold mb-2 text-blue-700'>Nenhuma pergunta encontrada</h3>
+                <Search className='h-12 w-12 mx-auto mb-4' style={{ color: '#39a1db' }} />
+                <h3 className='text-lg font-semibold mb-2' style={{ color: '#39a1db' }}>Nenhuma pergunta encontrada</h3>
                 <p className='text-gray-600'>
                   Tente usar outras palavras-chave ou navegue pelas categorias acima.
                 </p>
@@ -244,21 +253,27 @@ export default function Faq() {
               variants={cardVariants}
               layout
             >
-              <Card className='overflow-hidden border-blue-100 hover:border-blue-300 transition-all shadow-sm hover:shadow-md'>
-                <CardHeader className='pb-0 bg-gradient-to-r from-blue-50 to-blue-25'>
+              <Card className='overflow-hidden transition-all shadow-sm hover:shadow-md' style={{
+                borderColor: '#e0f2ff',
+              }}>
+                <CardHeader className='pb-0' style={{
+                  background: 'linear-gradient(to right, rgba(57, 161, 219, 0.05), rgba(57, 161, 219, 0.02))'
+                }}>
                   <Button
                     variant='ghost'
                     onClick={() => toggleItem(faq.id)}
                     className='w-full justify-between p-0 h-auto hover:bg-transparent text-left'
                   >
-                    <CardTitle className='text-left text-lg font-semibold text-blue-900 hover:text-blue-600 transition-colors'>
+                    <CardTitle className='text-left text-lg font-semibold transition-colors' style={{
+                      color: '#1a1a1a'
+                    }} onMouseEnter={(e) => e.currentTarget.style.color = '#39a1db'} onMouseLeave={(e) => e.currentTarget.style.color = '#1a1a1a'}>
                       {faq.question}
                     </CardTitle>
                     <motion.div
                       animate={{ rotate: openItems.has(faq.id) ? 180 : 0 }}
                       transition={{ duration: 0.3, ease: "easeInOut" }}
                     >
-                      <ChevronDown className='h-5 w-5 text-blue-600 transition-transform' />
+                      <ChevronDown className='h-5 w-5 transition-transform' style={{ color: '#39a1db' }} />
                     </motion.div>
                   </Button>
                 </CardHeader>
@@ -271,7 +286,7 @@ export default function Faq() {
                       transition={{ duration: 0.3, ease: "easeInOut" }}
                       className='overflow-hidden'
                     >
-                      <CardContent className='pt-4 border-t border-blue-100'>
+                      <CardContent className='pt-4' style={{ borderTop: '1px solid #e0f2ff' }}>
                         <div className='prose prose-sm max-w-none text-gray-700'>
                           {renderAnswer(faq.answer)}
                         </div>
