@@ -55,6 +55,7 @@ function Layout({ children }) {
             <Link to="/" className={cn("text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105", location.pathname === "/" ? "border-b-2 border-brand-primary pb-1" : "")}>Home</Link>
             <Link to="/para-quem" className={cn("text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105", location.pathname === "/para-quem" ? "border-b-2 border-brand-primary pb-1" : "")}>Para Quem</Link>
             <Link to="/recursos" className={cn("text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105", location.pathname === "/recursos" ? "border-b-2 border-brand-primary pb-1" : "")}>Recursos</Link>
+            <Link to="/faq" className={cn("text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105", location.pathname === "/faq" ? "border-b-2 border-brand-primary pb-1" : "")}>FAQ</Link>
             
             {/* Planos Dropdown */}
             <div className="relative" ref={plansDropdownRef}>
@@ -131,6 +132,13 @@ function Layout({ children }) {
                   onClick={() => setIsOpen(false)}
                 >
                   Recursos
+                </Link>
+                <Link
+                  to="/faq"
+                  className={cn("text-lg font-medium text-slate-700 hover:text-brand-primary transition-colors", location.pathname === "/faq" ? "border-b-2 border-brand-primary pb-1" : "")}
+                  onClick={() => setIsOpen(false)}
+                >
+                  FAQ
                 </Link>
                 
                 {/* Planos Section Mobile */}

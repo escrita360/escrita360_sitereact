@@ -6,6 +6,7 @@ import ParaQuem from './pages/ParaQuem.jsx'
 import Recursos from './pages/Recursos.jsx'
 import Precos from './pages/Planos.jsx'
 import Contato from './pages/Contato.jsx'
+import Faq from './pages/Faq.jsx'
 import Pagamento from './pages/Pagamento.jsx'
 import PagamentoSucesso from './pages/PagamentoSucesso.jsx'
 import PagamentoCancelado from './pages/PagamentoCancelado.jsx'
@@ -74,6 +75,19 @@ function App() {
               transition={pageTransition}
             >
               <Recursos />
+            </motion.div>
+          </Layout>
+        } />
+        <Route path="/faq" element={
+          <Layout>
+            <motion.div
+              initial="initial"
+              animate="in"
+              exit="out"
+              variants={pageVariants}
+              transition={pageTransition}
+            >
+              <Faq />
             </motion.div>
           </Layout>
         } />

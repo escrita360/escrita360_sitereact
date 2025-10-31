@@ -805,32 +805,6 @@ function Precos() {
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section className="py-8 md:py-12 lg:py-16 bg-slate-50">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-4 animate-fade-in-up">
-            Perguntas Frequentes
-          </h2>
-          <p className="text-lg md:text-xl text-center text-slate-600 mb-8 md:mb-12 max-w-2xl mx-auto animate-fade-in-up delay-200">
-            Tire suas dúvidas sobre o Escrita360
-          </p>
-          <div className="max-w-3xl mx-auto">
-            <Accordion type="single" collapsible className="space-y-4 animate-fade-in-up delay-300">
-              {faqs.map((faq, index) => (
-                <AccordionItem key={index} value={`item-${index}`} className="bg-white rounded-lg border hover-lift">
-                  <AccordionTrigger className="px-6 py-4 hover:no-underline">
-                    <span className="text-left font-medium">{faq.question}</span>
-                  </AccordionTrigger>
-                  <AccordionContent className="px-6 pb-4">
-                    <p className="text-slate-600">{faq.answer}</p>
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
       <section className="py-8 md:py-12 lg:py-16 bg-white">
         <div className="container mx-auto px-4 max-w-7xl text-center">
