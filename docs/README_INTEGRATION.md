@@ -22,6 +22,7 @@
 #### Documentação
 - **`INTEGRATION_COMPLETE.md`** - Guia completo de uso
 - **`docs/INTEGRATION.md`** - Documentação técnica detalhada
+- **`docs/CHATBOT_ENDPOINTS.md`** - Documentação dos endpoints do chatbot
 - **`src/tests/integration-test.js`** - Script de testes
 
 ### 🔄 Arquivos Atualizados

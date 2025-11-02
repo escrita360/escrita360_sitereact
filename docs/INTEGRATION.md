@@ -25,6 +25,10 @@ Este documento descreve como o frontend React está integrado com o backend Flas
    - Histórico de pagamentos
    - Cancelamento de assinaturas
 
+4. **chat.js** - Serviço de chatbot
+   - Envio de mensagens para o chatbot
+   - Recebimento de respostas automatizadas
+
 ## 🔧 Configuração
 
 ### 1. Instalar Dependências
@@ -151,6 +155,12 @@ A senha temporária é gerada e o usuário pode alterá-la depois no dashboard.
 ### Assinaturas
 
 - `POST /api/subscription/cancel/:subscriptionId` - Cancelar assinatura
+
+### Chatbot
+
+- `POST /api/chat/message` - Enviar mensagem para o chatbot
+  - Body: `{ "message": "string" }`
+  - Response: `{ "response": "string" }`
 
 ## 🧪 Testando a Integração
 

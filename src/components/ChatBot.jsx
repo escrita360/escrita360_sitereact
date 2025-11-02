@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.j
 import { Input } from '@/components/ui/input.jsx'
 import { ScrollArea } from '@/components/ui/scroll-area.jsx'
 import robo from '@/assets/robo.svg'
+import { chatService } from '@/services/chat.js'
 
 function ChatBot() {
   const [isOpen, setIsOpen] = useState(false)
@@ -12,10 +13,11 @@ function ChatBot() {
     { id: 1, text: 'Olá! Como posso ajudá-lo hoje?', sender: 'bot' }
   ])
   const [inputMessage, setInputMessage] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
-  const handleSendMessage = (e) => {
+  const handleSendMessage = async (e) => {
     e.preventDefault()
-    if (!inputMessage.trim()) return
+    if (!inputMessage.trim() || isLoading) return
 
     // Adiciona mensagem do usuário
     const userMessage = {
@@ -24,18 +26,28 @@ function ChatBot() {
       sender: 'user'
     }
     setMessages([...messages, userMessage])
+    setInputMessage('')
+    setIsLoading(true)
 
-    // Simula resposta do bot
-    setTimeout(() => {
+    try {
+      const response = await chatService.sendMessage(inputMessage.trim())
       const botMessage = {
         id: messages.length + 2,
-        text: 'Obrigado pela sua mensagem! Nossa equipe entrará em contato em breve.',
+        text: response.response,
         sender: 'bot'
       }
       setMessages(prev => [...prev, botMessage])
-    }, 1000)
-
-    setInputMessage('')
+    } catch (error) {
+      console.error('Erro ao enviar mensagem:', error)
+      const errorMessage = {
+        id: messages.length + 2,
+        text: 'Desculpe, houve um erro. Tente novamente mais tarde.',
+        sender: 'bot'
+      }
+      setMessages(prev => [...prev, errorMessage])
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -95,8 +107,9 @@ function ChatBot() {
                     value={inputMessage}
                     onChange={(e) => setInputMessage(e.target.value)}
                     className="flex-1"
+                    disabled={isLoading}
                   />
-                  <Button type="submit" size="icon" className="bg-brand-primary hover:bg-brand-secondary text-white">
+                  <Button type="submit" size="icon" className="bg-brand-primary hover:bg-brand-secondary text-white" disabled={isLoading}>
                     <Send className="w-4 h-4" />
                   </Button>
                 </div>
