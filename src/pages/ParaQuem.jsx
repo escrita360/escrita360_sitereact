@@ -14,10 +14,7 @@ import {
   UserCircle,
   Presentation,
   Building2,
-  Trophy,
-  Clock,
   TrendingUp,
-  Medal,
   CheckCircle,
   Users,
   Shield,
@@ -97,33 +94,6 @@ function ParaQuem() {
       tags: ['Cursinhos Presenciais', 'Cursos Online', 'Preparatórios ENEM'],
       cta: 'Solicitar Proposta',
       ctaLink: '/contato'
-    }
-  ]
-
-  const successStories = [
-    {
-      icon: Trophy,
-      title: 'Estudante conquistou nota 980',
-      description: 'De 640 para 980 em apenas 6 meses de prática autorregulada na plataforma.',
-      tag: 'Estudante'
-    },
-    {
-      icon: Clock,
-      title: 'Professor economizou 15h por semana',
-      description: 'Conseguiu gerenciar 30 alunos com o mesmo tempo que gastava com 10.',
-      tag: 'Professor'
-    },
-    {
-      icon: TrendingUp,
-      title: 'Escola aumentou média em 30%',
-      description: 'Após 1 ano usando a plataforma, todas as turmas melhoraram significativamente.',
-      tag: 'Escola'
-    },
-    {
-      icon: Medal,
-      title: 'Cursinho bateu recorde de aprovações',
-      description: '92% de aprovação em universidades públicas, melhor resultado da história.',
-      tag: 'Cursinho'
     }
   ]
 
@@ -250,36 +220,9 @@ function ParaQuem() {
           </Carousel>
         </div>
       </section>
-      {/* Success Stories */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-8 md:mb-12 animate-fade-in-up">
-            Histórias de Sucesso
-          </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {successStories.map((story, index) => {
-              const StoryIcon = story.icon
-              return (
-                <Card key={index} className={`p-6 hover-lift animate-fade-in-up delay-${index * 100}`}>
-                  <CardContent className="pt-6">
-                    <div className="text-center">
-                      <div className="w-16 h-16 bg-brand-light rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg transition-all duration-300 hover:scale-110">
-                        <StoryIcon className="w-8 h-8 text-brand-primary drop-shadow-md" strokeWidth={1.5} />
-                      </div>
-                      <h3 className="text-xl font-bold text-slate-900 mb-3">{story.title}</h3>
-                      <p className="text-slate-600 mb-4">{story.description}</p>
-                      <Badge variant="secondary">{story.tag}</Badge>
-                    </div>
-                  </CardContent>
-                </Card>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
+      
       {/* CTA Section */}
-      <section className="py-20 bg-slate-50">
+      <section className="py-8 bg-slate-50">
         <div className="container mx-auto px-4 max-w-7xl text-center">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 text-slate-900 animate-fade-in-up">
             Encontre a solução perfeita para você
