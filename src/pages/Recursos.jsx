@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Card, CardContent } from '@/components/ui/card.jsx'
 import { Button } from '@/components/ui/button.jsx'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
@@ -28,6 +29,7 @@ import {
 
 function Recursos() {
   const [activeTab, setActiveTab] = useState('estudantes')
+  const navigate = useNavigate()
   const heroRef = useScrollAnimation()
   const tabsRef = useScrollAnimation()
 
@@ -40,69 +42,43 @@ function Recursos() {
   const recursosEstudantes = [
     {
       icon: <List className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
-      title: 'Lista de Acrônimos Inteligentes',
-      description: 'Sistema completo de acrônimos específicos para cada fase do processo de escrita: planejamento, produção e autoavaliação. Ajuda a memorizar e aplicar estratégias eficazes.',
-      features: [
-        'Acrônimos para planejamento',
-        'Técnicas de produção',
-        'Guias de autoavaliação',
-        'Lembretes contextuais'
-      ]
+      title: 'Lista de Acrônimos',
+      description: 'Lista de Acrônimos específicos para cada uma das fases (planejamento, produção, autoavaliação).'
     },
     {
       icon: <Target className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
-      title: 'Planejamento de Metas Estruturado',
-      description: 'Organize seu processo de escrita com um sistema avançado de metas e prazos, permitindo acompanhar seu progresso de forma visual e motivadora.',
-      features: [
-        'Definição de objetivos claros',
-        'Cronograma personalizado',
-        'Acompanhamento visual',
-        'Notificações inteligentes'
-      ]
+      title: 'Planejamento de Metas',
+      description: 'Planejamento de metas e prazos para organizar o processo de escrita.'
     },
     {
       icon: <Settings className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
       title: 'Estratégias Autorreguladas',
-      description: 'Aplique estratégias comprovadas de autorregulação em cada fase da escrita, com técnicas de curto, médio e longo prazo adaptadas ao seu ritmo.',
-      features: [
-        'Estratégias de planejamento',
-        'Técnicas de monitoramento',
-        'Reflexão guiada',
-        'Autoavaliação contínua'
-      ]
+      description: 'Estratégias autorreguladas de curto, médio e longo prazo, aplicadas em cada fase (planejamento, produção, autoavaliação).'
     },
     {
       icon: <Smile className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
       title: 'Painel de Sentimentos',
-      description: 'Recurso exclusivo para acompanhamento das competências socioemocionais durante o processo de escrita, auxiliando na regulação de crenças e motivação.',
-      features: [
-        'Registro de emoções',
-        'Análise de motivação',
-        'Confiança progressiva',
-        'Insights personalizados'
-      ]
+      description: 'Painel de Sentimentos para monitorar motivação, confiança e emoções ligadas à escrita.'
     },
     {
       icon: <CheckCircle className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
       title: 'Autoavaliação Estruturada',
-      description: 'Sistema de rubricas detalhadas alinhadas às habilidades da BNCC e competências do ENEM, permitindo que você avalie seu próprio trabalho com critérios objetivos.',
-      features: [
-        'Rubricas BNCC e ENEM',
-        'Critérios objetivos',
-        'Feedback imediato',
-        'Evolução documentada'
-      ]
+      description: 'Autoavaliação estruturada, com rubricas alinhadas às habilidades da BNCC e às competências do Enem.'
     },
     {
       icon: <Edit className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
-      title: 'Módulo de Escrita Completo',
-      description: 'Ambiente de escrita com acompanhamento desde o parágrafo-padrão até a redação completa, com ferramentas de análise textual e sugestões contextuais.',
-      features: [
-        'Editor inteligente',
-        'Análise estrutural',
-        'Banco de temas',
-        'Histórico de versões'
-      ]
+      title: 'Módulo de Escrita',
+      description: 'Módulo de Escrita: acompanhamento desde a construção do parágrafo-padrão até a redação final.'
+    },
+    {
+      icon: <Eye className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
+      title: 'Correções Detalhadas',
+      description: 'Correções ilimitadas e detalhadas, na fase inicial da escrita incluindo análise de: Estrutura do parágrafo, Frequência de palavras, Uso de sinônimos e Coesão textual.'
+    },
+    {
+      icon: <Cloud className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
+      title: 'Feedback com IA',
+      description: 'Feedback com IA no final do processo — não para substituir, mas para complementar a revisão.'
     }
   ]
 
@@ -110,137 +86,60 @@ function Recursos() {
     {
       icon: <Cloud className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
       title: 'Plataforma 100% Online',
-      description: 'Ambiente totalmente automatizado na nuvem com acesso a todos os recursos estudantis, permitindo acompanhamento em tempo real de qualquer lugar.',
-      features: [
-        'Acesso multiplataforma',
-        'Sincronização automática',
-        'Backup contínuo',
-        'Sem instalação'
-      ]
+      description: 'Plataforma 100% online e automatizada com acesso aos recursos disponíveis para os estudantes para criar, enviar e avaliar as redações.'
     },
     {
       icon: <BookOpen className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
       title: 'Habilidades da BNCC',
-      description: 'Lista completa de habilidades da BNCC integrada à plataforma, facilitando o planejamento pedagógico e alinhamento curricular.',
-      features: [
-        'Biblioteca de habilidades',
-        'Alinhamento automático',
-        'Relatórios por habilidade',
-        'Sugestões pedagógicas'
-      ]
+      description: 'Lista de habilidades da BNCC a serem trabalhadas.'
     },
     {
       icon: <Eye className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
       title: 'Acompanhamento em Tempo Real',
-      description: 'Monitore o progresso individual e coletivo das turmas com dashboards dinâmicos que atualizam automaticamente.',
-      features: [
-        'Dashboard ao vivo',
-        'Alertas automáticos',
-        'Métricas detalhadas',
-        'Comparativos'
-      ]
+      description: 'Acompanhamento em tempo real do progresso de cada aluno e turma.'
     },
     {
       icon: <ClipboardCheck className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
-      title: 'Sistema de Avaliação Docente',
-      description: 'Ferramenta estruturada de avaliação alinhada à BNCC e competências ENEM, com critérios personalizáveis e feedback eficiente.',
-      features: [
-        'Critérios personalizáveis',
-        'Correção assistida',
-        'Banco de comentários',
-        'Exportação de notas'
-      ]
-    },
-    {
-      icon: <BarChart3 className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
-      title: 'Relatórios Detalhados',
-      description: 'Geração automática de relatórios individuais e coletivos com análises estatísticas e insights sobre o desenvolvimento das turmas.',
-      features: [
-        'Relatórios individuais',
-        'Análises de turma',
-        'Gráficos interativos',
-        'Exportação PDF/Excel'
-      ]
+      title: 'Avaliação Docente Estruturada',
+      description: 'Avaliação docente estruturada, com rubricas alinhadas às habilidades da BNCC e às competências do Enem.'
     },
     {
       icon: <Users className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
-      title: 'Gestão de Turmas',
-      description: 'Organize e gerencie múltiplas turmas com facilidade, atribua tarefas, acompanhe entregas e mantenha comunicação eficiente.',
-      features: [
-        'Criação de turmas',
-        'Atribuição de tarefas',
-        'Controle de prazos',
-        'Comunicação integrada'
-      ]
+      title: 'Dados de Autoavaliação',
+      description: 'Acesso aos dados da autoavaliação dos alunos (permitindo avaliação por pares e novos formatos avaliativos).'
+    },
+    {
+      icon: <Settings className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
+      title: 'Correções com IA',
+      description: 'Correções detalhadas com IA (como elemento de revisão adicional para feedbacks personalizados).'
+    },
+    {
+      icon: <BarChart3 className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
+      title: 'Relatórios Completos',
+      description: 'Relatórios completos de desempenho, com dados qualitativos, gráficos de evolução por habilidade e notas.'
+    },
+    {
+      icon: <Target className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
+      title: 'Redução de Carga',
+      description: 'Redução da carga de trabalho, com correções apoiadas em critérios qualitativos claros, compartilhados e previamente selecionados.'
     }
   ]
 
   const recursosEscolas = [
     {
       icon: <HandHeart className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
-      title: 'Suporte Completo para Professores',
-      description: 'Redução significativa da carga de trabalho docente com automação inteligente e ferramentas de apoio pedagógico.',
-      features: [
-        'Correção automatizada',
-        'Biblioteca de recursos',
-        'Treinamento contínuo',
-        'Suporte dedicado'
-      ]
-    },
-    {
-      icon: <PieChart className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
-      title: 'Dashboards Administrativos',
-      description: 'Painéis gerenciais personalizados com visualização de redações produzidas, habilidades trabalhadas e métricas institucionais.',
-      features: [
-        'Visão institucional',
-        'KPIs educacionais',
-        'Análise comparativa',
-        'Tendências e padrões'
-      ]
+      title: 'Suporte para Professores',
+      description: 'Suporte para professores com redução de carga de trabalho.'
     },
     {
       icon: <Users className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
       title: 'Desenvolvimento da Autorregulação',
-      description: 'Plataforma focada no desenvolvimento autônomo dos estudantes, promovendo habilidades para toda a vida.',
-      features: [
-        'Metodologia validada',
-        'Habilidades socioemocionais',
-        'Pensamento crítico',
-        'Autonomia progressiva'
-      ]
+      description: 'Plataforma que permite o desenvolvimento da autorregulação dos alunos, a produção escrita e os resultados gerais de aprovação.'
     },
     {
-      icon: <Link className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
-      title: 'Integração com LMS',
-      description: 'Integração perfeita com sistemas de gestão de aprendizagem existentes, mantendo todos os dados sincronizados.',
-      features: [
-        'Integração Moodle',
-        'API aberta',
-        'Sincronização automática',
-        'Dados centralizados'
-      ]
-    },
-    {
-      icon: <Palette className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
-      title: 'White-Label Disponível',
-      description: 'Personalize a plataforma com a identidade visual da sua instituição, criando uma experiência única para seus alunos.',
-      features: [
-        'Logo personalizado',
-        'Cores institucionais',
-        'Domínio próprio',
-        'Branding completo'
-      ]
-    },
-    {
-      icon: <Headphones className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
-      title: 'Suporte Dedicado 24/7',
-      description: 'Equipe especializada disponível em tempo integral para garantir o sucesso da implementação e uso contínuo da plataforma.',
-      features: [
-        'Suporte técnico',
-        'Consultoria pedagógica',
-        'Treinamentos',
-        'Acompanhamento contínuo'
-      ]
+      icon: <PieChart className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
+      title: 'Dashboards Personalizados',
+      description: 'Dashboards personalizados, mostrando: Quantitativo de redações produzidas, Habilidades da BNCC trabalhadas, Níveis de desempenho por aluno, turma ou escola.'
     }
   ]
 
@@ -351,14 +250,6 @@ function Recursos() {
                   <p className="text-slate-700 mb-6 text-center leading-relaxed">
                     {recurso.description}
                   </p>
-                  <ul className="space-y-3">
-                    {recurso.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-center gap-3 animate-fade-in-left" style={{ animationDelay: `${(index * 100) + (featureIndex * 50)}ms` }}>
-                        <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
-                        <span className="text-slate-700">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
                 </CardContent>
               </Card>
             ))}
@@ -377,6 +268,7 @@ function Recursos() {
           </p>
           <Button
             size="lg"
+            onClick={() => navigate('/precos')}
             className="bg-brand-primary hover:bg-brand-secondary text-white px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-110 hover:shadow-xl"
           >
             Começar Agora
