@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
+import { Eye, EyeOff, Mail, Lock, Shield, User, X, AlertCircle } from 'lucide-react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { Eye, EyeOff, Mail, Lock, AdminPanelSettings, User, X, AlertCircle } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -217,7 +217,7 @@ const Login = () => {
           <CardHeader className="text-center space-y-4">
             <div className="mx-auto w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center">
               {isAdmin ? (
-                <AdminPanelSettings className="w-10 h-10 text-blue-600" />
+                <Shield className="w-10 h-10 text-blue-600" />
               ) : (
                 <User className="w-10 h-10 text-blue-600" />
               )}
