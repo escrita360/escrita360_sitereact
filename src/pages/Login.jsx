@@ -41,12 +41,39 @@ const Login = () => {
       100% { opacity: 0.4; transform: scale(1.1); }
     }
     
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes slideInLeft {
+      0% { opacity: 0; transform: translateX(-20px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
+    
+    @keyframes slideInRight {
+      0% { opacity: 0; transform: translateX(20px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
+    
     .robot-container {
       animation: float 3s ease-in-out infinite;
     }
     
     .robot-glow {
       animation: glow 2s ease-in-out infinite alternate;
+    }
+    
+    .tab-content-enter {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    
+    .tab-register {
+      animation: slideInLeft 0.4s ease-out;
+    }
+    
+    .tab-login {
+      animation: slideInRight 0.4s ease-out;
     }
   `
   
@@ -222,34 +249,44 @@ const Login = () => {
                 <TabsTrigger 
                   value="register" 
                   className={cn(
-                    "flex items-center gap-2 transition-all duration-300 ease-in-out",
-                    "data-[state=active]:bg-white data-[state=active]:shadow-sm",
-                    "data-[state=active]:scale-105"
+                    "flex items-center gap-2 transition-all duration-500 ease-in-out",
+                    "data-[state=active]:bg-white data-[state=active]:shadow-md",
+                    "data-[state=active]:scale-105 data-[state=active]:transform",
+                    "hover:bg-white/50 hover:scale-102"
                   )}
                   style={{ 
-                    color: activeTab === 'register' ? BRAND_COLORS.primary : '#64748b'
+                    color: activeTab === 'register' ? BRAND_COLORS.primary : '#64748b',
+                    transform: activeTab === 'register' ? 'scale(1.05)' : 'scale(1)'
                   }}
                 >
-                  <UserPlus className="w-4 h-4" />
+                  <UserPlus className={cn(
+                    "w-4 h-4 transition-all duration-300",
+                    activeTab === 'register' ? 'animate-pulse' : ''
+                  )} />
                   Cadastrar
                 </TabsTrigger>
                 <TabsTrigger 
                   value="login" 
                   className={cn(
-                    "flex items-center gap-2 transition-all duration-300 ease-in-out",
-                    "data-[state=active]:bg-white data-[state=active]:shadow-sm",
-                    "data-[state=active]:scale-105"
+                    "flex items-center gap-2 transition-all duration-500 ease-in-out",
+                    "data-[state=active]:bg-white data-[state=active]:shadow-md",
+                    "data-[state=active]:scale-105 data-[state=active]:transform",
+                    "hover:bg-white/50 hover:scale-102"
                   )}
                   style={{ 
-                    color: activeTab === 'login' ? BRAND_COLORS.primary : '#64748b'
+                    color: activeTab === 'login' ? BRAND_COLORS.primary : '#64748b',
+                    transform: activeTab === 'login' ? 'scale(1.05)' : 'scale(1)'
                   }}
                 >
-                  <LogIn className="w-4 h-4" />
+                  <LogIn className={cn(
+                    "w-4 h-4 transition-all duration-300",
+                    activeTab === 'login' ? 'animate-pulse' : ''
+                  )} />
                   Entrar
                 </TabsTrigger>
               </TabsList>
 
-              <TabsContent value="login" className="space-y-6">
+              <TabsContent value="login" className={cn("space-y-6 tab-content-enter", activeTab === 'login' ? 'tab-login' : '')}>
                 <form onSubmit={handleLogin} className="space-y-4">
                   <div className={cn(
                     "relative transition-all duration-300 ease-in-out rounded-lg p-3",
@@ -320,7 +357,7 @@ const Login = () => {
                 </form>
               </TabsContent>
 
-              <TabsContent value="register" className="space-y-6">
+              <TabsContent value="register" className={cn("space-y-6 tab-content-enter", activeTab === 'register' ? 'tab-register' : '')}>
                 <form onSubmit={handleRegister} className="space-y-4">
                   <div className={cn(
                     "relative transition-all duration-300 ease-in-out rounded-lg p-3",
@@ -483,7 +520,7 @@ const Login = () => {
                   <Button
                     type="submit"
                     className="w-full h-12 text-white font-semibold transition-all duration-300 ease-in-out hover:shadow-lg hover:scale-105"
-                    style={{ backgroundColor: BRAND_COLORS.secondary }}
+                    style={{ backgroundColor: BRAND_COLORS.primary }}
                     disabled={isLoading}
                   >
                     {isLoading ? 'Cadastrando...' : 'Criar Conta'}
@@ -502,15 +539,17 @@ const Login = () => {
         </div>
         
         {/* Coluna da Direita - Robô Animado */}
-        <div className="hidden lg:flex justify-center items-center">
-          <div className="w-full max-w-md flex justify-center">
-            <div className="relative robot-container">
+        <div className="hidden lg:flex justify-center items-center h-screen">
+          <div className="w-full h-full flex justify-center items-center">
+            <div className="relative w-full h-full flex justify-center items-center robot-container">
               <img 
                 src={robo} 
                 alt="Robô Escrita360" 
-                className="w-80 h-80 object-contain hover:animate-pulse transition-all duration-500 ease-in-out hover:scale-110 cursor-pointer"
+                className="w-full h-full max-w-none object-contain hover:animate-pulse transition-all duration-500 ease-in-out hover:scale-105 cursor-pointer"
                 style={{ 
-                  filter: 'drop-shadow(0 15px 25px rgba(64, 112, 183, 0.4))'
+                  filter: 'drop-shadow(0 15px 25px rgba(64, 112, 183, 0.4))',
+                  minHeight: '600px',
+                  minWidth: '400px'
                 }}
               />
               {/* Efeito de brilho animado */}
