@@ -94,7 +94,7 @@ const Login = () => {
       return false
     }
     
-    if (!formData.email.match(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/)) {
+    if (!formData.email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)) {
       setError('Por favor, insira um email válido')
       return false
     }
@@ -181,7 +181,7 @@ const Login = () => {
         }))
         setError('Login expirado. Digite sua senha para continuar.')
       }
-    } catch {
+    } catch (error) {
       // Em caso de erro, preenche o email
       setFormData(prev => ({
         ...prev,
@@ -211,30 +211,30 @@ const Login = () => {
     : 'Faça login para acessar o painel Aluno'
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-6 transition-colors duration-300">
+    <div className="min-h-screen bg-neutral-50 dark:bg-slate-900 flex items-center justify-center p-6 transition-colors duration-300">
       <div className="w-full max-w-md">
-        <Card className="shadow-xl transition-all duration-300 hover:shadow-2xl">
-          <CardHeader className="text-center space-y-4">
-            <div className="mx-auto w-20 h-20 bg-muted rounded-full flex items-center justify-center transition-colors duration-200">
+        <Card className="shadow-lg ring-1 ring-slate-900/5 dark:ring-white/5 bg-white dark:bg-slate-800 transition-colors duration-200 rounded-lg overflow-hidden">
+          <CardHeader className="text-center space-y-4 p-6">
+            <div className="mx-auto w-20 h-20 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center transition-colors duration-200">
               {isAdmin ? (
-                <Shield className="w-10 h-10 text-primary transition-colors duration-200" />
+                <Shield className="w-10 h-10 text-sky-600 dark:text-sky-400" />
               ) : (
-                <User className="w-10 h-10 text-primary transition-colors duration-200" />
+                <User className="w-10 h-10 text-sky-600 dark:text-sky-400" />
               )}
             </div>
             <div>
-              <CardTitle className="text-2xl font-bold text-primary transition-colors duration-200">
+              <CardTitle className="text-2xl font-semibold text-slate-900 dark:text-slate-100">
                 {title}
               </CardTitle>
-              <CardDescription className="text-muted-foreground mt-2 transition-colors duration-200">
+              <CardDescription className="text-sm text-slate-500 dark:text-slate-300 mt-2">
                 {subtitle}
               </CardDescription>
             </div>
           </CardHeader>
 
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-6 p-6">
             {error && (
-              <Alert variant="destructive">
+              <Alert variant="destructive" className="transition-all duration-200">
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
@@ -243,14 +243,14 @@ const Login = () => {
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-2">
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4 transition-colors duration-200" />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4" />
                   <Input
                     type="email"
                     name="email"
                     placeholder="Email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="pl-10 transition-all duration-200 focus:ring-2 focus:ring-primary/20"
+                    className="pl-10 bg-transparent border border-slate-200 dark:border-slate-700 rounded-md h-10 transition-colors duration-200 focus:ring-2 focus:ring-sky-200 dark:focus:ring-sky-700"
                     autoComplete="email"
                   />
                 </div>
@@ -258,20 +258,21 @@ const Login = () => {
 
               <div className="space-y-2">
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4 transition-colors duration-200" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4" />
                   <Input
                     type={obscurePassword ? "password" : "text"}
                     name="password"
                     placeholder="Senha"
                     value={formData.password}
                     onChange={handleInputChange}
-                    className="pl-10 pr-10 transition-all duration-200 focus:ring-2 focus:ring-primary/20"
+                    className="pl-10 pr-10 bg-transparent border border-slate-200 dark:border-slate-700 rounded-md h-10 transition-colors duration-200 focus:ring-2 focus:ring-sky-200 dark:focus:ring-sky-700"
                     autoComplete="current-password"
                   />
                   <button
                     type="button"
                     onClick={() => setObscurePassword(!obscurePassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors duration-200"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors duration-150"
+                    aria-label="Mostrar senha"
                   >
                     {obscurePassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -284,11 +285,10 @@ const Login = () => {
                     id="remember"
                     checked={rememberLogin}
                     onCheckedChange={setRememberLogin}
-                    className="transition-colors duration-200"
                   />
                   <label
                     htmlFor="remember"
-                    className="text-sm text-foreground font-medium cursor-pointer transition-colors duration-200"
+                    className="text-sm text-slate-700 dark:text-slate-300 font-medium cursor-pointer"
                   >
                     Lembrar meu login para acessos futuros
                   </label>
@@ -297,12 +297,13 @@ const Login = () => {
 
               <Button
                 type="submit"
-                className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-lg disabled:opacity-50"
+                className="w-full h-12 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-sky-300 dark:focus:ring-sky-600"
+                style={{ backgroundColor: undefined }}
                 disabled={isLoading}
               >
                 {isLoading ? (
-                  <div className="flex items-center space-x-2">
-                    <div className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
+                  <div className="flex items-center space-x-2 text-white">
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                     <span>Entrando...</span>
                   </div>
                 ) : (
@@ -316,10 +317,10 @@ const Login = () => {
               <>
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-border transition-colors duration-200" />
+                    <div className="w-full border-t border-slate-200 dark:border-slate-700" />
                   </div>
                   <div className="relative flex justify-center text-sm">
-                    <span className="bg-background px-2 text-muted-foreground transition-colors duration-200">Logins Salvos</span>
+                    <span className="bg-white dark:bg-slate-800 px-2 text-slate-500 dark:text-slate-300">Logins Salvos</span>
                   </div>
                 </div>
 
@@ -338,7 +339,7 @@ const Login = () => {
             )}
 
             <div className="text-center pt-4">
-              <p className="text-sm text-muted-foreground transition-colors duration-200">
+              <p className="text-sm text-slate-500 dark:text-slate-400">
                 Escrita360 © 2025
               </p>
             </div>
@@ -361,31 +362,32 @@ const Login = () => {
 const SavedLoginCard = ({ login, isLoading, onLogin, onRemove }) => {
   return (
     <div className={cn(
-      "p-4 border rounded-lg transition-all duration-200 cursor-pointer hover:bg-muted/50 hover:shadow-sm",
-      isLoading && "bg-primary/5 border-primary/20"
+      "p-4 border rounded-lg transition-colors duration-200 cursor-pointer",
+      "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700",
+      isLoading && "ring-1 ring-sky-300"
     )}>
       <div className="flex items-center space-x-3" onClick={onLogin}>
-        <div className="w-10 h-10 bg-muted rounded-full flex items-center justify-center transition-colors duration-200">
-          <span className="text-primary font-semibold text-sm transition-colors duration-200">
+        <div className="w-10 h-10 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center transition-colors duration-200">
+          <span className="text-sky-600 dark:text-sky-400 font-semibold text-sm">
             {login.initials}
           </span>
         </div>
         
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-foreground truncate transition-colors duration-200">
+          <p className="text-sm font-medium text-slate-900 dark:text-slate-100 truncate">
             {login.displayName}
           </p>
-          <p className="text-xs text-muted-foreground truncate transition-colors duration-200">
+          <p className="text-xs text-slate-500 dark:text-slate-300 truncate">
             {login.email}
           </p>
-          <Badge variant="secondary" className="text-xs mt-1 transition-colors duration-200">
+          <Badge variant="secondary" className="text-xs mt-1">
             {login.typeDisplayName}
           </Badge>
         </div>
 
         <div className="flex-shrink-0">
           {isLoading ? (
-            <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+            <div className="w-6 h-6 border-2 border-sky-600 border-t-transparent rounded-full animate-spin" />
           ) : (
             <Button
               variant="ghost"
@@ -394,9 +396,9 @@ const SavedLoginCard = ({ login, isLoading, onLogin, onRemove }) => {
                 e.stopPropagation()
                 onRemove()
               }}
-              className="w-8 h-8 p-0 hover:bg-muted transition-colors duration-200"
+              className="w-8 h-8 p-0"
             >
-              <X className="w-4 h-4" />
+              <X className="w-4 h-4 text-slate-600 dark:text-slate-300" />
             </Button>
           )}
         </div>
@@ -407,31 +409,23 @@ const SavedLoginCard = ({ login, isLoading, onLogin, onRemove }) => {
 
 const RemoveDialog = ({ login, onConfirm, onCancel }) => {
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 transition-all duration-300">
-      <Card className="w-full max-w-sm transition-all duration-300 animate-in fade-in-0 zoom-in-95">
+    <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center p-4 z-50 transition-opacity duration-200">
+      <Card className="w-full max-w-sm bg-white dark:bg-slate-800">
         <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <AlertCircle className="w-5 h-5 text-destructive transition-colors duration-200" />
-            <span className="transition-colors duration-200">Remover Login Salvo</span>
+          <CardTitle className="flex items-center space-x-2 text-slate-900 dark:text-slate-100">
+            <AlertCircle className="w-5 h-5 text-orange-500" />
+            <span>Remover Login Salvo</span>
           </CardTitle>
-          <CardDescription className="transition-colors duration-200">
+          <CardDescription className="text-slate-600 dark:text-slate-300">
             Deseja remover o login salvo de {login.displayName}?
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex space-x-2">
-            <Button 
-              variant="outline" 
-              onClick={onCancel} 
-              className="flex-1 transition-all duration-200 hover:bg-muted"
-            >
+            <Button variant="outline" onClick={onCancel} className="flex-1">
               Cancelar
             </Button>
-            <Button 
-              variant="destructive" 
-              onClick={onConfirm} 
-              className="flex-1 transition-all duration-200 hover:shadow-lg"
-            >
+            <Button variant="destructive" onClick={onConfirm} className="flex-1">
               Remover
             </Button>
           </div>
