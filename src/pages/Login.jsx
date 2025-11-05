@@ -94,7 +94,7 @@ const Login = () => {
       return false
     }
     
-    if (!formData.email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)) {
+    if (!formData.email.match(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/)) {
       setError('Por favor, insira um email válido')
       return false
     }
@@ -181,7 +181,7 @@ const Login = () => {
         }))
         setError('Login expirado. Digite sua senha para continuar.')
       }
-    } catch (error) {
+    } catch {
       // Em caso de erro, preenche o email
       setFormData(prev => ({
         ...prev,
@@ -211,22 +211,22 @@ const Login = () => {
     : 'Faça login para acessar o painel Aluno'
 
   return (
-    <div className="min-h-screen bg-blue-600 flex items-center justify-center p-6">
+    <div className="min-h-screen bg-background flex items-center justify-center p-6 transition-colors duration-300">
       <div className="w-full max-w-md">
-        <Card className="shadow-xl">
+        <Card className="shadow-xl transition-all duration-300 hover:shadow-2xl">
           <CardHeader className="text-center space-y-4">
-            <div className="mx-auto w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center">
+            <div className="mx-auto w-20 h-20 bg-muted rounded-full flex items-center justify-center transition-colors duration-200">
               {isAdmin ? (
-                <Shield className="w-10 h-10 text-blue-600" />
+                <Shield className="w-10 h-10 text-primary transition-colors duration-200" />
               ) : (
-                <User className="w-10 h-10 text-blue-600" />
+                <User className="w-10 h-10 text-primary transition-colors duration-200" />
               )}
             </div>
             <div>
-              <CardTitle className="text-2xl font-bold text-blue-600">
+              <CardTitle className="text-2xl font-bold text-primary transition-colors duration-200">
                 {title}
               </CardTitle>
-              <CardDescription className="text-gray-600 mt-2">
+              <CardDescription className="text-muted-foreground mt-2 transition-colors duration-200">
                 {subtitle}
               </CardDescription>
             </div>
@@ -243,14 +243,14 @@ const Login = () => {
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-2">
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4 transition-colors duration-200" />
                   <Input
                     type="email"
                     name="email"
                     placeholder="Email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="pl-10"
+                    className="pl-10 transition-all duration-200 focus:ring-2 focus:ring-primary/20"
                     autoComplete="email"
                   />
                 </div>
@@ -258,20 +258,20 @@ const Login = () => {
 
               <div className="space-y-2">
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4 transition-colors duration-200" />
                   <Input
                     type={obscurePassword ? "password" : "text"}
                     name="password"
                     placeholder="Senha"
                     value={formData.password}
                     onChange={handleInputChange}
-                    className="pl-10 pr-10"
+                    className="pl-10 pr-10 transition-all duration-200 focus:ring-2 focus:ring-primary/20"
                     autoComplete="current-password"
                   />
                   <button
                     type="button"
                     onClick={() => setObscurePassword(!obscurePassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors duration-200"
                   >
                     {obscurePassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -284,10 +284,11 @@ const Login = () => {
                     id="remember"
                     checked={rememberLogin}
                     onCheckedChange={setRememberLogin}
+                    className="transition-colors duration-200"
                   />
                   <label
                     htmlFor="remember"
-                    className="text-sm text-gray-700 font-medium cursor-pointer"
+                    className="text-sm text-foreground font-medium cursor-pointer transition-colors duration-200"
                   >
                     Lembrar meu login para acessos futuros
                   </label>
@@ -296,12 +297,12 @@ const Login = () => {
 
               <Button
                 type="submit"
-                className="w-full h-12 bg-blue-600 hover:bg-blue-700"
+                className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-lg disabled:opacity-50"
                 disabled={isLoading}
               >
                 {isLoading ? (
                   <div className="flex items-center space-x-2">
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
                     <span>Entrando...</span>
                   </div>
                 ) : (
@@ -315,10 +316,10 @@ const Login = () => {
               <>
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-gray-300" />
+                    <div className="w-full border-t border-border transition-colors duration-200" />
                   </div>
                   <div className="relative flex justify-center text-sm">
-                    <span className="bg-white px-2 text-gray-500">Logins Salvos</span>
+                    <span className="bg-background px-2 text-muted-foreground transition-colors duration-200">Logins Salvos</span>
                   </div>
                 </div>
 
@@ -337,7 +338,7 @@ const Login = () => {
             )}
 
             <div className="text-center pt-4">
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground transition-colors duration-200">
                 Escrita360 © 2025
               </p>
             </div>
@@ -360,31 +361,31 @@ const Login = () => {
 const SavedLoginCard = ({ login, isLoading, onLogin, onRemove }) => {
   return (
     <div className={cn(
-      "p-4 border rounded-lg transition-all cursor-pointer hover:bg-gray-50",
-      isLoading && "bg-blue-50 border-blue-200"
+      "p-4 border rounded-lg transition-all duration-200 cursor-pointer hover:bg-muted/50 hover:shadow-sm",
+      isLoading && "bg-primary/5 border-primary/20"
     )}>
       <div className="flex items-center space-x-3" onClick={onLogin}>
-        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-          <span className="text-blue-600 font-semibold text-sm">
+        <div className="w-10 h-10 bg-muted rounded-full flex items-center justify-center transition-colors duration-200">
+          <span className="text-primary font-semibold text-sm transition-colors duration-200">
             {login.initials}
           </span>
         </div>
         
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-gray-900 truncate">
+          <p className="text-sm font-medium text-foreground truncate transition-colors duration-200">
             {login.displayName}
           </p>
-          <p className="text-xs text-gray-500 truncate">
+          <p className="text-xs text-muted-foreground truncate transition-colors duration-200">
             {login.email}
           </p>
-          <Badge variant="secondary" className="text-xs mt-1">
+          <Badge variant="secondary" className="text-xs mt-1 transition-colors duration-200">
             {login.typeDisplayName}
           </Badge>
         </div>
 
         <div className="flex-shrink-0">
           {isLoading ? (
-            <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+            <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
           ) : (
             <Button
               variant="ghost"
@@ -393,7 +394,7 @@ const SavedLoginCard = ({ login, isLoading, onLogin, onRemove }) => {
                 e.stopPropagation()
                 onRemove()
               }}
-              className="w-8 h-8 p-0"
+              className="w-8 h-8 p-0 hover:bg-muted transition-colors duration-200"
             >
               <X className="w-4 h-4" />
             </Button>
@@ -406,23 +407,31 @@ const SavedLoginCard = ({ login, isLoading, onLogin, onRemove }) => {
 
 const RemoveDialog = ({ login, onConfirm, onCancel }) => {
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <Card className="w-full max-w-sm">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 transition-all duration-300">
+      <Card className="w-full max-w-sm transition-all duration-300 animate-in fade-in-0 zoom-in-95">
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
-            <AlertCircle className="w-5 h-5 text-orange-500" />
-            <span>Remover Login Salvo</span>
+            <AlertCircle className="w-5 h-5 text-destructive transition-colors duration-200" />
+            <span className="transition-colors duration-200">Remover Login Salvo</span>
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="transition-colors duration-200">
             Deseja remover o login salvo de {login.displayName}?
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex space-x-2">
-            <Button variant="outline" onClick={onCancel} className="flex-1">
+            <Button 
+              variant="outline" 
+              onClick={onCancel} 
+              className="flex-1 transition-all duration-200 hover:bg-muted"
+            >
               Cancelar
             </Button>
-            <Button variant="destructive" onClick={onConfirm} className="flex-1">
+            <Button 
+              variant="destructive" 
+              onClick={onConfirm} 
+              className="flex-1 transition-all duration-200 hover:shadow-lg"
+            >
               Remover
             </Button>
           </div>
