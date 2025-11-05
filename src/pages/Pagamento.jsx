@@ -4,11 +4,13 @@ import { Label } from '@/components/ui/label.jsx'
 import { Card, CardContent } from '@/components/ui/card.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
 import { Separator } from '@/components/ui/separator.jsx'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs.jsx'
 import { CreditCard, Lock, Calendar, User, Shield, CheckCircle2, ArrowLeft, AlertCircle } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { paymentService } from '@/services/payment'
 import { authService } from '@/services/auth'
+import PagBankCheckout from '@/components/PagBankCheckout.jsx'
 
 function Pagamento() {
   const navigate = useNavigate()
@@ -18,6 +20,7 @@ function Pagamento() {
   const [paymentSuccess, setPaymentSuccess] = useState(false)
   const [paymentError, setPaymentError] = useState('')
   const [transactionData, setTransactionData] = useState(null)
+  const [paymentProvider, setPaymentProvider] = useState('stripe') // 'stripe' ou 'pagbank'
   const [formData, setFormData] = useState({
     cardNumber: '',
     cardName: '',
@@ -222,7 +225,7 @@ function Pagamento() {
             <div className="lg:col-span-3">
               <Card className="shadow-lg">
                 <CardContent className="p-8">
-                  <form onSubmit={handleSubmit} className="space-y-6">
+                  <Tabs value={paymentProvider} onValueChange={setPaymentProvider} className="space-y-6">
                     <div className="space-y-4">
                       <h3 className="text-lg font-semibold flex items-center gap-2">
                         <User className="w-5 h-5 text-brand-primary" />
@@ -256,69 +259,103 @@ function Pagamento() {
                     <Separator />
 
                     <div className="space-y-4">
-                      <h3 className="text-lg font-semibold flex items-center gap-2">
-                        <CreditCard className="w-5 h-5 text-brand-primary" />
-                        Dados do Cartão
-                      </h3>
-                      <div className="space-y-4">
-                        <div>
-                          <Label htmlFor="cardNumber">Número do Cartão *</Label>
-                          <div className="relative">
-                            <Input id="cardNumber" placeholder="0000 0000 0000 0000" maxLength={19}
-                              value={formData.cardNumber} onChange={(e) => handleInputChange('cardNumber', e.target.value)}
-                              className={`pl-10 ${errors.cardNumber ? 'border-red-500' : ''}`} />
-                            <CreditCard className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
-                          </div>
-                          {errors.cardNumber && <p className="text-xs text-red-500 mt-1">{errors.cardNumber}</p>}
-                        </div>
-                        <div>
-                          <Label htmlFor="cardName">Nome no Cartão *</Label>
-                          <Input id="cardName" placeholder="NOME COMO ESTÁ NO CARTÃO" 
-                            value={formData.cardName} onChange={(e) => handleInputChange('cardName', e.target.value)}
-                            className={errors.cardName ? 'border-red-500' : ''} />
-                          {errors.cardName && <p className="text-xs text-red-500 mt-1">{errors.cardName}</p>}
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div>
-                            <Label htmlFor="expiryDate">Validade *</Label>
-                            <div className="relative">
-                              <Input id="expiryDate" placeholder="MM/AA" maxLength={5}
-                                value={formData.expiryDate} onChange={(e) => handleInputChange('expiryDate', e.target.value)}
-                                className={`pl-10 ${errors.expiryDate ? 'border-red-500' : ''}`} />
-                              <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                      <h3 className="text-lg font-semibold">Método de Pagamento</h3>
+                      
+                      <TabsList className="grid w-full grid-cols-2">
+                        <TabsTrigger value="stripe">Stripe (Internacional)</TabsTrigger>
+                        <TabsTrigger value="pagbank">PagBank (Nacional)</TabsTrigger>
+                      </TabsList>
+                      
+                      <TabsContent value="stripe" className="space-y-4">
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                          <div className="space-y-4">
+                            <h4 className="font-medium flex items-center gap-2">
+                              <CreditCard className="w-4 h-4 text-brand-primary" />
+                              Cartão de Crédito (Stripe)
+                            </h4>
+                            <div>
+                              <Label htmlFor="cardNumber">Número do Cartão *</Label>
+                              <div className="relative">
+                                <Input id="cardNumber" placeholder="0000 0000 0000 0000" maxLength={19}
+                                  value={formData.cardNumber} onChange={(e) => handleInputChange('cardNumber', e.target.value)}
+                                  className={`pl-10 ${errors.cardNumber ? 'border-red-500' : ''}`} />
+                                <CreditCard className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                              </div>
+                              {errors.cardNumber && <p className="text-xs text-red-500 mt-1">{errors.cardNumber}</p>}
                             </div>
-                            {errors.expiryDate && <p className="text-xs text-red-500 mt-1">{errors.expiryDate}</p>}
-                          </div>
-                          <div>
-                            <Label htmlFor="cvv">CVV *</Label>
-                            <div className="relative">
-                              <Input id="cvv" type="password" placeholder="000" maxLength={4}
-                                value={formData.cvv} onChange={(e) => handleInputChange('cvv', e.target.value)}
-                                className={`pl-10 ${errors.cvv ? 'border-red-500' : ''}`} />
-                              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                            <div>
+                              <Label htmlFor="cardName">Nome no Cartão *</Label>
+                              <Input id="cardName" placeholder="NOME COMO ESTÁ NO CARTÃO" 
+                                value={formData.cardName} onChange={(e) => handleInputChange('cardName', e.target.value)}
+                                className={errors.cardName ? 'border-red-500' : ''} />
+                              {errors.cardName && <p className="text-xs text-red-500 mt-1">{errors.cardName}</p>}
                             </div>
-                            {errors.cvv && <p className="text-xs text-red-500 mt-1">{errors.cvv}</p>}
+                            <div className="grid grid-cols-2 gap-4">
+                              <div>
+                                <Label htmlFor="expiryDate">Validade *</Label>
+                                <div className="relative">
+                                  <Input id="expiryDate" placeholder="MM/AA" maxLength={5}
+                                    value={formData.expiryDate} onChange={(e) => handleInputChange('expiryDate', e.target.value)}
+                                    className={`pl-10 ${errors.expiryDate ? 'border-red-500' : ''}`} />
+                                  <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                                </div>
+                                {errors.expiryDate && <p className="text-xs text-red-500 mt-1">{errors.expiryDate}</p>}
+                              </div>
+                              <div>
+                                <Label htmlFor="cvv">CVV *</Label>
+                                <div className="relative">
+                                  <Input id="cvv" type="password" placeholder="000" maxLength={4}
+                                    value={formData.cvv} onChange={(e) => handleInputChange('cvv', e.target.value)}
+                                    className={`pl-10 ${errors.cvv ? 'border-red-500' : ''}`} />
+                                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                                </div>
+                                {errors.cvv && <p className="text-xs text-red-500 mt-1">{errors.cvv}</p>}
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    </div>
 
-                    <div className="bg-slate-50 p-4 rounded-lg flex items-start gap-3">
-                      <Shield className="w-5 h-5 text-green-600 flex-shrink-0" />
-                      <div>
-                        <p className="text-sm font-medium">Pagamento 100% Seguro</p>
-                        <p className="text-xs text-slate-600 mt-1">Seus dados são criptografados e protegidos.</p>
-                      </div>
-                    </div>
+                          <div className="bg-slate-50 p-4 rounded-lg flex items-start gap-3">
+                            <Shield className="w-5 h-5 text-green-600 flex-shrink-0" />
+                            <div>
+                              <p className="text-sm font-medium">Pagamento 100% Seguro</p>
+                              <p className="text-xs text-slate-600 mt-1">Processado pelo Stripe - padrão internacional.</p>
+                            </div>
+                          </div>
 
-                    <Button type="submit" className="w-full bg-brand-primary hover:bg-brand-secondary text-white h-12" disabled={isProcessing}>
-                      {isProcessing ? (
-                        <><div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2" />Processando...</>
-                      ) : (
-                        <><Lock className="w-5 h-5 mr-2" />Confirmar Pagamento</>
-                      )}
-                    </Button>
-                  </form>
+                          <Button type="submit" className="w-full bg-brand-primary hover:bg-brand-secondary text-white h-12" disabled={isProcessing}>
+                            {isProcessing ? (
+                              <><div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2" />Processando...</>
+                            ) : (
+                              <><Lock className="w-5 h-5 mr-2" />Pagar com Stripe</>
+                            )}
+                          </Button>
+                        </form>
+                      </TabsContent>
+                      
+                      <TabsContent value="pagbank" className="space-y-4">
+                        <PagBankCheckout
+                          planData={{
+                            planId: selectedPlan.name.toLowerCase(),
+                            name: selectedPlan.name,
+                            price: price
+                          }}
+                          customerData={{
+                            name: formData.cardName || formData.email.split('@')[0],
+                            email: formData.email,
+                            cpf: formData.cpf,
+                            phone: formData.phone
+                          }}
+                          onSuccess={(data) => {
+                            setPaymentSuccess(true)
+                            setTransactionData(data)
+                          }}
+                          onError={(error) => {
+                            setPaymentError(error)
+                          }}
+                        />
+                      </TabsContent>
+                    </div>
+                  </Tabs>
                 </CardContent>
               </Card>
             </div>
