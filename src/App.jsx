@@ -7,6 +7,7 @@ import Recursos from './pages/Recursos.jsx'
 import Precos from './pages/Planos.jsx'
 import Contato from './pages/Contato.jsx'
 import Faq from './pages/Faq.jsx'
+import Login from './pages/Login.jsx'
 import Pagamento from './pages/Pagamento.jsx'
 import PagamentoSucesso from './pages/PagamentoSucesso.jsx'
 import PagamentoCancelado from './pages/PagamentoCancelado.jsx'
@@ -155,6 +156,28 @@ function App() {
               <PagamentoCancelado />
             </motion.div>
           </Layout>
+        } />
+        <Route path="/login" element={
+          <motion.div
+            initial="initial"
+            animate="in"
+            exit="out"
+            variants={pageVariants}
+            transition={pageTransition}
+          >
+            <Login />
+          </motion.div>
+        } />
+        <Route path="/admin/login" element={
+          <motion.div
+            initial="initial"
+            animate="in"
+            exit="out"
+            variants={pageVariants}
+            transition={pageTransition}
+          >
+            <Login />
+          </motion.div>
         } />
       </Routes>
     </AnimatePresence>
