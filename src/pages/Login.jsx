@@ -9,6 +9,8 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { authService } from '@/services/auth'
 import { cn } from '@/lib/utils'
+import escrita360Logo from '@/assets/Escrita360.png'
+import robo from '@/assets/robo.svg'
 
 const LOGIN_USER_TYPE = {
   ADMIN: 'admin',
@@ -27,11 +29,32 @@ const Login = () => {
   const navigate = useNavigate()
   const location = useLocation()
   
+  // Estilos para animações customizadas
+  const customStyles = `
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+    
+    @keyframes glow {
+      0% { opacity: 0.2; transform: scale(1); }
+      100% { opacity: 0.4; transform: scale(1.1); }
+    }
+    
+    .robot-container {
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    .robot-glow {
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+  `
+  
   const userType = location.pathname.includes('admin') || location.search.includes('type=admin') 
     ? LOGIN_USER_TYPE.ADMIN 
     : LOGIN_USER_TYPE.ALUNO
 
-  const [activeTab, setActiveTab] = useState('login')
+  const [activeTab, setActiveTab] = useState('register')
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -48,6 +71,8 @@ const Login = () => {
   const [obscurePassword, setObscurePassword] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  const [focusedField, setFocusedField] = useState('')
+  const [isTermsAnimated, setIsTermsAnimated] = useState(false)
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -62,6 +87,20 @@ const Login = () => {
       [name]: type === 'checkbox' ? checked : value
     }))
     if (error) setError('')
+    
+    // Anima os termos quando o checkbox é marcado
+    if (name === 'acceptTerms' && checked) {
+      setIsTermsAnimated(true)
+      setTimeout(() => setIsTermsAnimated(false), 600)
+    }
+  }
+
+  const handleFocus = (fieldName) => {
+    setFocusedField(fieldName)
+  }
+
+  const handleBlur = () => {
+    setFocusedField('')
   }
 
   const handleLogin = async (e) => {
@@ -143,22 +182,32 @@ const Login = () => {
   const subtitle = isAdmin ? 'Acesso ao painel administrativo' : 'Plataforma de desenvolvimento da escrita'
 
   return (
-    <div style={{ backgroundColor: BRAND_COLORS.light }} className="min-h-screen flex items-center justify-center p-6">
-      <div className="w-full max-w-lg">
-        <Card className="shadow-xl border-0 overflow-hidden">
-          <CardHeader className="text-center space-y-6 pb-6" style={{ background: `linear-gradient(135deg, ${BRAND_COLORS.primary} 0%, ${BRAND_COLORS.accent} 100%)` }}>
-            <div className="mx-auto w-24 h-24 bg-white/20 rounded-full flex items-center justify-center">
-              {isAdmin ? (
-                <Shield className="w-12 h-12 text-white" />
-              ) : (
-                <User className="w-12 h-12 text-white" />
-              )}
-            </div>
-            <div>
-              <CardTitle className="text-3xl font-bold text-white">{title}</CardTitle>
-              <CardDescription className="text-white/90 mt-2 text-base">{subtitle}</CardDescription>
-            </div>
-          </CardHeader>
+    <>
+      <style>{customStyles}</style>
+      <div style={{ backgroundColor: BRAND_COLORS.light }} className="min-h-screen flex items-center justify-center p-6">
+        <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+        {/* Coluna da Esquerda - Formulário de Login/Cadastro */}
+        <div className="w-full max-w-lg mx-auto">
+          <Card className="shadow-xl border-0 overflow-hidden">
+            <CardHeader className="text-center space-y-6 pb-6 bg-white">
+              <div>
+                <div className="flex justify-center mb-2">
+                  <img 
+                    src={escrita360Logo} 
+                    alt={isAdmin ? "Escrita360 Admin" : "Escrita360"} 
+                    className="h-12 object-contain"
+                  />
+                  {isAdmin && (
+                    <span className="ml-2 text-3xl font-bold self-end" style={{ color: BRAND_COLORS.primary }}>
+                      Admin
+                    </span>
+                  )}
+                </div>
+                <CardDescription className="mt-2 text-base text-slate-600">
+                  {subtitle}
+                </CardDescription>
+              </div>
+            </CardHeader>
 
           <CardContent className="p-8">
             {error && (
@@ -169,49 +218,91 @@ const Login = () => {
             )}
 
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-2 mb-8">
-                <TabsTrigger value="login" className="flex items-center gap-2">
-                  <LogIn className="w-4 h-4" />
-                  Entrar
-                </TabsTrigger>
-                <TabsTrigger value="register" className="flex items-center gap-2">
+              <TabsList className="grid w-full grid-cols-2 mb-8 bg-slate-100 p-1 rounded-lg">
+                <TabsTrigger 
+                  value="register" 
+                  className={cn(
+                    "flex items-center gap-2 transition-all duration-300 ease-in-out",
+                    "data-[state=active]:bg-white data-[state=active]:shadow-sm",
+                    "data-[state=active]:scale-105"
+                  )}
+                  style={{ 
+                    color: activeTab === 'register' ? BRAND_COLORS.primary : '#64748b'
+                  }}
+                >
                   <UserPlus className="w-4 h-4" />
                   Cadastrar
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="login" 
+                  className={cn(
+                    "flex items-center gap-2 transition-all duration-300 ease-in-out",
+                    "data-[state=active]:bg-white data-[state=active]:shadow-sm",
+                    "data-[state=active]:scale-105"
+                  )}
+                  style={{ 
+                    color: activeTab === 'login' ? BRAND_COLORS.primary : '#64748b'
+                  }}
+                >
+                  <LogIn className="w-4 h-4" />
+                  Entrar
                 </TabsTrigger>
               </TabsList>
 
               <TabsContent value="login" className="space-y-6">
                 <form onSubmit={handleLogin} className="space-y-4">
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4" style={{ color: BRAND_COLORS.primary }} />
+                  <div className={cn(
+                    "relative transition-all duration-300 ease-in-out rounded-lg p-3",
+                    focusedField === 'login-email' ? 'bg-blue-50 border border-blue-200 shadow-sm' : ''
+                  )}>
+                    <Mail className="absolute left-6 top-1/2 transform -translate-y-1/2 w-4 h-4" style={{ color: BRAND_COLORS.primary }} />
                     <Input
                       type="email"
                       name="email"
                       placeholder="Email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      className="pl-10 h-12 border-2"
-                      style={{ borderColor: BRAND_COLORS.primary + '40' }}
+                      onFocus={() => setFocusedField('login-email')}
+                      onBlur={() => setFocusedField('')}
+                      className={cn(
+                        "pl-10 h-12 border-2 transition-all duration-300 ease-in-out",
+                        focusedField === 'login-email' ? 'border-blue-300 shadow-md' : ''
+                      )}
+                      style={{ 
+                        borderColor: focusedField === 'login-email' ? BRAND_COLORS.accent : BRAND_COLORS.primary + '40',
+                        boxShadow: focusedField === 'login-email' ? `0 0 0 3px ${BRAND_COLORS.accent}20` : ''
+                      }}
                       autoComplete="email"
                     />
                   </div>
 
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4" style={{ color: BRAND_COLORS.primary }} />
+                  <div className={cn(
+                    "relative transition-all duration-300 ease-in-out rounded-lg p-3",
+                    focusedField === 'login-password' ? 'bg-blue-50 border border-blue-200 shadow-sm' : ''
+                  )}>
+                    <Lock className="absolute left-6 top-1/2 transform -translate-y-1/2 w-4 h-4" style={{ color: BRAND_COLORS.primary }} />
                     <Input
                       type={obscurePassword ? "password" : "text"}
                       name="password"
                       placeholder="Senha"
                       value={formData.password}
                       onChange={handleInputChange}
-                      className="pl-10 pr-10 h-12 border-2"
-                      style={{ borderColor: BRAND_COLORS.primary + '40' }}
+                      onFocus={() => setFocusedField('login-password')}
+                      onBlur={() => setFocusedField('')}
+                      className={cn(
+                        "pl-10 pr-10 h-12 border-2 transition-all duration-300 ease-in-out",
+                        focusedField === 'login-password' ? 'border-blue-300 shadow-md' : ''
+                      )}
+                      style={{ 
+                        borderColor: focusedField === 'login-password' ? BRAND_COLORS.accent : BRAND_COLORS.primary + '40',
+                        boxShadow: focusedField === 'login-password' ? `0 0 0 3px ${BRAND_COLORS.accent}20` : ''
+                      }}
                       autoComplete="current-password"
                     />
                     <button
                       type="button"
                       onClick={() => setObscurePassword(!obscurePassword)}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2"
+                      className="absolute right-6 top-1/2 transform -translate-y-1/2 transition-colors duration-200 hover:opacity-75"
                       style={{ color: BRAND_COLORS.primary }}
                     >
                       {obscurePassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -220,7 +311,7 @@ const Login = () => {
 
                   <Button
                     type="submit"
-                    className="w-full h-12 text-white font-semibold"
+                    className="w-full h-12 text-white font-semibold transition-all duration-300 ease-in-out hover:shadow-lg hover:scale-105"
                     style={{ backgroundColor: BRAND_COLORS.primary }}
                     disabled={isLoading}
                   >
@@ -231,81 +322,167 @@ const Login = () => {
 
               <TabsContent value="register" className="space-y-6">
                 <form onSubmit={handleRegister} className="space-y-4">
-                  <div className="relative">
-                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4" style={{ color: BRAND_COLORS.primary }} />
+                  <div className={cn(
+                    "relative transition-all duration-300 ease-in-out rounded-lg p-3",
+                    focusedField === 'register-name' ? 'bg-blue-50 border border-blue-200 shadow-sm' : ''
+                  )}>
+                    <User className="absolute left-6 top-1/2 transform -translate-y-1/2 w-4 h-4" style={{ color: BRAND_COLORS.primary }} />
                     <Input
                       type="text"
                       name="name"
                       placeholder="Nome completo"
                       value={registerData.name}
                       onChange={handleRegisterInputChange}
-                      className="pl-10 h-12 border-2"
-                      style={{ borderColor: BRAND_COLORS.primary + '40' }}
+                      onFocus={() => setFocusedField('register-name')}
+                      onBlur={() => setFocusedField('')}
+                      className={cn(
+                        "pl-10 h-12 border-2 transition-all duration-300 ease-in-out",
+                        focusedField === 'register-name' ? 'border-blue-300 shadow-md' : ''
+                      )}
+                      style={{ 
+                        borderColor: focusedField === 'register-name' ? BRAND_COLORS.accent : BRAND_COLORS.primary + '40',
+                        boxShadow: focusedField === 'register-name' ? `0 0 0 3px ${BRAND_COLORS.accent}20` : ''
+                      }}
                     />
                   </div>
 
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4" style={{ color: BRAND_COLORS.primary }} />
+                  <div className={cn(
+                    "relative transition-all duration-300 ease-in-out rounded-lg p-3",
+                    focusedField === 'register-email' ? 'bg-blue-50 border border-blue-200 shadow-sm' : ''
+                  )}>
+                    <Mail className="absolute left-6 top-1/2 transform -translate-y-1/2 w-4 h-4" style={{ color: BRAND_COLORS.primary }} />
                     <Input
                       type="email"
                       name="email"
                       placeholder="Email"
                       value={registerData.email}
                       onChange={handleRegisterInputChange}
-                      className="pl-10 h-12 border-2"
-                      style={{ borderColor: BRAND_COLORS.primary + '40' }}
+                      onFocus={() => setFocusedField('register-email')}
+                      onBlur={() => setFocusedField('')}
+                      className={cn(
+                        "pl-10 h-12 border-2 transition-all duration-300 ease-in-out",
+                        focusedField === 'register-email' ? 'border-blue-300 shadow-md' : ''
+                      )}
+                      style={{ 
+                        borderColor: focusedField === 'register-email' ? BRAND_COLORS.accent : BRAND_COLORS.primary + '40',
+                        boxShadow: focusedField === 'register-email' ? `0 0 0 3px ${BRAND_COLORS.accent}20` : ''
+                      }}
                     />
                   </div>
 
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4" style={{ color: BRAND_COLORS.primary }} />
+                  <div className={cn(
+                    "relative transition-all duration-300 ease-in-out rounded-lg p-3",
+                    focusedField === 'register-password' ? 'bg-blue-50 border border-blue-200 shadow-sm' : ''
+                  )}>
+                    <Lock className="absolute left-6 top-1/2 transform -translate-y-1/2 w-4 h-4" style={{ color: BRAND_COLORS.primary }} />
                     <Input
                       type="password"
                       name="password"
                       placeholder="Senha"
                       value={registerData.password}
                       onChange={handleRegisterInputChange}
-                      className="pl-10 h-12 border-2"
-                      style={{ borderColor: BRAND_COLORS.primary + '40' }}
+                      onFocus={() => setFocusedField('register-password')}
+                      onBlur={() => setFocusedField('')}
+                      className={cn(
+                        "pl-10 h-12 border-2 transition-all duration-300 ease-in-out",
+                        focusedField === 'register-password' ? 'border-blue-300 shadow-md' : ''
+                      )}
+                      style={{ 
+                        borderColor: focusedField === 'register-password' ? BRAND_COLORS.accent : BRAND_COLORS.primary + '40',
+                        boxShadow: focusedField === 'register-password' ? `0 0 0 3px ${BRAND_COLORS.accent}20` : ''
+                      }}
                     />
                   </div>
 
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4" style={{ color: BRAND_COLORS.primary }} />
+                  <div className={cn(
+                    "relative transition-all duration-300 ease-in-out rounded-lg p-3",
+                    focusedField === 'register-confirmPassword' ? 'bg-blue-50 border border-blue-200 shadow-sm' : ''
+                  )}>
+                    <Lock className="absolute left-6 top-1/2 transform -translate-y-1/2 w-4 h-4" style={{ color: BRAND_COLORS.primary }} />
                     <Input
                       type="password"
                       name="confirmPassword"
                       placeholder="Confirmar senha"
                       value={registerData.confirmPassword}
                       onChange={handleRegisterInputChange}
-                      className="pl-10 h-12 border-2"
-                      style={{ borderColor: BRAND_COLORS.primary + '40' }}
+                      onFocus={() => setFocusedField('register-confirmPassword')}
+                      onBlur={() => setFocusedField('')}
+                      className={cn(
+                        "pl-10 h-12 border-2 transition-all duration-300 ease-in-out",
+                        focusedField === 'register-confirmPassword' ? 'border-blue-300 shadow-md' : ''
+                      )}
+                      style={{ 
+                        borderColor: focusedField === 'register-confirmPassword' ? BRAND_COLORS.accent : BRAND_COLORS.primary + '40',
+                        boxShadow: focusedField === 'register-confirmPassword' ? `0 0 0 3px ${BRAND_COLORS.accent}20` : ''
+                      }}
                     />
                   </div>
 
-                  <div className="flex items-start space-x-2">
+                  <div className={cn(
+                    "flex items-start space-x-3 p-4 rounded-lg transition-all duration-500 ease-in-out",
+                    isTermsAnimated ? 'bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 shadow-sm scale-105' : 'hover:bg-gray-50',
+                    registerData.acceptTerms ? 'border-green-200 bg-green-50' : ''
+                  )}>
                     <Checkbox
                       id="acceptTerms"
                       name="acceptTerms"
                       checked={registerData.acceptTerms}
-                      onCheckedChange={(checked) => setRegisterData(prev => ({ ...prev, acceptTerms: checked }))}
-                      className="mt-1"
+                      onCheckedChange={(checked) => {
+                        setRegisterData(prev => ({ ...prev, acceptTerms: checked }))
+                        if (checked) {
+                          setIsTermsAnimated(true)
+                          setTimeout(() => setIsTermsAnimated(false), 2000)
+                        }
+                      }}
+                      className={cn(
+                        "mt-1 transition-all duration-300 ease-in-out",
+                        registerData.acceptTerms ? 'scale-110' : 'hover:scale-105'
+                      )}
+                      style={{ 
+                        borderColor: registerData.acceptTerms ? BRAND_COLORS.secondary : BRAND_COLORS.primary 
+                      }}
                     />
-                    <label htmlFor="acceptTerms" className="text-sm leading-relaxed cursor-pointer">
+                    <label 
+                      htmlFor="acceptTerms" 
+                      className={cn(
+                        "text-sm leading-relaxed cursor-pointer transition-all duration-300 ease-in-out",
+                        registerData.acceptTerms ? 'font-medium' : '',
+                        isTermsAnimated ? 'text-blue-700' : ''
+                      )}
+                    >
                       Aceito os{' '}
-                      <a href="#" className="underline" style={{ color: BRAND_COLORS.primary }}>
+                      <a 
+                        href="#" 
+                        className={cn(
+                          "underline transition-colors duration-300 hover:opacity-80",
+                          isTermsAnimated ? 'text-blue-600 font-semibold' : ''
+                        )}
+                        style={{ color: BRAND_COLORS.primary }}
+                      >
                         termos de uso
                       </a>{' '}
                       e{' '}
-                      <a href="#" className="underline" style={{ color: BRAND_COLORS.primary }}>
+                      <a 
+                        href="#" 
+                        className={cn(
+                          "underline transition-colors duration-300 hover:opacity-80",
+                          isTermsAnimated ? 'text-blue-600 font-semibold' : ''
+                        )}
+                        style={{ color: BRAND_COLORS.primary }}
+                      >
                         política de privacidade
                       </a>
+                      {registerData.acceptTerms && (
+                        <span className="ml-2 text-green-600 font-medium animate-fade-in">
+                          ✓ Aceito
+                        </span>
+                      )}
                     </label>
                   </div>
 
                   <Button
                     type="submit"
-                    className="w-full h-12 text-white font-semibold"
+                    className="w-full h-12 text-white font-semibold transition-all duration-300 ease-in-out hover:shadow-lg hover:scale-105"
                     style={{ backgroundColor: BRAND_COLORS.secondary }}
                     disabled={isLoading}
                   >
@@ -322,8 +499,42 @@ const Login = () => {
             </div>
           </CardContent>
         </Card>
+        </div>
+        
+        {/* Coluna da Direita - Robô Animado */}
+        <div className="hidden lg:flex justify-center items-center">
+          <div className="w-full max-w-md flex justify-center">
+            <div className="relative robot-container">
+              <img 
+                src={robo} 
+                alt="Robô Escrita360" 
+                className="w-80 h-80 object-contain hover:animate-pulse transition-all duration-500 ease-in-out hover:scale-110 cursor-pointer"
+                style={{ 
+                  filter: 'drop-shadow(0 15px 25px rgba(64, 112, 183, 0.4))'
+                }}
+              />
+              {/* Efeito de brilho animado */}
+              <div 
+                className="absolute inset-0 rounded-full robot-glow pointer-events-none"
+                style={{ 
+                  background: `radial-gradient(circle, ${BRAND_COLORS.primary}30 0%, ${BRAND_COLORS.accent}20 50%, transparent 70%)`
+                }}
+              />
+              {/* Círculos animados de fundo */}
+              <div 
+                className="absolute inset-0 rounded-full animate-ping opacity-10 pointer-events-none"
+                style={{ 
+                  background: `radial-gradient(circle, ${BRAND_COLORS.secondary}40 0%, transparent 60%)`,
+                  animationDuration: '3s',
+                  animationDelay: '0.5s'
+                }}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+    </>
   )
 }
 
