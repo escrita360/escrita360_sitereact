@@ -42,7 +42,9 @@ function Contato() {
         }),
       })
       if (response.ok) {
-        alert('Mensagem enviada com sucesso!')
+        const data = await response.json()
+        localStorage.setItem('chatSession', JSON.stringify(data))
+        alert('Mensagem enviada com sucesso! O chatbot foi iniciado.')
         setFormData({
           nome: '',
           email: '',

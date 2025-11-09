@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { MessageCircle, X, Send } from 'lucide-react'
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.jsx'
@@ -14,29 +14,46 @@ function ChatBot() {
   ])
   const [inputMessage, setInputMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [sessionId, setSessionId] = useState(null)
 
-  const handleSendMessage = async (e) => {
-    e.preventDefault()
-    if (!inputMessage.trim() || isLoading) return
+  useEffect(() => {
+    const sessionData = localStorage.getItem('chatSession')
+    if (sessionData) {
+      const data = JSON.parse(sessionData)
+      setSessionId(data.session_id)
+      setMessages([
+        { id: 1, text: data.message, sender: 'bot', buttons: data.buttons }
+      ])
+      setIsOpen(true)
+      localStorage.removeItem('chatSession')
+    }
+  }, [])
+
+  const handleSendMessage = async (message = inputMessage.trim()) => {
+    if (!message || isLoading) return
 
     // Adiciona mensagem do usuário
     const userMessage = {
       id: messages.length + 1,
-      text: inputMessage,
+      text: message,
       sender: 'user'
     }
-    setMessages([...messages, userMessage])
+    setMessages(prev => [...prev, userMessage])
     setInputMessage('')
     setIsLoading(true)
 
     try {
-      const response = await chatService.sendMessage(inputMessage.trim())
+      const response = await chatService.sendMessage(message, sessionId)
       const botMessage = {
         id: messages.length + 2,
         text: response.response,
-        sender: 'bot'
+        sender: 'bot',
+        buttons: response.buttons
       }
       setMessages(prev => [...prev, botMessage])
+      if (!sessionId && response.session_id) {
+        setSessionId(response.session_id)
+      }
     } catch (error) {
       console.error('Erro ao enviar mensagem:', error)
       const errorMessage = {
@@ -92,6 +109,21 @@ function ChatBot() {
                         }`}
                       >
                         {message.text}
+                        {message.buttons && message.buttons.length > 0 && (
+                          <div className="flex flex-wrap gap-2 mt-2">
+                            {message.buttons.map((button) => (
+                              <Button
+                                key={button.id}
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleSendMessage(button.id)}
+                                className="text-xs"
+                              >
+                                {button.text}
+                              </Button>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -99,7 +131,7 @@ function ChatBot() {
               </ScrollArea>
 
               {/* Área de Input */}
-              <form onSubmit={handleSendMessage} className="p-4 border-t">
+              <form onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} className="p-4 border-t">
                 <div className="flex gap-2">
                   <Input
                     type="text"
