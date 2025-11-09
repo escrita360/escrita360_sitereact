@@ -9,11 +9,58 @@ import { Separator } from '@/components/ui/separator.jsx'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
 import { PageHero } from '@/components/PageHero.jsx'
 import { Mail, Phone, MapPin, MessageSquare, Clock, Calendar, Gift, Handshake, GraduationCap, Headphones, Send, Facebook, Instagram, MessageCircle, Rocket, BookOpen, HelpCircle, CalendarDays } from 'lucide-react'
+import { useState } from 'react'
 
 function Contato() {
   const heroRef = useScrollAnimation()
   const formRef = useScrollAnimation()
   const contactRef = useScrollAnimation()
+  
+  const [formData, setFormData] = useState({
+    nome: '',
+    email: '',
+    telefone: '',
+    perfil: '',
+    instituicao: '',
+    assunto: '',
+    mensagem: '',
+    aceito: false
+  })
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await fetch('https://escrita360-n8n.nnjeij.easypanel.host/webhook/chatbot/start', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nome: formData.nome,
+          email: formData.email,
+          telefone: formData.telefone
+        }),
+      })
+      if (response.ok) {
+        alert('Mensagem enviada com sucesso!')
+        setFormData({
+          nome: '',
+          email: '',
+          telefone: '',
+          perfil: '',
+          instituicao: '',
+          assunto: '',
+          mensagem: '',
+          aceito: false
+        })
+      } else {
+        alert('Erro ao enviar mensagem.')
+      }
+    } catch (error) {
+      console.error('Error:', error)
+      alert('Erro ao enviar mensagem.')
+    }
+  }
   
   const getHeroContent = () => {
     return {
@@ -45,26 +92,26 @@ function Contato() {
                 <p className="text-slate-600 animate-fade-in-up delay-100">Preencha o formulário abaixo e retornaremos em até 24 horas</p>
               </CardHeader>
               <CardContent>
-                <form className="space-y-6">
+                <form className="space-y-6" onSubmit={handleSubmit}>
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="nome">Nome completo *</Label>
-                      <Input id="nome" placeholder="Seu nome" required />
+                      <Input id="nome" placeholder="Seu nome" value={formData.nome} onChange={(e) => setFormData({...formData, nome: e.target.value})} required />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="email">E-mail *</Label>
-                      <Input id="email" type="email" placeholder="seu@email.com" required />
+                      <Input id="email" type="email" placeholder="seu@email.com" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} required />
                     </div>
                   </div>
 
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="telefone">Telefone/WhatsApp *</Label>
-                      <Input id="telefone" type="tel" placeholder="(00) 00000-0000" required />
+                      <Input id="telefone" type="tel" placeholder="(00) 00000-0000" value={formData.telefone} onChange={(e) => setFormData({...formData, telefone: e.target.value})} required />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="perfil">Você é: *</Label>
-                      <Select required>
+                      <Select value={formData.perfil} onValueChange={(value) => setFormData({...formData, perfil: value})} required>
                         <SelectTrigger>
                           <SelectValue placeholder="Selecione..." />
                         </SelectTrigger>
@@ -81,12 +128,12 @@ function Contato() {
 
                   <div className="space-y-2">
                     <Label htmlFor="instituicao">Instituição (opcional)</Label>
-                    <Input id="instituicao" placeholder="Nome da sua escola, cursinho ou universidade" />
+                    <Input id="instituicao" placeholder="Nome da sua escola, cursinho ou universidade" value={formData.instituicao} onChange={(e) => setFormData({...formData, instituicao: e.target.value})} />
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="assunto">Assunto *</Label>
-                    <Select required>
+                    <Select value={formData.assunto} onValueChange={(value) => setFormData({...formData, assunto: value})} required>
                       <SelectTrigger>
                         <SelectValue placeholder="Selecione..." />
                       </SelectTrigger>
@@ -107,19 +154,21 @@ function Contato() {
                       id="mensagem"
                       placeholder="Conte-nos como podemos ajudar..."
                       rows={6}
+                      value={formData.mensagem}
+                      onChange={(e) => setFormData({...formData, mensagem: e.target.value})}
                       required
                     />
                   </div>
 
                   <div className="flex items-start space-x-2">
-                    <Checkbox id="aceito" required />
+                    <Checkbox id="aceito" checked={formData.aceito} onCheckedChange={(checked) => setFormData({...formData, aceito: checked})} required />
                     <Label htmlFor="aceito" className="text-sm leading-relaxed">
                       Aceito receber comunicações da Escrita360 e concordo com a{' '}
                       <a href="#" className="text-brand-primary hover:underline">Política de Privacidade</a>
                     </Label>
                   </div>
 
-                  <Button className="w-full bg-brand-primary hover:bg-brand-secondary text-white transition-all duration-300 hover:scale-105">
+                  <Button type="submit" className="w-full bg-brand-primary hover:bg-brand-secondary text-white transition-all duration-300 hover:scale-105">
                     <Send className="w-4 h-4 mr-2 animate-float" />
                     Enviar Mensagem
                   </Button>
