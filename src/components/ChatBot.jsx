@@ -138,7 +138,8 @@ function ChatBot() {
       setMessages([{ id: 1, text: res.message, sender: 'bot', buttons: res.buttons }])
     } catch (error) {
       console.error('Erro ao iniciar conversa:', error)
-      pushBotMessage('Erro ao iniciar conversa. Tente novamente mais tarde.')
+      const errorMessage = error.response?.data?.message || error.message || 'Erro ao iniciar conversa. Tente novamente mais tarde.'
+      pushBotMessage(errorMessage)
     } finally {
       setIsLoading(false)
     }

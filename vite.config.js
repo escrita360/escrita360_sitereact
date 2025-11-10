@@ -15,8 +15,9 @@ export default defineConfig({
   server: {
     proxy: {
       '/webhook': {
-        target: 'https://escrita360-n8n.nnjeij.easypanel.host/webhook',
+        target: 'https://escrita360-n8n.nnjeij.easypanel.host',
         changeOrigin: true,
+        secure: false,
       },
     },
   },
