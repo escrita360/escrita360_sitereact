@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { X, Send } from 'lucide-react'
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.jsx'
@@ -20,6 +20,20 @@ function ChatBot() {
   const [email, setEmail] = useState('')
   const [telefone, setTelefone] = useState('')
   const [formErrors, setFormErrors] = useState({})
+  const messagesEndRef = useRef(null)
+  const scrollAreaRef = useRef(null)
+
+  // Função para scroll automático
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
+  // Scroll quando mensagens mudam
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages])
 
   useEffect(() => {
     const sessionData = localStorage.getItem('chatSession')
@@ -147,31 +161,32 @@ function ChatBot() {
 
       {/* Janela do Chat */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 z-50 w-[450px] h-[600px] animate-fade-in-up">
+        <div className="fixed bottom-24 right-6 z-50 w-[450px] max-w-[calc(100vw-3rem)] h-[600px] max-h-[calc(100vh-8rem)] animate-fade-in-up">
           <Card className="h-full flex flex-col shadow-2xl bg-white">
-            <CardHeader className="bg-brand-primary text-white rounded-t-lg">
-              <CardTitle className="flex items-center gap-2">
-                <img src={robo} alt="Chat Bot" className="w-20 h-20" style={{ filter: 'brightness(0) invert(1)' }} />
+            <CardHeader className="bg-brand-primary text-white rounded-t-lg py-3">
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <img src={robo} alt="Chat Bot" className="w-12 h-12" style={{ filter: 'brightness(0) invert(1)' }} />
                 Chat de Suporte
               </CardTitle>
             </CardHeader>
-            <CardContent className="flex-1 flex flex-col p-0">
+            <CardContent className="flex-1 flex flex-col p-0 overflow-hidden">
               {/* Área de Mensagens */}
-              <ScrollArea className="flex-1 p-4">
-                <div className="space-y-4">
+              <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
+                <div className="space-y-4 pb-2">
                   {messages.map((message) => (
                     <div
                       key={message.id}
                       className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                     >
                       <div
-                        className={`max-w-[80%] rounded-lg px-4 py-2 ${
+                        className={`max-w-[80%] rounded-lg px-4 py-2 break-words overflow-wrap-anywhere ${
                           message.sender === 'user'
                             ? 'bg-brand-primary text-white'
                             : 'bg-slate-100 text-slate-900'
                         }`}
+                        style={{ wordBreak: 'break-word', overflowWrap: 'anywhere', hyphens: 'auto' }}
                       >
-                        {message.text}
+                        <p className="whitespace-pre-wrap">{message.text}</p>
                         {message.buttons && message.buttons.length > 0 && (
                           <div className="flex flex-wrap gap-2 mt-2">
                             {message.buttons.map((button) => (
@@ -180,7 +195,7 @@ function ChatBot() {
                                 variant="outline"
                                 size="sm"
                                 onClick={() => handleSendMessage(button.id)}
-                                className="text-xs"
+                                className="text-xs bg-white hover:bg-slate-50"
                               >
                                 {button.text}
                               </Button>
@@ -190,52 +205,56 @@ function ChatBot() {
                       </div>
                     </div>
                   ))}
+                  <div ref={messagesEndRef} />
                 </div>
               </ScrollArea>
 
               {/* Área de Input / Formulário inicial */}
-              <div className="p-4 border-t">
+              <div className="p-4 border-t bg-white">
                 {!sessionId ? (
-                  <form onSubmit={handleStartConversation} className="space-y-2">
+                  <form onSubmit={handleStartConversation} className="space-y-3">
                     <div>
-                      <Label htmlFor="nome">Nome completo</Label>
+                      <Label htmlFor="nome" className="text-sm">Nome completo</Label>
                       <Input
                         id="nome"
                         type="text"
                         value={nome}
                         onChange={handleNomeChange}
                         disabled={isLoading}
-                        className={formErrors.nome ? 'border-red-500' : ''}
+                        className={`text-sm ${formErrors.nome ? 'border-red-500' : ''}`}
+                        placeholder="Digite seu nome"
                       />
-                      {formErrors.nome && <p className="text-red-500 text-sm">{formErrors.nome}</p>}
+                      {formErrors.nome && <p className="text-red-500 text-xs mt-1">{formErrors.nome}</p>}
                     </div>
                     <div>
-                      <Label htmlFor="email">Email</Label>
+                      <Label htmlFor="email" className="text-sm">Email</Label>
                       <Input
                         id="email"
                         type="email"
                         value={email}
                         onChange={handleEmailChange}
                         disabled={isLoading}
-                        className={formErrors.email ? 'border-red-500' : ''}
+                        className={`text-sm ${formErrors.email ? 'border-red-500' : ''}`}
+                        placeholder="seu@email.com"
                       />
-                      {formErrors.email && <p className="text-red-500 text-sm">{formErrors.email}</p>}
+                      {formErrors.email && <p className="text-red-500 text-xs mt-1">{formErrors.email}</p>}
                     </div>
                     <div>
-                      <Label htmlFor="telefone">Telefone (apenas números)</Label>
+                      <Label htmlFor="telefone" className="text-sm">Telefone</Label>
                       <Input
                         id="telefone"
                         type="text"
                         value={telefone}
                         onChange={handleTelefoneChange}
                         disabled={isLoading}
-                        className={formErrors.telefone ? 'border-red-500' : ''}
+                        className={`text-sm ${formErrors.telefone ? 'border-red-500' : ''}`}
+                        placeholder="(00) 00000-0000"
                       />
-                      {formErrors.telefone && <p className="text-red-500 text-sm">{formErrors.telefone}</p>}
+                      {formErrors.telefone && <p className="text-red-500 text-xs mt-1">{formErrors.telefone}</p>}
                     </div>
-                    <div className="flex justify-end">
-                      <Button type="submit" disabled={isLoading} className="bg-brand-primary text-white">
-                        Começar Conversa
+                    <div className="flex justify-end pt-2">
+                      <Button type="submit" disabled={isLoading} className="bg-brand-primary text-white hover:bg-brand-secondary">
+                        {isLoading ? 'Iniciando...' : 'Começar Conversa'}
                       </Button>
                     </div>
                   </form>
@@ -246,10 +265,21 @@ function ChatBot() {
                       placeholder="Digite sua mensagem..."
                       value={inputMessage}
                       onChange={(e) => setInputMessage(e.target.value)}
-                      className="flex-1"
+                      className="flex-1 text-sm"
                       disabled={isLoading}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault()
+                          handleSendMessage()
+                        }
+                      }}
                     />
-                    <Button type="submit" size="icon" className="bg-brand-primary hover:bg-brand-secondary text-white" disabled={isLoading}>
+                    <Button 
+                      type="submit" 
+                      size="icon" 
+                      className="bg-brand-primary hover:bg-brand-secondary text-white shrink-0" 
+                      disabled={isLoading || !inputMessage.trim()}
+                    >
                       <Send className="w-4 h-4" />
                     </Button>
                   </form>
