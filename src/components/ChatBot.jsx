@@ -113,6 +113,23 @@ function ChatBot() {
     if (formErrors.telefone) setFormErrors(prev => ({ ...prev, telefone: '' }))
   }
 
+  const handleStartConversation = async (e) => {
+    e && e.preventDefault()
+    if (!validateForm()) return
+    setIsLoading(true)
+    try {
+      const res = await chatService.startConversation({ nome, email, telefone })
+      if (res.session_id) setSessionId(res.session_id)
+      // Limpa mensagens e adiciona a resposta inicial do bot
+      setMessages([{ id: 1, text: res.message, sender: 'bot', buttons: res.buttons }])
+    } catch (error) {
+      console.error('Erro ao iniciar conversa:', error)
+      pushBotMessage('Erro ao iniciar conversa. Tente novamente mais tarde.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return (
     <div>
       {/* Botão Flutuante */}
