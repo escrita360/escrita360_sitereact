@@ -1,16 +1,40 @@
-import api from './api'
+import axios from 'axios'
+
+// Use VITE_CHATBOT_URL if provided, otherwise fallback to VITE_API_URL
+const CHATBOT_URL = import.meta.env.VITE_CHATBOT_URL || import.meta.env.VITE_API_URL || 'http://localhost:5000'
+
+const client = axios.create({
+  baseURL: CHATBOT_URL,
+  headers: { 'Content-Type': 'application/json' },
+})
 
 export const chatService = {
   /**
-   * Envia uma mensagem para o chatbot e recebe a resposta
-   * @param {string} message - Mensagem do usuário
-   * @param {string} sessionId - ID da sessão do chat
-   * @returns {Promise<Object>} - Resposta do bot { response: string, buttons?: array }
+   * Inicia uma nova conversa (POST /chatbot/start)
+   * @param {{nome:string,email:string,telefone:string}} data
    */
-  async sendMessage(message, sessionId = null) {
-    const payload = { message }
-    if (sessionId) payload.session_id = sessionId
-    const response = await api.post('/chat/message', payload)
-    return response.data
+  async startConversation(data) {
+    const res = await client.post('/chatbot/start', data)
+    return res.data
+  },
+
+  /**
+   * Envia a escolha do usuário (POST /chatbot/message)
+   * @param {string} sessionId
+   * @param {string} choice - id do botão (não o texto)
+   */
+  async sendChoice(sessionId, choice) {
+    const payload = { session_id: sessionId, choice }
+    const res = await client.post('/chatbot/message', payload)
+    return res.data
+  },
+
+  /**
+   * Finaliza a conversa e cria lead (POST /chatbot/finalize)
+   * @param {string} sessionId
+   */
+  async finalizeConversation(sessionId) {
+    const res = await client.post('/chatbot/finalize', { session_id: sessionId })
+    return res.data
   },
 }

@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
-import { MessageCircle, X, Send } from 'lucide-react'
+import { X, Send } from 'lucide-react'
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 import { Input } from '@/components/ui/input.jsx'
+import { Label } from '@/components/ui/label.jsx'
 import { ScrollArea } from '@/components/ui/scroll-area.jsx'
 import robo from '@/assets/robo.svg'
 import { chatService } from '@/services/chat.js'
@@ -15,6 +16,10 @@ function ChatBot() {
   const [inputMessage, setInputMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [sessionId, setSessionId] = useState(null)
+  const [nome, setNome] = useState('')
+  const [email, setEmail] = useState('')
+  const [telefone, setTelefone] = useState('')
+  const [formErrors, setFormErrors] = useState({})
 
   useEffect(() => {
     const sessionData = localStorage.getItem('chatSession')
@@ -28,6 +33,28 @@ function ChatBot() {
       localStorage.removeItem('chatSession')
     }
   }, [])
+
+  // Helper: add bot message
+  const pushBotMessage = (text, buttons) => {
+    const botMessage = {
+      id: messages.length + 1,
+      text,
+      sender: 'bot',
+      buttons: buttons || []
+    }
+    setMessages(prev => [...prev, botMessage])
+  }
+
+  const validateForm = () => {
+    const errors = {}
+    if (!nome.trim()) errors.nome = 'Nome é obrigatório'
+    if (!email.trim()) errors.email = 'Email é obrigatório'
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.email = 'Email inválido'
+    if (!telefone.trim()) errors.telefone = 'Telefone é obrigatório'
+    else if (!/^\d{10,11}$/.test(telefone.replace(/\D/g, ''))) errors.telefone = 'Telefone deve ter 10-11 dígitos'
+    setFormErrors(errors)
+    return Object.keys(errors).length === 0
+  }
 
   const handleSendMessage = async (message = inputMessage.trim()) => {
     if (!message || isLoading) return
@@ -43,28 +70,47 @@ function ChatBot() {
     setIsLoading(true)
 
     try {
-      const response = await chatService.sendMessage(message, sessionId)
-      const botMessage = {
-        id: messages.length + 2,
-        text: response.response,
-        sender: 'bot',
-        buttons: response.buttons
+      // Se a escolha for 'comprar', chamar finalize
+      if (message === 'comprar') {
+        const fin = await chatService.finalizeConversation(sessionId)
+        pushBotMessage(fin.message)
+        setIsLoading(false)
+        return
       }
-      setMessages(prev => [...prev, botMessage])
+
+      // Enviar escolha/texto para o chatbot
+      const response = await chatService.sendChoice(sessionId, message)
+
+      // Resposta pode ter message e buttons
+      if (response.message) {
+        pushBotMessage(response.message, response.buttons)
+      }
+
+      // Se não havia sessionId e veio uma session_id no retorno, guardar
       if (!sessionId && response.session_id) {
         setSessionId(response.session_id)
       }
     } catch (error) {
       console.error('Erro ao enviar mensagem:', error)
-      const errorMessage = {
-        id: messages.length + 2,
-        text: 'Desculpe, houve um erro. Tente novamente mais tarde.',
-        sender: 'bot'
-      }
-      setMessages(prev => [...prev, errorMessage])
+      pushBotMessage('Desculpe, houve um erro. Tente novamente mais tarde.')
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const handleNomeChange = (e) => {
+    setNome(e.target.value)
+    if (formErrors.nome) setFormErrors(prev => ({ ...prev, nome: '' }))
+  }
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value)
+    if (formErrors.email) setFormErrors(prev => ({ ...prev, email: '' }))
+  }
+
+  const handleTelefoneChange = (e) => {
+    setTelefone(e.target.value)
+    if (formErrors.telefone) setFormErrors(prev => ({ ...prev, telefone: '' }))
   }
 
   return (
@@ -130,22 +176,68 @@ function ChatBot() {
                 </div>
               </ScrollArea>
 
-              {/* Área de Input */}
-              <form onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} className="p-4 border-t">
-                <div className="flex gap-2">
-                  <Input
-                    type="text"
-                    placeholder="Digite sua mensagem..."
-                    value={inputMessage}
-                    onChange={(e) => setInputMessage(e.target.value)}
-                    className="flex-1"
-                    disabled={isLoading}
-                  />
-                  <Button type="submit" size="icon" className="bg-brand-primary hover:bg-brand-secondary text-white" disabled={isLoading}>
-                    <Send className="w-4 h-4" />
-                  </Button>
-                </div>
-              </form>
+              {/* Área de Input / Formulário inicial */}
+              <div className="p-4 border-t">
+                {!sessionId ? (
+                  <form onSubmit={handleStartConversation} className="space-y-2">
+                    <div>
+                      <Label htmlFor="nome">Nome completo</Label>
+                      <Input
+                        id="nome"
+                        type="text"
+                        value={nome}
+                        onChange={handleNomeChange}
+                        disabled={isLoading}
+                        className={formErrors.nome ? 'border-red-500' : ''}
+                      />
+                      {formErrors.nome && <p className="text-red-500 text-sm">{formErrors.nome}</p>}
+                    </div>
+                    <div>
+                      <Label htmlFor="email">Email</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={email}
+                        onChange={handleEmailChange}
+                        disabled={isLoading}
+                        className={formErrors.email ? 'border-red-500' : ''}
+                      />
+                      {formErrors.email && <p className="text-red-500 text-sm">{formErrors.email}</p>}
+                    </div>
+                    <div>
+                      <Label htmlFor="telefone">Telefone (apenas números)</Label>
+                      <Input
+                        id="telefone"
+                        type="text"
+                        value={telefone}
+                        onChange={handleTelefoneChange}
+                        disabled={isLoading}
+                        className={formErrors.telefone ? 'border-red-500' : ''}
+                      />
+                      {formErrors.telefone && <p className="text-red-500 text-sm">{formErrors.telefone}</p>}
+                    </div>
+                    <div className="flex justify-end">
+                      <Button type="submit" disabled={isLoading} className="bg-brand-primary text-white">
+                        Começar Conversa
+                      </Button>
+                    </div>
+                  </form>
+                ) : (
+                  <form onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} className="flex gap-2">
+                    <Input
+                      type="text"
+                      placeholder="Digite sua mensagem..."
+                      value={inputMessage}
+                      onChange={(e) => setInputMessage(e.target.value)}
+                      className="flex-1"
+                      disabled={isLoading}
+                    />
+                    <Button type="submit" size="icon" className="bg-brand-primary hover:bg-brand-secondary text-white" disabled={isLoading}>
+                      <Send className="w-4 h-4" />
+                    </Button>
+                  </form>
+                )}
+              </div>
             </CardContent>
           </Card>
         </div>
