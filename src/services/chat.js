@@ -1,7 +1,9 @@
 import axios from 'axios'
 
-// Use VITE_CHATBOT_URL if provided, otherwise fallback to VITE_API_URL
-const CHATBOT_URL = import.meta.env.VITE_CHATBOT_URL || import.meta.env.VITE_API_URL || 'http://localhost:5000'
+// Use proxy em desenvolvimento, URL direta em produção
+const CHATBOT_URL = import.meta.env.DEV 
+  ? '/api/chatbot' 
+  : (import.meta.env.VITE_CHATBOT_URL || 'https://escrita360-n8n.nnjeij.easypanel.host/webhook')
 
 const client = axios.create({
   baseURL: CHATBOT_URL,

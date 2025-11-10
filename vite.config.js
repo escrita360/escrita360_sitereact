@@ -12,4 +12,14 @@ export default defineConfig({
       "@": path.resolve(path.dirname(fileURLToPath(import.meta.url)), "./src"),
     },
   },
+  server: {
+    proxy: {
+      '/api/chatbot': {
+        target: 'https://escrita360-n8n.nnjeij.easypanel.host/webhook',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api\/chatbot/, '/chatbot'),
+      },
+    },
+  },
 })
