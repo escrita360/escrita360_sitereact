@@ -12,13 +12,4 @@ export default defineConfig({
       "@": path.resolve(path.dirname(fileURLToPath(import.meta.url)), "./src"),
     },
   },
-  server: {
-    proxy: {
-      '/webhook': {
-        target: 'https://escrita360-n8n.nnjeij.easypanel.host',
-        changeOrigin: true,
-        secure: false,
-      },
-    },
-  },
 })

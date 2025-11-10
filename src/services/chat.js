@@ -4,8 +4,11 @@ import axios from 'axios'
 const CHATBOT_URL = import.meta.env.VITE_CHATBOT_URL || import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
 const client = axios.create({
-  baseURL: import.meta.env.DEV ? '/webhook' : CHATBOT_URL,
-  headers: { 'Content-Type': 'application/json' },
+  baseURL: CHATBOT_URL,
+  headers: { 
+    'Content-Type': 'application/json',
+  },
+  withCredentials: false,
 })
 
 export const chatService = {
