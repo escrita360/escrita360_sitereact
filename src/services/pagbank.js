@@ -8,12 +8,14 @@ const PAGBANK_CONFIG = {
   sandbox: {
     baseUrl: 'https://ws.sandbox.pagseguro.uol.com.br',
     authUrl: 'https://sandbox.pagseguro.uol.com.br/connect/oauth2/authorize',
-    tokenUrl: 'https://ws.sandbox.pagseguro.uol.com.br/connect/oauth2/token'
+    tokenUrl: 'https://ws.sandbox.pagseguro.uol.com.br/connect/oauth2/token',
+    subscriptionsUrl: 'https://sandbox.api.assinaturas.pagseguro.com'
   },
   production: {
     baseUrl: 'https://ws.pagseguro.uol.com.br',
     authUrl: 'https://pagseguro.uol.com.br/connect/oauth2/authorize',
-    tokenUrl: 'https://ws.pagseguro.uol.com.br/connect/oauth2/token'
+    tokenUrl: 'https://ws.pagseguro.uol.com.br/connect/oauth2/token',
+    subscriptionsUrl: 'https://api.assinaturas.pagseguro.com'
   }
 }
 
@@ -58,6 +60,41 @@ class PagBankService {
       return await response.json()
     } catch (error) {
       console.error('PagBank API Error:', error)
+      throw error
+    }
+  }
+
+  /**
+   * Faz requisições autenticadas para a API de Assinaturas do PagBank
+   */
+  async makeSubscriptionsRequest(endpoint, options = {}) {
+    const url = `${this.config.subscriptionsUrl}${endpoint}`
+    
+    const defaultHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.token}`,
+      'Accept': 'application/json'
+    }
+
+    const requestOptions = {
+      ...options,
+      headers: {
+        ...defaultHeaders,
+        ...options.headers
+      }
+    }
+
+    try {
+      const response = await fetch(url, requestOptions)
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.message || `HTTP Error: ${response.status}`)
+      }
+
+      return await response.json()
+    } catch (error) {
+      console.error('PagBank Subscriptions API Error:', error)
       throw error
     }
   }
@@ -290,6 +327,37 @@ class PagBankService {
   async cancelOrder(orderId) {
     return await this.makeRequest(`/orders/${orderId}/cancel`, {
       method: 'POST'
+    })
+  }
+
+  /**
+   * Consulta cliente por ID (API de Assinaturas)
+   */
+  async getCustomer(customerId) {
+    return await this.makeSubscriptionsRequest(`/customers/${customerId}`)
+  }
+
+  /**
+   * Cria um novo cliente (API de Assinaturas)
+   */
+  async createCustomer(customerData) {
+    const {
+      name,
+      email,
+      tax_id,
+      phone
+    } = customerData
+
+    const payload = {
+      name,
+      email,
+      tax_id: this.formatTaxId(tax_id),
+      phone: this.formatPhone(phone)
+    }
+
+    return await this.makeSubscriptionsRequest('/customers', {
+      method: 'POST',
+      body: JSON.stringify(payload)
     })
   }
 
