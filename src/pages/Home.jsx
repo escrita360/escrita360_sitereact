@@ -17,7 +17,7 @@ function Home() {
         <div className="container mx-auto max-w-7xl">
           <div className="grid lg:grid-cols-2 items-center gap-8">
             <div className="hero-content animate-fade-in-left text-center lg:text-left">
-              <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl mb-6 leading-tight">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl mb-4 leading-tight text-center">
                 <span style={{ color: '#2b7475', fontWeight: 'normal' }}>Inovamos para oferecer a plataforma mais completa </span>
                 <span style={{ color: '#569e9d', fontWeight: 'bold' }}>para o desenvolvimento da escrita, </span>
                 <span style={{ color: '#569e9d', fontWeight: 'normal' }}>unindo </span>
