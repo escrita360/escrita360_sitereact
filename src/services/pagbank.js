@@ -21,12 +21,16 @@ const PAGBANK_CONFIG = {
 
 class PagBankService {
   constructor() {
-    this.environment = import.meta.env.VITE_PAGBANK_ENV || 'sandbox'
+    // Suporte para Node.js (scripts) e Vite (frontend)
+    const isNode = typeof process !== 'undefined' && process.env
+    const env = isNode ? process.env : import.meta.env
+    
+    this.environment = env.VITE_PAGBANK_ENV || 'sandbox'
     this.config = PAGBANK_CONFIG[this.environment]
-    this.token = import.meta.env.VITE_PAGBANK_TOKEN
-    this.appId = import.meta.env.VITE_PAGBANK_APP_ID
-    this.clientId = import.meta.env.VITE_PAGBANK_CLIENT_ID
-    this.clientSecret = import.meta.env.VITE_PAGBANK_CLIENT_SECRET
+    this.token = env.VITE_PAGBANK_TOKEN
+    this.appId = env.VITE_PAGBANK_APP_ID
+    this.clientId = env.VITE_PAGBANK_CLIENT_ID
+    this.clientSecret = env.VITE_PAGBANK_CLIENT_SECRET
   }
 
   /**
@@ -426,8 +430,14 @@ class PagBankService {
   }
 }
 
-// Instância singleton
-export const pagBankService = new PagBankService()
+// Instância singleton lazy
+let _pagBankService = null
+export const pagBankService = (() => {
+  if (!_pagBankService) {
+    _pagBankService = new PagBankService()
+  }
+  return _pagBankService
+})()
 
 // Exporta também a classe para testes
 export { PagBankService }

@@ -11,6 +11,7 @@ import Login from './pages/Login.jsx'
 import Pagamento from './pages/Pagamento.jsx'
 import PagamentoSucesso from './pages/PagamentoSucesso.jsx'
 import PagamentoCancelado from './pages/PagamentoCancelado.jsx'
+import PagBankSandbox from './pages/PagBankSandbox.jsx'
 import './App.css'
 
 function App() {
@@ -131,7 +132,7 @@ function App() {
             </motion.div>
           </Layout>
         } />
-        <Route path="/payment/success" element={
+        <Route path="/pagamento-sucesso" element={
           <Layout>
             <motion.div
               initial="initial"
@@ -144,7 +145,7 @@ function App() {
             </motion.div>
           </Layout>
         } />
-        <Route path="/payment/cancel" element={
+        <Route path="/pagamento-cancelado" element={
           <Layout>
             <motion.div
               initial="initial"
@@ -154,6 +155,19 @@ function App() {
               transition={pageTransition}
             >
               <PagamentoCancelado />
+            </motion.div>
+          </Layout>
+        } />
+        <Route path="/sandbox/pagbank" element={
+          <Layout>
+            <motion.div
+              initial="initial"
+              animate="in"
+              exit="out"
+              variants={pageVariants}
+              transition={pageTransition}
+            >
+              <PagBankSandbox />
             </motion.div>
           </Layout>
         } />

@@ -8,7 +8,12 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "vite"
+    "start": "vite",
+    "test:pagbank": "node scripts/test-pagbank-sandbox.js",
+    "test:pagbank:config": "node scripts/test-pagbank-sandbox.js test config",
+    "test:pagbank:card": "node scripts/test-pagbank-sandbox.js test card",
+    "test:pagbank:pix": "node scripts/test-pagbank-sandbox.js test pix",
+    "test:pagbank:boleto": "node scripts/test-pagbank-sandbox.js test boleto"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
@@ -44,9 +49,11 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "date-fns": "^3.0.0",
+    "dotenv": "^17.2.3",
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.15.0",
     "input-otp": "^1.4.2",
+    "jsencrypt": "^3.5.4",
     "lucide-react": "^0.510.0",
     "next-themes": "^0.4.6",
     "react": "^19.1.0",
