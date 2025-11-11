@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
@@ -7,39 +7,36 @@ import { CreditCard, Smartphone, FileText, Loader2, CheckCircle2, AlertCircle, C
 import { paymentService } from '@/services/payment'
 import { toast } from 'sonner'
 
-const PaymentMethodCard = ({ icon: Icon, title, description, isSelected, onClick, isDisabled = false }) => {
-  const IconComponent = Icon // Usar IconComponent para evitar warning
-  return (
-    <Card 
-      className={`cursor-pointer transition-all duration-200 hover:shadow-md ${
-        isSelected ? 'ring-2 ring-blue-500 bg-blue-50' : 'hover:bg-gray-50'
-      } ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-      onClick={!isDisabled ? onClick : undefined}
-    >
-      <CardContent className="flex items-center p-4">
-        <IconComponent className={`w-6 h-6 mr-3 ${isSelected ? 'text-blue-600' : 'text-gray-600'}`} />
-        <div className="flex-1">
-          <h3 className={`font-medium ${isSelected ? 'text-blue-900' : 'text-gray-900'}`}>
-            {title}
-          </h3>
-          <p className={`text-sm ${isSelected ? 'text-blue-700' : 'text-gray-600'}`}>
-            {description}
-          </p>
-        </div>
-        {isSelected && <CheckCircle2 className="w-5 h-5 text-blue-600" />}
-      </CardContent>
-    </Card>
-  )
-}
+const PaymentMethodCard = ({ icon: Icon, title, description, isSelected, onClick, isDisabled = false }) => (
+  <Card 
+    className={`cursor-pointer transition-all duration-200 hover:shadow-md ${
+      isSelected ? 'ring-2 ring-blue-500 bg-blue-50' : 'hover:bg-gray-50'
+    } ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+    onClick={!isDisabled ? onClick : undefined}
+  >
+    <CardContent className="flex items-center p-4">
+      <Icon className={`w-6 h-6 mr-3 ${isSelected ? 'text-blue-600' : 'text-gray-600'}`} />
+      <div className="flex-1">
+        <h3 className={`font-medium ${isSelected ? 'text-blue-900' : 'text-gray-900'}`}>
+          {title}
+        </h3>
+        <p className={`text-sm ${isSelected ? 'text-blue-700' : 'text-gray-600'}`}>
+          {description}
+        </p>
+      </div>
+      {isSelected && <CheckCircle2 className="w-5 h-5 text-blue-600" />}
+    </CardContent>
+  </Card>
+)
 
-const PixPayment = ({ paymentData, onError }) => {
+const PixPayment = ({ paymentData, onSuccess, onError }) => {
   const [pixData, setPixData] = useState(null)
   const [isGenerating, setIsGenerating] = useState(false)
   const [timeLeft, setTimeLeft] = useState(1800) // 30 minutos
 
   useEffect(() => {
     generatePix()
-  }, [generatePix])
+  }, [])
 
   useEffect(() => {
     if (timeLeft > 0) {
@@ -48,7 +45,7 @@ const PixPayment = ({ paymentData, onError }) => {
     }
   }, [timeLeft])
 
-  const generatePix = useCallback(async () => {
+  const generatePix = async () => {
     setIsGenerating(true)
     try {
       const result = await paymentService.createPagBankPixPayment(paymentData)
@@ -64,7 +61,7 @@ const PixPayment = ({ paymentData, onError }) => {
     } finally {
       setIsGenerating(false)
     }
-  }, [paymentData, onError])
+  }
 
   const copyPixCode = () => {
     if (pixData?.qr_codes?.[0]?.text) {
@@ -160,15 +157,15 @@ const PixPayment = ({ paymentData, onError }) => {
   )
 }
 
-const BoletoPayment = ({ paymentData, onError }) => {
+const BoletoPayment = ({ paymentData, onSuccess, onError }) => {
   const [boletoData, setBoletoData] = useState(null)
   const [isGenerating, setIsGenerating] = useState(false)
 
   useEffect(() => {
     generateBoleto()
-  }, [generateBoleto])
+  }, [])
 
-  const generateBoleto = useCallback(async () => {
+  const generateBoleto = async () => {
     setIsGenerating(true)
     try {
       // TODO: Implementar geração de boleto via PagBank
@@ -187,7 +184,7 @@ const BoletoPayment = ({ paymentData, onError }) => {
       onError('Erro ao gerar boleto: ' + error.message)
       setIsGenerating(false)
     }
-  }, [onError])
+  }
 
   if (isGenerating) {
     return (
@@ -248,6 +245,7 @@ const BoletoPayment = ({ paymentData, onError }) => {
 
 export function PagBankCheckout({ planData, customerData, onSuccess, onError }) {
   const [selectedMethod, setSelectedMethod] = useState('credit_card')
+  const [isProcessing, setIsProcessing] = useState(false)
 
   const paymentMethods = [
     {
