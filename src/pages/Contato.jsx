@@ -26,6 +26,7 @@ function Contato() {
     mensagem: '',
     aceito: false
   })
+  const [feedback, setFeedback] = useState('')
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -61,6 +62,16 @@ function Contato() {
     } catch (error) {
       console.error('Error:', error)
       alert('Erro ao enviar mensagem.')
+    }
+  }
+  
+  const handleFeedbackSubmit = (e) => {
+    e.preventDefault();
+    if (feedback.trim()) {
+      alert('Obrigado pelo seu feedback! Ele foi enviado com sucesso.');
+      setFeedback('');
+    } else {
+      alert('Por favor, escreva seu feedback antes de enviar.');
     }
   }
   
@@ -275,96 +286,32 @@ function Contato() {
         </div>
       </section>
 
-      {/* FAQ Section */}
+      {/* Feedback Section */}
       <section ref={contactRef} className="py-16 bg-white animate-on-scroll">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4 animate-fade-in-up">Perguntas Frequentes</h2>
-            <p className="text-xl text-slate-600 animate-fade-in-up delay-200">Encontre respostas rápidas antes de entrar em contato</p>
+            <h2 className="text-3xl font-bold text-slate-900 mb-4 animate-fade-in-up">Deixe seu Feedback</h2>
+            <p className="text-xl text-slate-600 animate-fade-in-up delay-200">Sua opinião é importante para nós. Compartilhe suas sugestões e experiências.</p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            <Card className="p-6 shadow-lg hover-lift animate-fade-in-up delay-100">
-              <CardContent className="pt-0">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center flex-shrink-0">
-                    <Clock className="w-6 h-6 text-brand-primary animate-pulse-glow" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-slate-900 mb-2">Qual o tempo de resposta?</h3>
-                    <p className="text-slate-600 text-sm">Respondemos todas as mensagens em até 24 horas úteis. Para urgências, utilize o WhatsApp.</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="p-6 shadow-lg hover-lift animate-fade-in-up delay-200">
-              <CardContent className="pt-0">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center flex-shrink-0">
-                    <Calendar className="w-6 h-6 text-brand-primary animate-pulse-glow" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-slate-900 mb-2">Como agendar uma demonstração?</h3>
-                    <p className="text-slate-600 text-sm">Preencha o formulário selecionando "Solicitar Demonstração" ou clique no botão "Agendar Demo".</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="p-6 shadow-lg hover-lift animate-fade-in-up delay-300">
-              <CardContent className="pt-0">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Gift className="w-6 h-6 text-green-600 animate-pulse-glow" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-slate-900 mb-2">O teste é realmente grátis?</h3>
-                    <p className="text-slate-600 text-sm">Sim! Não solicitamos cartão de crédito e você pode usar gratuitamente para sempre com o plano básico.</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="p-6 shadow-lg hover-lift animate-fade-in-up delay-400">
-              <CardContent className="pt-0">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center flex-shrink-0">
-                    <Handshake className="w-6 h-6 text-brand-primary animate-pulse-glow" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-slate-900 mb-2">Oferecem consultoria?</h3>
-                    <p className="text-slate-600 text-sm">Sim! Planos para escolas incluem consultoria pedagógica personalizada.</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="p-6 shadow-lg hover-lift animate-fade-in-up delay-500">
-              <CardContent className="pt-0">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center flex-shrink-0">
-                    <GraduationCap className="w-6 h-6 text-brand-primary animate-pulse-glow" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-slate-900 mb-2">Há treinamento disponível?</h3>
-                    <p className="text-slate-600 text-sm">Todos os planos pagos incluem treinamento. Escolas recebem treinamento personalizado completo.</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="p-6 shadow-lg hover-lift animate-fade-in-up delay-600">
-              <CardContent className="pt-0">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-brand-light rounded-full flex items-center justify-center flex-shrink-0">
-                    <Headphones className="w-6 h-6 text-brand-primary animate-pulse-glow" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-slate-900 mb-2">Como funciona o suporte?</h3>
-                    <p className="text-slate-600 text-sm">Oferecemos suporte por e-mail, WhatsApp e telefone. Planos superiores têm suporte prioritário.</p>
-                  </div>
-                </div>
+          <div className="max-w-2xl mx-auto">
+            <Card className="shadow-lg hover-lift animate-fade-in-up">
+              <CardHeader>
+                <CardTitle className="text-center" style={{ color: '#1A5B94' }}>Envie seu Feedback</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleFeedbackSubmit}>
+                  <Textarea
+                    placeholder="Escreva seu feedback aqui..."
+                    value={feedback}
+                    onChange={(e) => setFeedback(e.target.value)}
+                    className="mb-4"
+                    rows={8}
+                  />
+                  <Button type="submit" className="w-full" style={{ backgroundColor: '#1A5B94', color: 'white' }}>
+                    Enviar Feedback
+                  </Button>
+                </form>
               </CardContent>
             </Card>
           </div>
