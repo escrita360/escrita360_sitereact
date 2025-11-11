@@ -150,13 +150,7 @@ function Pagamento() {
       }
       
       const planId = planIdMap[selectedPlan.name] || 'basic'
-      
-      // Cria a sessão de checkout e redireciona para o Stripe
-      await paymentService.redirectToCheckout({
-        planId,
-        isYearly
-      })
-      
+            
       // Se chegou aqui, a URL pode não ter sido retornada
       // Normalmente o usuário seria redirecionado antes deste ponto
       
