@@ -506,25 +506,7 @@ class PagBankService {
     return await this.makeRequest('/public-keys')
   }
 
-  /**
-   * Valida webhook do PagBank
-   */
-  validateWebhook(payload, signature, publicKey) {
-    // Implementar validação de assinatura conforme documentação
-    // Esta é uma implementação básica - em produção, usar crypto apropriado
-    try {
-      const crypto = require('crypto')
-      const expectedSignature = crypto
-        .createHmac('sha256', publicKey)
-        .update(payload)
-        .digest('hex')
-      
-      return signature === expectedSignature
-    } catch (error) {
-      console.error('Erro na validação do webhook:', error)
-      return false
-    }
-  }
+
 
   /**
    * Métodos utilitários
