@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card.jsx'
 import { Check, X, PenTool, Brain, TrendingUp, GraduationCap, School, Edit, FileText, CheckCircle, Bot, RotateCcw, Trophy, Heart, Target, BarChart, Users, UserCheck, BookOpen, Award, Cloud, Clock } from 'lucide-react'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
 import logo from '@/assets/logo2.svg'
-import usuaria from '@/assets/usuaria.svg'
+import notebook from '@/assets/Escrita360 - notebook.svg'
 
 function Home() {
   const heroRef = useScrollAnimation()
@@ -43,9 +43,9 @@ function Home() {
             </div>
             <div className="hero-image flex justify-center">
                 <img 
-                  src={usuaria} 
-                  alt="Usuária Escrita360" 
-                  className="w-full max-w-md h-auto"
+                  src={notebook} 
+                  alt="Plataforma Escrita360" 
+                  className="w-full h-auto"
                 />
             </div>
           </div>
