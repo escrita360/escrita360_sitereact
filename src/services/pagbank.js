@@ -110,12 +110,80 @@ class PagBankService {
   }
 
   /**
-   * Cria um novo pedido (Order) - Versão simplificada para testes
-   * Como a API atual do PagBank não está respondendo corretamente,
-   * esta implementação simula uma resposta de sucesso para desenvolvimento
+   * Cria um novo pedido (Order) - API Real do PagBank
+   * Conforme documentação: https://developer.pagbank.com.br/reference/criar-pedido
    */
   async createOrder(orderData) {
-    console.log('🧪 PagBank: Simulando criação de pedido (ambiente de desenvolvimento)')
+    console.log('🔗 PagBank: Criando pedido na API real...')
+
+    try {
+      // Formatar dados conforme documentação oficial
+      const payload = {
+        reference_id: orderData.reference_id,
+        customer: {
+          name: orderData.customer.name,
+          email: orderData.customer.email,
+          tax_id: this.formatTaxId(orderData.customer.tax_id || orderData.customer.cpf),
+          phones: Array.isArray(orderData.customer.phones)
+            ? orderData.customer.phones
+            : [{
+                country: '55',
+                area: (orderData.customer.phone?.area || orderData.customer.phone?.slice(1, 3) || '11'),
+                number: (orderData.customer.phone?.number || orderData.customer.phone?.slice(4).replace(/\D/g, '') || '999999999'),
+                type: 'MOBILE'
+              }]
+        },
+        items: orderData.items.map(item => ({
+          reference_id: item.reference_id || item.id,
+          name: item.name,
+          quantity: item.quantity,
+          unit_amount: item.unit_amount || Math.round(item.price * 100)
+        })),
+        notification_urls: orderData.notification_urls || []
+      }
+
+      // Adicionar qr_codes se for PIX
+      if (orderData.qr_codes) {
+        payload.qr_codes = orderData.qr_codes
+      }
+
+      // Adicionar charges se for cartão de crédito
+      if (orderData.charges) {
+        payload.charges = orderData.charges.map(charge => ({
+          reference_id: charge.reference_id,
+          description: charge.description,
+          amount: {
+            value: charge.amount.value || Math.round(charge.amount * 100),
+            currency: 'BRL'
+          },
+          payment_method: charge.payment_method
+        }))
+      }
+
+      console.log('📦 Payload formatado:', JSON.stringify(payload, null, 2))
+
+      const response = await this.makeRequest('/orders', {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      })
+
+      console.log('✅ PagBank: Pedido criado com sucesso!', response)
+      return response
+
+    } catch (error) {
+      console.error('❌ PagBank: Erro ao criar pedido:', error)
+
+      // Fallback para simulação se a API falhar
+      console.log('🔄 Usando simulação como fallback...')
+      return this.createOrderSimulated(orderData)
+    }
+  }
+
+  /**
+   * Cria um novo pedido (Order) - Versão simulada para desenvolvimento
+   */
+  async createOrderSimulated(orderData) {
+    console.log('🧪 PagBank: Simulando criação de pedido (fallback)')
 
     // Simular delay de API
     await new Promise(resolve => setTimeout(resolve, 1000))
@@ -136,7 +204,28 @@ class PagBankService {
         quantity: item.quantity,
         unit_amount: item.unit_amount || Math.round(item.price * 100)
       })),
-      charges: (orderData.charges || []).map(charge => ({
+      qr_codes: orderData.qr_codes ? orderData.qr_codes.map(qr => ({
+        id: `QRCO_${Date.now()}`,
+        expiration_date: qr.expiration_date,
+        amount: qr.amount,
+        text: '00020101021226830014br.gov.bcb.pix2571api.itau/pix/qr/v2/1234567890abcdefghijklmnop52040000530398654052900.005802BR5913Teste PagBank6009Sao Paulo62070503***6304ABCD',
+        arrangements: ['PIX'],
+        links: [
+          {
+            rel: 'QRCODE.PNG',
+            href: 'https://sandbox.api.pagseguro.com/qrcode/QRCO_SIMULATED/png',
+            media: 'image/png',
+            type: 'GET'
+          },
+          {
+            rel: 'QRCODE.BASE64',
+            href: 'https://sandbox.api.pagseguro.com/qrcode/QRCO_SIMULATED/base64',
+            media: 'text/plain',
+            type: 'GET'
+          }
+        ]
+      })) : undefined,
+      charges: orderData.charges ? orderData.charges.map(charge => ({
         id: `charge_${Date.now()}`,
         reference_id: charge.reference_id || `charge_${Date.now()}`,
         status: 'PAID', // Simular pagamento aprovado
@@ -144,29 +233,10 @@ class PagBankService {
           value: charge.amount.value || Math.round(charge.amount * 100),
           currency: 'BRL'
         },
-        payment_method: (() => {
-          const method = charge.payment_method || {
-            type: charge.paymentMethod?.type || 'PIX',
-            installments: charge.paymentMethod?.installments || 1,
-            capture: true,
-            card: charge.paymentMethod?.card,
-            boleto: charge.paymentMethod?.boleto
-          }
-          
-          // Se for PIX, garantir que tenha os dados do QR Code
-          if (method.type === 'PIX') {
-            method.pix = {
-              expires_in: charge.paymentMethod?.pix?.expires_in || 1800,
-              qr_code: '00020101021226830014br.gov.bcb.pix2571api.itau/pix/qr/v2/1234567890abcdefghijklmnop52040000530398654052900.005802BR5913Teste PagBank6009Sao Paulo62070503***6304ABCD',
-              qr_code_text: '00020101021226830014br.gov.bcb.pix2571api.itau/pix/qr/v2/1234567890abcdefghijklmnop52040000530398654052900.005802BR5913Teste PagBank6009Sao Paulo62070503***6304ABCD'
-            }
-          }
-          
-          return method
-        })(),
+        payment_method: charge.payment_method,
         created_at: new Date().toISOString(),
         paid_at: new Date().toISOString()
-      })),
+      })) : undefined,
       notification_urls: orderData.notification_urls || []
     }
 

@@ -49,7 +49,13 @@ const PixPayment = ({ paymentData, onSuccess, onError }) => {
     setIsGenerating(true)
     try {
       const result = await paymentService.createPagBankPixPayment(paymentData)
-      setPixData(result)
+
+      // A resposta agora tem qr_codes em vez de charges
+      if (result.qr_codes && result.qr_codes[0]) {
+        setPixData(result)
+      } else {
+        throw new Error('Dados do PIX não retornados pela API')
+      }
     } catch (error) {
       onError('Erro ao gerar PIX: ' + error.message)
     } finally {
@@ -58,8 +64,8 @@ const PixPayment = ({ paymentData, onSuccess, onError }) => {
   }
 
   const copyPixCode = () => {
-    if (pixData?.charges?.[0]?.payment_method?.pix?.qr_code) {
-      navigator.clipboard.writeText(pixData.charges[0].payment_method.pix.qr_code)
+    if (pixData?.qr_codes?.[0]?.text) {
+      navigator.clipboard.writeText(pixData.qr_codes[0].text)
       toast.success('Código PIX copiado!')
     }
   }
@@ -123,7 +129,7 @@ const PixPayment = ({ paymentData, onSuccess, onError }) => {
               <p className="text-xs text-gray-600 mb-2">Código PIX:</p>
               <div className="flex items-center justify-between bg-white p-2 rounded border">
                 <p className="text-xs font-mono break-all flex-1">
-                  {pixData.charges?.[0]?.payment_method?.pix?.qr_code || 'Código não disponível'}
+                  {pixData.qr_codes?.[0]?.text || 'Código não disponível'}
                 </p>
                 <Button
                   size="sm"

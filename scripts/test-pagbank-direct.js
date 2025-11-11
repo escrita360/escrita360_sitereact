@@ -2,14 +2,13 @@
  * Teste direto da API PagBank - Criação de pedido
  */
 
-import dotenv from 'dotenv'
-dotenv.config()
+import config from './config.cjs'
 
 // Simula o ambiente do Vite
 Object.defineProperty(globalThis, 'import', {
   value: {
     meta: {
-      env: process.env
+      env: config
     }
   },
   writable: true,
@@ -22,38 +21,31 @@ async function testDirectOrder() {
   console.log('🧪 Testando criação direta de pedido PagBank...\n')
 
   try {
-    // Dados de teste para um pedido PIX
+    // Dados de teste para um pedido PIX - Estrutura correta conforme documentação
     const orderData = {
       reference_id: `test_${Date.now()}`,
       customer: {
         name: 'João Silva Teste',
         email: 'teste@example.com',
         tax_id: '11144477735', // CPF válido de teste
-        phone: {
-          country: '+55',
+        phones: [{
+          country: '55',
           area: '11',
-          number: '999999999'
-        }
+          number: '999999999',
+          type: 'MOBILE'
+        }]
       },
       items: [{
         reference_id: 'plano_basico',
         name: 'Plano Básico Escrita360',
         quantity: 1,
-        unit_amount: 2900 // R$ 29,00
+        unit_amount: 2900 // R$ 29,00 em centavos
       }],
-      charges: [{
-        reference_id: `charge_${Date.now()}`,
-        description: 'Pagamento teste Escrita360',
+      qr_codes: [{
         amount: {
-          value: 2900,
-          currency: 'BRL'
+          value: 2900 // R$ 29,00 em centavos
         },
-        payment_method: {
-          type: 'PIX',
-          pix: {
-            expires_in: 1800 // 30 minutos
-          }
-        }
+        expiration_date: new Date(Date.now() + 30 * 60 * 1000).toISOString() // 30 minutos
       }],
       notification_urls: [
         'https://webhook.site/test-pagbank'
@@ -70,7 +62,7 @@ async function testDirectOrder() {
       const testResponse = await fetch('https://sandbox.api.pagseguro.com/public-keys/card', {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${process.env.VITE_PAGBANK_TOKEN}`,
+          'Authorization': `Bearer ${config.token}`,
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         }
@@ -90,7 +82,7 @@ async function testDirectOrder() {
         const response = await fetch(`https://ws.sandbox.pagseguro.uol.com.br${endpoint}`, {
           method: 'GET',
           headers: {
-            'Authorization': `Bearer ${process.env.VITE_PAGBANK_TOKEN}`,
+            'Authorization': `Bearer ${config.token}`,
             'Content-Type': 'application/json',
             'Accept': 'application/json'
           }
@@ -110,10 +102,15 @@ async function testDirectOrder() {
     console.log('Resultado:', JSON.stringify(result, null, 2))
 
     // Verifica se tem dados do PIX
-    if (result.charges && result.charges[0]?.payment_method?.pix) {
+    if (result.qr_codes && result.qr_codes[0]) {
       console.log('\n💰 Dados do PIX:')
-      console.log('QR Code:', result.charges[0].payment_method.pix.qr_code)
-      console.log('Copia e Cola:', result.charges[0].payment_method.pix.qr_code_text)
+      console.log('ID do QR Code:', result.qr_codes[0].id)
+      console.log('Código PIX:', result.qr_codes[0].text)
+      console.log('Expira em:', result.qr_codes[0].expiration_date)
+      if (result.qr_codes[0].links) {
+        console.log('Link PNG:', result.qr_codes[0].links.find(l => l.rel === 'QRCODE.PNG')?.href)
+        console.log('Link Base64:', result.qr_codes[0].links.find(l => l.rel === 'QRCODE.BASE64')?.href)
+      }
     }
 
   } catch (error) {
