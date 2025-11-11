@@ -17,16 +17,16 @@ function Home() {
         <div className="container mx-auto max-w-7xl">
           <div className="grid lg:grid-cols-2 items-center gap-8">
             <div className="hero-content animate-fade-in-left text-center lg:text-left">
-              <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl mb-4 leading-tight text-center">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl mb-4 leading-none text-center">
                 <span style={{ color: '#2b7475', fontWeight: 'normal' }}>Inovamos para oferecer a plataforma mais completa </span>
                 <span style={{ color: '#569e9d', fontWeight: 'bold' }}>para o desenvolvimento da escrita, </span>
                 <span style={{ color: '#569e9d', fontWeight: 'normal' }}>unindo </span>
                 <span style={{ color: '#659bb3', fontWeight: 'normal' }}>autorregulação e inteligência artificial.</span>
               </h1>
-              <p className="hero-description text-lg md:text-xl text-slate-600 mb-8 leading-relaxed">
+              <p className="hero-description text-lg md:text-xl text-slate-600 mb-2 leading-relaxed text-center">
                 Revisão como apoio, não como atalho, respeitando o processo de aprendizagem. A correção complementar com Inteligência Artificial valoriza o processo de reescrita e garante que o aprendizado esteja no centro da experiência.
               </p>
-              <div className="hero-stats flex gap-8 justify-center lg:justify-start mt-8">
+              <div className="hero-stats flex gap-8 justify-center mt-8">
                 <div className="stat text-center">
                   <strong className="block text-slate-900 font-bold">Processo</strong>
                   <span className="text-slate-600">Autorregulado</span>

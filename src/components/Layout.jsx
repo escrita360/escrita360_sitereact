@@ -46,7 +46,7 @@ function Layout({ children }) {
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 animate-fade-in-down">
         <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
                 <Link to="/" className="flex items-center gap-2 font-bold text-2xl text-slate-900 logo-animate">
-                    <img src={logo} alt="Logo Escrita360" className="h-16 w-auto transition-transform duration-500 hover:scale-110" />
+                    <img src={logo} alt="Logo Escrita360" className="h-16 w-auto transition-transform duration-500 hover:scale-110 animate-fade-in" />
                   <span className="sr-only">Escrita360</span>
                 </Link>
 
