@@ -103,7 +103,7 @@ function Home() {
             <Button 
               size="lg" 
               variant="outline"
-              className="border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-105"
+              className="border-brand-primary text-brand-primary hover:bg-brand-primary hover:!text-white px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-105"
             >
               Saiba Mais para Estudantes
             </Button>
