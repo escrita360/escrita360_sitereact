@@ -39,24 +39,30 @@ const PixPayment = ({ paymentData, onSuccess, onError }) => {
   }, [])
 
   useEffect(() => {
-    if (timeLeft > 0) {
+    if (pixData && timeLeft > 0) {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000)
       return () => clearTimeout(timer)
     }
-  }, [timeLeft])
+  }, [timeLeft, pixData])
 
   const generatePix = async () => {
     setIsGenerating(true)
     try {
+      console.log('🔄 Gerando PIX com PagBank...')
       const result = await paymentService.createPagBankPixPayment(paymentData)
+
+      console.log('📦 Resposta do PagBank:', result)
 
       // A resposta agora tem qr_codes em vez de charges
       if (result.qr_codes && result.qr_codes[0]) {
         setPixData(result)
+        toast.success('Código PIX gerado com sucesso!')
       } else {
         throw new Error('Dados do PIX não retornados pela API')
       }
     } catch (error) {
+      console.error('❌ Erro ao gerar PIX:', error)
+      toast.error('Erro ao gerar PIX: ' + error.message)
       onError('Erro ao gerar PIX: ' + error.message)
     } finally {
       setIsGenerating(false)
@@ -243,29 +249,123 @@ const BoletoPayment = ({ paymentData, onSuccess, onError }) => {
   )
 }
 
+const RecurringPayment = ({ paymentData, onSuccess, onError }) => {
+  const [isCreating, setIsCreating] = useState(false)
+  const [subscriptionData, setSubscriptionData] = useState(null)
+
+  const createRecurringPayment = async () => {
+    setIsCreating(true)
+    try {
+      console.log('🔄 Criando assinatura recorrente com PagBank...')
+      
+      const result = await paymentService.createPagBankSubscription({
+        planData: paymentData.planData,
+        customerData: paymentData.customerData,
+        paymentMethod: 'BOLETO' // Por padrão usar boleto para recorrência
+      })
+
+      console.log('✅ Assinatura criada:', result)
+      setSubscriptionData(result)
+      toast.success('Assinatura criada com sucesso!')
+      onSuccess(result)
+    } catch (error) {
+      console.error('❌ Erro ao criar assinatura:', error)
+      toast.error('Erro ao criar assinatura: ' + error.message)
+      onError('Erro ao criar assinatura: ' + error.message)
+    } finally {
+      setIsCreating(false)
+    }
+  }
+
+  if (!subscriptionData) {
+    return (
+      <Card>
+        <CardContent className="flex flex-col items-center justify-center p-8">
+          <CreditCard className="w-12 h-12 text-blue-600 mb-4" />
+          <h3 className="text-lg font-semibold mb-2">Pagamento Recorrente</h3>
+          <p className="text-gray-600 text-center mb-6">
+            Crie sua assinatura recorrente do plano {paymentData.planData.name}. 
+            A cobrança será automática todos os meses.
+          </p>
+          <Button onClick={createRecurringPayment} disabled={isCreating} className="w-full">
+            {isCreating ? (
+              <><Loader2 className="w-4 h-4 animate-spin mr-2" />Criando Assinatura...</>
+            ) : (
+              <><CreditCard className="w-4 h-4 mr-2" />Criar Assinatura Recorrente</>
+            )}
+          </Button>
+          <p className="text-xs text-gray-500 mt-4 text-center">
+            Após criar a assinatura, você receberá o boleto para o primeiro pagamento por email.
+          </p>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center">
+          <CheckCircle2 className="w-5 h-5 mr-2 text-green-600" />
+          Assinatura Criada
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+          <div className="flex items-start">
+            <CheckCircle2 className="w-5 h-5 text-green-600 mr-2 mt-0.5" />
+            <div>
+              <h4 className="font-medium text-green-800">Assinatura Ativada!</h4>
+              <p className="text-sm text-green-700 mt-2">
+                Sua assinatura foi criada com sucesso. Você receberá os detalhes por email.
+              </p>
+              {subscriptionData.subscription?.id && (
+                <p className="text-xs font-mono text-green-600 mt-2">
+                  ID: {subscriptionData.subscription.id}
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <Separator />
+
+        <div className="text-center text-sm text-gray-600">
+          <p>
+            <strong>Plano:</strong> {paymentData.planData.name}
+          </p>
+          <p className="mt-1">
+            <strong>Valor mensal:</strong> R$ {paymentData.planData.price.toFixed(2)}
+          </p>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
 export function PagBankCheckout({ planData, customerData, onSuccess, onError }) {
-  const [selectedMethod, setSelectedMethod] = useState('credit_card')
+  const [selectedMethod, setSelectedMethod] = useState('recurring')
   const [isProcessing, setIsProcessing] = useState(false)
 
   const paymentMethods = [
     {
-      id: 'credit_card',
+      id: 'recurring',
       icon: CreditCard,
-      title: 'Cartão de Crédito',
-      description: 'Aprovação imediata em até 12x',
-      component: null // Será o formulário de cartão existente
+      title: 'Assinatura Recorrente',
+      description: 'Cobrança automática mensal (Recomendado)',
+      component: RecurringPayment
     },
     {
       id: 'pix',
       icon: Smartphone,
-      title: 'PIX',
-      description: 'Aprovação imediata, disponível 24h',
+      title: 'PIX (Pagamento Único)',
+      description: 'Aprovação imediata, pagamento único',
       component: PixPayment
     },
     {
       id: 'boleto',
       icon: FileText,
-      title: 'Boleto Bancário',
+      title: 'Boleto (Pagamento Único)',
       description: 'Aprovação em até 2 dias úteis',
       component: BoletoPayment
     }
@@ -289,7 +389,6 @@ export function PagBankCheckout({ planData, customerData, onSuccess, onError }) 
       )
     }
 
-    // Para cartão de crédito, retorna null pois o formulário já existe na página
     return null
   }
 
@@ -311,11 +410,9 @@ export function PagBankCheckout({ planData, customerData, onSuccess, onError }) 
         </div>
       </div>
 
-      {selectedMethod !== 'credit_card' && (
-        <div>
-          {renderPaymentForm()}
-        </div>
-      )}
+      <div>
+        {renderPaymentForm()}
+      </div>
     </div>
   )
 }

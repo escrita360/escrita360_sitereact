@@ -172,6 +172,44 @@ export const paymentService = {
   },
 
   /**
+   * Cria assinatura recorrente via PagBank
+   * @param {Object} subscriptionData - Dados da assinatura
+   * @returns {Promise<Object>} - Dados da assinatura criada
+   */
+  async createPagBankSubscription(subscriptionData) {
+    const { pagBankSubscriptionsService } = await import('./pagbank-subscriptions.js')
+    
+    const { planData, customerData, paymentMethod = 'CREDIT_CARD' } = subscriptionData
+
+    // Mapear nome do plano para configuração
+    const planConfig = {
+      'Básico': { intervalUnit: 'MONTH', intervalValue: 1 },
+      'Profissional': { intervalUnit: 'MONTH', intervalValue: 1 },
+      'Premium': { intervalUnit: 'MONTH', intervalValue: 1 },
+      'Empresarial': { intervalUnit: 'MONTH', intervalValue: 1 }
+    }
+
+    const config = planConfig[planData.name] || { intervalUnit: 'MONTH', intervalValue: 1 }
+
+    return await pagBankSubscriptionsService.createCompleteSubscription({
+      planName: planData.name,
+      planDescription: `Plano ${planData.name} - Escrita360`,
+      amount: planData.price,
+      intervalUnit: config.intervalUnit,
+      intervalValue: config.intervalValue,
+      customer: {
+        name: customerData.name,
+        email: customerData.email,
+        cpf: customerData.cpf,
+        phone: customerData.phone
+      },
+      paymentMethod,
+      cardToken: subscriptionData.cardToken,
+      cardSecurityCode: subscriptionData.cardSecurityCode
+    })
+  },
+
+  /**
    * Consulta status de pagamento PagBank
    * @param {string} orderId - ID do pedido
    * @returns {Promise<Object>} - Status do pagamento
