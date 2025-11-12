@@ -110,7 +110,7 @@ function Layout({ children }) {
                 <span className="sr-only">Toggle menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+            <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-white">
               <nav className="flex flex-col gap-4">
                 <Link
                   to="/"
