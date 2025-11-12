@@ -33,15 +33,15 @@ function Home() {
               </p>
               <div className="hero-stats flex gap-8 justify-center mt-8">
                 <div className="stat text-center">
-                  <strong className="block text-slate-900 font-bold">Processo</strong>
+                  <strong className="block font-bold" style={{ color: '#2b7475' }}>Processo</strong>
                   <span className="text-slate-600">Autorregulado</span>
                 </div>
                 <div className="stat text-center">
-                  <strong className="block text-slate-900 font-bold">IA</strong>
+                  <strong className="block font-bold" style={{ color: '#2b7475' }}>IA</strong>
                   <span className="text-slate-600">Complementar</span>
                 </div>
                 <div className="stat text-center">
-                  <strong className="block text-slate-900 font-bold">Foco</strong>
+                  <strong className="block font-bold" style={{ color: '#2b7475' }}>Foco</strong>
                   <span className="text-slate-600">Aprendizagem</span>
                 </div>
               </div>
@@ -69,7 +69,7 @@ function Home() {
                 <GraduationCap className="w-16 h-16 text-brand-primary mx-auto mb-6 animate-pulse-glow" />
                 <h3 className="text-2xl font-bold text-slate-900 mb-4">Estudantes</h3>
                 <p className="text-slate-700 leading-relaxed mb-4">
-                  <strong>Ideal para quem quer desenvolver habilidades de escrita exigidas pela escola, pelo ENEM e pelas competências do século XXI.</strong> Aqui, o aluno vivencia uma imersão autorregulada, em que pode escrever, reescrever e analisar, com análises ilimitadas e insights inteligentes. A IA atua como assistente de escrita, ajudando a aprimorar argumentos, estrutura e linguagem.
+                  <strong style={{ color: '#2b7475' }}>Ideal para quem quer desenvolver habilidades de escrita exigidas pela escola, pelo ENEM e pelas competências do século XXI.</strong> Aqui, o aluno vivencia uma imersão autorregulada, em que pode escrever, reescrever e analisar, com análises ilimitadas e insights inteligentes. A IA atua como assistente de escrita, ajudando a aprimorar argumentos, estrutura e linguagem.
                 </p>
                 <p className="text-slate-700 font-bold">
                   Mais do que corrigir, é aprender a escrever.
@@ -82,7 +82,7 @@ function Home() {
                 <Users className="w-16 h-16 text-brand-primary mx-auto mb-6 animate-pulse-glow" />
                 <h3 className="text-2xl font-bold text-slate-900 mb-4">Professores</h3>
                 <p className="text-slate-700 leading-relaxed mb-4">
-                  <strong>Pensado para educadores que atuam em cursos preparatórios ou plataformas online, o Escrita360 otimiza o tempo de correção e amplia o alcance do ensino de redação.</strong> Com relatórios automáticos e acompanhamento por versão, o professor foca no que importa: orientar o aprendizado.
+                  <strong style={{ color: '#2b7475' }}>Pensado para educadores que atuam em cursos preparatórios ou plataformas online, o Escrita360 otimiza o tempo de correção e amplia o alcance do ensino de redação.</strong> Com relatórios automáticos e acompanhamento por versão, o professor foca no que importa: orientar o aprendizado.
                 </p>
                 <p className="text-slate-700 font-bold">
                   Mais produtividade para o professor, mais aprendizado para o aluno.
@@ -95,7 +95,7 @@ function Home() {
                 <School className="w-16 h-16 text-brand-primary mx-auto mb-6 animate-pulse-glow" />
                 <h3 className="text-2xl font-bold text-slate-900 mb-4">Escolas</h3>
                 <p className="text-slate-700 leading-relaxed mb-4" style={{ marginTop: '36px' }}>
-                  <strong>Plataforma completa para integrar a escrita autoral ao currículo, desenvolvendo autonomia e autorregulação nos alunos.</strong> Permite acompanhar turmas em tempo real, gerar relatórios personalizados e promover práticas de escrita formativas em larga escala.
+                  <strong style={{ color: '#2b7475' }}>Plataforma completa para integrar a escrita autoral ao currículo, desenvolvendo autonomia e autorregulação nos alunos.</strong> Permite acompanhar turmas em tempo real, gerar relatórios personalizados e promover práticas de escrita formativas em larga escala.
                 </p>
                 <p className="text-slate-700 font-bold">
                   Ideal para redações escolares e preparatórios para o ENEM.
