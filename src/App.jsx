@@ -9,8 +9,7 @@ import Contato from './pages/Contato.jsx'
 import Faq from './pages/Faq.jsx'
 import Login from './pages/Login.jsx'
 import Pagamento from './pages/Pagamento.jsx'
-import PagamentoSucesso from './pages/PagamentoSucesso.jsx'
-import PagamentoCancelado from './pages/PagamentoCancelado.jsx'
+import PagamentoResultado from './pages/PagamentoResultado.jsx'
 import PagBankSandbox from './pages/PagBankSandbox.jsx'
 import './App.css'
 
@@ -141,7 +140,7 @@ function App() {
               variants={pageVariants}
               transition={pageTransition}
             >
-              <PagamentoSucesso />
+              <PagamentoResultado status="success" />
             </motion.div>
           </Layout>
         } />
@@ -154,7 +153,7 @@ function App() {
               variants={pageVariants}
               transition={pageTransition}
             >
-              <PagamentoCancelado />
+              <PagamentoResultado status="cancelled" />
             </motion.div>
           </Layout>
         } />
