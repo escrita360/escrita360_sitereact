@@ -3,6 +3,12 @@ import { Card, CardContent } from '@/components/ui/card.jsx'
 import { Check, X, PenTool, Brain, TrendingUp, GraduationCap, School, Edit, FileText, CheckCircle, Bot, RotateCcw, Trophy, Heart, Target, BarChart, Users, UserCheck, BookOpen, Award, Cloud, Clock } from 'lucide-react'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
 import notebook from '@/assets/notebook.svg'
+import card1 from '@/assets/card1.svg'
+import card2 from '@/assets/card2.svg'
+import card3 from '@/assets/card3.svg'
+import card4 from '@/assets/card4.svg'
+import card5 from '@/assets/card5.svg'
+import card6 from '@/assets/card6.svg'
 
 function Home() {
   const heroRef = useScrollAnimation()
@@ -142,19 +148,15 @@ function Home() {
                   A plataforma Escrita360 é um laboratório virtual, que transforma o aprendizado da escrita em uma experiência autorregulada e formativa. Permite ao usuário escrever, revisar, reescrever e analisar seus textos, por meio de recursos inteligentes de análise e geração de insights que favorecem a melhoria contínua e o desenvolvimento de competências linguísticas, argumentativas, críticas e criativas dos estudantes.
                 </p>
               </div>
-              <div className="order-1 lg:order-2">
-                <div className="w-full h-64 bg-brand-light rounded-lg shadow-lg flex items-center justify-center">
-                  <Edit className="w-24 h-24 text-brand-primary" />
-                </div>
+              <div className="order-1 lg:order-2 flex items-center justify-center">
+                <img src={card1} alt="Plataforma Escrita360" className="w-full max-w-md h-auto" />
               </div>
             </div>
 
             {/* Escrita Autorregulada no Centro */}
             <div className="grid lg:grid-cols-2 gap-8 items-center">
-              <div>
-                <div className="w-full h-64 bg-brand-light rounded-lg shadow-lg flex items-center justify-center">
-                  <Brain className="w-24 h-24 text-brand-secondary" />
-                </div>
+              <div className="flex items-center justify-center">
+                <img src={card2} alt="Escrita Autorregulada" className="w-full max-w-md h-auto" />
               </div>
               <div>
                 <h3 className="text-2xl font-bold text-slate-900 mb-4">Escrita Autorregulada no Centro</h3>
@@ -172,19 +174,15 @@ function Home() {
                   O módulo de escrita imersivo introduz o uso de parágrafo-padrão como ponto de partida para organizar ideias, estruturar argumentos e escrever com clareza e segurança. A plataforma oferece recursos essenciais para análises automáticas e ilimitadas (estrutura, fluidez, coesão textual -referencial e sequencial), frequência de palavras, equilíbrio entre tamanhos de frases e parágrafos e consistência geral do texto. Essa prática busca estimular o aluno a escrever, analisar e reescrever, a fim de desenvolver a autonomia e a consciência sobre o próprio processo de escrita.
                 </p>
               </div>
-              <div className="order-1 lg:order-2">
-                <div className="w-full h-64 bg-brand-light rounded-lg shadow-lg flex items-center justify-center">
-                  <BarChart className="w-24 h-24 text-brand-primary" />
-                </div>
+              <div className="order-1 lg:order-2 flex items-center justify-center">
+                <img src={card3} alt="Análise Integrada" className="w-full max-w-md h-auto" />
               </div>
             </div>
 
             {/* Painel de Sentimentos */}
             <div className="grid lg:grid-cols-2 gap-8 items-center">
-              <div>
-                <div className="w-full h-64 bg-brand-light rounded-lg shadow-lg flex items-center justify-center">
-                  <Heart className="w-24 h-24 text-brand-secondary" />
-                </div>
+              <div className="flex items-center justify-center">
+                <img src={card4} alt="Painel de Sentimentos" className="w-full max-w-md h-auto" />
               </div>
               <div>
                 <h3 className="text-2xl font-bold text-slate-900 mb-4">Painel de Sentimentos</h3>
@@ -202,19 +200,15 @@ function Home() {
                   Oferece rubricas autoavaliativas e monitoramento contínuo do desempenho, com gráficos e dados qualitativos alinhados às habilidades da BNCC e às competências do ENEM, auxiliando o estudante a identificar dificuldades e acompanhar sua evolução na escrita.
                 </p>
               </div>
-              <div className="order-1 lg:order-2">
-                <div className="w-full h-64 bg-brand-light rounded-lg shadow-lg flex items-center justify-center">
-                  <Award className="w-24 h-24 text-brand-primary" />
-                </div>
+              <div className="order-1 lg:order-2 flex items-center justify-center">
+                <img src={card5} alt="Rubricas e Evolução" className="w-full max-w-md h-auto" />
               </div>
             </div>
 
             {/* IA como Assistente */}
             <div className="grid lg:grid-cols-2 gap-8 items-center">
-              <div>
-                <div className="w-full h-64 bg-brand-light rounded-lg shadow-lg flex items-center justify-center">
-                  <Bot className="w-24 h-24 text-brand-secondary" />
-                </div>
+              <div className="flex items-center justify-center">
+                <img src={card6} alt="IA como Assistente" className="w-full max-w-md h-auto" />
               </div>
               <div>
                 <h3 className="text-2xl font-bold text-slate-900 mb-4">IA como Assistente</h3>
@@ -223,210 +217,6 @@ function Home() {
                 </p>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Platform Differences Section */}
-      <section className="platform-differences bg-white py-8 md:py-12 lg:py-16">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <div className="section-header text-center mb-8 md:mb-12">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Para Estudantes</h2>
-          </div>
-          <div className="differences-grid grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <Card className="difference-card p-6 hover-lift border-brand-accent/30 animate-scale-in delay-100">
-              <div className="difference-icon w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-brand-light rounded-lg">
-                <FileText className="w-8 h-8 text-brand-primary" />
-              </div>
-              <h4 className="text-lg font-bold text-slate-900 mb-3 text-center">Lista de Acrônimos</h4>
-              <p className="text-slate-700 text-center text-sm">
-                Lista de Acrônimos específicos para cada uma das fases (planejamento, produção, autoavaliação).
-              </p>
-            </Card>
-            <Card className="difference-card p-6 hover-lift border-brand-accent/30 animate-scale-in delay-200">
-              <div className="difference-icon w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-brand-light rounded-lg">
-                <Target className="w-8 h-8 text-brand-secondary" />
-              </div>
-              <h4 className="text-lg font-bold text-slate-900 mb-3 text-center">Planejamento de Metas</h4>
-              <p className="text-slate-700 text-center text-sm">
-                Planejamento de metas e prazos para organizar o processo de escrita.
-              </p>
-            </Card>
-            <Card className="difference-card p-6 hover-lift border-brand-accent/30 animate-scale-in delay-300">
-              <div className="difference-icon w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-brand-light rounded-lg">
-                <Brain className="w-8 h-8 text-brand-primary" />
-              </div>
-              <h4 className="text-lg font-bold text-slate-900 mb-3 text-center">Estratégias Autorreguladas</h4>
-              <p className="text-slate-700 text-center text-sm">
-                Estratégias autorreguladas de curto, médio e longo prazo, aplicadas em cada fase (planejamento, produção, autoavaliação).
-              </p>
-            </Card>
-            <Card className="difference-card p-6 hover-lift border-brand-accent/30 animate-scale-in delay-400">
-              <div className="difference-icon w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-brand-light rounded-lg">
-                <Heart className="w-8 h-8 text-brand-secondary" />
-              </div>
-              <h4 className="text-lg font-bold text-slate-900 mb-3 text-center">Painel de Sentimentos</h4>
-              <p className="text-slate-700 text-center text-sm">
-                Painel de Sentimentos para monitorar motivação, confiança e emoções ligadas à escrita.
-              </p>
-            </Card>
-            <Card className="difference-card p-6 hover-lift border-brand-accent/30 animate-scale-in delay-500">
-              <div className="difference-icon w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-brand-light rounded-lg">
-                <CheckCircle className="w-8 h-8 text-brand-primary" />
-              </div>
-              <h4 className="text-lg font-bold text-slate-900 mb-3 text-center">Autoavaliação Estruturada</h4>
-              <p className="text-slate-700 text-center text-sm">
-                Autoavaliação estruturada, com rubricas alinhadas às habilidades da BNCC e às competências do Enem.
-              </p>
-            </Card>
-            <Card className="difference-card p-6 hover-lift border-brand-accent/30 animate-scale-in delay-600">
-              <div className="difference-icon w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-brand-light rounded-lg">
-                <Edit className="w-8 h-8 text-brand-secondary" />
-              </div>
-              <h4 className="text-lg font-bold text-slate-900 mb-3 text-center">Módulo de Escrita</h4>
-              <p className="text-slate-700 text-center text-sm">
-                Módulo de Escrita: acompanhamento desde a construção do parágrafo-padrão até a redação final.
-              </p>
-            </Card>
-            <Card className="difference-card p-6 hover-lift border-brand-accent/30 animate-scale-in delay-700">
-              <div className="difference-icon w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-brand-light rounded-lg">
-                <PenTool className="w-8 h-8 text-brand-primary" />
-              </div>
-              <h4 className="text-lg font-bold text-slate-900 mb-3 text-center">Correções Detalhadas</h4>
-              <p className="text-slate-700 text-center text-sm">
-                Correções ilimitadas e detalhadas, na fase inicial da escrita incluindo análise de: Estrutura do parágrafo, Frequência de palavras, Uso de sinônimos e Coesão textual.
-              </p>
-            </Card>
-            <Card className="difference-card p-6 hover-lift border-brand-accent/30 animate-scale-in delay-800">
-              <div className="difference-icon w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-brand-light rounded-lg">
-                <Bot className="w-8 h-8 text-brand-secondary" />
-              </div>
-              <h4 className="text-lg font-bold text-slate-900 mb-3 text-center">Feedback com IA</h4>
-              <p className="text-slate-700 text-center text-sm">
-                Feedback com IA no final do processo — não para substituir, mas para complementar a revisão.
-              </p>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Teachers Features */}
-      <section className="bg-slate-50 py-8 md:py-12 lg:py-16">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <div className="section-header text-center mb-8 md:mb-12">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Para Professores</h2>
-          </div>
-          <div className="differences-grid grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <Card className="difference-card p-6 hover-lift border-brand-accent/30 animate-scale-in delay-100">
-              <div className="difference-icon w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-brand-light rounded-lg">
-                <Cloud className="w-8 h-8 text-brand-primary" />
-              </div>
-              <h4 className="text-lg font-bold text-slate-900 mb-3 text-center">Plataforma 100% Online</h4>
-              <p className="text-slate-700 text-center text-sm">
-                Plataforma 100% online e automatizada com acesso aos recursos disponíveis para os estudantes para criar, enviar e avaliar as redações.
-              </p>
-            </Card>
-            <Card className="difference-card p-6 hover-lift border-brand-accent/30 animate-scale-in delay-200">
-              <div className="difference-icon w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-brand-light rounded-lg">
-                <BookOpen className="w-8 h-8 text-brand-secondary" />
-              </div>
-              <h4 className="text-lg font-bold text-slate-900 mb-3 text-center">Habilidades da BNCC</h4>
-              <p className="text-slate-700 text-center text-sm">
-                Lista de habilidades da BNCC a serem trabalhadas.
-              </p>
-            </Card>
-            <Card className="difference-card p-6 hover-lift border-brand-accent/30 animate-scale-in delay-300">
-              <div className="difference-icon w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-brand-light rounded-lg">
-                <TrendingUp className="w-8 h-8 text-brand-primary" />
-              </div>
-              <h4 className="text-lg font-bold text-slate-900 mb-3 text-center">Acompanhamento em Tempo Real</h4>
-              <p className="text-slate-700 text-center text-sm">
-                Acompanhamento em tempo real do progresso de cada aluno e turma.
-              </p>
-            </Card>
-            <Card className="difference-card p-6 hover-lift border-brand-accent/30 animate-scale-in delay-400">
-              <div className="difference-icon w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-brand-light rounded-lg">
-                <Award className="w-8 h-8 text-brand-primary" />
-              </div>
-              <h4 className="text-lg font-bold text-slate-900 mb-3 text-center">Avaliação Docente Estruturada</h4>
-              <p className="text-slate-700 text-center text-sm">
-                Avaliação docente estruturada, com rubricas alinhadas às habilidades da BNCC e às competências do Enem.
-              </p>
-            </Card>
-            <Card className="difference-card p-6 hover-lift border-brand-accent/30 animate-scale-in delay-500">
-              <div className="difference-icon w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-brand-light rounded-lg">
-                <Users className="w-8 h-8 text-brand-primary" />
-              </div>
-              <h4 className="text-lg font-bold text-slate-900 mb-3 text-center">Dados de Autoavaliação</h4>
-              <p className="text-slate-700 text-center text-sm">
-                Acesso aos dados da autoavaliação dos alunos (permitindo avaliação por pares e novos formatos avaliativos).
-              </p>
-            </Card>
-            <Card className="difference-card p-6 hover-lift border-brand-accent/30 animate-scale-in delay-600">
-              <div className="difference-icon w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-brand-light rounded-lg">
-                <Bot className="w-8 h-8 text-brand-secondary" />
-              </div>
-              <h4 className="text-lg font-bold text-slate-900 mb-3 text-center">Correções com IA</h4>
-              <p className="text-slate-700 text-center text-sm">
-                Correções detalhadas com IA (como elemento de revisão adicional para feedbacks personalizados).
-              </p>
-            </Card>
-            <Card className="difference-card p-6 hover-lift border-brand-accent/30 animate-scale-in delay-700">
-              <div className="difference-icon w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-brand-light rounded-lg">
-                <FileText className="w-8 h-8 text-brand-primary" />
-              </div>
-              <h4 className="text-lg font-bold text-slate-900 mb-3 text-center">Relatórios Completos</h4>
-              <p className="text-slate-700 text-center text-sm">
-                Relatórios completos de desempenho, com dados qualitativos, gráficos de evolução por habilidade e notas.
-              </p>
-            </Card>
-            <Card className="difference-card p-6 hover-lift border-brand-accent/30 animate-scale-in delay-800">
-              <div className="difference-icon w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-brand-light rounded-lg">
-                <Clock className="w-8 h-8 text-brand-primary" />
-              </div>
-              <h4 className="text-lg font-bold text-slate-900 mb-3 text-center">Redução de Carga</h4>
-              <p className="text-slate-700 text-center text-sm">
-                Redução da carga de trabalho, com correções apoiadas em critérios qualitativos claros, compartilhados e previamente selecionados.
-              </p>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Schools Features */}
-      <section className="bg-slate-100 py-8 md:py-12 lg:py-16">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <div className="section-header text-center mb-8 md:mb-12">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Para Escolas</h2>
-          </div>
-          <div className="differences-grid grid md:grid-cols-3 gap-8">
-            <Card className="difference-card p-6 hover-lift border-brand-accent/30 animate-scale-in delay-100">
-              <div className="difference-icon w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <Users className="w-8 h-8 text-brand-primary" />
-              </div>
-              <h4 className="text-lg font-bold text-slate-900 mb-3 text-center">Suporte para Professores</h4>
-              <p className="text-slate-700 text-center">
-                Suporte para professores com redução de carga de trabalho.
-              </p>
-            </Card>
-            <Card className="difference-card p-6 hover-lift border-brand-accent/30 animate-scale-in delay-200">
-              <div className="difference-icon w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <GraduationCap className="w-8 h-8 text-brand-primary" />
-              </div>
-              <h4 className="text-lg font-bold text-slate-900 mb-3 text-center">Desenvolvimento da Autorregulação</h4>
-              <p className="text-slate-700 text-center">
-                Plataforma que permite o desenvolvimento da autorregulação dos alunos, a produção escrita e os resultados gerais de aprovação.
-              </p>
-            </Card>
-            <Card className="difference-card p-6 hover-lift border-brand-accent/30 animate-scale-in delay-300">
-              <div className="difference-icon w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <BarChart className="w-8 h-8 text-brand-primary" />
-              </div>
-              <h4 className="text-lg font-bold text-slate-900 mb-3 text-center">Dashboards Personalizados</h4>
-              <p className="text-slate-700 text-center">
-                Dashboards personalizados, mostrando: Quantitativo de redações produzidas, Habilidades da BNCC trabalhadas, Níveis de desempenho por aluno, turma ou escola.
-              </p>
-            </Card>
           </div>
         </div>
       </section>
