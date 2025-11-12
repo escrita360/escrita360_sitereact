@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card.jsx'
 import { Check, X, PenTool, Brain, TrendingUp, GraduationCap, School, Edit, FileText, CheckCircle, Bot, RotateCcw, Trophy, Heart, Target, BarChart, Users, UserCheck, BookOpen, Award, Cloud, Clock } from 'lucide-react'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
 import logo from '@/assets/logo2.svg'
-import notebook from '@/assets/Escrita360 - notebook.svg'
+import notebook from '@/assets/notebook.svg'
 
 function Home() {
   const heroRef = useScrollAnimation()
@@ -13,11 +13,11 @@ function Home() {
   return (
     <div>
       {/* Hero Section */}
-      <section ref={heroRef} className="hero bg-white animate-on-scroll -mt-4">
-        <div className="container mx-auto max-w-7xl">
+      <section ref={heroRef} className="hero bg-white animate-on-scroll min-h-screen flex items-center -mt-20 pt-20">
+        <div className="container mx-auto max-w-7xl px-4">
           <div className="grid lg:grid-cols-2 items-center gap-8">
             <div className="hero-content animate-fade-in-left text-center lg:text-left">
-              <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl mb-4 leading-none text-center">
+              <h1 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl mb-4 leading-none text-center">
                 <span style={{ color: '#2b7475', fontWeight: 'normal' }}>Inovamos para oferecer a plataforma mais completa </span>
                 <span style={{ color: '#569e9d', fontWeight: 'bold' }}>para o desenvolvimento da escrita, </span>
                 <span style={{ color: '#569e9d', fontWeight: 'normal' }}>unindo </span>
