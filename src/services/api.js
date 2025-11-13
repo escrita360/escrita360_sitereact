@@ -1,13 +1,61 @@
 import axios from 'axios'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+// Compatibilidade com Node.js e navegador
+const API_URL = (globalThis.import?.meta?.env?.VITE_API_URL) ||
+                (typeof process !== 'undefined' ? process.env?.VITE_API_URL : undefined) ||
+                'http://localhost:5000/api'
 
-const api = axios.create({
+// Mock para testes
+const isTestEnvironment = typeof process !== 'undefined' && process.env?.NODE_ENV === 'test'
+
+const mockApi = {
+  post: async (endpoint, data) => {
+    console.log(`   🔗 API Call: ${endpoint}`, JSON.stringify(data, null, 2).substring(0, 200) + '...')
+
+    if (endpoint === '/payment/create-pagbank-checkout') {
+      return {
+        data: {
+          id: `checkout_mock_${Date.now()}`,
+          payment_url: 'https://sandbox.pagbank.com/checkout/mock',
+          qr_code: null,
+          status: 'pending'
+        }
+      }
+    }
+
+    if (endpoint === '/payment/process-pagbank-card-payment') {
+      return {
+        data: {
+          id: `tx_mock_${Date.now()}`,
+          status: 'PAID',
+          amount: data.amount,
+          payment_method: 'CREDIT_CARD',
+          installments: data.installments,
+          created_at: new Date().toISOString()
+        }
+      }
+    }
+
+    throw new Error(`Endpoint não mockado: ${endpoint}`)
+  },
+  interceptors: {
+    request: {
+      use: () => {}
+    },
+    response: {
+      use: () => {}
+    }
+  }
+}
+
+const realApi = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
 })
+
+const api = isTestEnvironment ? mockApi : realApi
 
 // Interceptor para adicionar token JWT
 api.interceptors.request.use(
