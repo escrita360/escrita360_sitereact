@@ -18,8 +18,9 @@ const SUBSCRIPTIONS_CONFIG = {
 
 class PagBankSubscriptionsService {
   constructor() {
-    const isNode = typeof process !== 'undefined' && process.env
-    const env = isNode ? process.env : import.meta.env
+    // Detect environment safely without referencing an undefined `process`
+    const isNode = typeof globalThis !== 'undefined' && typeof globalThis.process !== 'undefined' && typeof globalThis.process.env !== 'undefined'
+    const env = isNode ? globalThis.process.env : (typeof import.meta !== 'undefined' ? import.meta.env : {})
     
     this.environment = env.VITE_PAGBANK_ENV || 'sandbox'
     this.config = SUBSCRIPTIONS_CONFIG[this.environment]
@@ -81,7 +82,8 @@ class PagBankSubscriptionsService {
       amount,
       intervalUnit = 'MONTH', // MONTH, YEAR, etc
       intervalValue = 1,
-      trial = null
+      trial = null,
+      paymentMethods = ['CREDIT_CARD', 'BOLETO'] // Métodos de pagamento aceitos
     } = planData
 
     const payload = {
@@ -94,8 +96,9 @@ class PagBankSubscriptionsService {
       },
       interval: {
         unit: intervalUnit,
-        value: intervalValue
+        length: intervalValue // Usar 'length' conforme documentação
       },
+      payment_method: paymentMethods, // Métodos de pagamento
       ...(trial && {
         trial: {
           enabled: true,
@@ -143,7 +146,8 @@ class PagBankSubscriptionsService {
       name,
       email,
       tax_id, // CPF ou CNPJ
-      phone
+      phone,
+      address // Opcional, necessário para BOLETO
     } = subscriberData
 
     // Formatar telefone
@@ -160,7 +164,8 @@ class PagBankSubscriptionsService {
       name,
       email,
       tax_id: tax_id.replace(/\D/g, ''),
-      phones: [phoneFormatted]
+      phones: [phoneFormatted],
+      ...(address && { address })
     }
 
     return await this.makeRequest('/customers', {

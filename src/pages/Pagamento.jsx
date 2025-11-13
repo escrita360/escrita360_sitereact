@@ -8,7 +8,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs.j
 import { CreditCard, Lock, Calendar, User, Shield, CheckCircle2, ArrowLeft, AlertCircle } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { paymentService } from '@/services/payment'
 import { authService } from '@/services/auth'
 import PagBankCheckout from '@/components/PagBankCheckout.jsx'
 
@@ -106,6 +105,7 @@ function Pagamento() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!formData.email) newErrors.email = 'E-mail é obrigatório'
     else if (!emailRegex.test(formData.email)) newErrors.email = 'E-mail inválido'
+    else if (formData.email.toLowerCase() === 'escrita360@gmail.com') newErrors.email = 'Use um e-mail diferente do vendedor'
     
     const phoneClean = formData.phone.replace(/\D/g, '')
     if (!phoneClean) newErrors.phone = 'Telefone é obrigatório'
@@ -149,7 +149,7 @@ function Pagamento() {
         'Empresarial': 'enterprise'
       }
       
-      const planId = planIdMap[selectedPlan.name] || 'basic'
+      const _planId = planIdMap[selectedPlan.name] || 'basic'
             
       // Se chegou aqui, a URL pode não ter sido retornada
       // Normalmente o usuário seria redirecionado antes deste ponto
