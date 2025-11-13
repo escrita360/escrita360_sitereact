@@ -1,5 +1,4 @@
 import api from './api'
-import { pagBankService, PAGBANK_CONSTANTS } from './pagbank'
 
 export const paymentService = {
   /**
@@ -86,100 +85,90 @@ export const paymentService = {
   // ============ MÉTODOS PAGBANK ============
 
   /**
-   * Cria checkout via PagBank
+   * Cria checkout via PagBank (através do backend)
    * @param {Object} planData - Dados do plano selecionado
    * @param {Object} customerData - Dados do cliente
    * @returns {Promise<Object>} - Link de checkout
    */
   async createPagBankCheckout(planData, customerData) {
-    const items = [{
-      id: planData.planId,
-      name: `Plano ${planData.name} - Escrita360`,
-      quantity: 1,
-      price: planData.price
-    }]
-
-    const checkoutData = {
-      items,
+    const data = {
+      plan_id: planData.planId,
+      plan_name: planData.name,
+      amount: planData.price,
       customer: {
         name: customerData.name,
         email: customerData.email,
-        cpf: pagBankService.formatTaxId(customerData.cpf),
+        cpf: customerData.cpf,
         phone: customerData.phone
-      },
-      redirectUrl: `${window.location.origin}/pagamento-sucesso`,
-      notificationUrls: [
-        `${import.meta.env.VITE_API_URL}/webhooks/pagbank`
-      ]
+      }
     }
 
-    return await pagBankService.createCheckoutLink(checkoutData)
+    const response = await api.post('/payment/create-pagbank-checkout', data)
+    return response.data
   },
 
   /**
-   * Processa pagamento direto com cartão via PagBank
+   * Processa pagamento direto com cartão via PagBank (através do backend)
    * @param {Object} paymentData - Dados do pagamento
    * @returns {Promise<Object>} - Resultado do pagamento
    */
   async processPagBankCardPayment(paymentData) {
     const { planData, customerData, cardData, installments } = paymentData
 
-    // Aqui seria necessário criptografar os dados do cartão
-    // usando a biblioteca JavaScript do PagBank
-    const encryptedCard = await this.encryptCardData(cardData)
-
-    const payment = {
+    const data = {
+      plan_name: planData.name,
+      amount: planData.price,
+      installments: installments || 1,
       customer: {
         name: customerData.name,
         email: customerData.email,
-        cpf: pagBankService.formatTaxId(customerData.cpf),
+        cpf: customerData.cpf,
         phone: customerData.phone
       },
       card: {
-        encrypted: encryptedCard,
+        number: cardData.number,
+        expiry_month: cardData.expiryMonth,
+        expiry_year: cardData.expiryYear,
         cvv: cardData.cvv,
-        holderName: cardData.holderName
-      },
-      amount: planData.price,
-      installments: installments || 1,
-      description: `Plano ${planData.name} - Escrita360`
+        holder_name: cardData.holderName
+      }
     }
 
-    return await pagBankService.processCardPayment(payment)
+    const response = await api.post('/payment/process-pagbank-card-payment', data)
+    return response.data
   },
 
   /**
-   * Cria pagamento PIX via PagBank
+   * Cria pagamento PIX via PagBank (através do backend)
    * @param {Object} paymentData - Dados do pagamento
    * @returns {Promise<Object>} - QR Code e dados do PIX
    */
   async createPagBankPixPayment(paymentData) {
     const { planData, customerData } = paymentData
 
-    const payment = {
+    const data = {
+      plan_name: planData.name,
+      amount: planData.price,
       customer: {
         name: customerData.name,
         email: customerData.email,
-        cpf: pagBankService.formatTaxId(customerData.cpf),
+        cpf: customerData.cpf,
         phone: customerData.phone
       },
-      amount: planData.price,
-      description: `Plano ${planData.name} - Escrita360`,
-      expirationMinutes: 30
+      expiration_minutes: 30
     }
 
-    return await pagBankService.createPixPayment(payment)
+    const response = await api.post('/payment/create-pagbank-pix-payment', data)
+    return response.data
   },
 
   /**
-   * Cria assinatura recorrente via PagBank
+   * Cria assinatura recorrente via PagBank (através do backend)
    * @param {Object} subscriptionData - Dados da assinatura
    * @returns {Promise<Object>} - Dados da assinatura criada
    */
   async createPagBankSubscription(subscriptionData) {
-    const { pagBankSubscriptionsService } = await import('./pagbank-subscriptions.js')
-    
-    const { planData, customerData, paymentMethod = 'CREDIT_CARD' } = subscriptionData
+    const { planData, customerData, paymentMethod = 'BOLETO' } = subscriptionData
 
     // Mapear nome do plano para configuração
     const planConfig = {
@@ -191,64 +180,55 @@ export const paymentService = {
 
     const config = planConfig[planData.name] || { intervalUnit: 'MONTH', intervalValue: 1 }
 
-    return await pagBankSubscriptionsService.createCompleteSubscription({
-      planName: planData.name,
-      planDescription: `Plano ${planData.name} - Escrita360`,
+    const data = {
+      plan_name: planData.name,
+      plan_description: `Plano ${planData.name} - Escrita360`,
       amount: planData.price,
-      intervalUnit: config.intervalUnit,
-      intervalValue: config.intervalValue,
+      interval_unit: config.intervalUnit,
+      interval_value: config.intervalValue,
       customer: {
         name: customerData.name,
         email: customerData.email,
         cpf: customerData.cpf,
         phone: customerData.phone
       },
-      paymentMethod,
-      cardToken: subscriptionData.cardToken,
-      cardSecurityCode: subscriptionData.cardSecurityCode
-    })
+      payment_method: paymentMethod,
+      card_token: subscriptionData.cardToken,
+      card_security_code: subscriptionData.cardSecurityCode
+    }
+
+    const response = await api.post('/payment/create-pagbank-subscription', data)
+    return response.data
   },
 
   /**
-   * Consulta status de pagamento PagBank
+   * Consulta status de pagamento PagBank (através do backend)
    * @param {string} orderId - ID do pedido
    * @returns {Promise<Object>} - Status do pagamento
    */
   async getPagBankPaymentStatus(orderId) {
-    return await pagBankService.getOrderStatus(orderId)
+    const response = await api.get(`/payment/pagbank-status/${orderId}`)
+    return response.data
   },
 
   /**
-   * Lista pagamentos PagBank
+   * Lista pagamentos PagBank (através do backend)
    * @param {Object} filters - Filtros para busca
    * @returns {Promise<Array>} - Lista de pagamentos
    */
   async listPagBankPayments(filters = {}) {
-    return await pagBankService.listOrders(filters)
+    const response = await api.get('/payment/pagbank-payments', { params: filters })
+    return response.data
   },
 
   /**
-   * Cancela pagamento PagBank
+   * Cancela pagamento PagBank (através do backend)
    * @param {string} orderId - ID do pedido
    * @returns {Promise<Object>} - Resultado do cancelamento
    */
   async cancelPagBankPayment(orderId) {
-    return await pagBankService.cancelOrder(orderId)
-  },
-
-  /**
-   * Criptografa dados do cartão (placeholder - implementar com biblioteca PagBank)
-   * @param {Object} cardData - Dados do cartão
-   * @returns {Promise<string>} - Dados criptografados
-   */
-  async encryptCardData(cardData) {
-    // TODO: Implementar criptografia usando a biblioteca JavaScript do PagBank
-    // Documentação: https://dev.pagbank.uol.com.br/docs/criptografia-dados-cartao
-    
-    // Por enquanto, retorna um placeholder
-    // Em produção, usar: window.PagSeguro.encryptCard(cardData)
-    console.warn('⚠️ Criptografia do cartão não implementada. Use apenas em ambiente de desenvolvimento.')
-    return 'encrypted_card_data_placeholder'
+    const response = await api.post(`/payment/cancel-pagbank-payment/${orderId}`)
+    return response.data
   },
 
   /**
