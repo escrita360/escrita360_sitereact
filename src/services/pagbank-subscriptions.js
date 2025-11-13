@@ -242,8 +242,7 @@ class PagBankSubscriptionsService {
         payload.customer.billing_info = [{
           type: 'CREDIT_CARD',
           card: {
-            token: cardToken,
-            security_code: cardSecurityCode
+            token: cardToken
           }
         }]
       }
@@ -251,12 +250,20 @@ class PagBankSubscriptionsService {
 
     // Método de pagamento
     if (paymentMethod === 'CREDIT_CARD') {
-      payload.payment_method.push({
-        type: 'CREDIT_CARD',
-        card: {
-          security_code: cardSecurityCode
-        }
-      })
+      // Se já usou cardToken no billing_info, não incluir card no payment_method
+      if (!cardToken) {
+        payload.payment_method.push({
+          type: 'CREDIT_CARD',
+          card: {
+            security_code: cardSecurityCode
+          }
+        })
+      } else {
+        // Quando usar token, apenas o tipo é suficiente
+        payload.payment_method.push({
+          type: 'CREDIT_CARD'
+        })
+      }
     } else if (paymentMethod === 'BOLETO') {
       payload.payment_method.push({
         type: 'BOLETO'
