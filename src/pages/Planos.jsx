@@ -208,21 +208,21 @@ function Precos() {
       name: 'Pacote 1',
       credits: 5,
       price: 20,
-      description: '5 créditos para usar em até 30 dias',
+      description: '',
       features: ['Análises detalhadas por IA', 'Validade de 30 dias', 'Suporte incluído']
     },
     {
       name: 'Pacote 2',
       credits: 15,
       price: 45,
-      description: '15 créditos para usar em até 30 dias',
+      description: '',
       features: ['Análises detalhadas por IA', 'Validade de 30 dias', 'Suporte incluído']
     },
     {
       name: 'Pacote 3',
       credits: 30,
       price: 60,
-      description: '30 créditos para usar em até 30 dias',
+      description: '',
       popular: true,
       features: ['Análises detalhadas por IA', 'Validade de 30 dias', 'Suporte incluído', 'Melhor custo-benefício']
     }
@@ -234,14 +234,14 @@ function Precos() {
       name: 'Pacote 1',
       credits: 100,
       price: 155,
-      description: '100 créditos para usar em até 30 dias',
+      description: '',
       features: ['Análises detalhadas por IA', 'Validade de 30 dias', 'Suporte incluído']
     },
     {
       name: 'Pacote 2',
       credits: 200,
       price: 300,
-      description: '200 créditos para usar em até 30 dias',
+      description: '',
       popular: true,
       features: ['Análises detalhadas por IA', 'Validade de 30 dias', 'Suporte incluído', 'Melhor custo-benefício']
     }
@@ -253,14 +253,14 @@ function Precos() {
       name: 'Pacote Escolar 1',
       credits: 3000,
       price: 6300,
-      description: '3.000 créditos para usar em até 90 dias',
+      description: '',
       features: ['Análises detalhadas por IA', 'Validade de 90 dias', 'Suporte prioritário', 'Relatórios institucionais']
     },
     {
       name: 'Pacote Escolar 2',
       credits: 5000,
       price: 10200,
-      description: '5.000 créditos para usar em até 90 dias',
+      description: '',
       popular: true,
       features: ['Análises detalhadas por IA', 'Validade de 90 dias', 'Suporte prioritário', 'Relatórios institucionais', 'Melhor custo-benefício']
     }
