@@ -40,7 +40,7 @@ function Precos() {
       name: 'Plano Mensal',
       badge: 'Acesso imediato',
       monthlyPrice: 49,
-      yearlyPrice: 49,
+      yearlyPrice: 588,
       description: 'Plano Híbrido (Uso da plataforma + créditos de IA)',
       credits: 10,
       features: [
@@ -61,7 +61,7 @@ function Precos() {
       name: 'Plano Trimestral',
       badge: 'Melhor custo-benefício',
       monthlyPrice: 120,
-      yearlyPrice: 120,
+      yearlyPrice: 480,
       description: 'Plano Híbrido (Uso da plataforma + créditos de IA)',
       credits: 50,
       popular: true,
@@ -87,7 +87,7 @@ function Precos() {
       name: 'Plano 1 Mensal',
       badge: 'Para começar',
       monthlyPrice: 49,
-      yearlyPrice: 49,
+      yearlyPrice: 588,
       description: 'Plano Híbrido (Plataforma + créditos de IA)',
       credits: 10,
       features: [
@@ -109,7 +109,7 @@ function Precos() {
       name: 'Plano 2 Mensal',
       badge: 'Mais escolhido',
       monthlyPrice: 130,
-      yearlyPrice: 130,
+      yearlyPrice: 1560,
       description: 'Plano Híbrido (Plataforma + créditos de IA)',
       credits: 100,
       popular: true,
@@ -132,7 +132,7 @@ function Precos() {
       name: 'Plano Trimestral',
       badge: 'Economia garantida',
       monthlyPrice: 320,
-      yearlyPrice: 320,
+      yearlyPrice: 1280,
       description: 'Plano Híbrido (Plataforma + créditos de IA)',
       credits: 200,
       features: [
@@ -154,7 +154,7 @@ function Precos() {
       name: 'Plano Semestral',
       badge: 'Melhor investimento',
       monthlyPrice: 465,
-      yearlyPrice: 465,
+      yearlyPrice: 930,
       description: 'Plano Híbrido (Plataforma + créditos de IA)',
       credits: 300,
       features: [
@@ -180,7 +180,7 @@ function Precos() {
       name: 'Plano Híbrido 360',
       badge: 'Institucional completo',
       monthlyPrice: 295,
-      yearlyPrice: 295,
+      yearlyPrice: 3540,
       description: 'Integração total entre os módulos Professor e Aluno',
       features: [
         { text: 'Módulo de escrita digital autorregulada', included: true },

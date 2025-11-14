@@ -343,8 +343,8 @@ const RecurringPayment = ({ paymentData, onSuccess, onError }) => {
   )
 }
 
-export function PagBankCheckout({ planData, customerData, onSuccess, onError }) {
-  const [selectedMethod, setSelectedMethod] = useState('recurring')
+export function PagBankCheckout({ planData, customerData, cardData, isYearly, onSuccess, onError }) {
+  const [selectedMethod, setSelectedMethod] = useState(isYearly ? 'card' : 'recurring')
 
   const paymentMethods = [
     {

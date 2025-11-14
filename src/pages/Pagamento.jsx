@@ -240,6 +240,7 @@ function Pagamento() {
                           cvv: formData.cvv,
                           holderName: formData.cardName
                         } : null}
+                        isYearly={isYearly}
                         onSuccess={(data) => {
                           setPaymentSuccess(true)
                           setTransactionData(data)
