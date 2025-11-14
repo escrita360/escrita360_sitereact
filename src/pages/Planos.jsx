@@ -570,7 +570,7 @@ function Precos() {
             </div>
             
             <div className={`grid gap-8 mx-auto justify-items-center ${
-              selectedAudience === 'escolas' ? 'md:grid-cols-2 max-w-4xl' : 
+              selectedAudience === 'escolas' ? 'md:grid-cols-2 max-w-3xl' : 
               selectedAudience === 'professores' ? 'md:grid-cols-2 max-w-4xl' :
               'md:grid-cols-3 max-w-5xl'
             }`}>
