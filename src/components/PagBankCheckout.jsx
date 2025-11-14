@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
@@ -7,7 +7,7 @@ import { CreditCard, Smartphone, FileText, Loader2, CheckCircle2, AlertCircle, C
 import { paymentService } from '@/services/payment'
 import { toast } from 'sonner'
 
-const PaymentMethodCard = ({ icon: Icon, title, description, isSelected, onClick, isDisabled = false }) => (
+const PaymentMethodCard = ({ icon: Icon, title, description, isSelected, onClick, isDisabled = false }) => ( // eslint-disable-line no-unused-vars
   <Card 
     className={`cursor-pointer transition-all duration-200 hover:shadow-md ${
       isSelected ? 'ring-2 ring-blue-500 bg-blue-50' : 'hover:bg-gray-50'
@@ -29,14 +29,14 @@ const PaymentMethodCard = ({ icon: Icon, title, description, isSelected, onClick
   </Card>
 )
 
-const PixPayment = ({ paymentData, onSuccess, onError }) => {
+const PixPayment = ({ paymentData, onError }) => {
   const [pixData, setPixData] = useState(null)
   const [isGenerating, setIsGenerating] = useState(false)
   const [timeLeft, setTimeLeft] = useState(1800) // 30 minutos
 
   useEffect(() => {
     generatePix()
-  }, [])
+  }, [generatePix])
 
   useEffect(() => {
     if (pixData && timeLeft > 0) {
@@ -45,7 +45,7 @@ const PixPayment = ({ paymentData, onSuccess, onError }) => {
     }
   }, [timeLeft, pixData])
 
-  const generatePix = async () => {
+  const generatePix = useCallback(async () => {
     setIsGenerating(true)
     try {
       console.log('🔄 Gerando PIX com PagBank...')
@@ -67,7 +67,7 @@ const PixPayment = ({ paymentData, onSuccess, onError }) => {
     } finally {
       setIsGenerating(false)
     }
-  }
+  }, [paymentData, onError])
 
   const copyPixCode = () => {
     if (pixData?.qr_codes?.[0]?.text) {
@@ -163,15 +163,15 @@ const PixPayment = ({ paymentData, onSuccess, onError }) => {
   )
 }
 
-const BoletoPayment = ({ paymentData, onSuccess, onError }) => {
+const BoletoPayment = ({ paymentData, onError }) => {
   const [boletoData, setBoletoData] = useState(null)
   const [isGenerating, setIsGenerating] = useState(false)
 
   useEffect(() => {
     generateBoleto()
-  }, [])
+  }, [generateBoleto])
 
-  const generateBoleto = async () => {
+  const generateBoleto = useCallback(async () => {
     setIsGenerating(true)
     try {
       // TODO: Implementar geração de boleto via PagBank
@@ -190,7 +190,7 @@ const BoletoPayment = ({ paymentData, onSuccess, onError }) => {
       onError('Erro ao gerar boleto: ' + error.message)
       setIsGenerating(false)
     }
-  }
+  }, [onError])
 
   if (isGenerating) {
     return (
@@ -345,7 +345,6 @@ const RecurringPayment = ({ paymentData, onSuccess, onError }) => {
 
 export function PagBankCheckout({ planData, customerData, onSuccess, onError }) {
   const [selectedMethod, setSelectedMethod] = useState('recurring')
-  const [isProcessing, setIsProcessing] = useState(false)
 
   const paymentMethods = [
     {
