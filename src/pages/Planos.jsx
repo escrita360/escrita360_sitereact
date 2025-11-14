@@ -14,7 +14,6 @@ function Precos() {
   const audienceFromUrl = searchParams.get('audience') || 'estudantes'
   const [selectedAudience, setSelectedAudience] = useState(audienceFromUrl)
   const navigate = useNavigate()
-  const heroRef = useScrollAnimation()
   const plansRef = useScrollAnimation()
   const comparisonRef = useScrollAnimation()
 
@@ -24,7 +23,7 @@ function Precos() {
     if (urlAudience && urlAudience !== selectedAudience) {
       setSelectedAudience(urlAudience)
     }
-  }, [searchParams])
+  }, [searchParams, selectedAudience])
 
   // Scroll to top when audience changes
   useEffect(() => {
@@ -317,21 +316,6 @@ function Precos() {
 
   const currentPlans = getCurrentPlans()
 
-  const comparisonData = [
-    { feature: 'Correções por mês', free: '3', professor: 'Ilimitadas', escola: 'Ilimitadas' },
-    { feature: 'Número de alunos', free: '1', professor: 'Até 30', escola: 'Ilimitados' },
-    { feature: 'Processo de escrita autorregulada', free: true, professor: true, escola: true },
-    { feature: 'Análise das 5 competências ENEM', free: true, professor: true, escola: true },
-    { feature: 'Painel de sentimentos', free: true, professor: true, escola: true },
-    { feature: 'Banco de temas', free: 'Limitado', professor: 'Completo', escola: 'Completo + Personalizado' },
-    { feature: 'Dashboard de acompanhamento', free: 'Básico', professor: 'Completo', escola: 'Administrativo Avançado' },
-    { feature: 'Relatórios', free: 'Básicos', professor: 'Detalhados', escola: 'Institucionais Completos' },
-    { feature: 'Gestão de turmas', free: false, professor: true, escola: true },
-    { feature: 'Suporte prioritário', free: false, professor: true, escola: true },
-    { feature: 'Integração com LMS', free: false, professor: false, escola: true },
-    { feature: 'API completa', free: false, professor: false, escola: true }
-  ]
-
   // Dados de comparação específicos para estudantes
   const studentComparisonData = [
     { feature: 'Módulo de escrita autorregulada', mensal: true, trimestral: true },
@@ -355,41 +339,6 @@ function Precos() {
     { feature: 'Correção por foto/digitada', plano1: true, plano2: true, trimestral: true, semestral: true },
     { feature: 'Análises por IA', plano1: '20 créditos', plano2: '100 créditos', trimestral: '200 créditos', semestral: '300 créditos' },
     { feature: 'Período de acesso', plano1: '30 dias', plano2: '30 dias', trimestral: '90 dias', semestral: '180 dias' }
-  ]
-
-  const faqs = [
-    {
-      question: "Como funciona a análise automática das redações?",
-      answer: "Nossa IA analisa sua redação seguindo exatamente os critérios do ENEM. Ela avalia cada uma das 5 competências, identifica erros gramaticais, problemas de estrutura e oferece sugestões específicas de melhoria com exemplos práticos."
-    },
-    {
-      question: "Quantas redações posso corrigir por mês?",
-      answer: "No plano Estudante você tem apenas o modo de autocorreção. O plano Professor oferece análises ilimitadas para você e seus alunos. Já o plano Escola não possui limites de uso para toda a instituição."
-    },
-    {
-      question: "Posso usar para outros vestibulares além do ENEM?",
-      answer: "Sim! Embora nosso foco principal seja o ENEM, os critérios de avaliação servem para a maioria dos vestibulares brasileiros. A plataforma ajuda a desenvolver habilidades fundamentais de escrita argumentativa."
-    },
-    {
-      question: "O que significa \"histórico é local\" no plano Estudante?",
-      answer: "No plano Estudante, suas redações e histórico ficam salvos apenas no seu dispositivo (navegador). Para backup na nuvem, sincronização entre dispositivos e relatórios avançados, recomendamos os planos pagos."
-    },
-    {
-      question: "Como funciona o dashboard para professores?",
-      answer: "Professores podem criar turmas, acompanhar o progresso individual de cada aluno, visualizar estatísticas da turma, identificar dificuldades comuns e gerar relatórios detalhados para reuniões pedagógicas."
-    },
-    {
-      question: "Meus dados e redações ficam seguros?",
-      answer: "Sim! Utilizamos criptografia de ponta para proteger todas as suas redações e dados pessoais. Seus textos nunca são compartilhados com terceiros e você tem controle total sobre suas informações."
-    },
-    {
-      question: "Posso cancelar minha assinatura a qualquer momento?",
-      answer: "Claro! Você pode cancelar sua assinatura a qualquer momento sem taxas. Após o cancelamento, você continuará tendo acesso até o fim do período já pago, incluindo seu histórico de redações."
-    },
-    {
-      question: "Como escolas podem integrar a plataforma em suas aulas?",
-      answer: "Oferecemos suporte completo para implementação em escolas, incluindo treinamento para professores, integração com sistemas existentes e relatórios administrativos. Nossa equipe pedagógica ajuda no planejamento da implementação."
-    }
   ]
 
   // Conteúdo do hero baseado no público selecionado
