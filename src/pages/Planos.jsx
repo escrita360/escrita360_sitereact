@@ -132,10 +132,10 @@ function Precos() {
     {
       name: 'Plano Trimestral',
       badge: 'Economia garantida',
-      monthlyPrice: 340,
-      yearlyPrice: 340,
+      monthlyPrice: 320,
+      yearlyPrice: 320,
       description: 'Plano Híbrido (Plataforma + créditos de IA)',
-      credits: 250,
+      credits: 200,
       features: [
         { text: 'Módulo de escrita digital autorregulada', included: true },
         { text: 'Banco de estratégias para escrita', included: true },
@@ -144,7 +144,7 @@ function Precos() {
         { text: 'Insights para melhoria da escrita', included: true },
         { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
         { text: 'Rubricas qualitativas para (auto)avaliação', included: true },
-        { text: '250 análises detalhadas de redações por IA', included: true, highlighted: true },
+        { text: '200 análises detalhadas de redações por IA', included: true, highlighted: true },
         { text: 'Correção por foto ou digitada', included: true },
         { text: 'Acesso por 90 dias', included: true }
       ],
@@ -154,10 +154,10 @@ function Precos() {
     {
       name: 'Plano Semestral',
       badge: 'Melhor investimento',
-      monthlyPrice: 620,
-      yearlyPrice: 620,
+      monthlyPrice: 465,
+      yearlyPrice: 465,
       description: 'Plano Híbrido (Plataforma + créditos de IA)',
-      credits: 500,
+      credits: 300,
       features: [
         { text: 'Módulo de escrita digital autorregulada', included: true },
         { text: 'Banco de estratégias para escrita', included: true },
@@ -166,7 +166,7 @@ function Precos() {
         { text: 'Insights para melhoria da escrita', included: true },
         { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
         { text: 'Rubricas qualitativas para (auto)avaliação', included: true },
-        { text: '500 análises detalhadas de redações por IA', included: true, highlighted: true },
+        { text: '300 análises detalhadas de redações por IA', included: true, highlighted: true },
         { text: 'Correção por foto ou digitada', included: true },
         { text: 'Acesso por 180 dias', included: true }
       ],
@@ -252,7 +252,7 @@ function Precos() {
     {
       name: 'Pacote Escolar 1',
       credits: 3000,
-      price: 3300,
+      price: 6300,
       description: '3.000 créditos para usar em até 90 dias',
       features: ['Análises detalhadas por IA', 'Validade de 90 dias', 'Suporte prioritário', 'Relatórios institucionais']
     },
@@ -353,7 +353,7 @@ function Precos() {
     { feature: 'Revisor integrado ilimitado', basico: true, profissional: true, trimestral: true, semestral: true },
     { feature: 'Rubricas qualitativas', basico: true, profissional: true, trimestral: true, semestral: true },
     { feature: 'Correção por foto/digitada', basico: true, profissional: true, trimestral: true, semestral: true },
-    { feature: 'Análises por IA', basico: '20 créditos', profissional: '100 créditos', trimestral: '250 créditos', semestral: '500 créditos' },
+    { feature: 'Análises por IA', basico: '20 créditos', profissional: '100 créditos', trimestral: '200 créditos', semestral: '300 créditos' },
     { feature: 'Período de acesso', basico: '30 dias', profissional: '30 dias', trimestral: '90 dias', semestral: '180 dias' }
   ]
 
