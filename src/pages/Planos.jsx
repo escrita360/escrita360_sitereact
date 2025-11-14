@@ -584,7 +584,9 @@ function Precos() {
                   <CardHeader className="text-center pb-4">
                     <h3 className="text-xl font-bold text-slate-900">{pkg.name}</h3>
                     <div className="my-4">
-                      <span className="text-3xl font-bold text-brand-primary">R$ {pkg.price}</span>
+                      <span className="text-3xl font-bold text-brand-primary">
+                        R$ {selectedAudience === 'escolas' ? pkg.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : pkg.price}
+                      </span>
                     </div>
                     <p className="text-slate-600 text-sm">
                       <strong>{pkg.credits} créditos</strong>
