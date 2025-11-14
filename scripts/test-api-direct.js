@@ -4,6 +4,7 @@ dotenv.config()
 async function testAPI() {
   console.log('🔍 Testando API PagBank diretamente...\n')
 
+  // eslint-disable-next-line no-undef
   const token = process.env.VITE_PAGBANK_TOKEN
   console.log('Token configurado:', token ? 'Sim' : 'Não')
 
