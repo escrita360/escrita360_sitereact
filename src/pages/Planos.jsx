@@ -85,7 +85,7 @@ function Precos() {
   // Planos para professores
   const teacherPlans = [
     {
-      name: 'Plano Básico Mensal',
+      name: 'Plano 1 Mensal',
       badge: 'Para começar',
       monthlyPrice: 49,
       yearlyPrice: 49,
@@ -103,11 +103,11 @@ function Precos() {
         { text: 'Correção por foto ou digitada', included: true },
         { text: 'Acesso por 30 dias', included: true }
       ],
-      buttonText: 'Escolher Básico',
+      buttonText: 'Escolher Plano 1',
       buttonVariant: 'default'
     },
     {
-      name: 'Plano Profissional Mensal',
+      name: 'Plano 2 Mensal',
       badge: 'Mais escolhido',
       monthlyPrice: 130,
       yearlyPrice: 130,
@@ -126,7 +126,7 @@ function Precos() {
         { text: 'Correção por foto ou digitada', included: true },
         { text: 'Acesso por 30 dias', included: true }
       ],
-      buttonText: 'Escolher Profissional',
+      buttonText: 'Escolher Plano 2',
       buttonVariant: 'default'
     },
     {
@@ -346,15 +346,15 @@ function Precos() {
 
   // Dados de comparação específicos para professores
   const teacherComparisonData = [
-    { feature: 'Módulo de escrita autorregulada', basico: true, profissional: true, trimestral: true, semestral: true },
-    { feature: 'Banco de estratégias para escrita', basico: true, profissional: true, trimestral: true, semestral: true },
-    { feature: 'Sugestão de temas', basico: true, profissional: true, trimestral: true, semestral: true },
-    { feature: 'Recursos de apoio autorregulatório', basico: true, profissional: true, trimestral: true, semestral: true },
-    { feature: 'Revisor integrado ilimitado', basico: true, profissional: true, trimestral: true, semestral: true },
-    { feature: 'Rubricas qualitativas', basico: true, profissional: true, trimestral: true, semestral: true },
-    { feature: 'Correção por foto/digitada', basico: true, profissional: true, trimestral: true, semestral: true },
-    { feature: 'Análises por IA', basico: '20 créditos', profissional: '100 créditos', trimestral: '200 créditos', semestral: '300 créditos' },
-    { feature: 'Período de acesso', basico: '30 dias', profissional: '30 dias', trimestral: '90 dias', semestral: '180 dias' }
+    { feature: 'Módulo de escrita autorregulada', plano1: true, plano2: true, trimestral: true, semestral: true },
+    { feature: 'Banco de estratégias para escrita', plano1: true, plano2: true, trimestral: true, semestral: true },
+    { feature: 'Sugestão de temas', plano1: true, plano2: true, trimestral: true, semestral: true },
+    { feature: 'Recursos de apoio autorregulatório', plano1: true, plano2: true, trimestral: true, semestral: true },
+    { feature: 'Revisor integrado ilimitado', plano1: true, plano2: true, trimestral: true, semestral: true },
+    { feature: 'Rubricas qualitativas', plano1: true, plano2: true, trimestral: true, semestral: true },
+    { feature: 'Correção por foto/digitada', plano1: true, plano2: true, trimestral: true, semestral: true },
+    { feature: 'Análises por IA', plano1: '20 créditos', plano2: '100 créditos', trimestral: '200 créditos', semestral: '300 créditos' },
+    { feature: 'Período de acesso', plano1: '30 dias', plano2: '30 dias', trimestral: '90 dias', semestral: '180 dias' }
   ]
 
   const faqs = [
@@ -736,14 +736,14 @@ function Precos() {
                     <h3 className="font-bold text-slate-900">Recursos</h3>
                   </div>
                   <div className="p-4 text-center border-l border-slate-200">
-                    <h3 className="font-bold text-slate-900">Básico</h3>
+                    <h3 className="font-bold text-slate-900">Plano 1</h3>
                     <p className="text-sm text-slate-600">R$ 49/mês</p>
                   </div>
                   <div className="p-4 text-center border-l border-slate-200 bg-gradient-to-br from-blue-50 to-cyan-50">
                     <div className="flex items-center justify-center mb-1">
                       <Badge className="bg-brand-primary text-white text-xs mr-2">Popular</Badge>
                     </div>
-                    <h3 className="font-bold text-slate-900">Profissional</h3>
+                    <h3 className="font-bold text-slate-900">Plano 2</h3>
                     <p className="text-sm text-slate-600">R$ 130/mês</p>
                   </div>
                   <div className="p-4 text-center border-l border-slate-200">
@@ -761,17 +761,17 @@ function Precos() {
                       <span className="text-sm font-medium text-slate-700">{row.feature}</span>
                     </div>
                     <div className="p-4 flex items-center justify-center border-l border-slate-100">
-                      {typeof row.basico === 'boolean' ? (
+                      {typeof row.plano1 === 'boolean' ? (
                         <Check className="w-5 h-5 text-green-600" />
                       ) : (
-                        <span className="text-sm text-slate-600 font-medium">{row.basico}</span>
+                        <span className="text-sm text-slate-600 font-medium">{row.plano1}</span>
                       )}
                     </div>
                     <div className="p-4 flex items-center justify-center border-l border-slate-100 bg-gradient-to-br from-blue-50/30 to-cyan-50/30">
-                      {typeof row.profissional === 'boolean' ? (
+                      {typeof row.plano2 === 'boolean' ? (
                         <Check className="w-5 h-5 text-green-600" />
                       ) : (
-                        <span className="text-sm text-slate-700 font-medium">{row.profissional}</span>
+                        <span className="text-sm text-slate-700 font-medium">{row.plano2}</span>
                       )}
                     </div>
                     <div className="p-4 flex items-center justify-center border-l border-slate-100">
