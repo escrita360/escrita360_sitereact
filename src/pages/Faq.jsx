@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ChevronDown, Search, List, Laptop, Settings, Wrench } from 'lucide-react';
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 
 const faqData = [
@@ -73,7 +74,6 @@ const renderAnswer = (answer) => {
     }
     if (line.startsWith('- ')) {
       const text = line.replace('- ', '');
-      const isBold = text.includes('**');
       return <li key={index} className='ml-4 mb-1'>{renderBoldText(text)}</li>;
     }
     if (line.trim() === '') {
@@ -97,6 +97,18 @@ export default function Faq() {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
   const [openItems, setOpenItems] = useState(new Set());
+
+  const toggleItem = (id) => {
+    setOpenItems(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
+    });
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -189,7 +201,7 @@ export default function Faq() {
         className='grid grid-cols-2 md:grid-cols-4 gap-4 mb-8'
         variants={itemVariants}
       >
-        {categories.map((category, index) => {
+        {categories.map((category) => {
           const Icon = category.icon;
           return (
             <motion.div
@@ -237,7 +249,7 @@ export default function Faq() {
             </Card>
           </motion.div>
         ) : (
-          filteredFaqs.map((faq, index) => (
+          filteredFaqs.map((faq) => (
             <motion.div
               key={faq.id}
               variants={cardVariants}

@@ -12,7 +12,6 @@ import { Mail, Phone, MapPin, MessageSquare, Clock, Calendar, Gift, Handshake, G
 import { useState } from 'react'
 
 function Contato() {
-  const heroRef = useScrollAnimation()
   const formRef = useScrollAnimation()
   const contactRef = useScrollAnimation()
   
