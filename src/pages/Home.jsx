@@ -3,12 +3,12 @@ import { Card, CardContent } from '@/components/ui/card.jsx'
 import { Check, X, PenTool, Brain, TrendingUp, GraduationCap, School, Edit, FileText, CheckCircle, Bot, RotateCcw, Trophy, Heart, Target, BarChart, Users, UserCheck, BookOpen, Award, Cloud, Clock } from 'lucide-react'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
 import notebook from '@/assets/notebook.svg'
-import card1 from '@/assets/card1.svg'
-import card2 from '@/assets/card2.svg'
-import card3 from '@/assets/card3.svg'
-import card4 from '@/assets/card4.svg'
-import card5 from '@/assets/card5.svg'
-import card6 from '@/assets/card6.svg'
+import card1 from '@/assets/card1.0.svg'
+import card2 from '@/assets/card2.0.svg'
+import card3 from '@/assets/card3.0.svg'
+import card4 from '@/assets/card4.0.svg'
+import card5 from '@/assets/card5.0.svg'
+import card6 from '@/assets/card6.0.svg'
 
 function Home() {
   const heroRef = useScrollAnimation()
