@@ -575,7 +575,7 @@ function Precos() {
               'md:grid-cols-3 max-w-5xl'
             }`}>
               {creditPackages.map((pkg, index) => (
-                <Card key={index} className={`relative hover-lift ${pkg.popular ? 'border-2 border-green-500 shadow-xl' : 'hover:shadow-xl'} transition-all`}>
+                <Card key={index} className={`relative hover-lift aspect-square ${pkg.popular ? 'border-2 border-green-500 shadow-xl' : 'hover:shadow-xl'} transition-all flex flex-col`}>
                   {pkg.popular && (
                     <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                       <Badge className="bg-green-500 text-white px-4 py-1">Melhor Custo-Benefício</Badge>
