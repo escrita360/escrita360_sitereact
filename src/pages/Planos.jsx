@@ -42,7 +42,7 @@ function Precos() {
       monthlyPrice: 49,
       yearlyPrice: 49,
       description: 'Plano Híbrido (Uso da plataforma + créditos de IA)',
-      credits: 20,
+      credits: 10,
       features: [
         { text: 'Módulo de escrita digital autorregulada', included: true },
         { text: 'Banco de estratégias para escrita', included: true },
@@ -51,7 +51,7 @@ function Precos() {
         { text: 'Insights para melhoria da escrita', included: true },
         { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
         { text: 'Rubricas qualitativas para (auto)avaliação', included: true },
-        { text: '20 análises detalhadas de redações do ENEM por IA', included: true, highlighted: true },
+        { text: "10 análises detalhadas de redações do ENEM por IA", included: true, highlighted: true },
         { text: 'Acesso por 30 dias', included: true }
       ],
       buttonText: 'Escolher Mensal',
@@ -89,7 +89,7 @@ function Precos() {
       monthlyPrice: 49,
       yearlyPrice: 49,
       description: 'Plano Híbrido (Plataforma + créditos de IA)',
-      credits: 20,
+      credits: 10,
       features: [
         { text: 'Módulo de escrita digital autorregulada', included: true },
         { text: 'Banco de estratégias para escrita', included: true },
@@ -98,7 +98,7 @@ function Precos() {
         { text: 'Insights para melhoria da escrita', included: true },
         { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
         { text: 'Rubricas qualitativas para (auto)avaliação', included: true },
-        { text: '20 análises detalhadas de redações por IA', included: true, highlighted: true },
+        { text: '10 análises detalhadas de redações por IA', included: true, highlighted: true },
         { text: 'Correção por foto ou digitada', included: true },
         { text: 'Acesso por 30 dias', included: true }
       ],
@@ -337,7 +337,7 @@ function Precos() {
     { feature: 'Revisor integrado ilimitado', plano1: true, plano2: true, trimestral: true, semestral: true },
     { feature: 'Rubricas qualitativas', plano1: true, plano2: true, trimestral: true, semestral: true },
     { feature: 'Correção por foto/digitada', plano1: true, plano2: true, trimestral: true, semestral: true },
-    { feature: 'Análises por IA', plano1: '20 créditos', plano2: '100 créditos', trimestral: '200 créditos', semestral: '300 créditos' },
+    { feature: 'Análises por IA', plano1: '10 créditos', plano2: '100 créditos', trimestral: '200 créditos', semestral: '300 créditos' },
     { feature: 'Período de acesso', plano1: '30 dias', plano2: '30 dias', trimestral: '90 dias', semestral: '180 dias' }
   ]
 
