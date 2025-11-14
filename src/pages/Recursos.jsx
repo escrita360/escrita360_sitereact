@@ -234,20 +234,20 @@ function Recursos() {
           </div>
 
           {/* Resources Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {getCurrentResources().map((recurso, index) => (
               <Card 
                 key={index} 
-                className={`p-6 hover-lift border-0 shadow-lg animate-scale-in delay-${Math.min(index * 100, 800)}`}
+                className={`p-4 hover-lift border-0 shadow-lg animate-scale-in delay-${Math.min(index * 100, 800)} aspect-square flex flex-col`}
               >
-                <CardContent className="pt-6">
-                  <div className="flex items-center justify-center w-16 h-16 bg-brand-light rounded-lg mb-6 mx-auto transition-transform duration-500 hover:rotate-12 hover:scale-110 animate-float" style={{ animationDelay: `${index * 100}ms` }}>
+                <CardContent className="pt-4 flex flex-col justify-center items-center text-center h-full">
+                  <div className="flex items-center justify-center w-12 h-12 bg-brand-light rounded-lg mb-4 mx-auto transition-transform duration-500 hover:rotate-12 hover:scale-110 animate-float" style={{ animationDelay: `${index * 100}ms` }}>
                     {recurso.icon}
                   </div>
-                  <h3 className="text-xl font-bold text-slate-900 mb-4 text-center">
+                  <h3 className="text-lg font-bold text-slate-900 mb-3 text-center">
                     {recurso.title}
                   </h3>
-                  <p className="text-slate-700 mb-6 text-center leading-relaxed">
+                  <p className="text-slate-700 mb-4 text-center leading-relaxed text-sm">
                     {recurso.description}
                   </p>
                 </CardContent>
@@ -269,7 +269,7 @@ function Recursos() {
           <Button
             size="lg"
             onClick={() => navigate('/precos')}
-            className="bg-brand-primary hover:bg-brand-secondary text-white px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-110 hover:shadow-xl"
+            className="bg-[#4A90E2] hover:bg-[#357ABD] text-white px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-110 hover:shadow-xl"
           >
             Começar Agora
           </Button>

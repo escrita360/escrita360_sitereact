@@ -87,27 +87,27 @@ function ParaQuem() {
                 const IconComponent = audience.icon
                 return (
                   <CarouselItem key={audience.id}>
-                    <Card className={`p-8 hover-lift animate-scale-in ${audience.featured ? 'border-brand-accent bg-slate-50' : ''}`}>
-                      <CardContent className="pt-6">
-                        <div className="flex items-start gap-8">
+                    <Card className={`p-6 hover-lift animate-scale-in ${audience.featured ? 'border-brand-accent bg-slate-50' : ''}`}>
+                      <CardContent className="pt-4">
+                        <div className="flex items-start gap-6">
                           <div className="flex-shrink-0">
-                            <div className="w-20 h-20 bg-brand-light rounded-2xl flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110">
-                              <IconComponent className="w-10 h-10 text-brand-primary drop-shadow-md" strokeWidth={1.5} />
+                            <div className="w-16 h-16 bg-brand-light rounded-2xl flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110">
+                              <IconComponent className="w-8 h-8 text-brand-primary drop-shadow-md" strokeWidth={1.5} />
                             </div>
                           </div>
                           <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-4">
-                              <h2 className="text-3xl font-bold text-slate-900 animate-fade-in-right">{audience.title}</h2>
+                            <div className="flex items-center gap-3 mb-3">
+                              <h2 className="text-2xl font-bold text-slate-900 animate-fade-in-right">{audience.title}</h2>
                               {audience.featured && (
                                 <Badge variant="secondary" className="text-xs bg-brand-accent text-white">Popular</Badge>
                               )}
                             </div>
 
-                            <p className="text-slate-700 text-lg mb-6 leading-relaxed animate-fade-in-right delay-100">
+                            <p className="text-slate-700 text-base mb-4 leading-relaxed animate-fade-in-right delay-100">
                               {audience.description}
                             </p>
 
-                            <p className="text-lg text-brand-primary font-medium mb-8 animate-fade-in-right delay-200">
+                            <p className="text-base text-brand-primary font-medium mb-6 animate-fade-in-right delay-200">
                               {audience.subtitle}
                             </p>
 
@@ -115,7 +115,7 @@ function ParaQuem() {
                             <Button
                               size="lg"
                               onClick={() => navigate(audience.ctaLink)}
-                              className="bg-brand-primary hover:bg-brand-secondary text-white px-8 py-3 text-lg transition-all hover:scale-105 cursor-pointer"
+                              className="bg-[#4A90E2] hover:bg-[#357ABD] text-white px-8 py-3 text-lg transition-all hover:scale-105 cursor-pointer"
                             >
                               {audience.cta}
                             </Button>

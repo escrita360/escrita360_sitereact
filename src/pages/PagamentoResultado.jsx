@@ -104,7 +104,7 @@ function PagamentoResultado({ status = 'success' }) {
           </div>
 
           <Card className="shadow-xl">
-            <CardContent className="p-8 space-y-6">
+            <CardContent className="p-6 space-y-4">
               <div className={`${currentConfig.cardBg} p-6 rounded-lg`}>
                 <div className="flex items-center gap-3 mb-3">
                   <IconComponent className={`w-6 h-6 ${currentConfig.iconColor}`} />

@@ -64,10 +64,10 @@ function Home() {
             Para Quem é o Escrita360?
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
-            <Card className="p-8 hover-lift border-brand-accent/30 animate-fade-in-up delay-100">
-              <CardContent className="pt-6 text-center">
-                <GraduationCap className="w-16 h-16 text-brand-primary mx-auto mb-6 animate-pulse-glow" />
-                <h3 className="text-2xl font-bold text-slate-900 mb-4">Estudantes</h3>
+            <Card className="p-6 hover-lift border-brand-accent/30 animate-fade-in-up delay-100 aspect-square flex flex-col">
+              <CardContent className="pt-4 text-center flex flex-col justify-center h-full">
+                <GraduationCap className="w-12 h-12 text-brand-primary mx-auto mb-4 animate-pulse-glow" />
+                <h3 className="text-xl font-bold text-slate-900 mb-3">Estudantes</h3>
                 <p className="text-slate-700 leading-relaxed mb-4">
                   <strong style={{ color: '#2b7475' }}>Ideal para quem quer desenvolver habilidades de escrita exigidas pela escola, pelo ENEM e pelas competências do século XXI.</strong> Aqui, o aluno vivencia uma imersão autorregulada, em que pode escrever, reescrever e analisar, com análises ilimitadas e insights inteligentes. A IA atua como assistente de escrita, ajudando a aprimorar argumentos, estrutura e linguagem.
                 </p>
@@ -77,10 +77,10 @@ function Home() {
               </CardContent>
             </Card>
             
-            <Card className="p-8 hover-lift border-brand-accent/30 animate-fade-in-up delay-200">
-              <CardContent className="pt-6 text-center">
-                <Users className="w-16 h-16 text-brand-primary mx-auto mb-6 animate-pulse-glow" />
-                <h3 className="text-2xl font-bold text-slate-900 mb-4">Professores</h3>
+            <Card className="p-6 hover-lift border-brand-accent/30 animate-fade-in-up delay-200 aspect-square flex flex-col">
+              <CardContent className="pt-4 text-center flex flex-col justify-center h-full">
+                <Users className="w-12 h-12 text-brand-primary mx-auto mb-4 animate-pulse-glow" />
+                <h3 className="text-xl font-bold text-slate-900 mb-3">Professores</h3>
                 <p className="text-slate-700 leading-relaxed mb-4">
                   <strong style={{ color: '#2b7475' }}>Pensado para educadores que atuam em cursos preparatórios ou plataformas online, o Escrita360 otimiza o tempo de correção e amplia o alcance do ensino de redação.</strong> Com relatórios automáticos e acompanhamento por versão, o professor foca no que importa: orientar o aprendizado.
                 </p>
@@ -90,11 +90,11 @@ function Home() {
               </CardContent>
             </Card>
             
-            <Card className="p-8 hover-lift border-brand-accent/30 animate-fade-in-up delay-300">
-              <CardContent className="pt-6 text-center">
-                <School className="w-16 h-16 text-brand-primary mx-auto mb-6 animate-pulse-glow" />
-                <h3 className="text-2xl font-bold text-slate-900 mb-4">Escolas</h3>
-                <p className="text-slate-700 leading-relaxed mb-4" style={{ marginTop: '36px' }}>
+            <Card className="p-6 hover-lift border-brand-accent/30 animate-fade-in-up delay-300 aspect-square flex flex-col">
+              <CardContent className="pt-4 text-center flex flex-col justify-center h-full">
+                <School className="w-12 h-12 text-brand-primary mx-auto mb-4 animate-pulse-glow" />
+                <h3 className="text-xl font-bold text-slate-900 mb-3">Escolas</h3>
+                <p className="text-slate-700 leading-relaxed mb-3" style={{ marginTop: '24px' }}>
                   <strong style={{ color: '#2b7475' }}>Plataforma completa para integrar a escrita autoral ao currículo, desenvolvendo autonomia e autorregulação nos alunos.</strong> Permite acompanhar turmas em tempo real, gerar relatórios personalizados e promover práticas de escrita formativas em larga escala.
                 </p>
                 <p className="text-slate-700 font-bold">
@@ -107,8 +107,8 @@ function Home() {
           <div className="text-center mt-12">
             <Button 
               size="lg" 
-              variant="outline"
-              className="border-brand-primary text-brand-primary hover:bg-brand-primary hover:!text-white px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-105"
+              variant="default"
+              className="bg-[#4A90E2] hover:bg-[#357ABD] text-white px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-105"
             >
               Saiba Mais para Estudantes
             </Button>

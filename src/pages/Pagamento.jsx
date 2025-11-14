@@ -135,7 +135,7 @@ function Pagamento() {
           <div className="grid lg:grid-cols-5 gap-8">
             <div className="lg:col-span-3">
               <Card className="shadow-lg">
-                <CardContent className="p-8">
+                <CardContent className="p-6">
                   <div className="space-y-6">
                     <div className="space-y-4">
                       <h3 className="text-lg font-semibold flex items-center gap-2">
@@ -333,7 +333,7 @@ function Pagamento() {
               <p className="text-xl text-slate-600">Sua assinatura foi ativada com sucesso</p>
             </div>
             <Card className="max-w-2xl mx-auto shadow-xl">
-              <CardContent className="p-8 space-y-6">
+              <CardContent className="p-6 space-y-4">
                 <div className="space-y-2">
                   <p className="text-sm text-slate-600">Plano Ativado</p>
                   <p className="text-2xl font-bold text-brand-primary">{selectedPlan.name}</p>

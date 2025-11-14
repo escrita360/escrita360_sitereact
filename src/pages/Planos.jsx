@@ -427,15 +427,15 @@ function Precos() {
       />
 
       {/* Pricing Grid */}
-      <section ref={plansRef} className="py-8 md:py-12 lg:py-16 bg-white animate-on-scroll">
+      <section ref={plansRef} className="pt-12 pb-8 md:pt-16 md:pb-12 lg:pt-20 lg:pb-16 bg-white animate-on-scroll">
         <div className="container mx-auto px-4 max-w-7xl">
-          <div className={`grid gap-8 mx-auto ${
+          <div className={`grid gap-8 mx-auto mt-6 ${
             selectedAudience === 'escolas' ? 'max-w-2xl' :
             selectedAudience === 'professores' ? 'md:grid-cols-2 lg:grid-cols-2 max-w-6xl' : 
             'md:grid-cols-2 max-w-5xl'
           }`}>
             {currentPlans.map((plan, index) => (
-              <Card key={index} className={`relative hover-lift animate-scale-in delay-${index * 200} ${plan.popular ? 'border-2 border-brand-primary shadow-xl' : 'hover:shadow-xl'} transition-all flex flex-col`}>
+              <Card key={index} className={`relative hover-lift animate-scale-in delay-${index * 200} ${plan.popular ? 'border-2 border-brand-primary shadow-xl' : 'hover:shadow-xl'} transition-all flex flex-col pt-4 aspect-square`}>
                 {plan.popular && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 animate-float">
                     <Badge className="bg-brand-primary text-white px-4 py-1">
@@ -450,14 +450,14 @@ function Precos() {
                     </Badge>
                   </div>
                 )}
-                <CardHeader className="text-center pb-4">
-                  <div className="mb-2">
+                <CardHeader className="text-center pb-2">
+                  <div className="mb-1">
                     {!plan.popular && <Badge variant="secondary" className="text-xs">
                       {plan.badge}
                     </Badge>}
                   </div>
-                  <h3 className="text-2xl font-bold text-slate-900">{plan.name}</h3>
-                  <div className="my-4">
+                  <h3 className="text-xl font-bold text-slate-900">{plan.name}</h3>
+                  <div className="my-3">
                     {plan.consultation ? (
                       <div className="text-center">
                         <span className="text-lg text-slate-600">Valor sob consulta</span>
@@ -465,8 +465,8 @@ function Precos() {
                       </div>
                     ) : (
                       <>
-                        <span className="text-4xl font-bold text-brand-primary">R$</span>
-                        <span className="text-5xl font-bold text-brand-primary">
+                        <span className="text-3xl font-bold text-brand-primary">R$</span>
+                        <span className="text-4xl font-bold text-brand-primary">
                           {plan.monthlyPrice}
                         </span>
                         <span className="text-slate-600">
@@ -479,17 +479,17 @@ function Precos() {
                   <p className="text-slate-600 text-sm">{plan.description}</p>
                 </CardHeader>
                 <CardContent className="flex flex-col h-full">
-                  <ul className="space-y-3 mb-8 flex-grow">
+                  <ul className="space-y-2 mb-6 flex-grow">
                     {plan.features.map((feature, featureIndex) => (
                       <li key={featureIndex} className={`flex items-start gap-2 ${feature.highlighted ? 'font-semibold text-brand-primary' : ''}`}>
-                        <Check className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+                        <Check className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
                         <span className="text-slate-700 text-sm">{feature.text}</span>
                       </li>
                     ))}
                   </ul>
                   <Button
-                    className="w-full transition-all duration-300 hover:scale-105 mt-auto"
-                    variant={plan.buttonVariant}
+                    className="w-full transition-all duration-300 hover:scale-105 mt-auto bg-[#4A90E2] hover:bg-[#357ABD] text-white"
+                    variant="default"
                     size="lg"
                     onClick={() => handleOpenPagamento(plan)}
                   >
@@ -516,7 +516,7 @@ function Precos() {
             <div className="space-y-8 max-w-5xl mx-auto">
               {schoolModels.map((model, index) => (
                 <Card key={index} className={`overflow-hidden hover-lift ${model.highlighted ? 'border-2 border-green-500 shadow-xl' : 'border border-slate-200'}`}>
-                  <CardContent className="p-8">
+                  <CardContent className="p-6">
                     <div className="flex items-start gap-6">
                       <div className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold flex-shrink-0 ${
                         model.highlighted ? 'bg-green-500 text-white' : 'bg-brand-primary text-white'
@@ -553,7 +553,7 @@ function Precos() {
 
       {/* Credit Packages Section - For all audiences */}
       {(selectedAudience === 'estudantes' || selectedAudience === 'professores' || selectedAudience === 'escolas') && (
-        <section className="py-8 md:py-12 lg:py-16 bg-white">
+        <section className="pt-12 pb-8 md:pt-16 md:pb-12 lg:pt-20 lg:pb-16 bg-white">
           <div className="container mx-auto px-4 max-w-7xl">
             <div className="text-center mb-12">
               <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">
@@ -569,22 +569,22 @@ function Precos() {
               </p>
             </div>
             
-            <div className={`grid gap-8 mx-auto justify-items-center ${
-              selectedAudience === 'escolas' ? 'md:grid-cols-2 max-w-3xl' : 
-              selectedAudience === 'professores' ? 'md:grid-cols-2 max-w-4xl' :
-              'md:grid-cols-3 max-w-5xl'
+            <div className={`grid gap-8 mx-auto justify-items-center mt-6 ${
+              selectedAudience === 'escolas' ? 'md:grid-cols-2 max-w-3xl gap-x-8 gap-y-12' : 
+              selectedAudience === 'professores' ? 'md:grid-cols-2 max-w-4xl gap-x-8 gap-y-12' :
+              'md:grid-cols-3 max-w-5xl gap-x-6 gap-y-12'
             }`}>
               {creditPackages.map((pkg, index) => (
-                <Card key={index} className={`relative hover-lift aspect-square ${pkg.popular ? 'border-2 border-green-500 shadow-xl' : 'hover:shadow-xl'} transition-all flex flex-col`}>
+                <Card key={index} className={`relative hover-lift ${pkg.popular ? 'border-2 border-green-500 shadow-xl' : 'hover:shadow-xl'} transition-all flex flex-col pt-4 aspect-square`}>
                   {pkg.popular && (
                     <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                       <Badge className="bg-green-500 text-white px-4 py-1">Melhor Custo-Benefício</Badge>
                     </div>
                   )}
-                  <CardHeader className="text-center pb-4">
-                    <h3 className="text-xl font-bold text-slate-900">{pkg.name}</h3>
-                    <div className="my-4">
-                      <span className="text-3xl font-bold text-brand-primary">
+                  <CardHeader className="text-center pb-2">
+                    <h3 className="text-lg font-bold text-slate-900">{pkg.name}</h3>
+                    <div className="my-2">
+                      <span className="text-2xl font-bold text-brand-primary">
                         R$ {selectedAudience === 'escolas' ? pkg.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : pkg.price}
                       </span>
                     </div>
@@ -594,15 +594,15 @@ function Precos() {
                     <p className="text-slate-600 text-xs mt-1">{pkg.description}</p>
                   </CardHeader>
                   <CardContent>
-                    <ul className="space-y-2 mb-6">
+                    <ul className="space-y-1 mb-4">
                       {pkg.features.map((feature, featureIndex) => (
                         <li key={featureIndex} className="flex items-center gap-2">
-                          <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                          <Check className="w-3 h-3 text-green-600 flex-shrink-0" />
                           <span className="text-slate-700 text-sm">{feature}</span>
                         </li>
                       ))}
                     </ul>
-                    <Button className="w-full" variant="outline">
+                    <Button className="w-full bg-[#4A90E2] hover:bg-[#357ABD] text-white" variant="default">
                       Adquirir Pacote
                     </Button>
                   </CardContent>
@@ -648,7 +648,7 @@ function Precos() {
       )}
 
       {/* How It Works Section */}
-      <section className="py-8 md:py-12 lg:py-16 bg-slate-50">
+      <section className="pt-12 pb-8 md:pt-16 md:pb-12 lg:pt-20 lg:pb-16 bg-slate-50">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Como Funciona o Escrita360</h2>
@@ -657,7 +657,7 @@ function Precos() {
           
           <div className="max-w-4xl mx-auto mb-12">
             <Card className="bg-gradient-to-br from-brand-light to-white border-2 border-brand-primary/20 shadow-lg">
-              <CardContent className="p-8">
+              <CardContent className="p-6">
                 <p className="text-lg text-slate-700 leading-relaxed text-center">
                   A plataforma prioriza o processo formativo de escrever e reescrever, a correção automática com IA só aparece no final, como suporte complementar. <strong className="text-brand-primary">IA como última etapa: revisão que fortalece o aprendizado.</strong>
                 </p>
@@ -668,7 +668,7 @@ function Precos() {
       </section>
 
       {/* Comparison Table */}
-      <section ref={comparisonRef} className="py-8 md:py-12 lg:py-16 bg-gradient-to-b from-slate-50 to-white animate-on-scroll">
+      <section ref={comparisonRef} className="pt-12 pb-8 md:pt-16 md:pb-12 lg:pt-20 lg:pb-16 bg-gradient-to-b from-slate-50 to-white animate-on-scroll">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-12 animate-fade-in-up">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">
@@ -808,7 +808,7 @@ function Precos() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-8 md:py-12 lg:py-16 bg-white">
+      <section className="pt-12 pb-8 md:pt-16 md:pb-12 lg:pt-20 lg:pb-16 bg-white">
         <div className="container mx-auto px-4 max-w-7xl text-center">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 text-slate-900 animate-fade-in-up">
             Pronto para revolucionar a escrita?
@@ -819,8 +819,8 @@ function Precos() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up delay-300">
             <Button 
               size="lg" 
-              variant="secondary" 
-              className="bg-brand-primary text-white hover:bg-brand-secondary transition-all duration-300 hover:scale-105"
+              variant="default" 
+              className="bg-[#4A90E2] hover:bg-[#357ABD] text-white transition-all duration-300 hover:scale-105"
               onClick={() => handleOpenPagamento(currentPlans.find(plan => plan.popular) || currentPlans[0])}
             >
               Assinar
