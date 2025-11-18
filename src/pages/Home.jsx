@@ -4,11 +4,11 @@ import { Check, X, PenTool, Brain, TrendingUp, GraduationCap, School, Edit, File
 import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
 import notebook from '@/assets/notebook.svg'
 import card1 from '@/assets/card1.0.svg'
-import card2 from '@/assets/card2.0.svg'
-import card3 from '@/assets/card3.0.svg'
-import card4 from '@/assets/card4.0.svg'
-import card5 from '@/assets/card5.0.svg'
-import card6 from '@/assets/card6.0.svg'
+import escritaAutoregulada from '@/assets/escrita_autoregulada.png'
+import imersaoTotal from '@/assets/imersao_total.png'
+import painelSentimentos from '@/assets/painel_sentimentos.png'
+import usoRubricas from '@/assets/uso_rubricas.png'
+import iaAssistente from '@/assets/ia_assistente.png'
 
 function Home() {
   const heroRef = useScrollAnimation()
@@ -156,7 +156,7 @@ function Home() {
             {/* Escrita Autorregulada no Centro */}
             <div className="grid lg:grid-cols-2 gap-8 items-center">
               <div className="flex items-center justify-center">
-                <img src={card2} alt="Escrita Autorregulada" className="w-full max-w-md h-auto" />
+                <img src={escritaAutoregulada} alt="Escrita Autorregulada no Centro" className="w-full max-w-md h-auto rounded-lg" />
               </div>
               <div>
                 <h3 className="text-2xl font-bold text-slate-900 mb-4">Escrita Autorregulada no Centro</h3>
@@ -175,14 +175,14 @@ function Home() {
                 </p>
               </div>
               <div className="order-1 lg:order-2 flex items-center justify-center">
-                <img src={card3} alt="Análise Integrada" className="w-full max-w-md h-auto" />
+                <img src={imersaoTotal} alt="Imersão total com Análise Integrada em Tempo Real" className="w-full max-w-md h-auto rounded-lg" />
               </div>
             </div>
 
             {/* Painel de Sentimentos */}
             <div className="grid lg:grid-cols-2 gap-8 items-center">
               <div className="flex items-center justify-center">
-                <img src={card4} alt="Painel de Sentimentos" className="w-full max-w-md h-auto" />
+                <img src={painelSentimentos} alt="Painel de Sentimentos" className="w-full max-w-md h-auto rounded-lg" />
               </div>
               <div>
                 <h3 className="text-2xl font-bold text-slate-900 mb-4">Painel de Sentimentos</h3>
@@ -201,14 +201,14 @@ function Home() {
                 </p>
               </div>
               <div className="order-1 lg:order-2 flex items-center justify-center">
-                <img src={card5} alt="Rubricas e Evolução" className="w-full max-w-md h-auto" />
+                <img src={usoRubricas} alt="Uso de rubricas e evolução por níveis" className="w-full max-w-md h-auto rounded-lg" />
               </div>
             </div>
 
             {/* IA como Assistente */}
             <div className="grid lg:grid-cols-2 gap-8 items-center">
               <div className="flex items-center justify-center">
-                <img src={card6} alt="IA como Assistente" className="w-full max-w-md h-auto" />
+                <img src={iaAssistente} alt="IA como Assistente" className="w-full max-w-md h-auto rounded-lg" />
               </div>
               <div>
                 <h3 className="text-2xl font-bold text-slate-900 mb-4">IA como Assistente</h3>
