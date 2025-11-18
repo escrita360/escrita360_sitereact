@@ -172,9 +172,9 @@ class PagBankSubscriptionsService {
                     tax_id: this.formatTaxId(customerData.cpf || customerData.tax_id)
                 },
                 status: 'ACTIVE',
-                payment_method: [{
+                payment_method: {
                     type: paymentMethod
-                }],
+                },
                 amount: subscriptionData.amount ? {
                     value: Math.round(subscriptionData.amount * 100),
                     currency: 'BRL'
@@ -224,13 +224,13 @@ class PagBankSubscriptionsService {
         }
 
         if (paymentMethod === 'BOLETO') {
-            payload.payment_method = [{
+            payload.payment_method = {
                 type: 'BOLETO'
-            }];
+            };
         } else if (paymentMethod === 'CREDIT_CARD') {
-            payload.payment_method = [{
+            payload.payment_method = {
                 type: 'CREDIT_CARD'
-            }];
+            };
         }
 
         // Remover o amount, já que o plano já define o valor
