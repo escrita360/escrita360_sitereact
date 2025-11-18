@@ -105,6 +105,18 @@ function Pagamento() {
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'As senhas não coincidem'
     }
+    if (!formData.cardNumber || formData.cardNumber.replace(/\s/g, '').length < 13) {
+      newErrors.cardNumber = 'Número do cartão é obrigatório'
+    }
+    if (!formData.cardName || formData.cardName.trim().length < 2) {
+      newErrors.cardName = 'Nome no cartão é obrigatório'
+    }
+    if (!formData.expiryDate || !/^\d{2}\/\d{2}$/.test(formData.expiryDate)) {
+      newErrors.expiryDate = 'Data de validade é obrigatória (MM/AA)'
+    }
+    if (!formData.cvv || formData.cvv.length < 3) {
+      newErrors.cvv = 'CVV é obrigatório'
+    }
     
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -263,8 +275,8 @@ function Pagamento() {
                     <Separator />
 
                     <div className="space-y-4">
-                      <h3 className="text-lg font-semibold">Dados do Cartão (Opcional)</h3>
-                      <p className="text-sm text-slate-600">Preencha apenas se quiser pagar com cartão de crédito</p>
+                      <h3 className="text-lg font-semibold">Dados do Cartão *</h3>
+                      <p className="text-sm text-slate-600">Preencha os dados do cartão de crédito para o pagamento</p>
                       
                       <div className="space-y-4">
                         <div>
@@ -326,13 +338,13 @@ function Pagamento() {
                           cpf: formData.cpf,
                           phone: formData.phone
                         }}
-                        cardData={formData.cardNumber ? {
+                        cardData={{
                           number: formData.cardNumber.replace(/\s/g, ''),
                           expiryMonth: formData.expiryDate.split('/')[0],
                           expiryYear: '20' + formData.expiryDate.split('/')[1],
                           cvv: formData.cvv,
                           holderName: formData.cardName
-                        } : null}
+                        }}
                         isYearly={isYearly}
                         onSuccess={async (data) => {
                           try {

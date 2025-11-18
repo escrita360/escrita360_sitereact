@@ -1,6 +1,7 @@
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion' // eslint-disable-line no-unused-vars
 import Layout from './components/Layout.jsx'
+import AdminRoute from './components/AdminRoute.jsx'
 import Home from './pages/Home.jsx'
 import ParaQuem from './pages/ParaQuem.jsx'
 import Recursos from './pages/Recursos.jsx'
@@ -11,6 +12,10 @@ import Login from './pages/Login.jsx'
 import Pagamento from './pages/Pagamento.jsx'
 import PagamentoResultado from './pages/PagamentoResultado.jsx'
 import PagBankSandbox from './pages/PagBankSandbox.jsx'
+import AdminDashboard from './pages/admin/AdminDashboard.jsx'
+import AdminUsers from './pages/admin/AdminUsers.jsx'
+import AdminSubscriptions from './pages/admin/AdminSubscriptions.jsx'
+import AdminPayments from './pages/admin/AdminPayments.jsx'
 import './App.css'
 
 function App() {
@@ -180,6 +185,66 @@ function App() {
           >
             <Login />
           </motion.div>
+        } />
+        <Route path="/admin" element={
+          <AdminRoute>
+            <Layout>
+              <motion.div
+                initial="initial"
+                animate="in"
+                exit="out"
+                variants={pageVariants}
+                transition={pageTransition}
+              >
+                <AdminDashboard />
+              </motion.div>
+            </Layout>
+          </AdminRoute>
+        } />
+        <Route path="/admin/users" element={
+          <AdminRoute>
+            <Layout>
+              <motion.div
+                initial="initial"
+                animate="in"
+                exit="out"
+                variants={pageVariants}
+                transition={pageTransition}
+              >
+                <AdminUsers />
+              </motion.div>
+            </Layout>
+          </AdminRoute>
+        } />
+        <Route path="/admin/subscriptions" element={
+          <AdminRoute>
+            <Layout>
+              <motion.div
+                initial="initial"
+                animate="in"
+                exit="out"
+                variants={pageVariants}
+                transition={pageTransition}
+              >
+                <AdminSubscriptions />
+              </motion.div>
+            </Layout>
+          </AdminRoute>
+        } />
+        <Route path="/admin/payments" element={
+          <AdminRoute>
+            <Layout>
+              <motion.div
+                initial="initial"
+                animate="in"
+                exit="out"
+                variants={pageVariants}
+                transition={pageTransition}
+              >
+                <AdminPayments />
+              </motion.div>
+            </Layout>
+          </AdminRoute>
         } />
         <Route path="/admin/login" element={
           <motion.div

@@ -19,8 +19,12 @@ function createApp() {
     // Registrar rotas da API
     const paymentRoutes = require('./app/routes/payment');
     const authRoutes = require('./app/routes/auth');
+    const adminRoutes = require('./app/routes/admin');
+    const webhookRoutes = require('./app/routes/webhook');
     app.use('/api/payment', paymentRoutes);
     app.use('/api/auth', authRoutes);
+    app.use('/api/admin', adminRoutes);
+    app.use('/api/webhook', webhookRoutes);
 
     // Health check
     app.get('/health', (req, res) => {

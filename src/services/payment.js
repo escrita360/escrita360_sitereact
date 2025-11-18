@@ -87,7 +87,7 @@ export const paymentService = {
    * @returns {Promise<Object>} - Dados da assinatura criada
    */
   async createPagBankSubscription(subscriptionData) {
-    const { planData, customerData, paymentMethod = 'BOLETO' } = subscriptionData
+    const { planData, customerData, cardData, paymentMethod = 'BOLETO' } = subscriptionData
 
     // Mapear nome do plano para configuração
     const planConfig = {
@@ -112,8 +112,7 @@ export const paymentService = {
         phone: customerData.phone
       },
       payment_method: paymentMethod,
-      card_token: subscriptionData.cardToken,
-      card_security_code: subscriptionData.cardSecurityCode
+      cardData: cardData
     }
 
     const response = await api.post('/payment/create-pagbank-subscription', data)

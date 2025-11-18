@@ -9,9 +9,11 @@ class PagBankSubscriptionsService {
         this.mockMode = process.env.PAGBANK_MOCK_MODE === 'true';
 
         if (this.environment === 'sandbox') {
-            this.baseUrl = 'https://sandbox.api.assinaturas.pagseguro.com';
+            this.subscriptionsBaseUrl = 'https://sandbox.api.assinaturas.pagseguro.com';
+            this.paymentsBaseUrl = 'https://sandbox.api.pagseguro.com';
         } else {
-            this.baseUrl = 'https://api.assinaturas.pagseguro.com';
+            this.subscriptionsBaseUrl = 'https://api.assinaturas.pagseguro.com';
+            this.paymentsBaseUrl = 'https://api.pagseguro.com';
         }
 
         this.headers = {
@@ -25,8 +27,9 @@ class PagBankSubscriptionsService {
         }
     }
 
-    async makeRequest(endpoint, method = 'GET', data = null) {
-        const url = `${this.baseUrl}${endpoint}`;
+    async makeRequest(endpoint, method = 'GET', data = null, usePaymentsApi = false) {
+        const baseUrl = usePaymentsApi ? this.paymentsBaseUrl : this.subscriptionsBaseUrl;
+        const url = `${baseUrl}${endpoint}`;
 
         try {
             const config = {
@@ -45,7 +48,7 @@ class PagBankSubscriptionsService {
             console.log(`✅ ${method} ${url} - Status: ${response.status}`);
             return response.data;
         } catch (error) {
-            console.error(`❌ Erro na requisição PagBank Subscriptions:`);
+            console.error(`❌ Erro na requisição PagBank ${usePaymentsApi ? 'Payments' : 'Subscriptions'}:`);
             console.error(`URL: ${url}`);
             console.error(`Método: ${method}`);
             if (error.response) {
@@ -134,20 +137,41 @@ class PagBankSubscriptionsService {
         return this.makeRequest('/plans', 'POST', payload);
     }
 
-    async createSubscriber(subscriberData) {
-        const payload = {
-            reference_id: `customer_${Date.now()}`,
-            name: subscriberData.name,
-            email: subscriberData.email,
-            tax_id: this.formatTaxId(subscriberData.tax_id),
-            phones: [this.formatPhone(subscriberData.phone)]
-        };
-
-        if (subscriberData.address) {
-            payload.address = subscriberData.address;
+    async tokenizeCard(cardData) {
+        // Modo simulação
+        if (this.mockMode) {
+            console.log('🎭 SIMULAÇÃO: Tokenizando cartão...');
+            const mockToken = {
+                id: `TOKEN_${Date.now()}`,
+                type: 'CARD',
+                card: {
+                    brand: 'visa',
+                    first_digits: cardData.number.substring(0, 6),
+                    last_digits: cardData.number.substring(cardData.number.length - 4),
+                    holder_name: cardData.holderName,
+                    exp_month: cardData.expiryMonth,
+                    exp_year: cardData.expiryYear
+                },
+                created_at: new Date().toISOString()
+            };
+            console.log('✅ SIMULAÇÃO: Cartão tokenizado:', mockToken);
+            return mockToken;
         }
 
-        return this.makeRequest('/customers', 'POST', payload);
+        const payload = {
+            type: 'CARD',
+            card: {
+                number: cardData.number,
+                exp_month: cardData.expiryMonth,
+                exp_year: cardData.expiryYear,
+                security_code: cardData.cvv,
+                holder: {
+                    name: cardData.holderName
+                }
+            }
+        };
+
+        return this.makeRequest('/tokens', 'POST', payload, true);
     }
 
     async createSubscription(subscriptionData) {
@@ -182,6 +206,12 @@ class PagBankSubscriptionsService {
                 created_at: new Date().toISOString(),
                 updated_at: new Date().toISOString()
             };
+            if (paymentMethod === 'CREDIT_CARD' && subscriptionData.cardData) {
+                mockSubscription.payment_method.card = {
+                    number: subscriptionData.cardData.number.replace(/\d(?=\d{4})/g, '*'),
+                    holder: { name: subscriptionData.cardData.holderName }
+                };
+            }
             console.log('✅ SIMULAÇÃO: Assinatura criada:', mockSubscription);
             return mockSubscription;
         }
@@ -208,19 +238,17 @@ class PagBankSubscriptionsService {
                 phones: [this.formatPhone(customerData.phone)]
             };
 
-            // Endereço é obrigatório para boleto
-            if (paymentMethod === 'BOLETO') {
-                payload.customer.address = {
-                    street: customerData.address?.street || 'Rua Exemplo',
-                    number: customerData.address?.number || '123',
-                    complement: customerData.address?.complement || '',
-                    locality: customerData.address?.locality || 'Centro',
-                    city: customerData.address?.city || 'São Paulo',
-                    region_code: customerData.address?.region_code || 'SP',
-                    country: 'BRA',
-                    postal_code: customerData.address?.postal_code?.replace(/\D/g, '') || '01310100'
-                };
-            }
+            // Endereço pode ser obrigatório para cartão também
+            payload.customer.address = {
+                street: customerData.address?.street || 'Rua Exemplo',
+                number: customerData.address?.number || '123',
+                complement: customerData.address?.complement || '',
+                locality: customerData.address?.locality || 'Centro',
+                city: customerData.address?.city || 'São Paulo',
+                region_code: customerData.address?.region_code || 'SP',
+                country: 'BRA',
+                postal_code: customerData.address?.postal_code?.replace(/\D/g, '') || '01310100'
+            };
         }
 
         if (paymentMethod === 'BOLETO') {
@@ -228,8 +256,20 @@ class PagBankSubscriptionsService {
                 type: 'BOLETO'
             };
         } else if (paymentMethod === 'CREDIT_CARD') {
+            if (!subscriptionData.cardData) {
+                throw new Error('Dados do cartão são obrigatórios para pagamento com cartão de crédito');
+            }
             payload.payment_method = {
-                type: 'CREDIT_CARD'
+                type: 'CREDIT_CARD',
+                card: {
+                    number: subscriptionData.cardData.number,
+                    exp_month: subscriptionData.cardData.expiryMonth,
+                    exp_year: subscriptionData.cardData.expiryYear,
+                    security_code: subscriptionData.cardData.cvv,
+                    holder: {
+                        name: subscriptionData.cardData.holderName
+                    }
+                }
             };
         }
 
@@ -259,7 +299,8 @@ class PagBankSubscriptionsService {
                 plan_id: plan.id,
                 customer: data.customer,
                 payment_method: data.payment_method || 'BOLETO',
-                amount: data.amount
+                amount: data.amount,
+                cardData: data.cardData
             });
 
             return {

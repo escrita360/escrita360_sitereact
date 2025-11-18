@@ -267,7 +267,8 @@ const RecurringPayment = ({ paymentData, onSuccess, onError, validateBeforeSubmi
       const result = await paymentService.createPagBankSubscription({
         planData: paymentData.planData,
         customerData: paymentData.customerData,
-        paymentMethod: 'BOLETO' // Por padrão usar boleto para recorrência
+        cardData: paymentData.cardData,
+        paymentMethod: 'CREDIT_CARD' // Usar cartão de crédito para recorrência
       })
 
       console.log('✅ Assinatura criada:', result)
@@ -349,7 +350,7 @@ const RecurringPayment = ({ paymentData, onSuccess, onError, validateBeforeSubmi
   )
 }
 
-export function PagBankCheckout({ planData, customerData, isYearly, onSuccess, onError, validateBeforeSubmit }) {
+export function PagBankCheckout({ planData, customerData, cardData, isYearly, onSuccess, onError, validateBeforeSubmit }) {
   const [selectedMethod, setSelectedMethod] = useState(isYearly ? 'card' : 'recurring')
 
   const paymentMethods = [
@@ -387,7 +388,7 @@ export function PagBankCheckout({ planData, customerData, isYearly, onSuccess, o
       const PaymentComponent = method.component
       return (
         <PaymentComponent
-          paymentData={{ planData, customerData }}
+          paymentData={{ planData, customerData, cardData }}
           onSuccess={onSuccess}
           onError={onError}
           validateBeforeSubmit={validateBeforeSubmit}
