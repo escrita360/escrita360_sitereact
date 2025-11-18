@@ -18,7 +18,6 @@ import {
 } from 'lucide-react'
 
 function ParaQuem() {
-  const heroRef = useScrollAnimation()
   const tabsRef = useScrollAnimation()
   const navigate = useNavigate()
   

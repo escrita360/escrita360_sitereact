@@ -1,6 +1,6 @@
 import robo from '@/assets/robo.svg'
 
-export function PageHero({ title, titleHighlight, subtitle, audienceType }) {
+export function PageHero({ title, titleHighlight, subtitle }) {
   return (
     <section className="bg-white py-12 md:py-16 lg:py-20">
       <div className="container mx-auto px-4 max-w-7xl">

@@ -30,7 +30,6 @@ function Pagamento() {
     paymentMethod: 'recurring' // 'recurring', 'card', 'pix', 'boleto'
   })
   const [errors, setErrors] = useState({})
-  const [isCreatingAccount, setIsCreatingAccount] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   
@@ -111,10 +110,8 @@ function Pagamento() {
     return Object.keys(newErrors).length === 0
   }
 
-  const createUserAccount = async (transactionData) => {
+  const createUserAccount = async () => {
     try {
-      setIsCreatingAccount(true)
-      
       // Criar conta com email e senha
       const userData = await authService.register(
         formData.email,
@@ -127,8 +124,6 @@ function Pagamento() {
     } catch (error) {
       console.error('Erro ao criar conta:', error)
       throw new Error('Não foi possível criar sua conta. Por favor, entre em contato com o suporte.')
-    } finally {
-      setIsCreatingAccount(false)
     }
   }
 
@@ -342,7 +337,7 @@ function Pagamento() {
                         onSuccess={async (data) => {
                           try {
                             // Criar conta do usuário
-                            await createUserAccount(data)
+                            await createUserAccount()
                             
                             // Marcar pagamento como bem-sucedido
                             setPaymentSuccess(true)

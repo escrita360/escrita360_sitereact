@@ -26,9 +26,9 @@ const PAGBANK_CONFIG = {
 class PagBankService {
   constructor() {
     // Suporte para Node.js (scripts) e Vite (frontend)
-    // eslint-disable-next-line no-undef
+     
     const isNode = typeof process !== 'undefined' && process.env
-    // eslint-disable-next-line no-undef
+     
     const env = isNode ? process.env : import.meta.env
     
     this.environment = env.VITE_PAGBANK_ENV || 'sandbox'
@@ -516,9 +516,9 @@ class PagBankService {
     // Esta é uma implementação básica - em produção, usar crypto apropriado
     try {
       // Verificar se estamos em ambiente Node.js
-      // eslint-disable-next-line no-undef
+       
       if (typeof process !== 'undefined' && process.versions && process.versions.node) {
-        // eslint-disable-next-line no-undef
+         
         const crypto = require('crypto')
         const expectedSignature = crypto
           .createHmac('sha256', publicKey)

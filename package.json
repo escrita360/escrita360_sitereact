@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "NODE_OPTIONS=\"--no-deprecation\" concurrently \"vite\" \"cd server && npx nodemon app.js\"",
+    "dev": "concurrently \"vite\" \"cd server && npx nodemon app.js\"",
     "dev:full": "pnpm build && concurrently \"cd server && nodemon app.js\"",
     "dev:frontend": "vite",
     "dev:backend": "cd server && nodemon app.js",

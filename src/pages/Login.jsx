@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Eye, EyeOff, Mail, Lock, Shield, User, X, AlertCircle, UserPlus, LogIn } from 'lucide-react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -122,14 +122,6 @@ const Login = () => {
     }
   }
 
-  const handleFocus = (fieldName) => {
-    setFocusedField(fieldName)
-  }
-
-  const handleBlur = () => {
-    setFocusedField('')
-  }
-
   const handleLogin = async (e) => {
     e.preventDefault()
     
@@ -205,7 +197,6 @@ const Login = () => {
   }
 
   const isAdmin = userType === LOGIN_USER_TYPE.ADMIN
-  const title = isAdmin ? 'Escrita360 Admin' : 'Escrita360'
   const subtitle = isAdmin ? 'Acesso ao painel administrativo' : 'Plataforma de desenvolvimento da escrita'
 
   return (

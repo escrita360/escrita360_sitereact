@@ -6,6 +6,21 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 export default [
   { ignores: ['dist'] },
   {
+    files: ['server/**/*.js'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.node,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'script',
+      },
+    },
+    rules: {
+      ...js.configs.recommended.rules,
+      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    },
+  },
+  {
     files: ['**/*.{js,jsx}'],
     languageOptions: {
       ecmaVersion: 2020,
@@ -31,13 +46,45 @@ export default [
     },
   },
   {
-    files: ['escrita360_backend/**/*.js'],
+    files: ['scripts/**/*.js'],
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.node,
       parserOptions: {
         ecmaVersion: 'latest',
-        sourceType: 'script', // for CommonJS
+        sourceType: 'script',
+      },
+    },
+    rules: {
+      ...js.configs.recommended.rules,
+      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      'no-case-declarations': 'off', // Allow lexical declarations in case blocks
+      'no-unreachable': 'off', // Allow unreachable code in test scripts
+    },
+  },
+  {
+    files: ['src/services/**/*.js'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: { ...globals.browser, ...globals.node },
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+      },
+    },
+    rules: {
+      ...js.configs.recommended.rules,
+      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+    },
+  },
+  {
+    files: ['tailwind.config.js'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.node,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'script',
       },
     },
     rules: {

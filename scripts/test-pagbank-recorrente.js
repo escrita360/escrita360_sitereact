@@ -267,7 +267,7 @@ async function runAllTests() {
     const planToUse = newPlan || existingPlans
     
     // Teste 3: Criar cliente
-    const customer = await test3_CreateCustomer()
+    await test3_CreateCustomer()
     
     // Teste 4: Criar assinatura com boleto
     let subscription = null

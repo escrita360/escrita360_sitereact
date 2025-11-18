@@ -30,7 +30,6 @@ import {
 function Recursos() {
   const [activeTab, setActiveTab] = useState('estudantes')
   const navigate = useNavigate()
-  const heroRef = useScrollAnimation()
   const tabsRef = useScrollAnimation()
 
   const tabs = [
