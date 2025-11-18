@@ -75,6 +75,22 @@ export const adminService = {
   },
 
   /**
+   * Obter configurações do PagBank
+   */
+  async getPagBankConfig() {
+    const response = await api.get('/admin/pagbank/config')
+    return response.data
+  },
+
+  /**
+   * Atualizar configurações do PagBank
+   */
+  async updatePagBankConfig(config) {
+    const response = await api.put('/admin/pagbank/config', config)
+    return response.data
+  },
+
+  /**
    * Busca assinaturas de um usuário
    */
   async getUserSubscriptions(uid) {

@@ -273,7 +273,15 @@ const RecurringPayment = ({ paymentData, onSuccess, onError, validateBeforeSubmi
 
       console.log('✅ Assinatura criada:', result)
       setSubscriptionData(result)
-      toast.success('Assinatura criada com sucesso!')
+      
+      // Verificar se está em modo demo
+      if (result.demo_mode) {
+        toast.warning('⚠️ Modo DEMO: ' + (result.warning || 'Assinatura de demonstração criada'))
+        console.warn('🎭 MODO DEMO ATIVO:', result.instructions || result.warning)
+      } else {
+        toast.success('Assinatura criada com sucesso!')
+      }
+      
       onSuccess(result)
     } catch (error) {
       console.error('❌ Erro ao criar assinatura:', error)
@@ -314,20 +322,48 @@ const RecurringPayment = ({ paymentData, onSuccess, onError, validateBeforeSubmi
       <CardHeader>
         <CardTitle className="flex items-center">
           <CheckCircle2 className="w-5 h-5 mr-2 text-green-600" />
-          Assinatura Criada
+          Assinatura Criada {subscriptionData.demo_mode && '(DEMO)'}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+        {subscriptionData.demo_mode && (
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+            <div className="flex items-start">
+              <AlertCircle className="w-5 h-5 text-yellow-600 mr-2 mt-0.5" />
+              <div>
+                <h4 className="font-medium text-yellow-800">Modo Demonstração</h4>
+                <p className="text-sm text-yellow-700 mt-2">
+                  {subscriptionData.warning || 'Esta é uma assinatura de demonstração para fins de teste.'}
+                </p>
+                {subscriptionData.instructions && (
+                  <div className="mt-3 text-xs text-yellow-700">
+                    <p className="font-semibold">{subscriptionData.instructions.message}</p>
+                    <ul className="mt-1 space-y-1">
+                      {subscriptionData.instructions.steps?.map((step, idx) => (
+                        <li key={idx}>{step}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+        
+        <div className={`border rounded-lg p-4 ${subscriptionData.demo_mode ? 'bg-yellow-50 border-yellow-200' : 'bg-green-50 border-green-200'}`}>
           <div className="flex items-start">
-            <CheckCircle2 className="w-5 h-5 text-green-600 mr-2 mt-0.5" />
+            <CheckCircle2 className={`w-5 h-5 mr-2 mt-0.5 ${subscriptionData.demo_mode ? 'text-yellow-600' : 'text-green-600'}`} />
             <div>
-              <h4 className="font-medium text-green-800">Assinatura Ativada!</h4>
-              <p className="text-sm text-green-700 mt-2">
-                Sua assinatura foi criada com sucesso. Você receberá os detalhes por email.
+              <h4 className={`font-medium ${subscriptionData.demo_mode ? 'text-yellow-800' : 'text-green-800'}`}>
+                Assinatura {subscriptionData.demo_mode ? 'Demo ' : ''}Ativada!
+              </h4>
+              <p className={`text-sm mt-2 ${subscriptionData.demo_mode ? 'text-yellow-700' : 'text-green-700'}`}>
+                {subscriptionData.demo_mode 
+                  ? 'Assinatura de demonstração criada com sucesso.'
+                  : 'Sua assinatura foi criada com sucesso. Você receberá os detalhes por email.'}
               </p>
               {subscriptionData.subscription?.id && (
-                <p className="text-xs font-mono text-green-600 mt-2">
+                <p className={`text-xs font-mono mt-2 ${subscriptionData.demo_mode ? 'text-yellow-600' : 'text-green-600'}`}>
                   ID: {subscriptionData.subscription.id}
                 </p>
               )}

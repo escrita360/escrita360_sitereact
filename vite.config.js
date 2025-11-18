@@ -20,6 +20,11 @@ export default defineConfig({
         secure: false,
         rewrite: (path) => path.replace(/^\/api\/chatbot/, '/chatbot'),
       },
+      '/api': {
+        target: 'http://localhost:5001',
+        changeOrigin: true,
+        secure: false,
+      },
     },
   },
 })

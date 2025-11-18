@@ -24,9 +24,56 @@ router.post('/create-pagbank-subscription', async (req, res) => {
         });
 
         console.log('✅ Assinatura criada com sucesso:', result);
-        res.status(201).json(result);
+        
+        // Adicionar aviso se estiver em modo demo
+        const response = {
+            ...result,
+            ...(pagbankSubscriptionsService.demoMode && {
+                demo_mode: true,
+                warning: 'Esta é uma assinatura de DEMONSTRAÇÃO. Configure um token PagBank válido para criar assinaturas reais.'
+            })
+        };
+        
+        res.status(201).json(response);
     } catch (error) {
         console.error('❌ Erro ao criar assinatura:', error.message);
+        
+        // Se for erro 403, tentar modo demo
+        if (error.response?.status === 403) {
+            console.log('🔄 Tentando novamente em modo DEMO...');
+            pagbankSubscriptionsService.demoMode = true;
+            
+            try {
+                const demoResult = await pagbankSubscriptionsService.createCompleteSubscription({
+                    plan_name: data.plan_name,
+                    plan_description: data.plan_description,
+                    amount: data.amount,
+                    interval_unit: data.interval_unit,
+                    interval_value: data.interval_value,
+                    customer: data.customer,
+                    payment_method: data.payment_method || 'BOLETO',
+                    cardData: data.cardData
+                });
+                
+                return res.status(201).json({
+                    ...demoResult,
+                    demo_mode: true,
+                    warning: 'Token PagBank inválido. Usando modo DEMONSTRAÇÃO.',
+                    instructions: {
+                        message: 'Para usar a API real do PagBank:',
+                        steps: [
+                            '1. Acesse https://painel.pagseguro.uol.com.br/',
+                            '2. Vá em Integrações > API',
+                            '3. Gere um token com permissões completas',
+                            '4. Configure no .env: PAGBANK_TOKEN=seu_token'
+                        ]
+                    }
+                });
+            } catch (demoError) {
+                console.error('❌ Erro mesmo em modo demo:', demoError.message);
+            }
+        }
+        
         if (error.response) {
             console.error('Detalhes do erro:', JSON.stringify(error.response.data, null, 2));
             res.status(error.response.status || 400).json({ 

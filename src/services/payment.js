@@ -65,14 +65,20 @@ export const paymentService = {
   async createPagBankPixPayment(paymentData) {
     const { planData, customerData } = paymentData
 
+    // Processar telefone para o formato correto
+    const phoneClean = customerData.phone.replace(/\D/g, '')
+    const phoneFormatted = phoneClean.length === 11 
+      ? { area_code: phoneClean.substring(0, 2), number: phoneClean.substring(2) }
+      : { area_code: phoneClean.substring(0, 2), number: phoneClean.substring(2) }
+
     const data = {
       plan_name: planData.name,
-      amount: planData.price,
+      amount: Math.round(planData.price * 100), // Converter para centavos
       customer: {
         name: customerData.name,
         email: customerData.email,
-        cpf: customerData.cpf,
-        phone: customerData.phone
+        cpf: customerData.cpf.replace(/\D/g, ''),
+        phone: phoneFormatted
       },
       expiration_minutes: 30
     }
@@ -99,17 +105,23 @@ export const paymentService = {
 
     const config = planConfig[planData.name] || { intervalUnit: 'MONTH', intervalValue: 1 }
 
+    // Processar telefone para o formato correto
+    const phoneClean = customerData.phone.replace(/\D/g, '')
+    const phoneFormatted = phoneClean.length === 11 
+      ? { area_code: phoneClean.substring(0, 2), number: phoneClean.substring(2) }
+      : { area_code: phoneClean.substring(0, 2), number: phoneClean.substring(2) }
+
     const data = {
       plan_name: planData.name,
       plan_description: `Plano ${planData.name} - Escrita360`,
-      amount: planData.price,
+      amount: Math.round(planData.price * 100), // Converter para centavos
       interval_unit: config.intervalUnit,
       interval_value: config.intervalValue,
       customer: {
         name: customerData.name,
         email: customerData.email,
-        cpf: customerData.cpf,
-        phone: customerData.phone
+        cpf: customerData.cpf.replace(/\D/g, ''),
+        phone: phoneFormatted
       },
       payment_method: paymentMethod,
       cardData: cardData

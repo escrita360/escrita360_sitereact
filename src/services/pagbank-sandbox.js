@@ -167,8 +167,25 @@ class PagBankSandbox {
       // Cria o cliente
       const customer = await this.testCreateCustomer()
       
-      // Criptografa os dados do cartão
-      const encryptedCard = await chavePublicaService.encryptCardData(cardData)
+      // Para testes em Node.js, usar dados diretos do cartão
+      const isNode = typeof process !== 'undefined' && process.env;
+      let encryptedCard;
+      
+      if (isNode) {
+        // Em Node.js, usar dados diretos (não criptografados)
+        encryptedCard = {
+          number: cardData.number,
+          exp_month: cardData.exp_month || cardData.expiryMonth,
+          exp_year: cardData.exp_year || cardData.expiryYear,
+          security_code: cardData.security_code || cardData.cvv,
+          holder: {
+            name: cardData.holder.name
+          }
+        };
+      } else {
+        // No browser, criptografar normalmente
+        encryptedCard = await chavePublicaService.encryptCardData(cardData);
+      }
       this.log('Dados do cartão criptografados', 'info')
 
       // Cria o pagamento

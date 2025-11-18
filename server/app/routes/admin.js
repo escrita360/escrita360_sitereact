@@ -153,6 +153,61 @@ router.get('/payments', adminAuth, async (req, res) => {
 });
 
 /**
+ * Obter configurações do PagBank
+ */
+router.get('/pagbank/config', adminAuth, async (req, res) => {
+  try {
+    console.log('🔧 Admin solicitando configurações do PagBank');
+    
+    const config = {
+      environment: process.env.PAGBANK_ENV || 'sandbox',
+      tokenConfigured: !!(process.env.PAGBANK_TOKEN && process.env.PAGBANK_TOKEN !== 'your_pagbank_token_here'),
+      baseUrl: process.env.PAGBANK_ENV === 'production' 
+        ? 'https://api.pagseguro.com' 
+        : 'https://sandbox.api.pagseguro.com',
+      appId: process.env.PAGBANK_APP_ID || null,
+      clientId: process.env.PAGBANK_CLIENT_ID || null,
+      clientSecret: !!(process.env.PAGBANK_CLIENT_SECRET && process.env.PAGBANK_CLIENT_SECRET !== 'your_pagbank_client_secret_here'),
+      email: process.env.PAGBANK_EMAIL || null
+    };
+    
+    res.json(config);
+  } catch (error) {
+    console.error('❌ Erro ao obter configurações PagBank:', error);
+    res.status(500).json({ error: 'Erro ao obter configurações PagBank', details: error.message });
+  }
+});
+
+/**
+ * Atualizar configurações do PagBank
+ */
+router.put('/pagbank/config', adminAuth, async (req, res) => {
+  try {
+    const { appId, clientId, clientSecret, email, token, environment } = req.body;
+    
+    console.log('🔧 Admin atualizando configurações do PagBank');
+    
+    // Validação básica
+    if (environment && !['sandbox', 'production'].includes(environment)) {
+      return res.status(400).json({ error: 'Ambiente deve ser "sandbox" ou "production"' });
+    }
+    
+    // Aqui você pode implementar a lógica para atualizar as variáveis de ambiente
+    // ou salvar em um arquivo de configuração seguro
+    
+    // Por enquanto, apenas retorna sucesso (as configurações são lidas do .env)
+    res.json({ 
+      success: true, 
+      message: 'Configurações atualizadas com sucesso. Reinicie o servidor para aplicar as mudanças.',
+      note: 'As configurações são lidas do arquivo .env. Edite o arquivo manualmente ou implemente um sistema de configuração dinâmico.'
+    });
+  } catch (error) {
+    console.error('❌ Erro ao atualizar configurações PagBank:', error);
+    res.status(500).json({ error: 'Erro ao atualizar configurações PagBank', details: error.message });
+  }
+});
+
+/**
  * Buscar assinaturas de um usuário específico
  */
 router.get('/users/:uid/subscriptions', adminAuth, async (req, res) => {

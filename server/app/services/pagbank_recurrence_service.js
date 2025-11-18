@@ -23,7 +23,6 @@ class PagBankRecurrenceService {
         this.environment = process.env.PAGBANK_ENV || 'sandbox';
         this.email = process.env.PAGBANK_EMAIL;
         this.token = process.env.PAGBANK_TOKEN;
-        this.mockMode = process.env.PAGBANK_MOCK_MODE === 'true';
 
         // URLs base conforme documentação
         if (this.environment === 'sandbox') {
@@ -37,10 +36,6 @@ class PagBankRecurrenceService {
             'Accept': 'application/vnd.pagseguro.com.br.v3+json;charset=ISO-8859-1',
             'Content-Type': 'application/json;charset=ISO-8859-1'
         };
-
-        if (this.mockMode) {
-            console.log('⚠️ MODO SIMULAÇÃO ATIVADO - Recorrência PagBank');
-        }
 
         if (!this.email || !this.token) {
             console.warn('⚠️ PAGBANK_EMAIL ou PAGBANK_TOKEN não configurados');
@@ -105,10 +100,6 @@ class PagBankRecurrenceService {
      * POST /pre-approvals/request/?email={email}&token={token}
      */
     async createPlan(planData) {
-        if (this.mockMode) {
-            return this._mockCreatePlan(planData);
-        }
-
         const payload = {
             redirectURL: planData.redirectURL || `${process.env.FRONTEND_URL}/pagamento-sucesso`,
             reference: planData.reference || `plan_${Date.now()}`,
@@ -141,10 +132,6 @@ class PagBankRecurrenceService {
      * POST /v2/sessions?email={email}&token={token}
      */
     async createSession() {
-        if (this.mockMode) {
-            return this._mockCreateSession();
-        }
-
         return this.makeRequest('/v2/sessions', 'POST');
     }
 
@@ -153,10 +140,6 @@ class PagBankRecurrenceService {
      * POST /pre-approvals?email={email}&token={token}
      */
     async createSubscription(subscriptionData) {
-        if (this.mockMode) {
-            return this._mockCreateSubscription(subscriptionData);
-        }
-
         const payload = {
             plan: subscriptionData.plan,
             reference: subscriptionData.reference || `subscription_${Date.now()}`,
@@ -211,10 +194,6 @@ class PagBankRecurrenceService {
      * POST /pre-approvals/payment?email={email}&token={token}
      */
     async chargeSubscription(chargeData) {
-        if (this.mockMode) {
-            return this._mockChargeSubscription(chargeData);
-        }
-
         const payload = {
             preApprovalCode: chargeData.preApprovalCode,
             reference: chargeData.reference || `charge_${Date.now()}`,
@@ -241,10 +220,6 @@ class PagBankRecurrenceService {
      * POST /pre-approvals/{preApprovalCode}/payment-orders/{paymentOrderCode}/payment?email={email}&token={token}
      */
     async retryPayment(preApprovalCode, paymentOrderCode) {
-        if (this.mockMode) {
-            return this._mockRetryPayment(preApprovalCode, paymentOrderCode);
-        }
-
         return this.makeRequest(
             `/pre-approvals/${preApprovalCode}/payment-orders/${paymentOrderCode}/payment`,
             'POST'
@@ -260,10 +235,6 @@ class PagBankRecurrenceService {
      * PUT /pre-approvals/{preApprovalCode}/status?email={email}&token={token}
      */
     async suspendSubscription(preApprovalCode) {
-        if (this.mockMode) {
-            return this._mockUpdateStatus(preApprovalCode, 'SUSPENDED');
-        }
-
         return this.makeRequest(
             `/pre-approvals/${preApprovalCode}/status`,
             'PUT',
@@ -276,10 +247,6 @@ class PagBankRecurrenceService {
      * PUT /pre-approvals/{preApprovalCode}/status?email={email}&token={token}
      */
     async reactivateSubscription(preApprovalCode) {
-        if (this.mockMode) {
-            return this._mockUpdateStatus(preApprovalCode, 'ACTIVE');
-        }
-
         return this.makeRequest(
             `/pre-approvals/${preApprovalCode}/status`,
             'PUT',
@@ -292,10 +259,6 @@ class PagBankRecurrenceService {
      * PUT /pre-approvals/{preApprovalCode}/cancel?email={email}&token={token}
      */
     async cancelSubscription(preApprovalCode) {
-        if (this.mockMode) {
-            return this._mockCancelSubscription(preApprovalCode);
-        }
-
         return this.makeRequest(
             `/pre-approvals/${preApprovalCode}/cancel`,
             'PUT'
@@ -311,10 +274,6 @@ class PagBankRecurrenceService {
      * PUT /pre-approvals/request/{preApprovalRequestCode}/payment?email={email}&token={token}
      */
     async updatePlanAmount(preApprovalRequestCode, amountPerPayment, updateSubscriptions = false) {
-        if (this.mockMode) {
-            return this._mockUpdatePlanAmount(preApprovalRequestCode, amountPerPayment);
-        }
-
         return this.makeRequest(
             `/pre-approvals/request/${preApprovalRequestCode}/payment`,
             'PUT',
@@ -330,10 +289,6 @@ class PagBankRecurrenceService {
      * PUT /pre-approvals/{preApprovalCode}/discount?email={email}&token={token}
      */
     async applyDiscount(preApprovalCode, discountType, discountValue) {
-        if (this.mockMode) {
-            return this._mockApplyDiscount(preApprovalCode, discountType, discountValue);
-        }
-
         return this.makeRequest(
             `/pre-approvals/${preApprovalCode}/discount`,
             'PUT',
@@ -349,10 +304,6 @@ class PagBankRecurrenceService {
      * PUT /pre-approvals/{preApprovalCode}/payment-method?email={email}&token={token}
      */
     async changePaymentMethod(preApprovalCode, paymentMethodData) {
-        if (this.mockMode) {
-            return this._mockChangePaymentMethod(preApprovalCode);
-        }
-
         const payload = {
             type: 'CREDITCARD',
             sender: {
@@ -388,10 +339,6 @@ class PagBankRecurrenceService {
      * GET /pre-approvals/{preApprovalCode}/payment-orders?email={email}&token={token}
      */
     async listPaymentOrders(preApprovalCode) {
-        if (this.mockMode) {
-            return this._mockListPaymentOrders(preApprovalCode);
-        }
-
         return this.makeRequest(`/pre-approvals/${preApprovalCode}/payment-orders`, 'GET');
     }
 
@@ -400,10 +347,6 @@ class PagBankRecurrenceService {
      * GET /pre-approvals/{preApprovalCode}?email={email}&token={token}
      */
     async getSubscription(preApprovalCode) {
-        if (this.mockMode) {
-            return this._mockGetSubscription(preApprovalCode);
-        }
-
         return this.makeRequest(`/pre-approvals/${preApprovalCode}`, 'GET');
     }
 
@@ -412,10 +355,6 @@ class PagBankRecurrenceService {
      * GET /pre-approvals/?email={email}&token={token}&initialDate={date}&finalDate={date}
      */
     async listSubscriptionsByDate(initialDate, finalDate) {
-        if (this.mockMode) {
-            return this._mockListSubscriptionsByDate(initialDate, finalDate);
-        }
-
         return this.makeRequest('/pre-approvals/', 'GET', null, {
             initialDate: initialDate, // formato: 2019-08-09T01:00
             finalDate: finalDate
@@ -427,142 +366,7 @@ class PagBankRecurrenceService {
      * GET /pre-approvals/notifications/{notificationCode}?email={email}&token={token}
      */
     async getSubscriptionByNotification(notificationCode) {
-        if (this.mockMode) {
-            return this._mockGetSubscription(notificationCode);
-        }
-
         return this.makeRequest(`/pre-approvals/notifications/${notificationCode}`, 'GET');
-    }
-
-    // =========================
-    // MÉTODOS DE SIMULAÇÃO (MOCK)
-    // =========================
-
-    _mockCreatePlan(planData) {
-        console.log('🎭 SIMULAÇÃO: Criando plano...');
-        const mockPlan = {
-            code: `PLAN_${Date.now()}`,
-            date: new Date().toISOString(),
-            reference: planData.reference || `plan_${Date.now()}`
-        };
-        console.log('✅ SIMULAÇÃO: Plano criado:', mockPlan);
-        return mockPlan;
-    }
-
-    _mockCreateSession() {
-        console.log('🎭 SIMULAÇÃO: Criando sessão...');
-        const mockSession = {
-            session: {
-                id: `SESSION_${Date.now()}`
-            }
-        };
-        console.log('✅ SIMULAÇÃO: Sessão criada:', mockSession);
-        return mockSession;
-    }
-
-    _mockCreateSubscription(subscriptionData) {
-        console.log('🎭 SIMULAÇÃO: Criando adesão ao plano...');
-        const mockSubscription = {
-            code: `SUB_${Date.now()}`,
-            date: new Date().toISOString(),
-            reference: subscriptionData.reference,
-            plan: subscriptionData.plan,
-            status: 'ACTIVE'
-        };
-        console.log('✅ SIMULAÇÃO: Adesão criada:', mockSubscription);
-        return mockSubscription;
-    }
-
-    _mockChargeSubscription(chargeData) {
-        console.log('🎭 SIMULAÇÃO: Cobrando plano...');
-        const mockCharge = {
-            transactionCode: `TRANS_${Date.now()}`,
-            date: new Date().toISOString(),
-            reference: chargeData.reference,
-            status: 'PAID'
-        };
-        console.log('✅ SIMULAÇÃO: Cobrança realizada:', mockCharge);
-        return mockCharge;
-    }
-
-    _mockRetryPayment(preApprovalCode, paymentOrderCode) {
-        console.log('🎭 SIMULAÇÃO: Retentando pagamento...');
-        const mockRetry = {
-            paymentOrderCode,
-            status: 'PROCESSING',
-            date: new Date().toISOString()
-        };
-        console.log('✅ SIMULAÇÃO: Retentativa iniciada:', mockRetry);
-        return mockRetry;
-    }
-
-    _mockUpdateStatus(preApprovalCode, status) {
-        console.log(`🎭 SIMULAÇÃO: Atualizando status para ${status}...`);
-        return { status: 204 };
-    }
-
-    _mockCancelSubscription(preApprovalCode) {
-        console.log('🎭 SIMULAÇÃO: Cancelando assinatura...');
-        return { status: 204 };
-    }
-
-    _mockUpdatePlanAmount(preApprovalRequestCode, amountPerPayment) {
-        console.log('🎭 SIMULAÇÃO: Atualizando valor do plano...');
-        return { status: 204 };
-    }
-
-    _mockApplyDiscount(preApprovalCode, discountType, discountValue) {
-        console.log('🎭 SIMULAÇÃO: Aplicando desconto...');
-        return { status: 204 };
-    }
-
-    _mockChangePaymentMethod(preApprovalCode) {
-        console.log('🎭 SIMULAÇÃO: Alterando meio de pagamento...');
-        return { status: 204 };
-    }
-
-    _mockListPaymentOrders(preApprovalCode) {
-        console.log('🎭 SIMULAÇÃO: Listando ordens de pagamento...');
-        return {
-            paymentOrders: [
-                {
-                    code: `ORDER_${Date.now()}`,
-                    status: 'PAID',
-                    amount: 29.90,
-                    schedulingDate: new Date().toISOString()
-                }
-            ]
-        };
-    }
-
-    _mockGetSubscription(preApprovalCode) {
-        console.log('🎭 SIMULAÇÃO: Consultando assinatura...');
-        return {
-            code: preApprovalCode,
-            name: 'Plano Mensal',
-            status: 'ACTIVE',
-            reference: `ref_${preApprovalCode}`,
-            lastEventDate: new Date().toISOString(),
-            charge: 'AUTO',
-            sender: {
-                name: 'Cliente Teste',
-                email: 'cliente@example.com'
-            }
-        };
-    }
-
-    _mockListSubscriptionsByDate(initialDate, finalDate) {
-        console.log('🎭 SIMULAÇÃO: Listando assinaturas por data...');
-        return {
-            preApprovals: [
-                {
-                    code: `SUB_${Date.now()}`,
-                    name: 'Plano Mensal',
-                    status: 'ACTIVE',
-                    date: new Date().toISOString()
-                }
-            ]
-        };
     }
 
     // =========================

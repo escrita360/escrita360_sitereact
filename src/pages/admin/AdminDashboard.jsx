@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { adminService } from '@/services/admin'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Users, CreditCard, TrendingUp, DollarSign } from 'lucide-react'
+import { Users, CreditCard, TrendingUp, DollarSign, Zap } from 'lucide-react'
 
 export default function AdminDashboard() {
   const navigate = useNavigate()
@@ -114,7 +114,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Menu de ações */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/admin/users')}>
           <CardHeader>
             <CardTitle>Gerenciar Usuários</CardTitle>
@@ -144,6 +144,21 @@ export default function AdminDashboard() {
             <CardTitle>Histórico de Pagamentos</CardTitle>
             <CardDescription>
               Visualize todas as transações realizadas
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">Acessar</Button>
+          </CardContent>
+        </Card>
+
+        <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/admin/pagbank')}>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Zap className="h-5 w-5" />
+              Gateway PagBank
+            </CardTitle>
+            <CardDescription>
+              Monitoramento e controle da integração PagBank
             </CardDescription>
           </CardHeader>
           <CardContent>

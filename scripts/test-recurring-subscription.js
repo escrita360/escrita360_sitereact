@@ -40,6 +40,27 @@ const { pagBankSubscriptionsService } = await import('../src/services/pagbank-su
 console.log('🚀 Teste de Assinatura Recorrente PagBank\n')
 console.log('================================================\n')
 
+// Função para gerar CPF válido
+function generateValidCPF() {
+  const base = Math.floor(Math.random() * 1000000000).toString().padStart(9, '0');
+  let cpf = base;
+  let sum = 0;
+  for (let i = 0; i < 9; i++) {
+    sum += parseInt(cpf[i]) * (10 - i);
+  }
+  let remainder = sum % 11;
+  let digit1 = remainder < 2 ? 0 : 11 - remainder;
+  cpf += digit1;
+  sum = 0;
+  for (let i = 0; i < 10; i++) {
+    sum += parseInt(cpf[i]) * (11 - i);
+  }
+  remainder = sum % 11;
+  let digit2 = remainder < 2 ? 0 : 11 - remainder;
+  cpf += digit2;
+  return cpf;
+}
+
 // Dados do cartão fornecidos pelo usuário
 const testCardData = {
   number: '5555666677778884',
@@ -52,7 +73,7 @@ const testCardData = {
 const testCustomer = {
   name: 'João Silva Teste',
   email: 'joao.silva.teste@escrita360.com',
-  cpf: '52998224725', // CPF válido para teste
+  cpf: generateValidCPF(), // CPF válido gerado dinamicamente
   phone: '11999999999'
 }
 

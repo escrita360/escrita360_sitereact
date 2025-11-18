@@ -16,6 +16,7 @@ import AdminDashboard from './pages/admin/AdminDashboard.jsx'
 import AdminUsers from './pages/admin/AdminUsers.jsx'
 import AdminSubscriptions from './pages/admin/AdminSubscriptions.jsx'
 import AdminPayments from './pages/admin/AdminPayments.jsx'
+import AdminPagBank from './pages/admin/AdminPagBank.jsx'
 import './App.css'
 
 function App() {
@@ -242,6 +243,21 @@ function App() {
                 transition={pageTransition}
               >
                 <AdminPayments />
+              </motion.div>
+            </Layout>
+          </AdminRoute>
+        } />
+        <Route path="/admin/pagbank" element={
+          <AdminRoute>
+            <Layout>
+              <motion.div
+                initial="initial"
+                animate="in"
+                exit="out"
+                variants={pageVariants}
+                transition={pageTransition}
+              >
+                <AdminPagBank />
               </motion.div>
             </Layout>
           </AdminRoute>
