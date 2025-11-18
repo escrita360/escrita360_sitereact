@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const FirebaseAdminService = require('../services/firebase_admin_service');
+const FirebaseAdminService = require('../services/firebase_admin_service_stub');
 const { adminAuth } = require('../middleware/adminAuth');
 
 // Instância do serviço Firebase

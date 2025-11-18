@@ -137,11 +137,11 @@ const Login = () => {
       const result = await authService.login(formData.email.trim(), formData.password)
       
       if (result.success !== false) {
-        const userTypeResult = result.user?.userType || userType
+        const userTypeResult = result.user?.role === 'admin' ? 'admin' : 'aluno'
         if (userTypeResult === 'admin') {
-          navigate('/admin-dashboard')
+          navigate('/admin')
         } else {
-          navigate('/aluno')
+          navigate('/')
         }
       } else {
         setError(result.message || 'Erro no login')
@@ -184,7 +184,7 @@ const Login = () => {
       })
       
       if (result.success !== false) {
-        navigate('/aluno')
+        navigate('/')
       } else {
         setError(result.message || 'Erro no cadastro')
       }

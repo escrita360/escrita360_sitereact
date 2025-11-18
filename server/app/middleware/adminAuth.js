@@ -1,29 +1,26 @@
-const jwt = require('jsonwebtoken');
+const LocalAuthService = require('../services/local_auth_service');
 
-// Lista de emails de administradores - em produção, use banco de dados
-const ADMIN_EMAILS = [
-  'admin@escrita360.com',
-  'suporte@escrita360.com'
-];
+// Instância do serviço de autenticação
+const authService = new LocalAuthService();
 
 /**
  * Middleware para verificar token JWT
  */
-const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+const authenticateToken = async (req, res, next) => {
+  try {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
 
-  if (!token) {
-    return res.status(401).json({ error: 'Token não fornecido' });
-  }
-
-  jwt.verify(token, process.env.JWT_SECRET_KEY || 'jwt_secret_dev_12345', (err, user) => {
-    if (err) {
-      return res.status(403).json({ error: 'Token inválido' });
+    if (!token) {
+      return res.status(401).json({ error: 'Token não fornecido' });
     }
+
+    const user = await authService.verifyToken(token);
     req.user = user;
     next();
-  });
+  } catch (error) {
+    return res.status(403).json({ error: 'Token inválido' });
+  }
 };
 
 /**
@@ -34,7 +31,7 @@ const requireAdmin = (req, res, next) => {
     return res.status(401).json({ error: 'Não autenticado' });
   }
 
-  if (!ADMIN_EMAILS.includes(req.user.email)) {
+  if (!authService.isAdmin(req.user)) {
     return res.status(403).json({ error: 'Acesso negado. Privilégios de administrador necessários.' });
   }
 
@@ -49,6 +46,5 @@ const adminAuth = [authenticateToken, requireAdmin];
 module.exports = {
   authenticateToken,
   requireAdmin,
-  adminAuth,
-  ADMIN_EMAILS
+  adminAuth
 };

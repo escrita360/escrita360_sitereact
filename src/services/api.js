@@ -3,7 +3,7 @@ import axios from 'axios'
 // Compatibilidade com Node.js e navegador
 const API_URL = (globalThis.import?.meta?.env?.VITE_API_URL) ||
                 (globalThis?.process?.env?.VITE_API_URL) ||
-                'http://localhost:5000/api'
+                'http://localhost:5001/api'
 
 // Mock para testes
 const isTestEnvironment = globalThis?.process?.env?.NODE_ENV === 'test'
