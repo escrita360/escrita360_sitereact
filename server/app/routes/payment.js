@@ -57,20 +57,27 @@ router.post('/create-pagbank-checkout', async (req, res) => {
 
 router.post('/create-pagbank-pix-payment', async (req, res) => {
     try {
+        console.log('📥 Recebendo dados para criar pagamento PIX:', JSON.stringify(req.body, null, 2));
         const data = req.body;
 
-        // Simulação - em produção, implementaria o PIX real
+        // Por enquanto, simulação do PIX - em produção, implementar a API real
         const result = {
-            id: `pix_${data.plan_name.toLowerCase().replace(/\s+/g, '_')}`,
+            id: `pix_${data.plan_name.toLowerCase().replace(/\s+/g, '_')}_${Date.now()}`,
             qr_codes: [{
                 text: '00020101021126890014br.gov.bcb.pix0117+55119999999995204000053039865802BR5913ESCrita3606009SAO PAULO62070503***6304ABCD',
-                expiration_date: '2025-12-18T10:00:00Z'
+                expiration_date: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
+                amount: {
+                    value: Math.round(data.amount * 100)
+                }
             }],
-            status: 'pending'
+            status: 'WAITING',
+            customer: data.customer
         };
 
+        console.log('✅ PIX gerado:', result);
         res.status(201).json(result);
     } catch (error) {
+        console.error('❌ Erro ao criar PIX:', error.message);
         res.status(400).json({ error: error.message });
     }
 });

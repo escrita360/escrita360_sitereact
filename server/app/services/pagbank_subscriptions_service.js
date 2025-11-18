@@ -59,21 +59,27 @@ class PagBankSubscriptionsService {
     }
 
     formatTaxId(taxId) {
-        return taxId.replace(/\D/g, '');
+        const cleaned = taxId.replace(/\D/g, '');
+        if (cleaned.length !== 11 && cleaned.length !== 14) {
+            throw new Error('CPF/CNPJ inválido');
+        }
+        return cleaned;
     }
 
     formatPhone(phone) {
         const cleanPhone = phone.replace(/\D/g, '');
 
         if (cleanPhone.length >= 10) {
+            const areaCode = cleanPhone.substring(0, 2);
+            const number = cleanPhone.substring(2);
             return {
                 country: '55',
-                area: cleanPhone.substring(0, 2),
-                number: cleanPhone.substring(2),
-                type: 'MOBILE'
+                area: areaCode,
+                number: number,
+                type: number.length >= 9 ? 'MOBILE' : 'BUSINESS'
             };
         } else {
-            throw new Error('Telefone inválido');
+            throw new Error('Telefone deve ter pelo menos 10 dígitos (DDD + número)');
         }
     }
 
@@ -198,36 +204,42 @@ class PagBankSubscriptionsService {
                 reference_id: `customer_${Date.now()}`,
                 name: customerData.name,
                 email: customerData.email,
-                tax_id: this.formatTaxId(customerData.cpf),
+                tax_id: this.formatTaxId(customerData.cpf || customerData.tax_id),
                 phones: [this.formatPhone(customerData.phone)]
             };
 
+            // Endereço é obrigatório para boleto
             if (paymentMethod === 'BOLETO') {
-                payload.customer.address = customerData.address || {
-                    street: 'Rua Exemplo',
-                    number: '123',
-                    complement: 'Apto 1',
-                    locality: 'Centro',
-                    city: 'São Paulo',
-                    region_code: 'SP',
+                payload.customer.address = {
+                    street: customerData.address?.street || 'Rua Exemplo',
+                    number: customerData.address?.number || '123',
+                    complement: customerData.address?.complement || '',
+                    locality: customerData.address?.locality || 'Centro',
+                    city: customerData.address?.city || 'São Paulo',
+                    region_code: customerData.address?.region_code || 'SP',
                     country: 'BRA',
-                    postal_code: '01310100'
+                    postal_code: customerData.address?.postal_code?.replace(/\D/g, '') || '01310100'
                 };
             }
         }
 
         if (paymentMethod === 'BOLETO') {
-            payload.payment_method.push({
+            payload.payment_method = [{
                 type: 'BOLETO'
-            });
+            }];
+        } else if (paymentMethod === 'CREDIT_CARD') {
+            payload.payment_method = [{
+                type: 'CREDIT_CARD'
+            }];
         }
 
-        if (subscriptionData.amount) {
-            payload.amount = {
-                value: Math.round(subscriptionData.amount * 100),
-                currency: 'BRL'
-            };
-        }
+        // Remover o amount, já que o plano já define o valor
+        // if (subscriptionData.amount) {
+        //     payload.amount = {
+        //         value: Math.round(subscriptionData.amount * 100),
+        //         currency: 'BRL'
+        //     };
+        // }
 
         return this.makeRequest('/subscriptions', 'POST', payload);
     }
