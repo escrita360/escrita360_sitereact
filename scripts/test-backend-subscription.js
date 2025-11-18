@@ -25,7 +25,7 @@ const testCardData = {
 const testCustomer = {
   name: 'João Silva Teste',
   email: 'joao.silva.teste@escrita360.com',
-  cpf: '12345678909',
+  cpf: '63013767812', // CPF válido
   phone: {
     area_code: '11',
     number: '999999999'

@@ -139,6 +139,18 @@ class PagBankSubscriptionsService {
 
     formatPhone(phone) {
         if (!phone) return null;
+
+        // Se já for um objeto formatado, retorna como está
+        if (typeof phone === 'object' && phone.area_code && phone.number) {
+            return {
+                country: '55',
+                area: phone.area_code,
+                number: phone.number,
+                type: phone.number.length >= 9 ? 'MOBILE' : 'BUSINESS'
+            };
+        }
+
+        // Se for string, processa normalmente
         const cleaned = phone.replace(/\D/g, '');
         if (cleaned.length < 10) {
             throw new Error(`Telefone inválido: deve ter pelo menos 10 dígitos (DDD + número), recebido ${cleaned.length}`);
@@ -271,6 +283,14 @@ class PagBankSubscriptionsService {
             payment_method: {}
         };
 
+        // Incluir amount se fornecido (obrigatório para cartão de crédito)
+        if (subscriptionData.amount) {
+            payload.amount = {
+                value: subscriptionData.amount,
+                currency: 'BRL'
+            };
+        }
+
         if (customerData.id) {
             payload.customer = {
                 id: customerData.id
@@ -302,16 +322,27 @@ class PagBankSubscriptionsService {
             }
         }
 
-        // Configurar método de pagamento
+        // Configurar método de pagamento baseado no tipo
         if (paymentMethod === 'BOLETO') {
-            payload.payment_method = {
+            // Para boleto, apenas indicar o tipo
+            payload.payment_method = [{
                 type: 'BOLETO'
-            };
+            }];
         } else if (paymentMethod === 'CREDIT_CARD') {
             if (!subscriptionData.cardData) {
                 throw new Error('Dados do cartão são obrigatórios para pagamento com cartão de crédito');
             }
-            payload.payment_method = {
+            
+            // Para cartão, o PagBank EXIGE:
+            // 1. Dados do cartão em customer.billing_info
+            // 2. payment_method apenas com type (sem dados do cartão)
+            
+            // Adicionar billing_info ao customer com os dados do cartão
+            if (!payload.customer.billing_info) {
+                payload.customer.billing_info = [];
+            }
+            
+            payload.customer.billing_info.push({
                 type: 'CREDIT_CARD',
                 card: {
                     number: subscriptionData.cardData.number.replace(/\s/g, ''),
@@ -322,7 +353,12 @@ class PagBankSubscriptionsService {
                         name: subscriptionData.cardData.holderName
                     }
                 }
-            };
+            });
+            
+            // payment_method apenas indica o tipo, sem repetir dados do cartão
+            payload.payment_method = [{
+                type: 'CREDIT_CARD'
+            }];
         }
 
         console.log('📤 Enviando payload para PagBank:', JSON.stringify(payload, null, 2));
@@ -351,7 +387,8 @@ class PagBankSubscriptionsService {
                 plan_id: plan.id,
                 customer: data.customer,
                 payment_method: data.payment_method || 'BOLETO',
-                cardData: data.cardData
+                cardData: data.cardData,
+                amount: data.amount // Passar o amount para a assinatura
             });
             console.log('✅ Assinatura criada:', subscription.id);
 

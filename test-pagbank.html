@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teste PagBank Subscription</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <h1>Teste de Assinatura PagBank</h1>
+    <button onclick="testarAssinatura()">Criar Assinatura com Cartão</button>
+    <pre id="resultado" style="background: #f0f0f0; padding: 20px; margin-top: 20px;"></pre>
+
+    <script>
+        async function testarAssinatura() {
+            const resultado = document.getElementById('resultado');
+            resultado.textContent = 'Aguarde... criando assinatura...';
+
+            const payload = {
+                plan_name: "Plano Básico Mensal",
+                plan_description: "Plano de teste para assinatura recorrente",
+                amount: 4990,
+                interval_unit: "MONTH",
+                interval_value: 1,
+                customer: {
+                    name: "João Silva Teste",
+                    email: "joao.silva.teste@escrita360.com",
+                    cpf: "63013767812",
+                    phone: {
+                        area_code: "11",
+                        number: "999999999"
+                    }
+                },
+                payment_method: "CREDIT_CARD",
+                cardData: {
+                    number: "5555666677778884",
+                    expiryMonth: "12",
+                    expiryYear: "2026",
+                    cvv: "123",
+                    holderName: "João Silva Teste"
+                }
+            };
+
+            try {
+                const response = await fetch('http://localhost:5001/api/payment/create-pagbank-subscription', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+                
+                resultado.textContent = `Status: ${response.status}\n\n${JSON.stringify(data, null, 2)}`;
+            } catch (error) {
+                resultado.textContent = `Erro: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>
