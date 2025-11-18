@@ -17,7 +17,9 @@ function createApp() {
 
     // Registrar rotas
     const paymentRoutes = require('./app/routes/payment');
+    const authRoutes = require('./app/routes/auth');
     app.use('/api/payment', paymentRoutes);
+    app.use('/api/auth', authRoutes);
 
     // Health check
     app.get('/health', (req, res) => {

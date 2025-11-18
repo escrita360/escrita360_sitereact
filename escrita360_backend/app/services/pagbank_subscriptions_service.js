@@ -6,6 +6,7 @@ class PagBankSubscriptionsService {
     constructor() {
         this.environment = process.env.PAGBANK_ENV || 'sandbox';
         this.token = process.env.PAGBANK_TOKEN;
+        this.mockMode = process.env.PAGBANK_MOCK_MODE === 'true';
 
         if (this.environment === 'sandbox') {
             this.baseUrl = 'https://sandbox.api.assinaturas.pagseguro.com';
@@ -18,6 +19,10 @@ class PagBankSubscriptionsService {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         };
+
+        if (this.mockMode) {
+            console.log('⚠️ MODO SIMULAÇÃO ATIVADO - Nenhuma chamada real será feita à API do PagBank');
+        }
     }
 
     async makeRequest(endpoint, method = 'GET', data = null) {
@@ -73,6 +78,30 @@ class PagBankSubscriptionsService {
     }
 
     async createPlan(planData) {
+        // Modo simulação
+        if (this.mockMode) {
+            console.log('🎭 SIMULAÇÃO: Criando plano...');
+            const mockPlan = {
+                id: `PLAN_${Date.now()}`,
+                reference_id: `plan_${Date.now()}`,
+                name: planData.name,
+                description: planData.description || `Plano ${planData.name}`,
+                amount: {
+                    value: Math.round(planData.amount * 100),
+                    currency: 'BRL'
+                },
+                interval: {
+                    unit: planData.interval_unit || 'MONTH',
+                    length: planData.interval_value || 1
+                },
+                payment_methods: planData.payment_methods || ['CREDIT_CARD', 'BOLETO'],
+                status: 'ACTIVE',
+                created_at: new Date().toISOString()
+            };
+            console.log('✅ SIMULAÇÃO: Plano criado:', mockPlan);
+            return mockPlan;
+        }
+
         const payload = {
             reference_id: `plan_${Date.now()}`,
             name: planData.name,
@@ -118,6 +147,38 @@ class PagBankSubscriptionsService {
     async createSubscription(subscriptionData) {
         const customerData = subscriptionData.customer;
         const paymentMethod = subscriptionData.payment_method || 'BOLETO';
+
+        // Modo simulação
+        if (this.mockMode) {
+            console.log('🎭 SIMULAÇÃO: Criando assinatura...');
+            const mockSubscription = {
+                id: `SUBS_${Date.now()}`,
+                reference_id: `subscription_${Date.now()}`,
+                plan: {
+                    id: subscriptionData.plan_id,
+                    name: 'Plano Simulado'
+                },
+                customer: {
+                    id: `CUST_${Date.now()}`,
+                    reference_id: `customer_${Date.now()}`,
+                    name: customerData.name,
+                    email: customerData.email,
+                    tax_id: this.formatTaxId(customerData.cpf || customerData.tax_id)
+                },
+                status: 'ACTIVE',
+                payment_method: [{
+                    type: paymentMethod
+                }],
+                amount: subscriptionData.amount ? {
+                    value: Math.round(subscriptionData.amount * 100),
+                    currency: 'BRL'
+                } : undefined,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+            };
+            console.log('✅ SIMULAÇÃO: Assinatura criada:', mockSubscription);
+            return mockSubscription;
+        }
 
         const payload = {
             reference_id: `subscription_${Date.now()}`,
