@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const path = require('path');
 
 // Carregar variáveis de ambiente
 dotenv.config();
@@ -15,7 +16,7 @@ function createApp() {
     app.use(express.json());
     app.use(cors({ origin: ['http://localhost:5173', 'http://localhost:3000'] }));
 
-    // Registrar rotas
+    // Registrar rotas da API
     const paymentRoutes = require('./app/routes/payment');
     const authRoutes = require('./app/routes/auth');
     app.use('/api/payment', paymentRoutes);
@@ -26,9 +27,17 @@ function createApp() {
         res.json({ status: 'ok', service: 'escrita360-backend' });
     });
 
-    // Rota de teste
-    app.get('/', (req, res) => {
-        res.json({ message: 'Escrita360 Backend API', version: '1.0.0' });
+    // Servir arquivos estáticos da distribuição do site
+    const distPath = path.join(__dirname, '..', 'dist');
+    app.use(express.static(distPath));
+
+    // SPA fallback - todas as rotas não-API retornam o index.html
+    app.get('*', (req, res) => {
+        // Não interceptar rotas da API
+        if (req.path.startsWith('/api/') || req.path === '/health') {
+            return res.status(404).json({ error: 'Not found' });
+        }
+        res.sendFile(path.join(distPath, 'index.html'));
     });
 
     return app;

@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently \"vite\" \"cd server && nodemon app.js\"",
+    "dev:full": "pnpm build && concurrently \"cd server && nodemon app.js\"",
     "dev:frontend": "vite",
     "dev:backend": "cd server && nodemon app.js",
     "build": "vite build",

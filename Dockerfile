@@ -19,14 +19,30 @@ COPY . .
 # Build the application
 RUN pnpm build
 
-# Use nginx to serve the built application
-FROM nginx:alpine
+# Production stage
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
 
 # Copy built files from build stage
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build /app/dist ./dist
 
-# Expose port 80
-EXPOSE 80
+# Copy server files
+COPY --from=build /app/server ./server
 
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Copy package.json for server dependencies
+COPY --from=build /app/server/package.json ./server/
+
+# Install only server dependencies
+WORKDIR /app/server
+RUN npm install --production
+
+# Set working directory back to app
+WORKDIR /app
+
+# Expose port 5000
+EXPOSE 5000
+
+# Start the server
+CMD ["node", "server/app.js"]
