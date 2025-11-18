@@ -249,11 +249,17 @@ const BoletoPayment = ({ paymentData, onError }) => {
   )
 }
 
-const RecurringPayment = ({ paymentData, onSuccess, onError }) => {
+const RecurringPayment = ({ paymentData, onSuccess, onError, validateBeforeSubmit }) => {
   const [isCreating, setIsCreating] = useState(false)
   const [subscriptionData, setSubscriptionData] = useState(null)
 
   const createRecurringPayment = async () => {
+    // Validar formulário antes de prosseguir
+    if (validateBeforeSubmit && !validateBeforeSubmit()) {
+      toast.error('Por favor, preencha todos os campos obrigatórios corretamente')
+      return
+    }
+
     setIsCreating(true)
     try {
       console.log('🔄 Criando assinatura recorrente com PagBank...')
@@ -343,7 +349,7 @@ const RecurringPayment = ({ paymentData, onSuccess, onError }) => {
   )
 }
 
-export function PagBankCheckout({ planData, customerData, cardData, isYearly, onSuccess, onError }) {
+export function PagBankCheckout({ planData, customerData, cardData, isYearly, onSuccess, onError, validateBeforeSubmit }) {
   const [selectedMethod, setSelectedMethod] = useState(isYearly ? 'card' : 'recurring')
 
   const paymentMethods = [
@@ -384,6 +390,7 @@ export function PagBankCheckout({ planData, customerData, cardData, isYearly, on
           paymentData={{ planData, customerData }}
           onSuccess={onSuccess}
           onError={onError}
+          validateBeforeSubmit={validateBeforeSubmit}
         />
       )
     }

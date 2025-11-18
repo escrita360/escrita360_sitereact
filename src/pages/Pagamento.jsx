@@ -4,10 +4,11 @@ import { Label } from '@/components/ui/label.jsx'
 import { Card, CardContent } from '@/components/ui/card.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
 import { Separator } from '@/components/ui/separator.jsx'
-import { CreditCard, Lock, Calendar, User, Shield, CheckCircle2, ArrowLeft, AlertCircle } from 'lucide-react'
+import { CreditCard, Lock, Calendar, User, Shield, CheckCircle2, ArrowLeft, AlertCircle, Eye, EyeOff } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import PagBankCheckout from '@/components/PagBankCheckout.jsx'
+import { authService } from '@/services/auth.js'
 
 function Pagamento() {
   const navigate = useNavigate()
@@ -24,9 +25,14 @@ function Pagamento() {
     cpf: '',
     email: '',
     phone: '',
+    password: '',
+    confirmPassword: '',
     paymentMethod: 'recurring' // 'recurring', 'card', 'pix', 'boleto'
   })
   const [errors, setErrors] = useState({})
+  const [isCreatingAccount, setIsCreatingAccount] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   
   useEffect(() => {
     if (!selectedPlan) {
@@ -80,6 +86,50 @@ function Pagamento() {
     
     setFormData(prev => ({ ...prev, [field]: formattedValue }))
     if (errors[field]) setErrors(prev => ({ ...prev, [field]: '' }))
+  }
+
+  const validateForm = () => {
+    const newErrors = {}
+    
+    if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Email válido é obrigatório'
+    }
+    if (!formData.cpf || formData.cpf.replace(/\D/g, '').length !== 11) {
+      newErrors.cpf = 'CPF válido é obrigatório'
+    }
+    if (!formData.phone || formData.phone.replace(/\D/g, '').length < 10) {
+      newErrors.phone = 'Telefone válido é obrigatório'
+    }
+    if (!formData.password || formData.password.length < 6) {
+      newErrors.password = 'Senha deve ter no mínimo 6 caracteres'
+    }
+    if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = 'As senhas não coincidem'
+    }
+    
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  const createUserAccount = async (transactionData) => {
+    try {
+      setIsCreatingAccount(true)
+      
+      // Criar conta com email e senha
+      const userData = await authService.register(
+        formData.email,
+        formData.password,
+        formData.cardName || formData.email.split('@')[0]
+      )
+      
+      console.log('Conta criada com sucesso:', userData)
+      return userData
+    } catch (error) {
+      console.error('Erro ao criar conta:', error)
+      throw new Error('Não foi possível criar sua conta. Por favor, entre em contato com o suporte.')
+    } finally {
+      setIsCreatingAccount(false)
+    }
   }
 
   const handleGoBack = () => navigate('/precos')
@@ -165,6 +215,54 @@ function Pagamento() {
                           {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone}</p>}
                         </div>
                       </div>
+                      
+                      <div className="grid grid-cols-2 gap-4 mt-4">
+                        <div>
+                          <Label htmlFor="password">Senha *</Label>
+                          <div className="relative">
+                            <Input 
+                              id="password" 
+                              type={showPassword ? 'text' : 'password'}
+                              placeholder="Mínimo 6 caracteres"
+                              value={formData.password} 
+                              onChange={(e) => handleInputChange('password', e.target.value)}
+                              className={errors.password ? 'border-red-500 pr-10' : 'pr-10'} 
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setShowPassword(!showPassword)}
+                              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                            >
+                              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                            </button>
+                          </div>
+                          {errors.password && <p className="text-xs text-red-500 mt-1">{errors.password}</p>}
+                        </div>
+                        <div>
+                          <Label htmlFor="confirmPassword">Confirmar Senha *</Label>
+                          <div className="relative">
+                            <Input 
+                              id="confirmPassword" 
+                              type={showConfirmPassword ? 'text' : 'password'}
+                              placeholder="Repita a senha"
+                              value={formData.confirmPassword} 
+                              onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
+                              className={errors.confirmPassword ? 'border-red-500 pr-10' : 'pr-10'} 
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                            >
+                              {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                            </button>
+                          </div>
+                          {errors.confirmPassword && <p className="text-xs text-red-500 mt-1">{errors.confirmPassword}</p>}
+                        </div>
+                      </div>
+                      <p className="text-xs text-slate-600 mt-2">
+                        Esta senha será usada para acessar sua conta no site
+                      </p>
                     </div>
 
                     <Separator />
@@ -241,13 +339,23 @@ function Pagamento() {
                           holderName: formData.cardName
                         } : null}
                         isYearly={isYearly}
-                        onSuccess={(data) => {
-                          setPaymentSuccess(true)
-                          setTransactionData(data)
+                        onSuccess={async (data) => {
+                          try {
+                            // Criar conta do usuário
+                            await createUserAccount(data)
+                            
+                            // Marcar pagamento como bem-sucedido
+                            setPaymentSuccess(true)
+                            setTransactionData(data)
+                          } catch (error) {
+                            setPaymentError(error.message || 'Pagamento aprovado, mas houve um erro ao criar sua conta. Entre em contato com o suporte.')
+                            console.error('Erro ao processar sucesso do pagamento:', error)
+                          }
                         }}
                         onError={(error) => {
                           setPaymentError(error)
                         }}
+                        validateBeforeSubmit={validateForm}
                       />
                     </div>
                   </div>
@@ -331,7 +439,7 @@ function Pagamento() {
             </div>
             <div className="space-y-3">
               <h2 className="text-5xl font-bold">Pagamento Confirmado!</h2>
-              <p className="text-xl text-slate-600">Sua assinatura foi ativada com sucesso</p>
+              <p className="text-xl text-slate-600">Sua assinatura foi ativada e sua conta criada com sucesso</p>
             </div>
             <Card className="max-w-2xl mx-auto shadow-xl">
               <CardContent className="p-6 space-y-4">
@@ -361,6 +469,21 @@ function Pagamento() {
                   )}
                 </div>
                 <Separator />
+                <div className="bg-green-50 p-5 rounded-lg text-left">
+                  <p className="text-base font-medium text-green-900 mb-3">✅ Sua Conta Foi Criada!</p>
+                  <div className="space-y-2">
+                    <p className="text-sm text-green-700">
+                      <strong>E-mail:</strong> {formData.email}
+                    </p>
+                    <p className="text-sm text-green-700">
+                      <strong>Senha:</strong> ••••••• (use a senha que você cadastrou)
+                    </p>
+                  </div>
+                  <p className="text-sm text-green-600 mt-3">
+                    Você já pode fazer login no site com essas credenciais!
+                  </p>
+                </div>
+                <Separator />
                 <div className="bg-blue-50 p-5 rounded-lg text-left">
                   <p className="text-base font-medium text-blue-900 mb-2">📧 Confirmação Enviada</p>
                   <p className="text-sm text-blue-700">Enviamos todos os detalhes para {formData.email}</p>
@@ -371,8 +494,8 @@ function Pagamento() {
               <Button size="lg" className="bg-brand-primary hover:bg-brand-secondary" onClick={() => navigate('/dashboard')}>
                 Ir para o Dashboard
               </Button>
-              <Button size="lg" variant="outline" onClick={handleGoBack}>
-                Voltar para Planos
+              <Button size="lg" variant="outline" onClick={() => navigate('/login')}>
+                Fazer Login Agora
               </Button>
             </div>
           </div>
