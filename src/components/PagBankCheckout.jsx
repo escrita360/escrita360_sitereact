@@ -263,6 +263,11 @@ const RecurringPayment = ({ paymentData, onSuccess, onError, validateBeforeSubmi
     setIsCreating(true)
     try {
       console.log('🔄 Criando assinatura recorrente com PagBank...')
+      console.log('📦 Dados enviados:', {
+        planData: paymentData.planData,
+        customerData: { ...paymentData.customerData, cpf: '***' },
+        hasCardData: !!paymentData.cardData
+      })
       
       const result = await paymentService.createPagBankSubscription({
         planData: paymentData.planData,
@@ -274,19 +279,47 @@ const RecurringPayment = ({ paymentData, onSuccess, onError, validateBeforeSubmi
       console.log('✅ Assinatura criada:', result)
       setSubscriptionData(result)
       
-      // Verificar se está em modo demo
-      if (result.demo_mode) {
-        toast.warning('⚠️ Modo DEMO: ' + (result.warning || 'Assinatura de demonstração criada'))
-        console.warn('🎭 MODO DEMO ATIVO:', result.instructions || result.warning)
-      } else {
-        toast.success('Assinatura criada com sucesso!')
-      }
-      
+      toast.success('Assinatura criada com sucesso!')
       onSuccess(result)
     } catch (error) {
       console.error('❌ Erro ao criar assinatura:', error)
-      toast.error('Erro ao criar assinatura: ' + error.message)
-      onError('Erro ao criar assinatura: ' + error.message)
+      
+      let errorMessage = 'Erro ao criar assinatura'
+      
+      // Tratar diferentes tipos de erro
+      if (error.response) {
+        // Erro da API
+        const status = error.response.status
+        const data = error.response.data
+        
+        if (status === 500 || status === 502 || status === 503) {
+          errorMessage = 'Erro no servidor. Por favor, verifique se o backend está rodando.'
+        } else if (status === 403) {
+          errorMessage = 'Token PagBank não autorizado. Verifique a configuração do backend.'
+        } else if (status === 404) {
+          errorMessage = 'Endpoint não encontrado. Verifique se o backend está atualizado.'
+        } else if (data?.error) {
+          errorMessage = data.error
+        } else {
+          errorMessage = `Erro ${status}: ${error.message}`
+        }
+        
+        console.error('📋 Detalhes do erro da API:', {
+          status,
+          data,
+          message: error.message
+        })
+      } else if (error.request) {
+        // Requisição enviada mas sem resposta
+        errorMessage = 'Sem resposta do servidor. Verifique se o backend está rodando em http://localhost:5000'
+        console.error('📋 Backend não respondeu. Verifique se está rodando.')
+      } else {
+        // Erro na configuração da requisição
+        errorMessage = error.message || 'Erro desconhecido ao processar requisição'
+      }
+      
+      toast.error(errorMessage, { duration: 10000 })
+      onError(errorMessage)
     } finally {
       setIsCreating(false)
     }
@@ -322,50 +355,33 @@ const RecurringPayment = ({ paymentData, onSuccess, onError, validateBeforeSubmi
       <CardHeader>
         <CardTitle className="flex items-center">
           <CheckCircle2 className="w-5 h-5 mr-2 text-green-600" />
-          Assinatura Criada {subscriptionData.demo_mode && '(DEMO)'}
+          Assinatura Criada com Sucesso
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {subscriptionData.demo_mode && (
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
-            <div className="flex items-start">
-              <AlertCircle className="w-5 h-5 text-yellow-600 mr-2 mt-0.5" />
-              <div>
-                <h4 className="font-medium text-yellow-800">Modo Demonstração</h4>
-                <p className="text-sm text-yellow-700 mt-2">
-                  {subscriptionData.warning || 'Esta é uma assinatura de demonstração para fins de teste.'}
-                </p>
-                {subscriptionData.instructions && (
-                  <div className="mt-3 text-xs text-yellow-700">
-                    <p className="font-semibold">{subscriptionData.instructions.message}</p>
-                    <ul className="mt-1 space-y-1">
-                      {subscriptionData.instructions.steps?.map((step, idx) => (
-                        <li key={idx}>{step}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-        
-        <div className={`border rounded-lg p-4 ${subscriptionData.demo_mode ? 'bg-yellow-50 border-yellow-200' : 'bg-green-50 border-green-200'}`}>
+        <div className="bg-green-50 border-2 border-green-200 rounded-lg p-4">
           <div className="flex items-start">
-            <CheckCircle2 className={`w-5 h-5 mr-2 mt-0.5 ${subscriptionData.demo_mode ? 'text-yellow-600' : 'text-green-600'}`} />
-            <div>
-              <h4 className={`font-medium ${subscriptionData.demo_mode ? 'text-yellow-800' : 'text-green-800'}`}>
-                Assinatura {subscriptionData.demo_mode ? 'Demo ' : ''}Ativada!
-              </h4>
-              <p className={`text-sm mt-2 ${subscriptionData.demo_mode ? 'text-yellow-700' : 'text-green-700'}`}>
-                {subscriptionData.demo_mode 
-                  ? 'Assinatura de demonstração criada com sucesso.'
-                  : 'Sua assinatura foi criada com sucesso. Você receberá os detalhes por email.'}
+            <CheckCircle2 className="w-6 h-6 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
+            <div className="flex-1">
+              <h4 className="font-bold text-green-900 text-lg">✅ Assinatura Criada com Sucesso!</h4>
+              <p className="text-sm text-green-700 mt-2">
+                Sua assinatura foi ativada e você receberá os detalhes por email.
               </p>
               {subscriptionData.subscription?.id && (
-                <p className={`text-xs font-mono mt-2 ${subscriptionData.demo_mode ? 'text-yellow-600' : 'text-green-600'}`}>
-                  ID: {subscriptionData.subscription.id}
-                </p>
+                <div className="mt-3 bg-green-100 rounded p-2">
+                  <p className="text-xs text-green-700">ID da Assinatura:</p>
+                  <p className="text-xs font-mono text-green-800 font-semibold mt-1">
+                    {subscriptionData.subscription.id}
+                  </p>
+                </div>
+              )}
+              {subscriptionData.plan?.id && (
+                <div className="mt-2 bg-green-100 rounded p-2">
+                  <p className="text-xs text-green-700">ID do Plano:</p>
+                  <p className="text-xs font-mono text-green-800 font-semibold mt-1">
+                    {subscriptionData.plan.id}
+                  </p>
+                </div>
               )}
             </div>
           </div>

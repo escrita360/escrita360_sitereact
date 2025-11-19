@@ -27,36 +27,14 @@ class PagBankSubscriptionsService {
 
         // Validar token
         if (!this.token || this.token.includes('your_pagbank_token')) {
-            console.warn('⚠️ PAGBANK_TOKEN não configurado!');
-            console.warn('   Ativando modo DEMO para desenvolvimento');
-            this.demoMode = true;
-        } else if (this.token.length < 50) {
-            console.warn('⚠️ Token PagBank parece ser inválido (muito curto)');
-            console.warn('   Ativando modo DEMO');
-            this.demoMode = true;
+            throw new Error('PAGBANK_TOKEN não configurado! Configure o token no arquivo server/.env');
         }
 
         console.log(`🔧 PagBank Subscriptions Service inicializado`);
         console.log(`   Ambiente: ${this.environment}`);
-        console.log(`   Modo: ${this.demoMode ? '🎭 DEMO' : '🔴 REAL'}`);
+        console.log(`   Email: ${process.env.PAGBANK_EMAIL || 'não configurado'}`);
+        console.log(`   Token: ${this.token.substring(0, 20)}...${this.token.substring(this.token.length - 10)}`);
         console.log(`   Base URL: ${this.subscriptionsBaseUrl}`);
-        
-        if (this.demoMode) {
-            console.log('');
-            console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-            console.log('⚠️  MODO DEMONSTRAÇÃO ATIVO');
-            console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-            console.log('');
-            console.log('Para usar a API real do PagBank:');
-            console.log('1. Acesse: https://dev.pagseguro.uol.com.br/');
-            console.log('2. Crie uma conta de desenvolvedor');
-            console.log('3. Gere um token de API no painel');
-            console.log('4. Configure no arquivo .env:');
-            console.log('   PAGBANK_TOKEN=seu_token_aqui');
-            console.log('');
-            console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-            console.log('');
-        }
     }
 
     async makeRequest(endpoint, method = 'GET', data = null, usePaymentsApi = false) {
@@ -174,25 +152,6 @@ class PagBankSubscriptionsService {
             throw new Error('Valor do plano deve ser maior que zero');
         }
 
-        // Modo DEMO
-        if (this.demoMode) {
-            console.log('🎭 DEMO: Simulando criação de plano...');
-            const mockPlan = {
-                id: `PLAN_DEMO_${Date.now()}`,
-                reference_id: `plan_${Date.now()}`,
-                name: planData.name,
-                description: planData.description || `Plano ${planData.name}`,
-                amount: {
-                    value: Math.round(planData.amount * 100),
-                    currency: 'BRL'
-                },
-                status: 'ACTIVE',
-                created_at: new Date().toISOString()
-            };
-            console.log('✅ DEMO: Plano criado:', mockPlan);
-            return mockPlan;
-        }
-
         // Payload conforme documentação PagBank API v4
         const payload = {
             reference_id: `plan_${Date.now()}`,
@@ -243,35 +202,11 @@ class PagBankSubscriptionsService {
 
     async createSubscription(subscriptionData) {
         const customerData = subscriptionData.customer;
-        const paymentMethod = subscriptionData.payment_method || 'BOLETO';
+        const paymentMethod = subscriptionData.payment_method || 'CREDIT_CARD';
 
         // Validar dados obrigatórios
         if (!customerData.name || !customerData.email) {
             throw new Error('Nome e email do cliente são obrigatórios');
-        }
-
-        // Modo DEMO
-        if (this.demoMode) {
-            console.log('🎭 DEMO: Simulando criação de assinatura...');
-            const mockSubscription = {
-                id: `SUB_DEMO_${Date.now()}`,
-                reference_id: `subscription_${Date.now()}`,
-                plan: {
-                    id: subscriptionData.plan_id
-                },
-                customer: {
-                    name: customerData.name,
-                    email: customerData.email
-                },
-                status: 'ACTIVE',
-                payment_method: {
-                    type: paymentMethod
-                },
-                created_at: new Date().toISOString(),
-                next_invoice_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
-            };
-            console.log('✅ DEMO: Assinatura criada:', mockSubscription);
-            return mockSubscription;
         }
 
         const payload = {
@@ -332,17 +267,13 @@ class PagBankSubscriptionsService {
             if (!subscriptionData.cardData) {
                 throw new Error('Dados do cartão são obrigatórios para pagamento com cartão de crédito');
             }
-            
-            // Para cartão, o PagBank EXIGE:
-            // 1. Dados do cartão em customer.billing_info
-            // 2. payment_method apenas com type (sem dados do cartão)
-            
-            // Adicionar billing_info ao customer com os dados do cartão
-            if (!payload.customer.billing_info) {
-                payload.customer.billing_info = [];
-            }
-            
-            payload.customer.billing_info.push({
+
+            // Para cartão, o PagBank exige:
+            // 1. Dados do cartão no customer.billing_info (para associar ao cliente)
+            // 2. Dados do cartão no payment_method (para cobrança)
+
+            // Adicionar billing_info ao customer
+            payload.customer.billing_info = [{
                 type: 'CREDIT_CARD',
                 card: {
                     number: subscriptionData.cardData.number.replace(/\s/g, ''),
@@ -353,15 +284,22 @@ class PagBankSubscriptionsService {
                         name: subscriptionData.cardData.holderName
                     }
                 }
-            });
-            
-            // payment_method apenas indica o tipo, sem repetir dados do cartão
-            payload.payment_method = [{
-                type: 'CREDIT_CARD'
             }];
-        }
 
-        console.log('📤 Enviando payload para PagBank:', JSON.stringify(payload, null, 2));
+            // Incluir dados do cartão no payment_method
+            payload.payment_method = [{
+                type: 'CREDIT_CARD',
+                card: {
+                    number: subscriptionData.cardData.number.replace(/\s/g, ''),
+                    exp_month: String(subscriptionData.cardData.expiryMonth).padStart(2, '0'),
+                    exp_year: String(subscriptionData.cardData.expiryYear),
+                    security_code: String(subscriptionData.cardData.cvv),
+                    holder: {
+                        name: subscriptionData.cardData.holderName
+                    }
+                }
+            }];
+        }        console.log('📤 Enviando payload para PagBank:', JSON.stringify(payload, null, 2));
         return this.makeRequest('/subscriptions', 'POST', payload);
     }
 
