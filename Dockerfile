@@ -54,7 +54,7 @@ RUN mkdir -p /etc/nginx/http.d && \
     echo '' >> /etc/nginx/http.d/default.conf && \
     echo '    # API proxy' >> /etc/nginx/http.d/default.conf && \
     echo '    location /api/ {' >> /etc/nginx/http.d/default.conf && \
-    echo '        proxy_pass http://localhost:5001;' >> /etc/nginx/http.d/default.conf && \
+    echo '        proxy_pass http://localhost:5000;' >> /etc/nginx/http.d/default.conf && \
     echo '        proxy_http_version 1.1;' >> /etc/nginx/http.d/default.conf && \
     echo '        proxy_set_header Upgrade $http_upgrade;' >> /etc/nginx/http.d/default.conf && \
     echo '        proxy_set_header Connection "upgrade";' >> /etc/nginx/http.d/default.conf && \
@@ -66,7 +66,7 @@ RUN mkdir -p /etc/nginx/http.d && \
     echo '' >> /etc/nginx/http.d/default.conf && \
     echo '    # Health check endpoint' >> /etc/nginx/http.d/default.conf && \
     echo '    location /health {' >> /etc/nginx/http.d/default.conf && \
-    echo '        proxy_pass http://localhost:5001;' >> /etc/nginx/http.d/default.conf && \
+    echo '        proxy_pass http://localhost:5000;' >> /etc/nginx/http.d/default.conf && \
     echo '    }' >> /etc/nginx/http.d/default.conf && \
     echo '' >> /etc/nginx/http.d/default.conf && \
     echo '    # SPA fallback' >> /etc/nginx/http.d/default.conf && \
@@ -112,17 +112,17 @@ RUN echo '#!/bin/sh' > /app/entrypoint.sh && \
     echo 'fi' >> /app/entrypoint.sh && \
     echo 'echo "✅ Environment variables validated"' >> /app/entrypoint.sh && \
     echo 'echo "   PAGBANK_ENV: $PAGBANK_ENV"' >> /app/entrypoint.sh && \
-    echo 'echo "   PORT: ${PORT:-5001}"' >> /app/entrypoint.sh && \
+    echo 'echo "   PORT: ${PORT:-5000}"' >> /app/entrypoint.sh && \
     echo 'echo ""' >> /app/entrypoint.sh && \
     echo 'echo "🚀 Starting services..."' >> /app/entrypoint.sh && \
     echo 'echo "   📱 Frontend (Nginx): Port 80"' >> /app/entrypoint.sh && \
-    echo 'echo "   ⚙️  Backend (Node.js): Port 5001"' >> /app/entrypoint.sh && \
+    echo 'echo "   ⚙️  Backend (Node.js): Port 5000"' >> /app/entrypoint.sh && \
     echo 'echo ""' >> /app/entrypoint.sh && \
     echo 'exec /usr/bin/supervisord -c /etc/supervisor.d/supervisord.ini' >> /app/entrypoint.sh && \
     chmod +x /app/entrypoint.sh
 
-# Expose ports for frontend (80) and backend (5001)
-EXPOSE 80 5001
+# Expose ports for frontend (80) and backend (5000)
+EXPOSE 80 5000
 
 # Start both services with supervisor
 ENTRYPOINT ["/app/entrypoint.sh"]
