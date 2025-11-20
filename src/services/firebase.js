@@ -212,7 +212,7 @@ export const firebaseSubscriptionService = {
         tokens: 10, // 10 tokens por assinatura mensal
         origem: 'site',
         planoOrigem: plan.name,
-        valorPago: plan.price,
+        valorPago: isYearly ? plan.yearlyPrice : plan.monthlyPrice,
         periodicidade: isYearly ? 'anual' : 'mensal',
         pagamentoId: paymentData.transactionId || '',
         criado_em: serverTimestamp(),
