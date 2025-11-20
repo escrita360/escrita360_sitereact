@@ -307,17 +307,32 @@ class PagBankSubscriptionsService {
         try {
             console.log('🔄 Iniciando fluxo completo de assinatura...');
             
-            // Passo 1: Criar o plano
-            console.log('📋 Criando plano...');
-            const plan = await this.createPlan({
-                name: data.plan_name,
-                description: data.plan_description,
-                amount: data.amount,
-                interval_unit: data.interval_unit,
-                interval_value: data.interval_value,
-                payment_methods: ['CREDIT_CARD', 'BOLETO']
-            });
-            console.log('✅ Plano criado:', plan.id);
+            // Passo 1: Verificar se o plano já existe
+            console.log('📋 Verificando se plano já existe...');
+            let plan;
+            try {
+                const existingPlans = await this.listPlans();
+                // Procurar plano com o mesmo nome
+                const existingPlan = existingPlans.plans?.find(p => p.name === data.plan_name);
+                if (existingPlan) {
+                    console.log('✅ Plano existente encontrado:', existingPlan.id);
+                    plan = existingPlan;
+                } else {
+                    throw new Error('Plano não encontrado');
+                }
+            } catch (error) {
+                console.log('📋 Plano não encontrado, criando novo...');
+                // Se não encontrou ou erro na busca, criar novo plano
+                plan = await this.createPlan({
+                    name: data.plan_name,
+                    description: data.plan_description,
+                    amount: data.amount,
+                    interval_unit: data.interval_unit,
+                    interval_value: data.interval_value,
+                    payment_methods: ['CREDIT_CARD', 'BOLETO']
+                });
+                console.log('✅ Plano criado:', plan.id);
+            }
 
             // Passo 2: Criar a assinatura
             console.log('📝 Criando assinatura...');
