@@ -214,7 +214,7 @@ export const firebaseSubscriptionService = {
         planoOrigem: plan.name,
         valorPago: isYearly ? plan.yearlyPrice : plan.monthlyPrice,
         periodicidade: isYearly ? 'anual' : 'mensal',
-        pagamentoId: paymentData.transactionId || '',
+        pagamentoId: paymentData.transactionId || `WEB_PAY_${Date.now()}`,
         criado_em: serverTimestamp(),
         atualizado_em: serverTimestamp()
       }
@@ -312,16 +312,16 @@ export const firebasePaymentService = {
     try {
       const pagamentoData = {
         userId: userId,
-        userEmail: paymentData.email,
-        valor: paymentData.amount,
+        userEmail: paymentData.email || '',
+        valor: paymentData.amount || 0,
         status: paymentData.status || 'pending',
         metodoPagamento: paymentData.paymentMethod || 'card',
-        transacaoId: paymentData.transactionId,
-        plano: paymentData.plan,
+        transacaoId: paymentData.transactionId || `WEB_TXN_${Date.now()}`,
+        plano: paymentData.plan || '',
         periodicidade: paymentData.isYearly ? 'anual' : 'mensal',
         origem: 'site',
         criadoEm: serverTimestamp(),
-        dadosCompletos: paymentData
+        dadosCompletos: paymentData || {}
       }
       
       const pagamentoRef = doc(collection(db, 'pagamentos'))
