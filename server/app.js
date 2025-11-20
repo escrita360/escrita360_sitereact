@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 const path = require('path');
 
 // Carregar variáveis de ambiente
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, '..', '.env') });
 
 function createApp() {
     const app = express();
