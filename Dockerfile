@@ -19,13 +19,16 @@ COPY . .
 # Build the application
 RUN pnpm build
 
-# Production stage
+# Production stage - Multi-service container
 FROM node:18-alpine
+
+# Install nginx and supervisor
+RUN apk add --no-cache nginx supervisor
 
 # Set working directory
 WORKDIR /app
 
-# Copy built files from build stage
+# Copy built frontend files
 COPY --from=build /app/dist ./dist
 
 # Copy server files
@@ -41,7 +44,65 @@ RUN npm install --production
 # Set working directory back to app
 WORKDIR /app
 
-# Create a simple entrypoint script to validate environment variables
+# Create nginx configuration
+RUN mkdir -p /etc/nginx/http.d && \
+    echo 'server {' > /etc/nginx/http.d/default.conf && \
+    echo '    listen 80;' >> /etc/nginx/http.d/default.conf && \
+    echo '    server_name _;' >> /etc/nginx/http.d/default.conf && \
+    echo '    root /app/dist;' >> /etc/nginx/http.d/default.conf && \
+    echo '    index index.html;' >> /etc/nginx/http.d/default.conf && \
+    echo '' >> /etc/nginx/http.d/default.conf && \
+    echo '    # API proxy' >> /etc/nginx/http.d/default.conf && \
+    echo '    location /api/ {' >> /etc/nginx/http.d/default.conf && \
+    echo '        proxy_pass http://localhost:5001;' >> /etc/nginx/http.d/default.conf && \
+    echo '        proxy_http_version 1.1;' >> /etc/nginx/http.d/default.conf && \
+    echo '        proxy_set_header Upgrade $http_upgrade;' >> /etc/nginx/http.d/default.conf && \
+    echo '        proxy_set_header Connection "upgrade";' >> /etc/nginx/http.d/default.conf && \
+    echo '        proxy_set_header Host $host;' >> /etc/nginx/http.d/default.conf && \
+    echo '        proxy_set_header X-Real-IP $remote_addr;' >> /etc/nginx/http.d/default.conf && \
+    echo '        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;' >> /etc/nginx/http.d/default.conf && \
+    echo '        proxy_set_header X-Forwarded-Proto $scheme;' >> /etc/nginx/http.d/default.conf && \
+    echo '    }' >> /etc/nginx/http.d/default.conf && \
+    echo '' >> /etc/nginx/http.d/default.conf && \
+    echo '    # Health check endpoint' >> /etc/nginx/http.d/default.conf && \
+    echo '    location /health {' >> /etc/nginx/http.d/default.conf && \
+    echo '        proxy_pass http://localhost:5001;' >> /etc/nginx/http.d/default.conf && \
+    echo '    }' >> /etc/nginx/http.d/default.conf && \
+    echo '' >> /etc/nginx/http.d/default.conf && \
+    echo '    # SPA fallback' >> /etc/nginx/http.d/default.conf && \
+    echo '    location / {' >> /etc/nginx/http.d/default.conf && \
+    echo '        try_files $uri $uri/ /index.html;' >> /etc/nginx/http.d/default.conf && \
+    echo '    }' >> /etc/nginx/http.d/default.conf && \
+    echo '}' >> /etc/nginx/http.d/default.conf
+
+# Create supervisor configuration
+RUN mkdir -p /etc/supervisor.d && \
+    echo '[supervisord]' > /etc/supervisor.d/supervisord.ini && \
+    echo 'nodaemon=true' >> /etc/supervisor.d/supervisord.ini && \
+    echo 'user=root' >> /etc/supervisor.d/supervisord.ini && \
+    echo 'logfile=/var/log/supervisord.log' >> /etc/supervisor.d/supervisord.ini && \
+    echo 'pidfile=/var/run/supervisord.pid' >> /etc/supervisor.d/supervisord.ini && \
+    echo '' >> /etc/supervisor.d/supervisord.ini && \
+    echo '[program:nginx]' >> /etc/supervisor.d/supervisord.ini && \
+    echo 'command=nginx -g "daemon off;"' >> /etc/supervisor.d/supervisord.ini && \
+    echo 'autostart=true' >> /etc/supervisor.d/supervisord.ini && \
+    echo 'autorestart=true' >> /etc/supervisor.d/supervisord.ini && \
+    echo 'stdout_logfile=/dev/stdout' >> /etc/supervisor.d/supervisord.ini && \
+    echo 'stdout_logfile_maxbytes=0' >> /etc/supervisor.d/supervisord.ini && \
+    echo 'stderr_logfile=/dev/stderr' >> /etc/supervisor.d/supervisord.ini && \
+    echo 'stderr_logfile_maxbytes=0' >> /etc/supervisor.d/supervisord.ini && \
+    echo '' >> /etc/supervisor.d/supervisord.ini && \
+    echo '[program:backend]' >> /etc/supervisor.d/supervisord.ini && \
+    echo 'command=node /app/server/app.js' >> /etc/supervisor.d/supervisord.ini && \
+    echo 'directory=/app' >> /etc/supervisor.d/supervisord.ini && \
+    echo 'autostart=true' >> /etc/supervisor.d/supervisord.ini && \
+    echo 'autorestart=true' >> /etc/supervisor.d/supervisord.ini && \
+    echo 'stdout_logfile=/dev/stdout' >> /etc/supervisor.d/supervisord.ini && \
+    echo 'stdout_logfile_maxbytes=0' >> /etc/supervisor.d/supervisord.ini && \
+    echo 'stderr_logfile=/dev/stderr' >> /etc/supervisor.d/supervisord.ini && \
+    echo 'stderr_logfile_maxbytes=0' >> /etc/supervisor.d/supervisord.ini
+
+# Create entrypoint script with environment validation
 RUN echo '#!/bin/sh' > /app/entrypoint.sh && \
     echo 'echo "🔍 Checking environment variables..."' >> /app/entrypoint.sh && \
     echo 'if [ -z "$PAGBANK_TOKEN" ]; then' >> /app/entrypoint.sh && \
@@ -51,12 +112,17 @@ RUN echo '#!/bin/sh' > /app/entrypoint.sh && \
     echo 'fi' >> /app/entrypoint.sh && \
     echo 'echo "✅ Environment variables validated"' >> /app/entrypoint.sh && \
     echo 'echo "   PAGBANK_ENV: $PAGBANK_ENV"' >> /app/entrypoint.sh && \
-    echo 'echo "   PORT: $PORT"' >> /app/entrypoint.sh && \
-    echo 'exec node server/app.js' >> /app/entrypoint.sh && \
+    echo 'echo "   PORT: ${PORT:-5001}"' >> /app/entrypoint.sh && \
+    echo 'echo ""' >> /app/entrypoint.sh && \
+    echo 'echo "🚀 Starting services..."' >> /app/entrypoint.sh && \
+    echo 'echo "   📱 Frontend (Nginx): Port 80"' >> /app/entrypoint.sh && \
+    echo 'echo "   ⚙️  Backend (Node.js): Port 5001"' >> /app/entrypoint.sh && \
+    echo 'echo ""' >> /app/entrypoint.sh && \
+    echo 'exec /usr/bin/supervisord -c /etc/supervisor.d/supervisord.ini' >> /app/entrypoint.sh && \
     chmod +x /app/entrypoint.sh
 
-# Expose port 5001
-EXPOSE 5001
+# Expose ports for frontend (80) and backend (5001)
+EXPOSE 80 5001
 
-# Start the server with entrypoint
+# Start both services with supervisor
 ENTRYPOINT ["/app/entrypoint.sh"]

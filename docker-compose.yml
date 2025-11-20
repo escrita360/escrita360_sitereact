@@ -1,31 +1,21 @@
 version: '3.8'
 
 services:
-  frontend:
+  app:
     build: .
     ports:
-      - "8080:80"
+      - "8080:80"      # Frontend (Nginx)
+      - "5001:5001"    # Backend (Node.js)
     environment:
       - NODE_ENV=production
-
-  backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "5001:5001"
-    environment:
-      - NODE_ENV=development
       - PORT=5001
       - SECRET_KEY=dev_secret_key_12345
       - PAGBANK_ENV=sandbox
       - PAGBANK_EMAIL=escrita360@gmail.com
       - PAGBANK_TOKEN=e7160b77-a214-4b48-8c61-93732bc6241b2256143d4139951eb97603d812916bd6e65e-ed77-49cf-97a6-87b1bf6fe327
       - PAGBANK_APP_ID=app_escrita360
-      - FRONTEND_URL=http://localhost:5173
-      - PAGBANK_WEBHOOK_URL=http://localhost:5000/api/webhook/pagbank
+      - FRONTEND_URL=http://localhost:8080
+      - PAGBANK_WEBHOOK_URL=http://localhost:8080/api/webhook/pagbank
       - DATABASE_URL=sqlite:///app.db
       - JWT_SECRET_KEY=jwt_secret_dev_12345
-    volumes:
-      - ./server:/app/server
-    command: ["node", "server/app.js"]
+    restart: unless-stopped
