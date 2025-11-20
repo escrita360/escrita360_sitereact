@@ -51,7 +51,7 @@ function createApp() {
 const app = createApp();
 
 if (require.main === module) {
-    const port = process.env.PORT || 5001;
+    const port = process.env.PORT || 5000;
     console.log(`🔍 Attempting to start server on port ${port}...`);
     
     const server = app.listen(port, 'localhost', () => {
