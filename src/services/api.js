@@ -1,9 +1,18 @@
 import axios from 'axios'
 
 // Compatibilidade com Node.js e navegador
-const API_URL = (globalThis.import?.meta?.env?.VITE_API_URL) ||
-                (globalThis?.process?.env?.VITE_API_URL) ||
-                'http://localhost:5000/api'
+const getApiUrl = () => {
+  // Em produção, usar a URL do mesmo host (backend e frontend no mesmo domínio)
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+    return `${window.location.protocol}//${window.location.hostname}/api`
+  }
+  // Em desenvolvimento
+  return (globalThis.import?.meta?.env?.VITE_API_URL) ||
+         (globalThis?.process?.env?.VITE_API_URL) ||
+         'http://localhost:5000/api'
+}
+
+const API_URL = getApiUrl()
 
 // Mock para testes
 const isTestEnvironment = globalThis?.process?.env?.NODE_ENV === 'test'

@@ -37,7 +37,11 @@ function createApp() {
             'http://127.0.0.1:5173',
             'http://127.0.0.1:3000',
             'http://127.0.0.1:5000',
-            'http://127.0.0.1:8080'
+            'http://127.0.0.1:8080',
+            'https://escrita360-react.nnjeij.easypanel.host',
+            /\.easypanel\.host$/,
+            /\.vercel\.app$/,
+            /\.netlify\.app$/
         ],
         credentials: true
     }));
