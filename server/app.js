@@ -28,7 +28,19 @@ function createApp() {
 
     // Middleware
     app.use(express.json());
-    app.use(cors({ origin: ['http://localhost:5173', 'http://localhost:3000'] }));
+    app.use(cors({ 
+        origin: [
+            'http://localhost:5173', 
+            'http://localhost:3000',
+            'http://localhost:5000',
+            'http://localhost:8080',
+            'http://127.0.0.1:5173',
+            'http://127.0.0.1:3000',
+            'http://127.0.0.1:5000',
+            'http://127.0.0.1:8080'
+        ],
+        credentials: true
+    }));
 
     // Registrar rotas da API
     const paymentRoutes = require('./app/routes/payment');
@@ -68,7 +80,7 @@ if (require.main === module) {
     const port = process.env.PORT || 5000;
     console.log(`🔍 Attempting to start server on port ${port}...`);
     
-    const server = app.listen(port, 'localhost', () => {
+    const server = app.listen(port, () => {
         const address = server.address();
         console.log(`✅ Server running on http://localhost:${address.port}`);
         console.log(`✅ Health check: http://localhost:${address.port}/health`);
