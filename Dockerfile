@@ -41,8 +41,22 @@ RUN npm install --production
 # Set working directory back to app
 WORKDIR /app
 
+# Create a simple entrypoint script to validate environment variables
+RUN echo '#!/bin/sh' > /app/entrypoint.sh && \
+    echo 'echo "🔍 Checking environment variables..."' >> /app/entrypoint.sh && \
+    echo 'if [ -z "$PAGBANK_TOKEN" ]; then' >> /app/entrypoint.sh && \
+    echo '  echo "❌ ERROR: PAGBANK_TOKEN not set!"' >> /app/entrypoint.sh && \
+    echo '  echo "Please configure environment variables in Easypanel"' >> /app/entrypoint.sh && \
+    echo '  exit 1' >> /app/entrypoint.sh && \
+    echo 'fi' >> /app/entrypoint.sh && \
+    echo 'echo "✅ Environment variables validated"' >> /app/entrypoint.sh && \
+    echo 'echo "   PAGBANK_ENV: $PAGBANK_ENV"' >> /app/entrypoint.sh && \
+    echo 'echo "   PORT: $PORT"' >> /app/entrypoint.sh && \
+    echo 'exec node server/app.js' >> /app/entrypoint.sh && \
+    chmod +x /app/entrypoint.sh
+
 # Expose port 5001
 EXPOSE 5001
 
-# Start the server
-CMD ["node", "server/app.js"]
+# Start the server with entrypoint
+ENTRYPOINT ["/app/entrypoint.sh"]

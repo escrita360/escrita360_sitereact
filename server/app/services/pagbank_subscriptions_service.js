@@ -27,7 +27,14 @@ class PagBankSubscriptionsService {
 
         // Validar token
         if (!this.token || this.token.includes('your_pagbank_token')) {
-            throw new Error('PAGBANK_TOKEN não configurado! Configure o token no arquivo server/.env');
+            console.error('❌ PAGBANK_TOKEN não configurado!');
+            console.error('📋 Variáveis de ambiente disponíveis:');
+            console.error(`   NODE_ENV: ${process.env.NODE_ENV}`);
+            console.error(`   PORT: ${process.env.PORT}`);
+            console.error(`   PAGBANK_ENV: ${process.env.PAGBANK_ENV}`);
+            console.error(`   PAGBANK_EMAIL: ${process.env.PAGBANK_EMAIL}`);
+            console.error(`   PAGBANK_TOKEN presente: ${!!process.env.PAGBANK_TOKEN}`);
+            throw new Error('PAGBANK_TOKEN não configurado! Configure as variáveis de ambiente no Easypanel (veja EASYPANEL_ENV_VARS.md)');
         }
 
         console.log(`🔧 PagBank Subscriptions Service inicializado`);
