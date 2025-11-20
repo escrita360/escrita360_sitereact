@@ -31,6 +31,9 @@ COPY --from=build /app/dist ./dist
 # Copy server files
 COPY --from=build /app/server ./server
 
+# Copy .env file if it exists
+COPY --from=build /app/server/.env ./server/.env* ./
+
 # Copy package.json for server dependencies
 COPY --from=build /app/server/package.json ./server/
 

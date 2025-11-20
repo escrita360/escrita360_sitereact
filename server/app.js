@@ -4,7 +4,21 @@ const dotenv = require('dotenv');
 const path = require('path');
 
 // Carregar variáveis de ambiente
-dotenv.config({ path: path.join(__dirname, '..', '.env') });
+// Tenta carregar do diretório server primeiro, depois do parent
+const envPath = path.join(__dirname, '.env');
+const envParentPath = path.join(__dirname, '..', '.env');
+const fs = require('fs');
+
+if (fs.existsSync(envPath)) {
+    dotenv.config({ path: envPath });
+    console.log('✅ Loaded .env from server directory');
+} else if (fs.existsSync(envParentPath)) {
+    dotenv.config({ path: envParentPath });
+    console.log('✅ Loaded .env from parent directory');
+} else {
+    console.warn('⚠️  No .env file found, using environment variables');
+    dotenv.config(); // Tenta carregar do diretório atual
+}
 
 function createApp() {
     const app = express();
