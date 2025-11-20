@@ -10,6 +10,7 @@ import Contato from './pages/Contato.jsx'
 import Faq from './pages/Faq.jsx'
 import Login from './pages/Login.jsx'
 import Pagamento from './pages/Pagamento.jsx'
+import PagamentoCreditos from './pages/PagamentoCreditos.jsx'
 import PagamentoResultado from './pages/PagamentoResultado.jsx'
 import PagBankSandbox from './pages/PagBankSandbox.jsx'
 import AdminDashboard from './pages/admin/AdminDashboard.jsx'
@@ -134,6 +135,19 @@ function App() {
               transition={pageTransition}
             >
               <Pagamento />
+            </motion.div>
+          </Layout>
+        } />
+        <Route path="/pagamento-creditos" element={
+          <Layout>
+            <motion.div
+              initial="initial"
+              animate="in"
+              exit="out"
+              variants={pageVariants}
+              transition={pageTransition}
+            >
+              <PagamentoCreditos />
             </motion.div>
           </Layout>
         } />

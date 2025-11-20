@@ -2,10 +2,12 @@ const express = require('express');
 const router = express.Router();
 const PagBankSubscriptionsService = require('../services/pagbank_subscriptions_service');
 const PagBankRecurrenceService = require('../services/pagbank_recurrence_service');
+const PagBankOrdersService = require('../services/pagbank_orders_service');
 
 // Instâncias dos serviços
 const pagbankSubscriptionsService = new PagBankSubscriptionsService();
 const pagbankRecurrenceService = new PagBankRecurrenceService();
+const pagbankOrdersService = new PagBankOrdersService();
 
 router.post('/create-pagbank-subscription', async (req, res) => {
     try {
@@ -376,6 +378,95 @@ router.get('/pagbank/notification/:notificationCode', async (req, res) => {
     } catch (error) {
         console.error('❌ Erro ao processar notificação:', error.message);
         res.status(400).json({ error: error.message });
+    }
+});
+
+// =========================
+// ROTAS DE PAGAMENTO ÚNICO (CRÉDITOS)
+// =========================
+
+/**
+ * Criar Pedido com Pagamento Único (Cartão de Crédito)
+ * POST /api/payment/pagbank/create-order
+ */
+router.post('/pagbank/create-order', async (req, res) => {
+    try {
+        console.log('📥 Criando pedido de pagamento único:', JSON.stringify(req.body, null, 2));
+        
+        const result = await pagbankOrdersService.createOrderWithCard(req.body);
+        
+        console.log('✅ Pedido criado com sucesso:', result.id);
+        res.status(201).json(result);
+    } catch (error) {
+        console.error('❌ Erro ao criar pedido:', error.message);
+        res.status(400).json({ 
+            error: error.message, 
+            details: error.response?.data || error.stack 
+        });
+    }
+});
+
+/**
+ * Criar Pedido com PIX
+ * POST /api/payment/pagbank/create-pix-order
+ */
+router.post('/pagbank/create-pix-order', async (req, res) => {
+    try {
+        console.log('📥 Criando pedido PIX:', JSON.stringify(req.body, null, 2));
+        
+        const result = await pagbankOrdersService.createOrderWithPix(req.body);
+        
+        console.log('✅ QR Code PIX gerado:', result.id);
+        res.status(201).json(result);
+    } catch (error) {
+        console.error('❌ Erro ao criar PIX:', error.message);
+        res.status(400).json({ 
+            error: error.message, 
+            details: error.response?.data || error.stack 
+        });
+    }
+});
+
+/**
+ * Consultar Status do Pedido
+ * GET /api/payment/pagbank/order/:orderId
+ */
+router.get('/pagbank/order/:orderId', async (req, res) => {
+    try {
+        const { orderId } = req.params;
+        console.log('📥 Consultando pedido:', orderId);
+        
+        const result = await pagbankOrdersService.getOrder(orderId);
+        
+        console.log('✅ Status do pedido:', result.charges?.[0]?.status || 'N/A');
+        res.status(200).json(result);
+    } catch (error) {
+        console.error('❌ Erro ao consultar pedido:', error.message);
+        res.status(400).json({ 
+            error: error.message,
+            details: error.response?.data || error.stack
+        });
+    }
+});
+
+/**
+ * Criar Pedido com Boleto
+ * POST /api/payment/pagbank/create-boleto-order
+ */
+router.post('/pagbank/create-boleto-order', async (req, res) => {
+    try {
+        console.log('📥 Criando pedido com Boleto:', JSON.stringify(req.body, null, 2));
+        
+        const result = await pagbankOrdersService.createOrderWithBoleto(req.body);
+        
+        console.log('✅ Boleto gerado:', result.id);
+        res.status(201).json(result);
+    } catch (error) {
+        console.error('❌ Erro ao criar Boleto:', error.message);
+        res.status(400).json({ 
+            error: error.message, 
+            details: error.response?.data || error.stack 
+        });
     }
 });
 

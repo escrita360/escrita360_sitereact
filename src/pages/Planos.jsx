@@ -551,7 +551,11 @@ function Precos() {
                         </li>
                       ))}
                     </ul>
-                    <Button className="w-full bg-[#4A90E2] hover:bg-[#357ABD] text-white" variant="default">
+                    <Button 
+                      className="w-full bg-[#4A90E2] hover:bg-[#357ABD] text-white" 
+                      variant="default"
+                      onClick={() => navigate('/pagamento-creditos', { state: { selectedPackage: pkg, audience: selectedAudience } })}
+                    >
                       Adquirir Pacote
                     </Button>
                   </CardContent>
