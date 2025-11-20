@@ -31,9 +31,6 @@ COPY --from=build /app/dist ./dist
 # Copy server files
 COPY --from=build /app/server ./server
 
-# Copy .env file if it exists
-COPY --from=build /app/server/.env ./server/.env* ./
-
 # Copy package.json for server dependencies
 COPY --from=build /app/server/package.json ./server/
 
@@ -44,8 +41,8 @@ RUN npm install --production
 # Set working directory back to app
 WORKDIR /app
 
-# Expose port 5000
-EXPOSE 5000
+# Expose port 5001
+EXPOSE 5001
 
 # Start the server
 CMD ["node", "server/app.js"]
