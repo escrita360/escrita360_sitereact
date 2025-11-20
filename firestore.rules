@@ -1,0 +1,155 @@
+rules_version = '2';
+
+// Regras de Segurança do Firestore
+// Projeto: escrita360aluno
+// Integração: Site React + App Flutter
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ===========================
+    // COLEÇÃO: usuarios
+    // ===========================
+    match /usuarios/{userId} {
+      // Usuários podem ler/escrever apenas seus próprios dados
+      allow read: if request.auth != null && request.auth.uid == userId;
+      
+      // Criar/atualizar próprio perfil
+      allow create: if request.auth != null && request.auth.uid == userId;
+      allow update: if request.auth != null && request.auth.uid == userId;
+      
+      // Não pode deletar (apenas admin via backend)
+      allow delete: if false;
+    }
+    
+    // ===========================
+    // COLEÇÃO: assinaturas
+    // ===========================
+    match /assinaturas/{assinaturaId} {
+      // Usuários podem ler suas próprias assinaturas
+      allow read: if request.auth != null && 
+                     resource.data.userId == request.auth.uid;
+      
+      // Criar assinatura (site e admin)
+      allow create: if request.auth != null &&
+                       request.resource.data.userId == request.auth.uid;
+      
+      // Atualizar assinatura (admin ou sistema)
+      allow update: if request.auth != null &&
+                       resource.data.userId == request.auth.uid;
+      
+      // Não pode deletar (apenas admin via backend)
+      allow delete: if false;
+    }
+    
+    // ===========================
+    // COLEÇÃO: pagamentos
+    // ===========================
+    match /pagamentos/{pagamentoId} {
+      // Usuários podem ler apenas seus próprios pagamentos
+      allow read: if request.auth != null && 
+                     resource.data.userId == request.auth.uid;
+      
+      // Criar pagamento (site e admin)
+      allow create: if request.auth != null &&
+                       request.resource.data.userId == request.auth.uid;
+      
+      // Não pode atualizar ou deletar (histórico imutável)
+      allow update, delete: if false;
+    }
+    
+    // ===========================
+    // COLEÇÃO: redacoes (App Flutter)
+    // ===========================
+    match /redacoes/{redacaoId} {
+      // Usuários podem ler/escrever apenas suas próprias redações
+      allow read, write: if request.auth != null && 
+                            resource.data.userId == request.auth.uid;
+    }
+    
+    // ===========================
+    // COLEÇÃO: compras_creditos
+    // ===========================
+    match /compras_creditos/{compraId} {
+      // Usuários podem ler apenas suas próprias compras
+      allow read: if request.auth != null && 
+                     resource.data.userId == request.auth.uid;
+      
+      // Criar compra (site cria após pagamento)
+      allow create: if request.auth != null &&
+                       request.resource.data.userId == request.auth.uid;
+      
+      // Não pode atualizar ou deletar (histórico imutável)
+      allow update, delete: if false;
+    }
+    
+    // ===========================
+    // COLEÇÃO: creditos_avulsos
+    // ===========================
+    match /creditos_avulsos/{creditoId} {
+      // Usuários podem ler apenas seus próprios créditos
+      allow read: if request.auth != null && 
+                     resource.data.userId == request.auth.uid;
+      
+      // Criar/atualizar créditos (site e app)
+      allow create, update: if request.auth != null &&
+                               request.resource.data.userId == request.auth.uid;
+      
+      // Não pode deletar
+      allow delete: if false;
+    }
+    
+    // ===========================
+    // REGRAS DE ADMIN (Backend)
+    // ===========================
+    // Admins podem acessar tudo via Firebase Admin SDK
+    // Essas regras não se aplicam ao Admin SDK
+    
+    // ===========================
+    // BLOQUEIO PADRÃO
+    // ===========================
+    // Qualquer outra coleção: acesso negado
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
+/**
+ * COMO APLICAR ESSAS REGRAS:
+ * 
+ * 1. Acesse o Firebase Console:
+ *    https://console.firebase.google.com/project/escrita360aluno/firestore/rules
+ * 
+ * 2. Cole este arquivo completo
+ * 
+ * 3. Clique em "Publicar"
+ * 
+ * 4. Aguarde alguns segundos para propagação
+ * 
+ * IMPORTANTE:
+ * - Essas regras garantem que usuários só acessem seus próprios dados
+ * - Firebase Admin SDK (backend) ignora essas regras
+ * - Teste as regras no Firestore Rules Playground antes de publicar
+ * 
+ * TESTES NO PLAYGROUND:
+ * 
+ * Teste 1: Ler próprio usuário
+ *   Tipo: get
+ *   Caminho: /usuarios/{userId}
+ *   Auth: Autenticado como userId
+ *   Resultado: ✅ Permitido
+ * 
+ * Teste 2: Ler usuário de outro
+ *   Tipo: get
+ *   Caminho: /usuarios/{outroUserId}
+ *   Auth: Autenticado como userId
+ *   Resultado: ❌ Negado
+ * 
+ * Teste 3: Criar assinatura
+ *   Tipo: create
+ *   Caminho: /assinaturas/{assinaturaId}
+ *   Auth: Autenticado
+ *   Dados: { userId: {auth.uid}, ... }
+ *   Resultado: ✅ Permitido
+ */

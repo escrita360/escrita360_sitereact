@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { authService } from '@/services/auth'
+import { firebaseAuthService } from '@/services/firebase'
 import { cn } from '@/lib/utils'
 import escrita360Logo from '@/assets/Escrita360.png'
 import robo from '@/assets/robo.svg'
@@ -134,21 +134,34 @@ const Login = () => {
     setError('')
 
     try {
-      const result = await authService.login(formData.email.trim(), formData.password)
+      console.log('🔐 Fazendo login no Firebase...')
+      const result = await firebaseAuthService.login(formData.email.trim(), formData.password)
       
-      if (result.success !== false) {
-        const userTypeResult = result.user?.role === 'admin' ? 'admin' : 'aluno'
-        if (userTypeResult === 'admin') {
+      if (result.success) {
+        console.log('✅ Login realizado com sucesso!', result.uid)
+        
+        // Salvar dados do usuário no localStorage
+        localStorage.setItem('user', JSON.stringify({
+          uid: result.uid,
+          email: result.email,
+          ...result.user
+        }))
+        
+        // Verificar se é admin
+        const isAdmin = result.user?.role === 'admin'
+        
+        if (isAdmin) {
           navigate('/admin')
         } else {
+          // Redirecionar para home ou dashboard
           navigate('/')
         }
       } else {
-        setError(result.message || 'Erro no login')
+        setError('Erro no login')
       }
     } catch (error) {
-      console.error('Erro no login:', error)
-      setError(error.message || 'Erro no login. Tente novamente.')
+      console.error('❌ Erro no login:', error)
+      setError(error.message || 'Email ou senha incorretos')
     } finally {
       setIsLoading(false)
     }
@@ -176,20 +189,34 @@ const Login = () => {
     setError('')
 
     try {
-      const result = await authService.register({
-        name: registerData.name,
-        email: registerData.email.trim(),
-        password: registerData.password,
-        userType: 'aluno'
-      })
+      console.log('🔐 Criando conta no Firebase...')
+      const result = await firebaseAuthService.register(
+        registerData.email.trim(),
+        registerData.password,
+        {
+          name: registerData.name,
+          userType: 'aluno',
+          origem: 'cadastro_direto'
+        }
+      )
       
-      if (result.success !== false) {
+      if (result.success) {
+        console.log('✅ Conta criada com sucesso!', result.uid)
+        
+        // Salvar dados do usuário no localStorage
+        localStorage.setItem('user', JSON.stringify({
+          uid: result.uid,
+          email: result.email,
+          ...result.user
+        }))
+        
+        // Redirecionar para home
         navigate('/')
       } else {
-        setError(result.message || 'Erro no cadastro')
+        setError('Erro no cadastro')
       }
     } catch (error) {
-      console.error('Erro no cadastro:', error)
+      console.error('❌ Erro no cadastro:', error)
       setError(error.message || 'Erro no cadastro. Tente novamente.')
     } finally {
       setIsLoading(false)

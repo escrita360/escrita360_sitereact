@@ -8,7 +8,7 @@ import { CreditCard, Lock, Calendar, User, Shield, CheckCircle2, ArrowLeft, Aler
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import PagBankCheckout from '@/components/PagBankCheckout.jsx'
-import { authService } from '@/services/auth.js'
+import { firebaseAuthService, firebaseSubscriptionService, firebasePaymentService } from '@/services/firebase.js'
 
 function Pagamento() {
   const navigate = useNavigate()
@@ -124,18 +124,62 @@ function Pagamento() {
 
   const createUserAccount = async () => {
     try {
-      // Criar conta com email e senha
-      const userData = await authService.register(
+      console.log('🔐 Iniciando criação de conta Firebase...')
+      
+      // Criar conta com email e senha no Firebase
+      const userData = await firebaseAuthService.register(
         formData.email,
         formData.password,
-        formData.cardName || formData.email.split('@')[0]
+        {
+          name: formData.cardName || formData.email.split('@')[0],
+          cpf: formData.cpf,
+          phone: formData.phone
+        }
       )
       
-      console.log('Conta criada com sucesso:', userData)
+      console.log('✅ Conta Firebase criada com sucesso:', userData)
       return userData
     } catch (error) {
-      console.error('Erro ao criar conta:', error)
-      throw new Error('Não foi possível criar sua conta. Por favor, entre em contato com o suporte.')
+      console.error('❌ Erro ao criar conta Firebase:', error)
+      throw new Error(error.message || 'Não foi possível criar sua conta. Por favor, tente novamente.')
+    }
+  }
+
+  const createSubscriptionRecord = async (userId, paymentData) => {
+    try {
+      console.log('📝 Criando registro de assinatura...')
+      
+      // Criar assinatura no Firestore
+      const subscriptionResult = await firebaseSubscriptionService.createSubscription(
+        userId,
+        {
+          plan: selectedPlan,
+          isYearly: isYearly,
+          paymentData: {
+            name: formData.cardName,
+            email: formData.email,
+            transactionId: paymentData?.transaction_id,
+            ...paymentData
+          }
+        }
+      )
+      
+      // Registrar pagamento
+      await firebasePaymentService.recordPayment(userId, {
+        email: formData.email,
+        amount: total,
+        status: 'paid',
+        paymentMethod: 'card',
+        transactionId: paymentData?.transaction_id,
+        plan: selectedPlan.name,
+        isYearly: isYearly
+      })
+      
+      console.log('✅ Assinatura e pagamento registrados:', subscriptionResult)
+      return subscriptionResult
+    } catch (error) {
+      console.error('❌ Erro ao criar assinatura:', error)
+      throw error
     }
   }
 
@@ -348,15 +392,24 @@ function Pagamento() {
                         isYearly={isYearly}
                         onSuccess={async (data) => {
                           try {
-                            // Criar conta do usuário
-                            await createUserAccount()
+                            console.log('💳 Pagamento aprovado! Iniciando criação de conta...')
                             
-                            // Marcar pagamento como bem-sucedido
+                            // 1. Criar conta do usuário no Firebase
+                            const userResult = await createUserAccount()
+                            console.log('✅ Conta criada - UID:', userResult.uid)
+                            
+                            // 2. Criar assinatura e registrar pagamento no Firestore
+                            await createSubscriptionRecord(userResult.uid, data)
+                            console.log('✅ Assinatura ativada!')
+                            
+                            // 3. Marcar como sucesso
                             setPaymentSuccess(true)
                             setTransactionData(data)
+                            
+                            console.log('🎉 Processo completo! Usuário pode fazer login no app Flutter com as mesmas credenciais.')
                           } catch (error) {
                             setPaymentError(error.message || 'Pagamento aprovado, mas houve um erro ao criar sua conta. Entre em contato com o suporte.')
-                            console.error('Erro ao processar sucesso do pagamento:', error)
+                            console.error('❌ Erro ao processar sucesso do pagamento:', error)
                           }
                         }}
                         onError={(error) => {
