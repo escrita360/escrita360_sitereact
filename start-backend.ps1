@@ -27,9 +27,9 @@ if (-not (Test-Path ".\.env")) {
 }
 
 # Iniciar o servidor
-Write-Host "Iniciando servidor na porta 5001..." -ForegroundColor Cyan
-Write-Host "Health check: http://localhost:5001/health" -ForegroundColor Cyan
-Write-Host "API Base: http://localhost:5001/api" -ForegroundColor Cyan
+Write-Host "Iniciando servidor na porta 5000..." -ForegroundColor Cyan
+Write-Host "Health check: http://localhost:5000/health" -ForegroundColor Cyan
+Write-Host "API Base: http://localhost:5000/api" -ForegroundColor Cyan
 Write-Host ""
-$env:PORT = "5001"
+$env:PORT = "5000"
 npm start
