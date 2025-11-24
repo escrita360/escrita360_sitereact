@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent } from '@/components/ui/card.jsx'
 import { Check, X, PenTool, Brain, TrendingUp, GraduationCap, School, Edit, FileText, CheckCircle, Bot, RotateCcw, Trophy, Heart, Target, BarChart, Users, UserCheck, BookOpen, Award, Cloud, Clock } from 'lucide-react'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
-import notebook from '@/assets/notebook.svg'
+import Pessoas_borda from '@/assets/Pessoas_borda.svg'
 import card1 from '@/assets/card1.0.svg'
 import escritaAutoregulada from '@/assets/escrita_autoregulada.png'
 import imersaoTotal from '@/assets/imersao_total.png'
@@ -48,7 +48,7 @@ function Home() {
             </div>
             <div className="hero-image flex justify-center">
                 <img 
-                  src={notebook} 
+                  src={Pessoas_borda} 
                   alt="Plataforma Escrita360" 
                   className="w-full h-auto"
                 />
