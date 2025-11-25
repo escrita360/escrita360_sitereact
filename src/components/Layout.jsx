@@ -220,7 +220,9 @@ function Layout({ children }) {
             <div>
               <h3 className="font-bold mb-4">Institucional</h3>
               <ul className="space-y-2 text-slate-400">
+                <li><Link to="/sobre-nos" className="hover:text-white transition-colors">Sobre Nós</Link></li>
                 <li><Link to="/carreiras" className="hover:text-white transition-colors">Carreiras</Link></li>
+                <li><Link to="/termos-servico" className="hover:text-white transition-colors">Termos de Serviço</Link></li>
                 <li><Link to="/politica-privacidade" className="hover:text-white transition-colors">Políticas de Privacidade</Link></li>
                 <li><Link to="/programa-integridade" className="hover:text-white transition-colors">Programa de Integridade</Link></li>
               </ul>
