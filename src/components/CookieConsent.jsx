@@ -16,14 +16,10 @@ function CookieConsent() {
   })
 
   useEffect(() => {
-    // Sempre mostrar o banner para teste - remova esta linha em produção
-    setShowBanner(true)
-    
-    // Código original comentado:
-    // const consent = localStorage.getItem('cookieConsent')
-    // if (!consent) {
-    //   setShowBanner(true)
-    // }
+    const consent = localStorage.getItem('cookieConsent')
+    if (!consent) {
+      setShowBanner(true)
+    }
   }, [])
 
   const acceptAll = () => {
