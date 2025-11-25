@@ -191,7 +191,7 @@ function Contato() {
             {/* Contact Info */}
             <div className="space-y-6 animate-fade-in-right">
               {/* Contact Methods */}
-              <Card className="p-4 shadow-lg hover-lift animate-scale-in delay-200 aspect-square flex flex-col">
+              <Card className="p-4 shadow-lg hover-lift animate-scale-in delay-200 flex flex-col h-fit">
                 <CardHeader className="text-center">
                   <CardTitle className="text-lg text-slate-900">Outras formas de contato</CardTitle>
                 </CardHeader>
@@ -317,20 +317,6 @@ function Contato() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="bg-white py-16">
-        <div className="container mx-auto px-4 max-w-7xl text-center">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold mb-4 text-slate-900 animate-fade-in-up">Prefere começar por conta própria?</h2>
-            <p className="text-xl text-slate-600 mb-8 animate-fade-in-up delay-200">
-              Crie sua conta gratuita agora e comece a transformar sua escrita imediatamente.
-            </p>
-            <Button size="lg" className="bg-brand-primary text-white hover:bg-brand-secondary transition-all duration-300 hover:scale-105 animate-fade-in-up delay-300">
-              Criar Conta Grátis
-            </Button>
-          </div>
-        </div>
-      </section>
     </div>
   )
 }

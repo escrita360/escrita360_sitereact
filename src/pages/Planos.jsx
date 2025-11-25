@@ -15,7 +15,6 @@ function Precos() {
   const [selectedAudience, setSelectedAudience] = useState(audienceFromUrl)
   const navigate = useNavigate()
   const plansRef = useScrollAnimation()
-  const comparisonRef = useScrollAnimation()
 
   // Atualizar quando a URL mudar
   useEffect(() => {
@@ -316,31 +315,6 @@ function Precos() {
 
   const currentPlans = getCurrentPlans()
 
-  // Dados de comparação específicos para estudantes
-  const studentComparisonData = [
-    { feature: 'Módulo de escrita autorregulada', mensal: true, trimestral: true },
-    { feature: 'Banco de estratégias para escrita', mensal: true, trimestral: true },
-    { feature: 'Sugestão de temas', mensal: true, trimestral: true },
-    { feature: 'Recursos de apoio autorregulatório', mensal: true, trimestral: true },
-    { feature: 'Revisor integrado ilimitado', mensal: true, trimestral: true },
-    { feature: 'Rubricas qualitativas', mensal: true, trimestral: true },
-    { feature: 'Análises por IA', mensal: '20 créditos', trimestral: '50 créditos' },
-    { feature: 'Período de acesso', mensal: '30 dias', trimestral: '90 dias' }
-  ]
-
-  // Dados de comparação específicos para professores
-  const teacherComparisonData = [
-    { feature: 'Módulo de escrita autorregulada', plano1: true, plano2: true, trimestral: true, semestral: true },
-    { feature: 'Banco de estratégias para escrita', plano1: true, plano2: true, trimestral: true, semestral: true },
-    { feature: 'Sugestão de temas', plano1: true, plano2: true, trimestral: true, semestral: true },
-    { feature: 'Recursos de apoio autorregulatório', plano1: true, plano2: true, trimestral: true, semestral: true },
-    { feature: 'Revisor integrado ilimitado', plano1: true, plano2: true, trimestral: true, semestral: true },
-    { feature: 'Rubricas qualitativas', plano1: true, plano2: true, trimestral: true, semestral: true },
-    { feature: 'Correção por foto/digitada', plano1: true, plano2: true, trimestral: true, semestral: true },
-    { feature: 'Análises por IA', plano1: '10 créditos', plano2: '100 créditos', trimestral: '200 créditos', semestral: '300 créditos' },
-    { feature: 'Período de acesso', plano1: '30 dias', plano2: '30 dias', trimestral: '90 dias', semestral: '180 dias' }
-  ]
-
   // Conteúdo do hero baseado no público selecionado
   const getHeroContent = () => {
     if (selectedAudience === 'estudantes') {
@@ -603,184 +577,16 @@ function Precos() {
       {/* How It Works Section */}
       <section className="pt-12 pb-8 md:pt-16 md:pb-12 lg:pt-20 lg:pb-16 bg-slate-50">
         <div className="container mx-auto px-4 max-w-7xl">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Como Funciona o Escrita360</h2>
-            <p className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto">A plataforma prioriza o processo formativo de escrever e reescrever</p>
-          </div>
-          
-          <div className="max-w-4xl mx-auto mb-12">
+    <div className="text-center mb-12">
+      <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Como Funciona o Escrita360</h2>
+    </div>          <div className="max-w-4xl mx-auto mb-12">
             <Card className="bg-gradient-to-br from-brand-light to-white border-2 border-brand-primary/20 shadow-lg">
               <CardContent className="p-6">
                 <p className="text-lg text-slate-700 leading-relaxed text-center">
-                  A plataforma prioriza o processo formativo de escrever e reescrever, a correção automática com IA só aparece no final, como suporte complementar. <strong className="text-brand-primary">IA como última etapa: revisão que fortalece o aprendizado.</strong>
+                  A plataforma prioriza o processo formativo de escrever e reescrever, a correção automática com IA só aparece no final, como suporte complementar. <br /><strong className="text-brand-primary">IA como última etapa: revisão que fortalece o aprendizado.</strong>
                 </p>
               </CardContent>
             </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Comparison Table */}
-      <section ref={comparisonRef} className="pt-12 pb-8 md:pt-16 md:pb-12 lg:pt-20 lg:pb-16 bg-gradient-to-b from-slate-50 to-white animate-on-scroll">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <div className="text-center mb-12 animate-fade-in-up">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">
-              {selectedAudience === 'estudantes' && 'Comparação: Planos para Estudantes'}
-              {selectedAudience === 'professores' && 'Comparação: Planos para Professores'}
-              {selectedAudience === 'escolas' && 'Comparação: Recursos Disponíveis'}
-            </h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-              {(selectedAudience === 'estudantes' || selectedAudience === 'professores') && 'Compare os recursos incluídos em cada plano'}
-              {selectedAudience === 'escolas' && 'Recursos disponíveis no Plano Híbrido 360'}
-            </p>
-          </div>
-          
-
-
-          {/* Student Comparison */}
-          {selectedAudience === 'estudantes' && (
-            <div className="max-w-4xl mx-auto">
-              <Card className="overflow-hidden shadow-xl mx-auto">
-                <div className="grid grid-cols-3 gap-0 bg-slate-50 border-b border-slate-200">
-                  <div className="p-4 text-center">
-                    <h3 className="font-bold text-slate-900">Recursos</h3>
-                  </div>
-                  <div className="p-4 text-center border-l border-slate-200">
-                    <h3 className="font-bold text-slate-900">Plano Mensal</h3>
-                    <p className="text-sm text-slate-600">R$ 49/mês</p>
-                  </div>
-                  <div className="p-4 text-center border-l border-slate-200 bg-gradient-to-br from-blue-50 to-cyan-50">
-                    <div className="flex items-center justify-center mb-1">
-                      <Badge className="bg-green-500 text-white text-xs mr-2">Popular</Badge>
-                    </div>
-                    <h3 className="font-bold text-slate-900">Plano Trimestral</h3>
-                    <p className="text-sm text-slate-600">R$ 120/3 meses</p>
-                  </div>
-                </div>
-                {studentComparisonData.map((row, index) => (
-                  <div key={index} className={`grid grid-cols-3 gap-0 ${index % 2 === 0 ? 'bg-white' : 'bg-slate-50'} hover:bg-slate-100 transition-colors`}>
-                    <div className="p-4 flex items-center">
-                      <span className="text-sm font-medium text-slate-700">{row.feature}</span>
-                    </div>
-                    <div className="p-4 flex items-center justify-center border-l border-slate-100">
-                      {typeof row.mensal === 'boolean' ? (
-                        <Check className="w-5 h-5 text-green-600" />
-                      ) : (
-                        <span className="text-sm text-slate-600 font-medium">{row.mensal}</span>
-                      )}
-                    </div>
-                    <div className="p-4 flex items-center justify-center border-l border-slate-100 bg-gradient-to-br from-blue-50/30 to-cyan-50/30">
-                      {typeof row.trimestral === 'boolean' ? (
-                        <Check className="w-5 h-5 text-green-600" />
-                      ) : (
-                        <span className="text-sm text-slate-700 font-medium">{row.trimestral}</span>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </Card>
-            </div>
-          )}
-
-          {/* Teacher Comparison */}
-          {selectedAudience === 'professores' && (
-            <div className="max-w-6xl mx-auto overflow-x-auto">
-              <Card className="overflow-hidden shadow-xl mx-auto">
-                <div className="grid grid-cols-5 gap-0 bg-slate-50 border-b border-slate-200">
-                  <div className="p-4 text-center">
-                    <h3 className="font-bold text-slate-900">Recursos</h3>
-                  </div>
-                  <div className="p-4 text-center border-l border-slate-200">
-                    <h3 className="font-bold text-slate-900">Plano 1</h3>
-                    <p className="text-sm text-slate-600">R$ 49/mês</p>
-                  </div>
-                  <div className="p-4 text-center border-l border-slate-200 bg-gradient-to-br from-blue-50 to-cyan-50">
-                    <div className="flex items-center justify-center mb-1">
-                      <Badge className="bg-brand-primary text-white text-xs mr-2">Popular</Badge>
-                    </div>
-                    <h3 className="font-bold text-slate-900">Plano 2</h3>
-                    <p className="text-sm text-slate-600">R$ 130/mês</p>
-                  </div>
-                  <div className="p-4 text-center border-l border-slate-200">
-                    <h3 className="font-bold text-slate-900">Trimestral</h3>
-                    <p className="text-sm text-slate-600">R$ 340/3 meses</p>
-                  </div>
-                  <div className="p-4 text-center border-l border-slate-200">
-                    <h3 className="font-bold text-slate-900">Semestral</h3>
-                    <p className="text-sm text-slate-600">R$ 620/6 meses</p>
-                  </div>
-                </div>
-                {teacherComparisonData.map((row, index) => (
-                  <div key={index} className={`grid grid-cols-5 gap-0 ${index % 2 === 0 ? 'bg-white' : 'bg-slate-50'} hover:bg-slate-100 transition-colors`}>
-                    <div className="p-4 flex items-center">
-                      <span className="text-sm font-medium text-slate-700">{row.feature}</span>
-                    </div>
-                    <div className="p-4 flex items-center justify-center border-l border-slate-100">
-                      {typeof row.plano1 === 'boolean' ? (
-                        <Check className="w-5 h-5 text-green-600" />
-                      ) : (
-                        <span className="text-sm text-slate-600 font-medium">{row.plano1}</span>
-                      )}
-                    </div>
-                    <div className="p-4 flex items-center justify-center border-l border-slate-100 bg-gradient-to-br from-blue-50/30 to-cyan-50/30">
-                      {typeof row.plano2 === 'boolean' ? (
-                        <Check className="w-5 h-5 text-green-600" />
-                      ) : (
-                        <span className="text-sm text-slate-700 font-medium">{row.plano2}</span>
-                      )}
-                    </div>
-                    <div className="p-4 flex items-center justify-center border-l border-slate-100">
-                      {typeof row.trimestral === 'boolean' ? (
-                        <Check className="w-5 h-5 text-green-600" />
-                      ) : (
-                        <span className="text-sm text-slate-600 font-medium">{row.trimestral}</span>
-                      )}
-                    </div>
-                    <div className="p-4 flex items-center justify-center border-l border-slate-100">
-                      {typeof row.semestral === 'boolean' ? (
-                        <Check className="w-5 h-5 text-green-600" />
-                      ) : (
-                        <span className="text-sm text-slate-600 font-medium">{row.semestral}</span>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </Card>
-            </div>
-          )}
-
-
-
-          {/* Info Footer */}
-          <div className="mt-8 text-center animate-fade-in-up delay-300">
-            <p className="text-sm text-slate-500">
-              Todos os planos incluem atualizações gratuitas e acesso às novas funcionalidades
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="pt-12 pb-8 md:pt-16 md:pb-12 lg:pt-20 lg:pb-16 bg-white">
-        <div className="container mx-auto px-4 max-w-7xl text-center">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 text-slate-900 animate-fade-in-up">
-            Pronto para revolucionar a escrita?
-          </h2>
-          <p className="text-lg md:text-xl text-slate-600 mb-8 max-w-2xl mx-auto animate-fade-in-up delay-200">
-            Comece gratuitamente e veja a diferença que a autorregulação faz no desenvolvimento da escrita.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up delay-300">
-            <Button 
-              size="lg" 
-              variant="default" 
-              className="bg-[#4A90E2] hover:bg-[#357ABD] text-white transition-all duration-300 hover:scale-105"
-              onClick={() => handleOpenPagamento(currentPlans.find(plan => plan.popular) || currentPlans[0])}
-            >
-              Assinar
-            </Button>
-            <Button size="lg" variant="outline" className="border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-all duration-300 hover:scale-105 [&:hover]:!text-white">
-              Falar com Especialista
-            </Button>
           </div>
         </div>
       </section>

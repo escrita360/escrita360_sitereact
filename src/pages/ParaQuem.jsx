@@ -43,8 +43,7 @@ function ParaQuem() {
       description: 'Plataforma completa para integrar a escrita autoral ao currículo, desenvolvendo autonomia e autorregulação nos alunos. Permite acompanhar turmas em tempo real, gerar relatórios personalizados e promover práticas de escrita formativas em larga escala.',
       subtitle: 'Ideal para redações escolares e preparatórios para o ENEM.',
       cta: 'Agendar Demonstração',
-      ctaLink: '/recursos',
-      featured: true
+      ctaLink: '/recursos'
     }
   ]
 

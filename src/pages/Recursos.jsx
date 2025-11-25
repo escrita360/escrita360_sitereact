@@ -1,7 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { Card, CardContent } from '@/components/ui/card.jsx'
-import { Button } from '@/components/ui/button.jsx'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
 import { PageHero } from '@/components/PageHero.jsx'
 import {
@@ -29,7 +27,6 @@ import {
 
 function Recursos() {
   const [activeTab, setActiveTab] = useState('estudantes')
-  const navigate = useNavigate()
   const tabsRef = useScrollAnimation()
 
   const tabs = [
@@ -256,24 +253,6 @@ function Recursos() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="bg-white py-16 animate-fade-in-up">
-        <div className="container mx-auto px-4 max-w-7xl text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-slate-900">
-            Pronto para transformar a escrita na sua instituição?
-          </h2>
-          <p className="text-xl text-slate-600 mb-8 max-w-2xl mx-auto">
-            Experimente gratuitamente todos os recursos e veja o impacto na autonomia e qualidade da escrita dos seus alunos.
-          </p>
-          <Button
-            size="lg"
-            onClick={() => navigate('/precos')}
-            className="bg-[#4A90E2] hover:bg-[#357ABD] text-white px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-110 hover:shadow-xl"
-          >
-            Começar Agora
-          </Button>
-        </div>
-      </section>
     </div>
   )
 }
