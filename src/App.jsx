@@ -8,6 +8,7 @@ import Recursos from './pages/Recursos.jsx'
 import Precos from './pages/Planos.jsx'
 import Contato from './pages/Contato.jsx'
 import Faq from './pages/Faq.jsx'
+import SobreNos from './pages/SobreNos.jsx'
 import Login from './pages/Login.jsx'
 import Pagamento from './pages/Pagamento.jsx'
 import PagamentoCreditos from './pages/PagamentoCreditos.jsx'
@@ -123,6 +124,19 @@ function App() {
               transition={pageTransition}
             >
               <Contato />
+            </motion.div>
+          </Layout>
+        } />
+        <Route path="/sobre-nos" element={
+          <Layout>
+            <motion.div
+              initial="initial"
+              animate="in"
+              exit="out"
+              variants={pageVariants}
+              transition={pageTransition}
+            >
+              <SobreNos />
             </motion.div>
           </Layout>
         } />
