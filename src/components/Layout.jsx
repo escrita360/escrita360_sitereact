@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button.jsx'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet.jsx'
 import { cn } from '@/lib/utils'
 import ChatBot from '@/components/ChatBot.jsx'
+import CookieConsent from '@/components/CookieConsent.jsx'
 import logo from '@/assets/logo2.svg'
 
 function Layout({ children }) {
@@ -235,6 +236,9 @@ function Layout({ children }) {
 
       {/* ChatBot Flutuante */}
       <ChatBot />
+
+      {/* Cookie Consent Banner */}
+      <CookieConsent />
     </div>
   )
 }
