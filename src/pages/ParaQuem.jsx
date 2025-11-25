@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent } from '@/components/ui/card.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
 import {
@@ -10,7 +9,6 @@ import {
 } from "@/components/ui/carousel.jsx"
 import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
 import { PageHero } from '@/components/PageHero.jsx'
-import { useNavigate } from 'react-router-dom'
 import {
   UserCircle,
   Presentation,
@@ -19,7 +17,6 @@ import {
 
 function ParaQuem() {
   const tabsRef = useScrollAnimation()
-  const navigate = useNavigate()
   
   const audiences = [
     {
@@ -108,15 +105,6 @@ function ParaQuem() {
                             <p className="text-base text-brand-primary font-medium mb-6 animate-fade-in-right delay-200">
                               {audience.subtitle}
                             </p>
-
-                            {/* CTA */}
-                            <Button
-                              size="lg"
-                              onClick={() => navigate(audience.ctaLink)}
-                              className="bg-[#4A90E2] hover:bg-[#357ABD] text-white px-8 py-3 text-lg transition-all hover:scale-105 cursor-pointer"
-                            >
-                              {audience.cta}
-                            </Button>
                           </div>
                         </div>
                       </CardContent>
@@ -132,20 +120,6 @@ function ParaQuem() {
       </section>
       
       {/* CTA Section */}
-      <section className="py-12 bg-slate-50">
-        <div className="container mx-auto px-4 max-w-7xl text-center">
-          <div className="animate-fade-in-up delay-300">
-            <Button 
-              size="lg"
-              onClick={() => navigate('/recursos')}
-              className="bg-brand-primary text-white hover:bg-brand-secondary px-8 py-3 text-lg transition-all hover:scale-105 cursor-pointer"
-            >
-              <span className="mr-2">→</span>
-              Saiba Mais para Estudantes
-            </Button>
-          </div>
-        </div>
-      </section>
     </div>
   )
 }
