@@ -223,11 +223,12 @@ function Layout({ children }) {
                 <li><Link to="/faq" className="hover:text-white transition-colors">FAQ</Link></li>
                 <li><Link to="/contato" className="hover:text-white transition-colors">Blog</Link></li>
                 <li><Link to="/contato" className="hover:text-white transition-colors">Sobre</Link></li>
+                <li><Link to="/politica-cookies" className="hover:text-white transition-colors">Política de Cookies</Link></li>
               </ul>
             </div>
           </div>
           <div className="border-t border-slate-800 pt-8 text-center text-slate-400">
-            <p>&copy; 2025. Todos os direitos reservados.</p>
+            <p>Copyright © 2025 Escrita360. Todos os direitos reservados</p>
           </div>
         </div>
       </footer>
