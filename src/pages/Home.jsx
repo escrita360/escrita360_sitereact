@@ -104,15 +104,6 @@ function Home() {
             </Card>
           </div>
           
-          <div className="text-center mt-12">
-            <Button 
-              size="lg" 
-              variant="default"
-              className="bg-[#4A90E2] hover:bg-[#357ABD] text-white px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-105"
-            >
-              Saiba Mais para Estudantes
-            </Button>
-          </div>
         </div>
       </section>
 

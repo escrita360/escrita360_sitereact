@@ -27,7 +27,6 @@ function ParaQuem() {
       icon: UserCircle,
       title: 'Estudantes',
       description: 'Ideal para quem quer desenvolver habilidades de escrita exigidas pela escola, pelo ENEM e pelas competências do século XXI. Aqui, o aluno vivencia uma imersão autorregulada, em que pode escrever, reescrever e analisar, com análises ilimitadas e insights inteligentes. A IA atua como assistente de escrita, ajudando a aprimorar argumentos, estrutura e linguagem.',
-      subtitle: 'Mais do que corrigir, é aprender a escrever.',
       cta: 'Saiba Mais para Estudantes',
       ctaLink: '/recursos'
     },
