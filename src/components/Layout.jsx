@@ -6,7 +6,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet.jsx'
 import { cn } from '@/lib/utils'
 import ChatBot from '@/components/ChatBot.jsx'
 import CookieConsent from '@/components/CookieConsent.jsx'
-import logo from '@/assets/logo2.svg'
+import logo from '@/assets/Logo/logo2.svg'
 
 function Layout({ children }) {
   const [isOpen, setIsOpen] = useState(false)

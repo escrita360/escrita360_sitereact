@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card.j
 import { Input } from '@/components/ui/input.jsx'
 import { Label } from '@/components/ui/label.jsx'
 import { ScrollArea } from '@/components/ui/scroll-area.jsx'
-import robo from '@/assets/robo.svg'
+import robo from '@/assets/Logo/robo.svg'
 import { chatService } from '@/services/chat.js'
 
 function ChatBot() {

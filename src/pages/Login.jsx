@@ -9,8 +9,8 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { firebaseAuthService } from '@/services/firebase'
 import { cn } from '@/lib/utils'
-import escrita360Logo from '@/assets/Escrita360.png'
-import robo from '@/assets/robo.svg'
+import escrita360Logo from '@/assets/Logo/Escrita360.png'
+import robo from '@/assets/Logo/robo.svg'
 
 const LOGIN_USER_TYPE = {
   ADMIN: 'admin',

@@ -1,4 +1,4 @@
-import robo from '@/assets/robo.svg'
+import robo from '@/assets/Logo/robo.svg'
 
 export function PageHero({ title, titleHighlight, subtitle }) {
   return (
