@@ -7,6 +7,8 @@ import { cn } from '@/lib/utils'
 function CookieConsent() {
   const [showBanner, setShowBanner] = useState(false)
   const [showPreferences, setShowPreferences] = useState(false)
+  const [showPdfModal, setShowPdfModal] = useState(false)
+  const [selectedPdf, setSelectedPdf] = useState('')
   const [preferences, setPreferences] = useState({
     necessary: true, // sempre habilitado
     analytics: false,
@@ -60,6 +62,16 @@ function CookieConsent() {
 
   const closePreferences = () => {
     setShowPreferences(false)
+  }
+
+  const openPdf = (pdfPath) => {
+    setSelectedPdf(pdfPath)
+    setShowPdfModal(true)
+  }
+
+  const closePdfModal = () => {
+    setShowPdfModal(false)
+    setSelectedPdf('')
   }
 
   if (!showBanner && !showPreferences) return null
@@ -219,13 +231,13 @@ function CookieConsent() {
                   Lista de cookies
                 </Button>
                 <Button 
-                  onClick={() => window.open('/aviso-privacidade', '_blank')}
+                  onClick={() => openPdf('/docs/politica-privacidade.pdf')}
                   className="bg-[#39A1DB] hover:bg-[#1A5B94] text-white"
                 >
                   Aviso de Privacidade
                 </Button>
                 <Button 
-                  onClick={() => window.open('/termos-uso', '_blank')}
+                  onClick={() => openPdf('/docs/termos-uso.pdf')}
                   className="bg-[#39A1DB] hover:bg-[#1A5B94] text-white"
                 >
                   Termos de Uso
@@ -247,6 +259,33 @@ function CookieConsent() {
                   Salvar & Fechar
                 </Button>
               </div>
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {/* Modal PDF */}
+      {showPdfModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <Card className="w-full max-w-5xl max-h-[90vh] overflow-hidden bg-white">
+            <div className="p-4 flex items-center justify-between border-b">
+              <h2 className="text-xl font-bold text-slate-900">Documento</h2>
+              <Button 
+                onClick={closePdfModal}
+                variant="ghost" 
+                size="icon"
+              >
+                <X className="w-5 h-5" />
+              </Button>
+            </div>
+            <div className="p-4">
+              <iframe 
+                src={selectedPdf} 
+                width="100%" 
+                height="600px" 
+                style={{ border: 'none' }}
+                title="Documento PDF"
+              />
             </div>
           </Card>
         </div>
