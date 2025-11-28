@@ -7,7 +7,7 @@ import card1 from '@/assets/Cards/card1.0.svg'
 import escritaAutoregulada from '@/assets/Cards/escrita_autoregulada.png'
 import imersaoTotal from '@/assets/Cards/imersao_total.png'
 import painelSentimentos from '@/assets/Cards/painel_sentimentos.png'
-import usoRubricas from '@/assets/Cards/uso_rubricas.png'
+import usoRubricas from '@/assets/Cards/card5.1.svg'
 import iaAssistente from '@/assets/Cards/ia_assistente.png'
 
 function Home() {
