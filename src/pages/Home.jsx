@@ -31,18 +31,18 @@ function Home() {
               <p className="hero-description text-lg md:text-xl text-slate-600 mb-2 leading-relaxed text-center">
                 Revisão como apoio, não como atalho, respeitando o processo de aprendizagem. A correção complementar com Inteligência Artificial valoriza o processo de reescrita e garante que o aprendizado esteja no centro da experiência.
               </p>
-              <div className="hero-stats flex gap-8 justify-center mt-8">
-                <div className="stat text-center">
-                  <strong className="block font-bold" style={{ color: '#2b7475' }}>Processo</strong>
-                  <span className="text-slate-600">Autorregulado</span>
+              <div className="hero-stats flex flex-wrap gap-4 justify-center mt-8">
+                <div className="stat bg-white rounded-xl shadow-md border border-slate-100 px-6 py-4 text-center hover:shadow-lg hover:border-[#2b7475]/20 transition-all duration-300">
+                  <strong className="block font-bold text-lg mb-2" style={{ color: '#2b7475' }}>Processo</strong>
+                  <span className="text-slate-900 text-sm">Autorregulado</span>
                 </div>
-                <div className="stat text-center">
-                  <strong className="block font-bold" style={{ color: '#2b7475' }}>IA</strong>
-                  <span className="text-slate-600">Complementar</span>
+                <div className="stat bg-white rounded-xl shadow-md border border-slate-100 px-6 py-4 text-center hover:shadow-lg hover:border-[#2b7475]/20 transition-all duration-300">
+                  <strong className="block font-bold text-lg mb-2" style={{ color: '#2b7475' }}>IA</strong>
+                  <span className="text-slate-900 text-sm">Complementar</span>
                 </div>
-                <div className="stat text-center">
-                  <strong className="block font-bold" style={{ color: '#2b7475' }}>Foco</strong>
-                  <span className="text-slate-600">Aprendizagem</span>
+                <div className="stat bg-white rounded-xl shadow-md border border-slate-100 px-6 py-4 text-center hover:shadow-lg hover:border-[#2b7475]/20 transition-all duration-300">
+                  <strong className="block font-bold text-lg mb-2" style={{ color: '#2b7475' }}>Foco</strong>
+                  <span className="text-slate-900 text-sm">Aprendizagem</span>
                 </div>
               </div>
             </div>
