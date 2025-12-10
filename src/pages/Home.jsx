@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent } from '@/components/ui/card.jsx'
 import { Check, X, PenTool, Brain, TrendingUp, GraduationCap, School, Edit, FileText, CheckCircle, Bot, RotateCcw, Trophy, Heart, Target, BarChart, Users, UserCheck, BookOpen, Award, Cloud, Clock } from 'lucide-react'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
-import Pessoas_borda from '@/assets/Cards/pessoas_borda.svg'
+import Pessoas from '@/assets/Portfolio/pessoas.svg'
 import card1 from '@/assets/Cards/card1.0.svg'
 import escritaAutoregulada from '@/assets/Cards/escrita_autoregulada.png'
 import imersaoTotal from '@/assets/Cards/imersao_total.png'
@@ -48,7 +48,7 @@ function Home() {
             </div>
             <div className="hero-image flex justify-center">
                 <img 
-                  src={Pessoas_borda} 
+                  src={Pessoas} 
                   alt="Plataforma Escrita360" 
                   className="w-full h-auto"
                 />
@@ -63,41 +63,47 @@ function Home() {
           <h2 className="section-title text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-8 md:mb-12 animate-fade-in-up">
             Para Quem é o Escrita360?
           </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="p-6 hover-lift border-brand-accent/30 animate-fade-in-up delay-100 aspect-square flex flex-col">
-              <CardContent className="pt-4 text-center flex flex-col justify-center h-full">
-                <GraduationCap className="w-12 h-12 text-brand-primary mx-auto mb-4 animate-pulse-glow" />
-                <h3 className="text-xl font-bold text-slate-900 mb-3">Estudantes</h3>
-                <p className="text-slate-700 leading-relaxed mb-4">
-                  <strong style={{ color: '#2b7475' }}>Ideal para quem quer desenvolver habilidades de escrita exigidas pela escola, pelo ENEM e pelas competências do século XXI.</strong> Aqui, o aluno vivencia uma imersão autorregulada, em que pode escrever, reescrever e analisar, com análises ilimitadas e insights inteligentes. A IA atua como assistente de escrita, ajudando a aprimorar argumentos, estrutura e linguagem.
-                </p>
-                <p className="text-slate-700 font-bold">
+          <div className="grid md:grid-cols-3 gap-8 items-stretch">
+            <Card className="p-6 hover-lift border-brand-accent/30 animate-fade-in-up delay-100 flex flex-col h-full">
+              <CardContent className="pt-4 text-center flex flex-col justify-between h-full">
+                <div>
+                  <GraduationCap className="w-12 h-12 text-brand-primary mx-auto mb-4 animate-pulse-glow" />
+                  <h3 className="text-xl font-bold text-slate-900 mb-3">Estudantes</h3>
+                  <p className="text-slate-700 leading-relaxed mb-4 text-sm">
+                    <strong style={{ color: '#2b7475' }}>Ideal para quem quer desenvolver habilidades de escrita exigidas pela escola, pelo ENEM e pelas competências do século XXI.</strong> Aqui, o aluno vivencia uma imersão autorregulada, em que pode escrever, reescrever e analisar, com análises ilimitadas e insights inteligentes. A IA atua como assistente de escrita, ajudando a aprimorar argumentos, estrutura e linguagem.
+                  </p>
+                </div>
+                <p className="text-slate-700 font-bold text-sm mt-auto">
                   Mais do que corrigir, é aprender a escrever.
                 </p>
               </CardContent>
             </Card>
             
-            <Card className="p-6 hover-lift border-brand-accent/30 animate-fade-in-up delay-200 aspect-square flex flex-col">
-              <CardContent className="pt-4 text-center flex flex-col justify-center h-full">
-                <Users className="w-12 h-12 text-brand-primary mx-auto mb-4 animate-pulse-glow" />
-                <h3 className="text-xl font-bold text-slate-900 mb-3">Professores</h3>
-                <p className="text-slate-700 leading-relaxed mb-4">
-                  <strong style={{ color: '#2b7475' }}>Pensado para educadores que atuam em cursos preparatórios ou plataformas online, o Escrita360 otimiza o tempo de correção e amplia o alcance do ensino de redação.</strong> Com relatórios automáticos e acompanhamento por versão, o professor foca no que importa: orientar o aprendizado.
-                </p>
-                <p className="text-slate-700 font-bold">
+            <Card className="p-6 hover-lift border-brand-accent/30 animate-fade-in-up delay-200 flex flex-col h-full">
+              <CardContent className="pt-4 text-center flex flex-col justify-between h-full">
+                <div>
+                  <Users className="w-12 h-12 text-brand-primary mx-auto mb-4 animate-pulse-glow" />
+                  <h3 className="text-xl font-bold text-slate-900 mb-3">Professores</h3>
+                  <p className="text-slate-700 leading-relaxed mb-4 text-sm">
+                    <strong style={{ color: '#2b7475' }}>Pensado para educadores que atuam em cursos preparatórios ou plataformas online, o Escrita360 otimiza o tempo de correção e amplia o alcance do ensino de redação.</strong> Com relatórios automáticos e acompanhamento por versão, o professor foca no que importa: orientar o aprendizado.
+                  </p>
+                </div>
+                <p className="text-slate-700 font-bold text-sm mt-auto">
                   Mais produtividade para o professor, mais aprendizado para o aluno.
                 </p>
               </CardContent>
             </Card>
             
-            <Card className="p-6 hover-lift border-brand-accent/30 animate-fade-in-up delay-300 aspect-square flex flex-col">
-              <CardContent className="pt-4 text-center flex flex-col justify-center h-full">
-                <School className="w-12 h-12 text-brand-primary mx-auto mb-4 animate-pulse-glow" />
-                <h3 className="text-xl font-bold text-slate-900 mb-3">Escolas</h3>
-                <p className="text-slate-700 leading-relaxed mb-3" style={{ marginTop: '24px' }}>
-                  <strong style={{ color: '#2b7475' }}>Plataforma completa para integrar a escrita autoral ao currículo, desenvolvendo autonomia e autorregulação nos alunos.</strong> Permite acompanhar turmas em tempo real, gerar relatórios personalizados e promover práticas de escrita formativas em larga escala.
-                </p>
-                <p className="text-slate-700 font-bold">
+            <Card className="p-6 hover-lift border-brand-accent/30 animate-fade-in-up delay-300 flex flex-col h-full">
+              <CardContent className="pt-4 text-center flex flex-col justify-between h-full">
+                <div>
+                  <School className="w-12 h-12 text-brand-primary mx-auto mb-4 animate-pulse-glow" />
+                  <h3 className="text-xl font-bold text-slate-900 mb-3">Escolas</h3>
+                  <p className="text-slate-700 leading-relaxed mb-4 text-sm">
+                    <strong style={{ color: '#2b7475' }}>Plataforma completa para integrar a escrita autoral ao currículo, desenvolvendo autonomia e autorregulação nos alunos.</strong> Permite acompanhar turmas em tempo real, gerar relatórios personalizados e promover práticas de escrita formativas em larga escala.
+                  </p>
+                </div>
+                <p className="text-slate-700 font-bold text-sm mt-auto">
                   Ideal para redações escolares e preparatórios para o ENEM.
                 </p>
               </CardContent>
