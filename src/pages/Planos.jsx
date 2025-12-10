@@ -478,23 +478,21 @@ function Precos() {
               {/* Planos Semestrais */}
               <div className="mb-16">
                 <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-8 text-center">Escola Plano Institucional (Semestral)</h3>
-                <div className="grid md:grid-cols-3 gap-8 mx-auto max-w-6xl">
+                <div className="grid md:grid-cols-3 gap-6 mx-auto max-w-5xl justify-items-center">
                   {schoolPlansSemestral.map((plan, index) => (
-                    <Card key={index} className={`relative hover-lift animate-scale-in delay-${index * 200} ${plan.popular ? 'border-2 border-brand-primary shadow-xl' : 'hover:shadow-xl'} transition-all flex flex-col pt-4`}>
-                      {plan.popular && (
-                        <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 animate-float">
-                          <Badge className="bg-brand-primary text-white px-4 py-1">
+                    <Card key={index} className={`relative hover-lift animate-scale-in delay-${index * 200} ${plan.popular ? 'border-2 border-brand-primary shadow-xl' : 'hover:shadow-xl'} transition-all flex flex-col pt-6 w-full max-w-sm`}>
+                      <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 flex gap-2 animate-float">
+                        {plan.popular && (
+                          <Badge className="bg-brand-primary text-white px-3 py-1 text-xs whitespace-nowrap">
                             Mais escolhido
                           </Badge>
-                        </div>
-                      )}
-                      {plan.credits && (
-                        <div className="absolute -top-4 right-4 animate-float">
-                          <Badge className="bg-yellow-500 text-white px-3 py-1">
+                        )}
+                        {plan.credits && (
+                          <Badge className="bg-yellow-500 text-white px-3 py-1 text-xs whitespace-nowrap">
                             {plan.credits} análises
                           </Badge>
-                        </div>
-                      )}
+                        )}
+                      </div>
                       <CardHeader className="text-center pb-2">
                         <h3 className="text-xl font-bold text-slate-900">{plan.name}</h3>
                         <div className="my-3">
@@ -532,23 +530,21 @@ function Precos() {
               {/* Planos Anuais */}
               <div>
                 <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-8 text-center">Planos Anuais para Escolas</h3>
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mx-auto max-w-7xl">
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mx-auto max-w-6xl justify-items-center">
                   {schoolPlansAnual.map((plan, index) => (
-                    <Card key={index} className={`relative hover-lift animate-scale-in delay-${index * 200} ${plan.popular ? 'border-2 border-brand-primary shadow-xl' : 'hover:shadow-xl'} transition-all flex flex-col pt-4`}>
-                      {plan.popular && (
-                        <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 animate-float">
-                          <Badge className="bg-brand-primary text-white px-4 py-1">
+                    <Card key={index} className={`relative hover-lift animate-scale-in delay-${index * 200} ${plan.popular ? 'border-2 border-brand-primary shadow-xl' : 'hover:shadow-xl'} transition-all flex flex-col pt-6 w-full max-w-xs`}>
+                      <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 flex gap-2 animate-float">
+                        {plan.popular && (
+                          <Badge className="bg-brand-primary text-white px-2 py-1 text-xs whitespace-nowrap">
                             Mais escolhido
                           </Badge>
-                        </div>
-                      )}
-                      {plan.credits && (
-                        <div className="absolute -top-4 right-4 animate-float">
-                          <Badge className="bg-yellow-500 text-white px-3 py-1">
+                        )}
+                        {plan.credits && (
+                          <Badge className="bg-yellow-500 text-white px-2 py-1 text-xs whitespace-nowrap">
                             {plan.credits} análises
                           </Badge>
-                        </div>
-                      )}
+                        )}
+                      </div>
                       <CardHeader className="text-center pb-2">
                         <h3 className="text-xl font-bold text-slate-900">Plano Anual</h3>
                         <div className="my-3">
@@ -584,26 +580,24 @@ function Precos() {
               </div>
             </>
           ) : (
-          <div className={`grid gap-8 mx-auto mt-6 ${
-            selectedAudience === 'professores' ? 'md:grid-cols-2 lg:grid-cols-2 max-w-6xl' : 
-            'max-w-xl'
+          <div className={`grid gap-8 mx-auto mt-6 justify-center ${
+            selectedAudience === 'professores' ? 'md:grid-cols-2 lg:grid-cols-2 max-w-5xl' : 
+            'grid-cols-1 max-w-md'
           }`}>
             {currentPlans.map((plan, index) => (
-              <Card key={index} className={`relative hover-lift animate-scale-in delay-${index * 200} ${plan.popular ? 'border-2 border-brand-primary shadow-xl' : 'hover:shadow-xl'} transition-all flex flex-col pt-4 aspect-square`}>
-                {plan.popular && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 animate-float">
-                    <Badge className="bg-brand-primary text-white px-4 py-1">
+              <Card key={index} className={`relative hover-lift animate-scale-in delay-${index * 200} ${plan.popular ? 'border-2 border-brand-primary shadow-xl' : 'hover:shadow-xl'} transition-all flex flex-col pt-6 w-full`}>
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 flex gap-2 animate-float">
+                  {plan.popular && (
+                    <Badge className="bg-brand-primary text-white px-3 py-1 text-xs whitespace-nowrap">
                       {plan.badge}
                     </Badge>
-                  </div>
-                )}
-                {plan.credits && (
-                  <div className="absolute -top-4 right-4 animate-float">
-                    <Badge className="bg-yellow-500 text-white px-3 py-1">
+                  )}
+                  {plan.credits && (
+                    <Badge className="bg-yellow-500 text-white px-3 py-1 text-xs whitespace-nowrap">
                       {plan.credits} créditos IA
                     </Badge>
-                  </div>
-                )}
+                  )}
+                </div>
                 <CardHeader className="text-center pb-2">
                   <div className="mb-1">
                     {!plan.popular && <Badge variant="secondary" className="text-xs">
@@ -730,13 +724,13 @@ function Precos() {
               </p>
             </div>
             
-            <div className={`grid gap-8 mx-auto justify-items-center mt-6 ${
-              selectedAudience === 'escolas' ? 'md:grid-cols-2 max-w-3xl gap-x-8 gap-y-12' : 
-              selectedAudience === 'professores' ? 'md:grid-cols-2 max-w-4xl gap-x-8 gap-y-12' :
-              'md:grid-cols-3 max-w-5xl gap-x-6 gap-y-12'
+            <div className={`grid gap-6 mx-auto justify-items-center mt-6 ${
+              selectedAudience === 'escolas' ? 'md:grid-cols-2 max-w-2xl' : 
+              selectedAudience === 'professores' ? 'md:grid-cols-2 max-w-2xl' :
+              'md:grid-cols-3 max-w-4xl'
             }`}>
               {creditPackages.map((pkg, index) => (
-                <Card key={index} className={`relative hover-lift ${pkg.popular ? 'border-2 border-green-500 shadow-xl' : 'hover:shadow-xl'} transition-all flex flex-col pt-4 aspect-square`}>
+                <Card key={index} className={`relative hover-lift ${pkg.popular ? 'border-2 border-green-500 shadow-xl' : 'hover:shadow-xl'} transition-all flex flex-col pt-4 w-full max-w-xs`}>
                   {pkg.popular && (
                     <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                       <Badge className="bg-green-500 text-white px-4 py-1">Melhor Custo-Benefício</Badge>
