@@ -37,31 +37,11 @@ function Precos() {
   const studentPlans = [
     {
       name: 'Plano Mensal',
-      badge: 'Acesso imediato',
-      monthlyPrice: 49,
-      yearlyPrice: 588,
-      description: 'Plano Híbrido (Uso da plataforma + créditos de IA)',
-      credits: 10,
-      features: [
-        { text: 'Módulo de escrita digital autorregulada', included: true },
-        { text: 'Banco de estratégias para escrita', included: true },
-        { text: 'Sugestão de temas', included: true },
-        { text: 'Recursos de apoio autorregulatório', included: true },
-        { text: 'Insights para melhoria da escrita', included: true },
-        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
-        { text: 'Rubricas qualitativas para (auto)avaliação', included: true },
-        { text: "10 análises detalhadas de redações do ENEM por IA", included: true, highlighted: true },
-        { text: 'Acesso por 30 dias', included: true }
-      ],
-      buttonText: 'Escolher Mensal',
-      buttonVariant: 'default'
-    },
-    {
-      name: 'Plano Trimestral',
-      badge: 'Melhor custo-benefício',
+      badge: 'Preço promocional de lançamento',
       monthlyPrice: 120,
-      yearlyPrice: 480,
-      description: 'Plano Híbrido (Uso da plataforma + créditos de IA)',
+      yearlyPrice: 1440,
+      description: 'Projetado para uso individual e motivacional',
+      subDescription: 'Aproveite o preço promocional de lançamento da Plataforma Escrita360',
       credits: 50,
       popular: true,
       features: [
@@ -73,9 +53,9 @@ function Precos() {
         { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
         { text: 'Rubricas qualitativas para (auto)avaliação', included: true },
         { text: '50 análises detalhadas de redações do ENEM por IA', included: true, highlighted: true },
-        { text: 'Acesso por 90 dias', included: true }
+        { text: 'Acesso por 30 dias', included: true }
       ],
-      buttonText: 'Escolher Trimestral',
+      buttonText: 'Escolher Plano',
       buttonVariant: 'default'
     }
   ]
@@ -84,10 +64,11 @@ function Precos() {
   const teacherPlans = [
     {
       name: 'Plano 1 Mensal',
-      badge: 'Para começar',
+      badge: 'Preço promocional de lançamento',
       monthlyPrice: 49,
       yearlyPrice: 588,
       description: 'Plano Híbrido (Plataforma + créditos de IA)',
+      subDescription: 'Aproveite o preço promocional de lançamento da Plataforma Escrita360',
       credits: 10,
       features: [
         { text: 'Módulo de escrita digital autorregulada', included: true },
@@ -106,11 +87,12 @@ function Precos() {
     },
     {
       name: 'Plano 2 Mensal',
-      badge: 'Mais escolhido',
-      monthlyPrice: 130,
-      yearlyPrice: 1560,
+      badge: 'Preço promocional de lançamento',
+      monthlyPrice: 120,
+      yearlyPrice: 1440,
       description: 'Plano Híbrido (Plataforma + créditos de IA)',
-      credits: 100,
+      subDescription: 'Aproveite o preço promocional de lançamento da Plataforma Escrita360',
+      credits: 60,
       popular: true,
       features: [
         { text: 'Módulo de escrita digital autorregulada', included: true },
@@ -120,7 +102,7 @@ function Precos() {
         { text: 'Insights para melhoria da escrita', included: true },
         { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
         { text: 'Rubricas qualitativas para (auto)avaliação', included: true },
-        { text: '100 análises detalhadas de redações por IA', included: true, highlighted: true },
+        { text: '60 análises detalhadas de redações por IA', included: true, highlighted: true },
         { text: 'Correção por foto ou digitada', included: true },
         { text: 'Acesso por 30 dias', included: true }
       ],
@@ -130,8 +112,8 @@ function Precos() {
     {
       name: 'Plano Trimestral',
       badge: 'Economia garantida',
-      monthlyPrice: 320,
-      yearlyPrice: 1280,
+      monthlyPrice: 390,
+      yearlyPrice: 1560,
       description: 'Plano Híbrido (Plataforma + créditos de IA)',
       credits: 200,
       features: [
@@ -152,8 +134,8 @@ function Precos() {
     {
       name: 'Plano Semestral',
       badge: 'Melhor investimento',
-      monthlyPrice: 465,
-      yearlyPrice: 930,
+      monthlyPrice: 570,
+      yearlyPrice: 1140,
       description: 'Plano Híbrido (Plataforma + créditos de IA)',
       credits: 300,
       features: [
@@ -173,14 +155,15 @@ function Precos() {
     }
   ]
 
-  // Planos para escolas
-  const schoolPlans = [
+  // Planos para escolas - Semestrais
+  const schoolPlansSemestral = [
     {
-      name: 'Plano Híbrido 360',
-      badge: 'Institucional completo',
-      monthlyPrice: 295,
-      yearlyPrice: 3540,
-      description: 'Integração total entre os módulos Professor e Aluno',
+      name: 'Plano Semestral',
+      badge: 'Institucional',
+      monthlyPrice: 1200,
+      description: 'Plano Híbrido (Uso da plataforma + créditos de IA)',
+      credits: 500,
+      planType: 'semestral',
       features: [
         { text: 'Módulo de escrita digital autorregulada', included: true },
         { text: 'Banco de estratégias para escrita', included: true },
@@ -188,17 +171,156 @@ function Precos() {
         { text: 'Recursos de apoio autorregulatório', included: true },
         { text: 'Insights para melhoria da escrita', included: true },
         { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
-        { text: 'Rubricas qualitativas para (auto)avaliação', included: true },
-        { text: 'Correção por foto ou digitada', included: true },
-        { text: 'Dashboard institucional completo', included: true },
-        { text: 'Integração Professor-Aluno total', included: true },
+        { text: 'Rubricas qualitativas para avaliação', included: true },
+        { text: 'Correção por foto ou digitada (OCR)', included: true },
         { text: 'Relatórios automáticos (autoavaliação, sentimentos, IA)', included: true },
-        { text: 'O acesso permanece ativo durante o período letivo', included: true, highlighted: true }
+        { text: 'O acesso permanece ativo durante a vigência da assinatura', included: true, highlighted: true }
       ],
-      buttonText: 'Escolher Híbrido 360',
+      buttonText: 'Escolher Plano',
+      buttonVariant: 'default'
+    },
+    {
+      name: 'Plano Semestral',
+      badge: 'Institucional',
+      monthlyPrice: 2400,
+      description: 'Plano Híbrido (Uso da plataforma + créditos de IA)',
+      credits: 1000,
+      planType: 'semestral',
+      popular: true,
+      features: [
+        { text: 'Módulo de escrita digital autorregulada', included: true },
+        { text: 'Banco de estratégias para escrita', included: true },
+        { text: 'Sugestão de temas', included: true },
+        { text: 'Recursos de apoio autorregulatório', included: true },
+        { text: 'Insights para melhoria da escrita', included: true },
+        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
+        { text: 'Rubricas qualitativas para avaliação', included: true },
+        { text: 'Correção por foto ou digitada (OCR)', included: true },
+        { text: 'Relatórios automáticos (autoavaliação, sentimentos, IA)', included: true },
+        { text: 'O acesso permanece ativo durante a vigência da assinatura', included: true, highlighted: true }
+      ],
+      buttonText: 'Escolher Plano',
+      buttonVariant: 'default'
+    },
+    {
+      name: 'Plano Semestral',
+      badge: 'Institucional',
+      monthlyPrice: 4800,
+      description: 'Plano Híbrido (Uso da plataforma + créditos de IA)',
+      credits: 2000,
+      planType: 'semestral',
+      features: [
+        { text: 'Módulo de escrita digital autorregulada', included: true },
+        { text: 'Banco de estratégias para escrita', included: true },
+        { text: 'Sugestão de temas', included: true },
+        { text: 'Recursos de apoio autorregulatório', included: true },
+        { text: 'Insights para melhoria da escrita', included: true },
+        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
+        { text: 'Rubricas qualitativas para avaliação', included: true },
+        { text: 'Correção por foto ou digitada (OCR)', included: true },
+        { text: 'Relatórios automáticos (autoavaliação, sentimentos, IA)', included: true },
+        { text: 'O acesso permanece ativo durante a vigência da assinatura', included: true, highlighted: true }
+      ],
+      buttonText: 'Escolher Plano',
       buttonVariant: 'default'
     }
   ]
+
+  // Planos para escolas - Anuais
+  const schoolPlansAnual = [
+    {
+      name: 'Escola Plano Institucional (Anual)',
+      badge: 'Anual Institucional',
+      monthlyPrice: 2350,
+      description: 'Plano Híbrido (Uso da plataforma + créditos de IA)',
+      credits: 1000,
+      planType: 'anual',
+      features: [
+        { text: 'Módulo de escrita digital autorregulada', included: true },
+        { text: 'Banco de estratégias para escrita', included: true },
+        { text: 'Sugestão de temas', included: true },
+        { text: 'Recursos de apoio autorregulatório', included: true },
+        { text: 'Insights para melhoria da escrita', included: true },
+        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
+        { text: 'Rubricas qualitativas para avaliação', included: true },
+        { text: 'Correção por foto ou digitada (OCR)', included: true },
+        { text: 'Relatórios automáticos (autoavaliação, sentimentos, IA)', included: true },
+        { text: 'O acesso permanece ativo durante a vigência da assinatura', included: true, highlighted: true }
+      ],
+      buttonText: 'Escolher Plano',
+      buttonVariant: 'default'
+    },
+    {
+      name: 'Escola Plano Híbrido 360 (Anual)',
+      badge: 'Anual',
+      monthlyPrice: 2150,
+      description: 'Plano Híbrido (Uso da plataforma + créditos de IA)',
+      credits: 1000,
+      planType: 'anual',
+      features: [
+        { text: 'Módulo de escrita digital autorregulada', included: true },
+        { text: 'Banco de estratégias para escrita', included: true },
+        { text: 'Sugestão de temas', included: true },
+        { text: 'Recursos de apoio autorregulatório', included: true },
+        { text: 'Insights para melhoria da escrita', included: true },
+        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
+        { text: 'Rubricas qualitativas para avaliação', included: true },
+        { text: 'Correção por foto ou digitada (OCR)', included: true },
+        { text: 'Relatórios automáticos (autoavaliação, sentimentos, IA)', included: true },
+        { text: 'O acesso permanece ativo durante a vigência da assinatura', included: true, highlighted: true }
+      ],
+      buttonText: 'Escolher Plano',
+      buttonVariant: 'default'
+    },
+    {
+      name: 'Escola Plano Híbrido 360 (Anual)',
+      badge: 'Anual',
+      monthlyPrice: 4300,
+      description: 'Plano Híbrido (Uso da plataforma + créditos de IA)',
+      credits: 2000,
+      planType: 'anual',
+      popular: true,
+      features: [
+        { text: 'Módulo de escrita digital autorregulada', included: true },
+        { text: 'Banco de estratégias para escrita', included: true },
+        { text: 'Sugestão de temas', included: true },
+        { text: 'Recursos de apoio autorregulatório', included: true },
+        { text: 'Insights para melhoria da escrita', included: true },
+        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
+        { text: 'Rubricas qualitativas para avaliação', included: true },
+        { text: 'Correção por foto ou digitada (OCR)', included: true },
+        { text: 'Relatórios automáticos (autoavaliação, sentimentos, IA)', included: true },
+        { text: 'O acesso permanece ativo durante a vigência da assinatura', included: true, highlighted: true }
+      ],
+      buttonText: 'Escolher Plano',
+      buttonVariant: 'default'
+    },
+    {
+      name: 'Escola Plano Híbrido 360 (Anual)',
+      badge: 'Anual',
+      monthlyPrice: 10750,
+      description: 'Plano Híbrido (Uso da plataforma + créditos de IA)',
+      credits: 5000,
+      planType: 'anual',
+      features: [
+        { text: 'Módulo de escrita digital autorregulada', included: true },
+        { text: 'Banco de estratégias para escrita', included: true },
+        { text: 'Sugestão de temas', included: true },
+        { text: 'Recursos de apoio autorregulatório', included: true },
+        { text: 'Insights para melhoria da escrita', included: true },
+        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
+        { text: 'Rubricas qualitativas para avaliação', included: true },
+        { text: 'Correção por foto ou digitada (OCR)', included: true },
+        { text: 'Relatórios automáticos (autoavaliação, sentimentos, IA)', included: true },
+        { text: 'O acesso permanece ativo durante a vigência da assinatura', included: true, highlighted: true }
+      ],
+      buttonText: 'Escolher Plano',
+      buttonVariant: 'default'
+    }
+  ]
+
+  // Combinar planos de escolas
+  const schoolPlans = [...schoolPlansSemestral, ...schoolPlansAnual]
 
   // Pacotes de créditos para estudantes
   const studentCreditPackages = [
@@ -207,14 +329,14 @@ function Precos() {
       credits: 5,
       price: 20,
       description: '',
-      features: ['Análises detalhadas por IA', 'Validade de 30 dias', 'Suporte incluído']
+      features: ['Análises detalhadas por IA', 'Validade de 30 dias']
     },
     {
       name: 'Pacote 2',
       credits: 15,
       price: 45,
       description: '',
-      features: ['Análises detalhadas por IA', 'Validade de 30 dias', 'Suporte incluído']
+      features: ['Análises detalhadas por IA', 'Validade de 30 dias']
     },
     {
       name: 'Pacote 3',
@@ -222,7 +344,7 @@ function Precos() {
       price: 60,
       description: '',
       popular: true,
-      features: ['Análises detalhadas por IA', 'Validade de 30 dias', 'Suporte incluído', 'Melhor custo-benefício']
+      features: ['Análises detalhadas por IA', 'Validade de 30 dias', 'Melhor custo-benefício']
     }
   ]
 
@@ -231,36 +353,36 @@ function Precos() {
     {
       name: 'Pacote 1',
       credits: 100,
-      price: 155,
+      price: 200,
       description: '',
-      features: ['Análises detalhadas por IA', 'Validade de 30 dias', 'Suporte incluído']
+      features: ['Análises detalhadas por IA', 'Validade de 30 dias']
     },
     {
       name: 'Pacote 2',
-      credits: 200,
+      credits: 150,
       price: 300,
       description: '',
       popular: true,
-      features: ['Análises detalhadas por IA', 'Validade de 30 dias', 'Suporte incluído', 'Melhor custo-benefício']
+      features: ['Análises detalhadas por IA', 'Validade de 30 dias', 'Melhor custo-benefício']
     }
   ]
 
   // Pacotes de créditos para escolas
   const schoolCreditPackages = [
     {
-      name: 'Pacote Escolar 1',
-      credits: 3000,
-      price: 6300,
+      name: 'Pacote 1',
+      credits: 500,
+      price: 1200,
       description: '',
-      features: ['Análises detalhadas por IA', 'Validade de 90 dias', 'Suporte prioritário', 'Relatórios institucionais']
+      features: ['Análises detalhadas por IA', 'O acesso aos créditos extras ocorre durante a vigência da assinatura']
     },
     {
-      name: 'Pacote Escolar 2',
-      credits: 5000,
-      price: 10200,
+      name: 'Pacote 2',
+      credits: 1000,
+      price: 2400,
       description: '',
       popular: true,
-      features: ['Análises detalhadas por IA', 'Validade de 90 dias', 'Suporte prioritário', 'Relatórios institucionais', 'Melhor custo-benefício']
+      features: ['Análises detalhadas por IA', 'O acesso aos créditos extras ocorre durante a vigência da assinatura', 'Melhor custo-benefício']
     }
   ]
 
@@ -284,16 +406,15 @@ function Precos() {
   const schoolModels = [
     {
       title: 'Assinatura Institucional',
-      focus: 'Facilitar o trabalho dos professores e otimizar a correção das redações realizadas em sala de aula e das provas de redação realizadas na escola.',
-      description: 'A escola adquire Planos Híbridos (plataforma + créditos de IA), disponíveis nas versões mensal, semestral ou anual, para os professores de Língua Portuguesa ou demais docentes envolvidos na produção e correção de redações e adquire pacotes adicionais de créditos, conforme a demanda de correções dos estudantes.',
+      focus: 'Facilitar o trabalho docente e otimizar a correção de textos produzidos em sala de aula e avaliações oficiais da escola (provas de redação).',
+      description: 'A escola adquire Planos Híbridos (plataforma + créditos de IA), disponíveis nas versões semestral e anual para os professores envolvidos na produção e correção de redações e pode adquirir pacotes adicionais de créditos, conforme a demanda de correções da escola.',
       number: 1
     },
     {
-      title: 'Assinatura Compartilhada (Escola + Família)',
-      focus: 'Implementar o uso da plataforma de forma completa, fomentar a autorregulação da aprendizagem, otimizar o processo de correção das redações e acompanhar o desenvolvimento das habilidades de escrita dos estudantes por meio de métricas e dados de desempenho.',
-      description: 'Nesse modelo, os pais adquirem a assinatura da plataforma e a escola adquire o Plano Híbrido 360 (integração total entre os módulos Professor e Aluno) e os créditos de IA necessários para as correções das atividades e provas de redação realizadas na escola. A instituição tem acesso a todos os recursos da Plataforma e um Dashboard institucional que centraliza o acompanhamento pedagógico.',
-      benefits: 'Esse modelo fortalece o engajamento entre escola e família, permitindo que os pais acompanhem de forma contínua a evolução das habilidades de escrita dos estudantes.',
-      consultation: true,
+      title: 'Assinatura Compartilhada - Plano Híbrido 360',
+      focus: 'Ampliar a adesão e possibilitar o uso contínuo da plataforma e controle pedagógico à gestão.',
+      description: 'O modelo híbrido combina a aquisição de assinaturas individuais, adquiridas pelas famílias (responsáveis) e assinaturas para os professores, adquiridas pela escola. Além das assinaturas, a escola adquire pacotes de créditos de IA, utilizados conforme a necessidade pedagógica. Esse modelo busca ampliar a adesão e possibilitar o uso contínuo da plataforma e controle pedagógico à gestão.',
+      additionalInfo: 'Os créditos de IA podem ser utilizados para correção de textos produzidos pelos estudantes e provas de redação. As modalidades de contratação podem ser semestrais ou anuais. Alunos e professores têm acesso a todos os recursos da plataforma.',
       number: 2,
       highlighted: true
     }
@@ -321,7 +442,7 @@ function Precos() {
       return {
         title: 'Planos para',
         titleHighlight: 'Estudantes',
-        subtitle: 'Desenvolva suas habilidades de escrita para o ENEM e vestibulares. Aprenda no seu ritmo com nossa metodologia autorregulada.'
+        subtitle: 'Projetado para uso individual e motivacional. Aproveite o preço promocional de lançamento da Plataforma Escrita360.'
       }
     } else if (selectedAudience === 'professores') {
       return {
@@ -352,10 +473,120 @@ function Precos() {
       {/* Pricing Grid */}
       <section ref={plansRef} className="pt-12 pb-8 md:pt-16 md:pb-12 lg:pt-20 lg:pb-16 bg-white animate-on-scroll">
         <div className="container mx-auto px-4 max-w-7xl">
+          {selectedAudience === 'escolas' ? (
+            <>
+              {/* Planos Semestrais */}
+              <div className="mb-16">
+                <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-8 text-center">Escola Plano Institucional (Semestral)</h3>
+                <div className="grid md:grid-cols-3 gap-8 mx-auto max-w-6xl">
+                  {schoolPlansSemestral.map((plan, index) => (
+                    <Card key={index} className={`relative hover-lift animate-scale-in delay-${index * 200} ${plan.popular ? 'border-2 border-brand-primary shadow-xl' : 'hover:shadow-xl'} transition-all flex flex-col pt-4`}>
+                      {plan.popular && (
+                        <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 animate-float">
+                          <Badge className="bg-brand-primary text-white px-4 py-1">
+                            Mais escolhido
+                          </Badge>
+                        </div>
+                      )}
+                      {plan.credits && (
+                        <div className="absolute -top-4 right-4 animate-float">
+                          <Badge className="bg-yellow-500 text-white px-3 py-1">
+                            {plan.credits} análises
+                          </Badge>
+                        </div>
+                      )}
+                      <CardHeader className="text-center pb-2">
+                        <h3 className="text-xl font-bold text-slate-900">{plan.name}</h3>
+                        <div className="my-3">
+                          <span className="text-3xl font-bold text-brand-primary">R$</span>
+                          <span className="text-4xl font-bold text-brand-primary">
+                            {plan.monthlyPrice.toLocaleString('pt-BR')}
+                          </span>
+                          <span className="text-slate-600">/6 meses</span>
+                        </div>
+                        <p className="text-slate-600 text-sm">{plan.description}</p>
+                      </CardHeader>
+                      <CardContent className="flex flex-col h-full">
+                        <ul className="space-y-2 mb-6 flex-grow">
+                          {plan.features.map((feature, featureIndex) => (
+                            <li key={featureIndex} className={`flex items-start gap-2 ${feature.highlighted ? 'font-semibold text-brand-primary' : ''}`}>
+                              <Check className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                              <span className="text-slate-700 text-sm">{feature.text}</span>
+                            </li>
+                          ))}
+                        </ul>
+                        <Button
+                          className="w-full transition-all duration-300 hover:scale-105 mt-auto bg-[#4A90E2] hover:bg-[#357ABD] text-white"
+                          variant="default"
+                          size="lg"
+                          onClick={() => handleOpenPagamento(plan)}
+                        >
+                          {plan.buttonText}
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+
+              {/* Planos Anuais */}
+              <div>
+                <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-8 text-center">Planos Anuais para Escolas</h3>
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mx-auto max-w-7xl">
+                  {schoolPlansAnual.map((plan, index) => (
+                    <Card key={index} className={`relative hover-lift animate-scale-in delay-${index * 200} ${plan.popular ? 'border-2 border-brand-primary shadow-xl' : 'hover:shadow-xl'} transition-all flex flex-col pt-4`}>
+                      {plan.popular && (
+                        <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 animate-float">
+                          <Badge className="bg-brand-primary text-white px-4 py-1">
+                            Mais escolhido
+                          </Badge>
+                        </div>
+                      )}
+                      {plan.credits && (
+                        <div className="absolute -top-4 right-4 animate-float">
+                          <Badge className="bg-yellow-500 text-white px-3 py-1">
+                            {plan.credits} análises
+                          </Badge>
+                        </div>
+                      )}
+                      <CardHeader className="text-center pb-2">
+                        <h3 className="text-xl font-bold text-slate-900">Plano Anual</h3>
+                        <div className="my-3">
+                          <span className="text-3xl font-bold text-brand-primary">R$</span>
+                          <span className="text-4xl font-bold text-brand-primary">
+                            {plan.monthlyPrice.toLocaleString('pt-BR')}
+                          </span>
+                          <span className="text-slate-600">/ano</span>
+                        </div>
+                        <p className="text-slate-600 text-sm">{plan.description}</p>
+                      </CardHeader>
+                      <CardContent className="flex flex-col h-full">
+                        <ul className="space-y-2 mb-6 flex-grow">
+                          {plan.features.map((feature, featureIndex) => (
+                            <li key={featureIndex} className={`flex items-start gap-2 ${feature.highlighted ? 'font-semibold text-brand-primary' : ''}`}>
+                              <Check className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                              <span className="text-slate-700 text-sm">{feature.text}</span>
+                            </li>
+                          ))}
+                        </ul>
+                        <Button
+                          className="w-full transition-all duration-300 hover:scale-105 mt-auto bg-[#4A90E2] hover:bg-[#357ABD] text-white"
+                          variant="default"
+                          size="lg"
+                          onClick={() => handleOpenPagamento(plan)}
+                        >
+                          {plan.buttonText}
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            </>
+          ) : (
           <div className={`grid gap-8 mx-auto mt-6 ${
-            selectedAudience === 'escolas' ? 'max-w-2xl' :
             selectedAudience === 'professores' ? 'md:grid-cols-2 lg:grid-cols-2 max-w-6xl' : 
-            'md:grid-cols-2 max-w-5xl'
+            'max-w-xl'
           }`}>
             {currentPlans.map((plan, index) => (
               <Card key={index} className={`relative hover-lift animate-scale-in delay-${index * 200} ${plan.popular ? 'border-2 border-brand-primary shadow-xl' : 'hover:shadow-xl'} transition-all flex flex-col pt-4 aspect-square`}>
@@ -400,6 +631,9 @@ function Precos() {
                     )}
                   </div>
                   <p className="text-slate-600 text-sm">{plan.description}</p>
+                  {plan.subDescription && (
+                    <p className="text-brand-primary text-xs mt-1 font-medium">{plan.subDescription}</p>
+                  )}
                 </CardHeader>
                 <CardContent className="flex flex-col h-full">
                   <ul className="space-y-2 mb-6 flex-grow">
@@ -422,6 +656,7 @@ function Precos() {
               </Card>
             ))}
           </div>
+          )}
         </div>
       </section>
 
@@ -452,6 +687,9 @@ function Precos() {
                           <strong className="text-slate-700">Foco:</strong> {model.focus}
                         </div>
                         <p className="text-slate-600 mb-4 leading-relaxed">{model.description}</p>
+                        {model.additionalInfo && (
+                          <p className="text-slate-600 mb-4 leading-relaxed">{model.additionalInfo}</p>
+                        )}
                         {model.benefits && (
                           <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
                             <p className="text-green-800 font-medium">{model.benefits}</p>
@@ -480,14 +718,14 @@ function Precos() {
           <div className="container mx-auto px-4 max-w-7xl">
             <div className="text-center mb-12">
               <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">
-                {selectedAudience === 'escolas' ? 'Pacotes de Créditos para Escolas' : 'Pacotes de Créditos'}
+                {selectedAudience === 'escolas' ? 'Pacotes de Créditos' : 'Pacotes de Créditos'}
               </h2>
               <p className="text-lg text-slate-600 max-w-3xl mx-auto">
                 {selectedAudience === 'estudantes' 
-                  ? 'Para quem já tem acesso à plataforma e precisa de mais análises com IA'
+                  ? 'Precisa escrever mais este mês?'
                   : selectedAudience === 'professores'
-                  ? 'Para professores que precisam de mais análises além do plano contratado'
-                  : 'Créditos de IA para análises detalhadas das redações dos estudantes'
+                  ? 'Turma com muitas redações esta semana?'
+                  : 'Para as escolas que necessitam mais análises além do plano contratado.'
                 }
               </p>
             </div>
