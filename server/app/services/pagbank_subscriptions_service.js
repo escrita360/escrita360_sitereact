@@ -6,7 +6,7 @@ class PagBankSubscriptionsService {
     constructor() {
         this.environment = process.env.PAGBANK_ENV || 'sandbox';
         this.token = process.env.PAGBANK_TOKEN;
-        this.demoMode = false;
+        this.demoMode = process.env.PAGBANK_MOCK_MODE === 'true';
         
         // URLs da API v4 do PagBank (Connect)
         if (this.environment === 'sandbox') {
@@ -25,8 +25,8 @@ class PagBankSubscriptionsService {
             'x-api-version': '4.0'
         };
 
-        // Validar token
-        if (!this.token || this.token.includes('your_pagbank_token')) {
+        // Validar token apenas se não estiver em modo simulação
+        if (!this.demoMode && (!this.token || this.token.includes('your_pagbank_token'))) {
             console.error('❌ PAGBANK_TOKEN não configurado!');
             console.error('📋 Variáveis de ambiente disponíveis:');
             console.error(`   NODE_ENV: ${process.env.NODE_ENV}`);
@@ -40,11 +40,20 @@ class PagBankSubscriptionsService {
         console.log(`🔧 PagBank Subscriptions Service inicializado`);
         console.log(`   Ambiente: ${this.environment}`);
         console.log(`   Email: ${process.env.PAGBANK_EMAIL || 'não configurado'}`);
-        console.log(`   Token: ${this.token.substring(0, 20)}...${this.token.substring(this.token.length - 10)}`);
+        console.log(`   Token: ${this.token ? this.token.substring(0, 20) + '...' + this.token.substring(this.token.length - 10) : 'MODO SIMULAÇÃO'}`);
         console.log(`   Base URL: ${this.subscriptionsBaseUrl}`);
+        if (this.demoMode) {
+            console.log(`⚠️  MODO SIMULAÇÃO ATIVADO - Nenhuma chamada real será feita à API do PagBank`);
+        }
     }
 
     async makeRequest(endpoint, method = 'GET', data = null, usePaymentsApi = false) {
+        // Modo simulação - retorna dados mockados
+        if (this.demoMode) {
+            console.log(`🎭 [MOCK] ${method} ${endpoint} - Retornando dados simulados`);
+            return this.getMockResponse(endpoint, method, data);
+        }
+
         const baseUrl = usePaymentsApi ? this.paymentsBaseUrl : this.subscriptionsBaseUrl;
         const url = `${baseUrl}${endpoint}`;
 
@@ -111,6 +120,60 @@ class PagBankSubscriptionsService {
             }
             throw error;
         }
+    }
+
+    getMockResponse(endpoint, method, data) {
+        const mockId = `mock_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        
+        if (endpoint === '/plans' && method === 'GET') {
+            // Mock para listPlans
+            return {
+                plans: [{
+                    id: `plan_${mockId}`,
+                    name: data?.plan_name || 'Plano Básico',
+                    description: data?.plan_description || 'Plano de teste',
+                    amount: { value: data?.amount || 2990, currency: 'BRL' },
+                    interval: { unit: data?.interval_unit || 'MONTH', value: data?.interval_value || 1 },
+                    created_at: new Date().toISOString(),
+                    status: 'ACTIVE'
+                }]
+            };
+        }
+        
+        if (endpoint.startsWith('/plans') && method === 'POST') {
+            // Mock para createPlan
+            return {
+                id: `plan_${mockId}`,
+                name: data.name,
+                description: data.description,
+                amount: data.amount,
+                interval: { unit: data.interval_unit, value: data.interval_value },
+                created_at: new Date().toISOString(),
+                status: 'ACTIVE'
+            };
+        }
+        
+        if (endpoint === '/subscriptions' && method === 'POST') {
+            // Mock para createSubscription
+            return {
+                id: `sub_${mockId}`,
+                reference_id: data.reference_id,
+                plan: data.plan,
+                customer: data.customer,
+                payment_method: data.payment_method,
+                status: 'ACTIVE',
+                created_at: new Date().toISOString(),
+                next_charge_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+            };
+        }
+        
+        // Fallback mock
+        return {
+            id: mockId,
+            status: 'SUCCESS',
+            message: 'Operação simulada com sucesso',
+            created_at: new Date().toISOString()
+        };
     }
 
     formatTaxId(taxId) {
