@@ -298,6 +298,18 @@ const RecurringPayment = ({ paymentData, onSuccess, onError, validateBeforeSubmi
           errorMessage = 'Token PagBank não autorizado. Verifique a configuração do backend.'
         } else if (status === 404) {
           errorMessage = 'Endpoint não encontrado. Verifique se o backend está atualizado.'
+        } else if (data?.details?.error_messages) {
+          // Tratar erros específicos do PagBank
+          const pagbankError = data.details.error_messages[0]
+          if (pagbankError?.parameter_name === 'email' && pagbankError?.description?.includes('merchant')) {
+            errorMessage = 'O email informado não pode ser o mesmo email da conta PagBank do comerciante. Use um email diferente.'
+          } else if (pagbankError?.parameter_name === 'tax_id') {
+            errorMessage = 'CPF inválido. Por favor, verifique os dígitos do CPF.'
+          } else if (pagbankError?.description) {
+            errorMessage = `Erro PagBank: ${pagbankError.description}`
+          } else {
+            errorMessage = data.error || `Erro ${status}: ${error.message}`
+          }
         } else if (data?.error) {
           errorMessage = data.error
         } else {

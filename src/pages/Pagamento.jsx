@@ -280,6 +280,7 @@ function Pagamento() {
                             value={formData.email} onChange={(e) => handleInputChange('email', e.target.value)}
                             className={errors.email ? 'border-red-500' : ''} />
                           {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
+                          <p className="text-xs text-slate-500 mt-1">Use seu email pessoal para receber o acesso</p>
                         </div>
                         <div>
                           <Label htmlFor="cpf">CPF *</Label>
