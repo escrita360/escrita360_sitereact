@@ -17,7 +17,7 @@ function Layout({ children }) {
 
   const plansOptions = [
     { key: 'estudantes', label: 'Estudantes', icon: GraduationCap },
-    { key: 'professores', label: 'Professores Independentes', icon: UserCheck },
+    { key: 'professores', label: 'Professores', icon: UserCheck },
     { key: 'escolas', label: 'Escolas', icon: School }
   ]
 
