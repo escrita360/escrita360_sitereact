@@ -38,8 +38,8 @@ function Precos() {
     {
       name: 'Plano Mensal',
       badge: 'Preço promocional de lançamento',
-      monthlyPrice: 120,
-      yearlyPrice: 1440,
+      monthlyPrice: 49,
+      yearlyPrice: 588,
       description: 'Projetado para uso individual e motivacional',
       subDescription: 'Aproveite o preço promocional de lançamento da Plataforma Escrita360',
       credits: 50,
