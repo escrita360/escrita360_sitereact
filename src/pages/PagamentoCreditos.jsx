@@ -43,7 +43,7 @@ function PagamentoCreditos() {
   const formatExpiryDate = (value) => {
     const cleaned = value.replace(/\D/g, '')
     if (cleaned.length >= 2) {
-      return cleaned.slice(0, 2) + '/' + cleaned.slice(2, 4)
+      return cleaned.slice(0, 2) + '/' + cleaned.slice(2, 6)
     }
     return cleaned
   }
@@ -103,8 +103,8 @@ function PagamentoCreditos() {
       if (!formData.cardName || formData.cardName.trim().length < 2) {
         newErrors.cardName = 'Nome no cartão é obrigatório'
       }
-      if (!formData.expiryDate || !/^\d{2}\/\d{2}$/.test(formData.expiryDate)) {
-        newErrors.expiryDate = 'Data de validade é obrigatória (MM/AA)'
+      if (!formData.expiryDate || !/^\d{2}\/\d{4}$/.test(formData.expiryDate)) {
+        newErrors.expiryDate = 'Data de validade é obrigatória (MM/AAAA)'
       }
       if (!formData.cvv || formData.cvv.length < 3) {
         newErrors.cvv = 'CVV é obrigatório'
@@ -279,7 +279,7 @@ function PagamentoCreditos() {
                               <div>
                                 <Label htmlFor="expiryDate">Validade</Label>
                                 <div className="relative">
-                                  <Input id="expiryDate" placeholder="MM/AA" maxLength={5}
+                                  <Input id="expiryDate" placeholder="MM/AAAA" maxLength={7}
                                     value={formData.expiryDate} onChange={(e) => handleInputChange('expiryDate', e.target.value)}
                                     className={`pl-10 ${errors.expiryDate ? 'border-red-500' : ''}`} />
                                   <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
