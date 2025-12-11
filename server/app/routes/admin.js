@@ -183,7 +183,7 @@ router.get('/pagbank/config', adminAuth, async (req, res) => {
  */
 router.put('/pagbank/config', adminAuth, async (req, res) => {
   try {
-    const { appId, clientId, clientSecret, email, token, environment } = req.body;
+    const { appId: _appId, clientId: _clientId, clientSecret: _clientSecret, email: _email, token: _token, environment } = req.body;
     
     console.log('🔧 Admin atualizando configurações do PagBank');
     

@@ -18,7 +18,7 @@ const authenticateToken = async (req, res, next) => {
     const user = await authService.verifyToken(token);
     req.user = user;
     next();
-  } catch (error) {
+  } catch {
     return res.status(403).json({ error: 'Token inválido' });
   }
 };

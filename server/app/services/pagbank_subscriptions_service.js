@@ -327,7 +327,7 @@ class PagBankSubscriptionsService {
                 } else {
                     throw new Error('Plano não encontrado');
                 }
-            } catch (error) {
+            } catch {
                 console.log('📋 Plano não encontrado, criando novo...');
                 // Se não encontrou ou erro na busca, criar novo plano
                 plan = await this.createPlan({

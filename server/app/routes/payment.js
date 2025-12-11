@@ -213,7 +213,7 @@ router.put('/pagbank/subscription/:preApprovalCode/suspend', async (req, res) =>
     try {
         const { preApprovalCode } = req.params;
         console.log('📥 Suspendendo assinatura:', preApprovalCode);
-        const result = await pagbankRecurrenceService.suspendSubscription(preApprovalCode);
+        await pagbankRecurrenceService.suspendSubscription(preApprovalCode);
         console.log('✅ Assinatura suspensa');
         res.status(204).send();
     } catch (error) {
@@ -230,7 +230,7 @@ router.put('/pagbank/subscription/:preApprovalCode/reactivate', async (req, res)
     try {
         const { preApprovalCode } = req.params;
         console.log('📥 Reativando assinatura:', preApprovalCode);
-        const result = await pagbankRecurrenceService.reactivateSubscription(preApprovalCode);
+        await pagbankRecurrenceService.reactivateSubscription(preApprovalCode);
         console.log('✅ Assinatura reativada');
         res.status(204).send();
     } catch (error) {
@@ -247,7 +247,7 @@ router.put('/pagbank/subscription/:preApprovalCode/cancel', async (req, res) => 
     try {
         const { preApprovalCode } = req.params;
         console.log('📥 Cancelando assinatura:', preApprovalCode);
-        const result = await pagbankRecurrenceService.cancelSubscription(preApprovalCode);
+        await pagbankRecurrenceService.cancelSubscription(preApprovalCode);
         console.log('✅ Assinatura cancelada');
         res.status(204).send();
     } catch (error) {
@@ -265,7 +265,7 @@ router.put('/pagbank/plan/:preApprovalRequestCode/amount', async (req, res) => {
         const { preApprovalRequestCode } = req.params;
         const { amountPerPayment, updateSubscriptions } = req.body;
         console.log('📥 Atualizando valor do plano:', preApprovalRequestCode, amountPerPayment);
-        const result = await pagbankRecurrenceService.updatePlanAmount(
+        await pagbankRecurrenceService.updatePlanAmount(
             preApprovalRequestCode,
             amountPerPayment,
             updateSubscriptions
@@ -287,7 +287,7 @@ router.put('/pagbank/subscription/:preApprovalCode/discount', async (req, res) =
         const { preApprovalCode } = req.params;
         const { type, value } = req.body;
         console.log('📥 Aplicando desconto:', preApprovalCode, type, value);
-        const result = await pagbankRecurrenceService.applyDiscount(preApprovalCode, type, value);
+        await pagbankRecurrenceService.applyDiscount(preApprovalCode, type, value);
         console.log('✅ Desconto aplicado');
         res.status(204).send();
     } catch (error) {
@@ -304,7 +304,7 @@ router.put('/pagbank/subscription/:preApprovalCode/payment-method', async (req, 
     try {
         const { preApprovalCode } = req.params;
         console.log('📥 Alterando meio de pagamento:', preApprovalCode);
-        const result = await pagbankRecurrenceService.changePaymentMethod(preApprovalCode, req.body);
+        await pagbankRecurrenceService.changePaymentMethod(preApprovalCode, req.body);
         console.log('✅ Meio de pagamento alterado');
         res.status(204).send();
     } catch (error) {

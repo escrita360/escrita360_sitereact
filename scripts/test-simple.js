@@ -55,7 +55,7 @@ const req = http.request(options, (res) => {
         try {
             const jsonResponse = JSON.parse(data);
             console.log(JSON.stringify(jsonResponse, null, 2));
-        } catch (e) {
+        } catch {
             console.log(data);
         }
     });

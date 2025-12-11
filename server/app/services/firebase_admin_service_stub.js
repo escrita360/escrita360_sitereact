@@ -1,5 +1,6 @@
 // Firebase Admin Service - Stub implementation
 // This is a placeholder until Firebase Admin SDK is properly configured
+/* eslint-disable no-unused-vars */
 
 class FirebaseAdminService {
     constructor() {
@@ -15,7 +16,7 @@ class FirebaseAdminService {
         };
     }
 
-    async listUsers(maxResults = 100, pageToken) {
+    async listUsers(_maxResults = 100, _pageToken) {
         return {
             users: [],
             pageToken: null,
@@ -33,7 +34,7 @@ class FirebaseAdminService {
         };
     }
 
-    async getUserSubscriptions(uid) {
+    async getUserSubscriptions(_uid) {
         return [];
     }
 
@@ -47,7 +48,7 @@ class FirebaseAdminService {
         return true;
     }
 
-    async listAllSubscriptions(limit = 50, startAfter) {
+    async listAllSubscriptions(_limit = 50, _startAfter) {
         return {
             subscriptions: [],
             lastDoc: null,
@@ -60,7 +61,7 @@ class FirebaseAdminService {
         return true;
     }
 
-    async listAllPayments(limit = 50, startAfter) {
+    async listAllPayments(_limit = 50, _startAfter) {
         return {
             payments: [],
             lastDoc: null,

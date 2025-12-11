@@ -82,7 +82,7 @@ class LocalAuthService {
                 name: user.name,
                 role: user.role
             };
-        } catch (error) {
+        } catch {
             throw new Error('Token inválido');
         }
     }
