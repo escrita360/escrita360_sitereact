@@ -470,6 +470,58 @@ function Precos() {
         subtitle={heroContent.subtitle}
       />
 
+      {/* School Models Section - Only for schools - FIRST */}
+      {selectedAudience === 'escolas' && (
+        <section className="py-8 md:py-12 lg:py-16 bg-slate-50">
+          <div className="container mx-auto px-4 max-w-7xl">
+            <div className="text-center mb-12">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Modelos de Assinatura</h2>
+              <p className="text-lg text-slate-600 max-w-3xl mx-auto">
+                Com foco em flexibilidade e integração pedagógica, oferecemos dois modelos de assinatura para instituições de ensino
+              </p>
+            </div>
+            
+            <div className="space-y-8 max-w-5xl mx-auto">
+              {schoolModels.map((model, index) => (
+                <Card key={index} className={`overflow-hidden hover-lift ${model.highlighted ? 'border-2 border-green-500 shadow-xl' : 'border border-slate-200'}`}>
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-6">
+                      <div className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold flex-shrink-0 ${
+                        model.highlighted ? 'bg-green-500 text-white' : 'bg-brand-primary text-white'
+                      }`}>
+                        {model.number}
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-2xl font-bold text-slate-900 mb-3">{model.title}</h3>
+                        <div className="mb-4">
+                          <strong className="text-slate-700">Foco:</strong> {model.focus}
+                        </div>
+                        <p className="text-slate-600 mb-4 leading-relaxed">{model.description}</p>
+                        {model.additionalInfo && (
+                          <p className="text-slate-600 mb-4 leading-relaxed">{model.additionalInfo}</p>
+                        )}
+                        {model.benefits && (
+                          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                            <p className="text-green-800 font-medium">{model.benefits}</p>
+                          </div>
+                        )}
+                        {model.consultation && (
+                          <div className="bg-brand-light rounded-lg p-4 text-center">
+                            <p className="text-brand-primary font-semibold">
+                              Valor definido conforme número de alunos e turmas. Entre em contato para receber uma proposta personalizada.
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Pricing Grid */}
       <section ref={plansRef} className="pt-12 pb-8 md:pt-16 md:pb-12 lg:pt-20 lg:pb-16 bg-white animate-on-scroll">
         <div className="container mx-auto px-4 max-w-7xl">
@@ -653,58 +705,6 @@ function Precos() {
           )}
         </div>
       </section>
-
-      {/* School Models Section - Only for schools */}
-      {selectedAudience === 'escolas' && (
-        <section className="py-8 md:py-12 lg:py-16 bg-slate-50">
-          <div className="container mx-auto px-4 max-w-7xl">
-            <div className="text-center mb-12">
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Modelos de Assinatura</h2>
-              <p className="text-lg text-slate-600 max-w-3xl mx-auto">
-                Com foco em flexibilidade e integração pedagógica, oferecemos dois modelos de assinatura para instituições de ensino
-              </p>
-            </div>
-            
-            <div className="space-y-8 max-w-5xl mx-auto">
-              {schoolModels.map((model, index) => (
-                <Card key={index} className={`overflow-hidden hover-lift ${model.highlighted ? 'border-2 border-green-500 shadow-xl' : 'border border-slate-200'}`}>
-                  <CardContent className="p-6">
-                    <div className="flex items-start gap-6">
-                      <div className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold flex-shrink-0 ${
-                        model.highlighted ? 'bg-green-500 text-white' : 'bg-brand-primary text-white'
-                      }`}>
-                        {model.number}
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-2xl font-bold text-slate-900 mb-3">{model.title}</h3>
-                        <div className="mb-4">
-                          <strong className="text-slate-700">Foco:</strong> {model.focus}
-                        </div>
-                        <p className="text-slate-600 mb-4 leading-relaxed">{model.description}</p>
-                        {model.additionalInfo && (
-                          <p className="text-slate-600 mb-4 leading-relaxed">{model.additionalInfo}</p>
-                        )}
-                        {model.benefits && (
-                          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
-                            <p className="text-green-800 font-medium">{model.benefits}</p>
-                          </div>
-                        )}
-                        {model.consultation && (
-                          <div className="bg-brand-light rounded-lg p-4 text-center">
-                            <p className="text-brand-primary font-semibold">
-                              Valor definido conforme número de alunos e turmas. Entre em contato para receber uma proposta personalizada.
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* Credit Packages Section - For all audiences */}
       {(selectedAudience === 'estudantes' || selectedAudience === 'professores' || selectedAudience === 'escolas') && (

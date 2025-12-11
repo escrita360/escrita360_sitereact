@@ -64,12 +64,12 @@ function Recursos() {
     {
       icon: <Edit className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
       title: 'Módulo de Escrita',
-      description: 'Módulo de Escrita: acompanhamento desde a construção do parágrafo-padrão até a redação final.'
+      description: 'Módulo de Escrita: acompanhamento desde a construção do parágrafo padrão até a redação final.'
     },
     {
       icon: <Eye className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
       title: 'Correções Detalhadas',
-      description: 'Correções ilimitadas e detalhadas, na fase inicial da escrita incluindo análise de: Estrutura do parágrafo, Frequência de palavras, Uso de sinônimos e Coesão textual.'
+      description: 'Correções ilimitadas e detalhadas, no módulo de escrita. Inclui a análise de: Estrutura e fluídez textual, Coesão textual e Frequência de palavras.'
     },
     {
       icon: <Cloud className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
@@ -81,8 +81,8 @@ function Recursos() {
   const recursosProfessores = [
     {
       icon: <Cloud className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
-      title: 'Plataforma 100% Online',
-      description: 'Plataforma 100% online e automatizada com acesso aos recursos disponíveis para os estudantes para criar, enviar e avaliar as redações.'
+      title: 'Plataforma automatizada',
+      description: 'Oferece recursos que permitem aos estudantes planejar, escrever, revisar, reescrever e autoavaliar suas produções de forma orientada,  eficiente e autônoma.'
     },
     {
       icon: <BookOpen className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
@@ -90,19 +90,9 @@ function Recursos() {
       description: 'Lista de habilidades da BNCC a serem trabalhadas.'
     },
     {
-      icon: <Eye className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
-      title: 'Acompanhamento em Tempo Real',
-      description: 'Acompanhamento em tempo real do progresso de cada aluno e turma.'
-    },
-    {
       icon: <ClipboardCheck className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
       title: 'Avaliação Docente Estruturada',
       description: 'Avaliação docente estruturada, com rubricas alinhadas às habilidades da BNCC e às competências do Enem.'
-    },
-    {
-      icon: <Users className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
-      title: 'Dados de Autoavaliação',
-      description: 'Acesso aos dados da autoavaliação dos alunos (permitindo avaliação por pares e novos formatos avaliativos).'
     },
     {
       icon: <Settings className="w-8 h-8 text-brand-primary animate-pulse-glow" />,

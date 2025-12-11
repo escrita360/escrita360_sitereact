@@ -118,12 +118,9 @@ function Home() {
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="text-center animate-fade-in-up">
             <p className="about-text text-lg text-slate-700 leading-relaxed">
-            O <span className="font-bold text-brand-primary">Escrita360</span> é a plataforma mais completa de escrita autorregulada e avaliação inteligente,
-            projetada para levar estudantes, professores e escolas para o próximo nível com Inteligência Artificial.
-            Com soluções inovadoras e tecnologia de ponta, oferecemos uma experiência educacional única, que engaja
-            os estudantes na jornada completa de desenvolvimento da escrita, empodera professores com dados valiosos
-            e oferece às escolas dashboards completos para gestão pedagógica, promovendo a aprendizagem significativa
-            que impulsiona o sucesso acadêmico.
+            O <span className="font-bold text-brand-primary">Escrita360</span> é uma plataforma completa de escrita autorregulada e (auto)avaliação com Inteligência Artificial. Desenvolvida para estudantes, professores e escolas, ela potencializa o desenvolvimento da escrita em todas as etapas do processo.
+Com soluções inovadoras, o Escrita360 engaja os estudantes na construção consciente do texto e oferece aos professores recursos inteligentes para orientar, acompanhar e avaliar as produções de forma criteriosa, eficiente e personalizada.
+
           </p>
           </div>
         </div>
