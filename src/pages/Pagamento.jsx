@@ -385,7 +385,7 @@ function Pagamento() {
                         cardData={{
                           number: formData.cardNumber.replace(/\s/g, ''),
                           expiryMonth: formData.expiryDate.split('/')[0],
-                          expiryYear: '20' + formData.expiryDate.split('/')[1],
+                          expiryYear: formData.expiryDate.split('/')[1], // Já vem como AAAA (ex: 2026)
                           cvv: formData.cvv,
                           holderName: formData.cardName
                         }}
