@@ -806,24 +806,8 @@ function Precos() {
         </section>
       )}
 
-      {/* How It Works Section */}
-      <section className="pt-12 pb-8 md:pt-16 md:pb-12 lg:pt-20 lg:pb-16 bg-slate-50">
-        <div className="container mx-auto px-4 max-w-7xl">
-    <div className="text-center mb-12">
-      <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Como Funciona o Escrita360</h2>
-    </div>          <div className="max-w-4xl mx-auto mb-12">
-            <Card className="bg-gradient-to-br from-brand-light to-white border-2 border-brand-primary/20 shadow-lg">
-              <CardContent className="p-6">
-                <p className="text-lg text-slate-700 leading-relaxed text-center">
-                  A plataforma prioriza o processo formativo de escrever e reescrever, a correção automática com IA só aparece no final, como suporte complementar. <br /><strong className="text-brand-primary">IA como última etapa: revisão que fortalece o aprendizado.</strong>
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
     </div>
-  )
+  )   
 }
 
 export default Precos
