@@ -22,27 +22,27 @@ function Home() {
         <div className="container mx-auto max-w-7xl px-4">
           <div className="grid lg:grid-cols-2 items-center gap-8">
             <div className="hero-content animate-fade-in-left text-center lg:text-left">
-              <h1 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl mb-4 leading-none text-center bg-gradient-to-r from-[#1d5a91] to-[#3b82f6] bg-clip-text text-transparent">
+              <h1 className="text-lg md:text-xl lg:text-2xl xl:text-3xl mb-4 leading-none text-center bg-gradient-to-r from-[#1d5a91] to-[#3b82f6] bg-clip-text text-transparent">
                 <span className="font-normal">Inovamos para oferecer a plataforma mais completa </span>
                 <span className="font-bold">para o desenvolvimento da escrita, </span>
                 <span className="font-normal">unindo </span>
                 <span className="font-normal">autorregulação e inteligência artificial.</span>
               </h1>
-              <p className="hero-description text-lg md:text-xl text-slate-600 mb-2 leading-relaxed text-center">
+              <p className="hero-description text-base md:text-lg text-slate-600 mb-2 leading-relaxed text-center">
                 Revisão como apoio, não como atalho, respeitando o processo de aprendizagem. A correção complementar com Inteligência Artificial valoriza o processo de reescrita e garante que o aprendizado esteja no centro da experiência.
               </p>
               <div className="hero-stats flex flex-wrap gap-4 justify-center mt-8">
                 <div className="stat bg-white rounded-xl shadow-md border border-slate-100 px-6 py-4 text-center hover:shadow-lg hover:border-[#2b7475]/20 transition-all duration-300">
-                  <strong className="block font-bold text-lg mb-2" style={{ color: '#2b7475' }}>Processo</strong>
-                  <span className="text-slate-900 text-sm">Autorregulado</span>
+                  <strong className="block font-bold text-base mb-2" style={{ color: '#2b7475' }}>Processo</strong>
+                  <span className="text-slate-900 text-xs">Autorregulado</span>
                 </div>
                 <div className="stat bg-white rounded-xl shadow-md border border-slate-100 px-6 py-4 text-center hover:shadow-lg hover:border-[#2b7475]/20 transition-all duration-300">
-                  <strong className="block font-bold text-lg mb-2" style={{ color: '#2b7475' }}>IA</strong>
-                  <span className="text-slate-900 text-sm">Complementar</span>
+                  <strong className="block font-bold text-base mb-2" style={{ color: '#2b7475' }}>IA</strong>
+                  <span className="text-slate-900 text-xs">Complementar</span>
                 </div>
                 <div className="stat bg-white rounded-xl shadow-md border border-slate-100 px-6 py-4 text-center hover:shadow-lg hover:border-[#2b7475]/20 transition-all duration-300">
-                  <strong className="block font-bold text-lg mb-2" style={{ color: '#2b7475' }}>Foco</strong>
-                  <span className="text-slate-900 text-sm">Aprendizagem</span>
+                  <strong className="block font-bold text-base mb-2" style={{ color: '#2b7475' }}>Foco</strong>
+                  <span className="text-slate-900 text-xs">Aprendizagem</span>
                 </div>
               </div>
             </div>
@@ -50,7 +50,7 @@ function Home() {
                 <img 
                   src={Pessoas} 
                   alt="Plataforma Escrita360" 
-                  className="w-full h-auto"
+                  className="w-full h-auto lg:scale-105"
                 />
             </div>
           </div>
