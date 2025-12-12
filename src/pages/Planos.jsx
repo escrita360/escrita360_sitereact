@@ -367,25 +367,6 @@ function Precos() {
     }
   ]
 
-  // Pacotes de créditos para escolas
-  const schoolCreditPackages = [
-    {
-      name: 'Pacote 1',
-      credits: 500,
-      price: 1200,
-      description: '',
-      features: ['Análises detalhadas por IA', 'O acesso aos créditos extras ocorre durante a vigência da assinatura']
-    },
-    {
-      name: 'Pacote 2',
-      credits: 1000,
-      price: 2400,
-      description: '',
-      popular: true,
-      features: ['Análises detalhadas por IA', 'O acesso aos créditos extras ocorre durante a vigência da assinatura', 'Melhor custo-benefício']
-    }
-  ]
-
   // Selecionar pacotes de créditos baseado no público alvo
   const getCurrentCreditPackages = () => {
     switch (selectedAudience) {
@@ -393,8 +374,6 @@ function Precos() {
         return studentCreditPackages
       case 'professores':
         return teacherCreditPackages
-      case 'escolas':
-        return schoolCreditPackages
       default:
         return studentCreditPackages
     }
@@ -461,6 +440,46 @@ function Precos() {
 
   const heroContent = getHeroContent()
 
+  // Features da plataforma por público
+  const getPlatformFeatures = () => {
+    if (selectedAudience === 'estudantes') {
+      return [
+        'Módulo de escrita digital autorregulada',
+        'Banco de estratégias para escrita',
+        'Sugestão de temas',
+        'Recursos de apoio autorregulatório',
+        'Insights para melhoria da escrita',
+        'Revisor integrado com recursos de análise ilimitada',
+        'Rubricas qualitativas para (auto)avaliação'
+      ]
+    } else if (selectedAudience === 'professores') {
+      return [
+        'Módulo de escrita digital autorregulada',
+        'Banco de estratégias para escrita',
+        'Sugestão de temas',
+        'Recursos de apoio autorregulatório',
+        'Insights para melhoria da escrita',
+        'Revisor integrado com recursos de análise ilimitada',
+        'Rubricas qualitativas para (auto)avaliação',
+        'Correção por foto ou digitada'
+      ]
+    } else {
+      return [
+        'Módulo de escrita digital autorregulada',
+        'Banco de estratégias para escrita',
+        'Sugestão de temas',
+        'Recursos de apoio autorregulatório',
+        'Insights para melhoria da escrita',
+        'Revisor integrado com recursos de análise ilimitada',
+        'Rubricas qualitativas para avaliação',
+        'Correção por foto ou digitada (OCR)',
+        'Relatórios automáticos (autoavaliação, sentimentos, IA)'
+      ]
+    }
+  }
+
+  const platformFeatures = getPlatformFeatures()
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -469,6 +488,33 @@ function Precos() {
         titleHighlight={heroContent.titleHighlight}
         subtitle={heroContent.subtitle}
       />
+
+      {/* Platform Features Section - For all audiences */}
+      <section className="py-8 md:py-12 bg-gradient-to-b from-slate-50 to-white">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="text-center mb-8">
+            <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-slate-900 mb-3">
+              O que está incluso na plataforma
+            </h2>
+            <p className="text-slate-600">
+              Todos os planos incluem acesso completo aos recursos da Escrita360
+            </p>
+          </div>
+          
+          <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 md:p-8">
+            <div className="grid sm:grid-cols-2 gap-3 md:gap-4">
+              {platformFeatures.map((feature, index) => (
+                <div key={index} className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Check className="w-3 h-3 text-green-600" />
+                  </div>
+                  <span className="text-slate-700 text-sm md:text-base">{feature}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* School Models Section - Only for schools - FIRST */}
       {selectedAudience === 'escolas' && (
@@ -522,210 +568,104 @@ function Precos() {
         </section>
       )}
 
-      {/* Pricing Grid */}
-      <section ref={plansRef} className="pt-12 pb-8 md:pt-16 md:pb-12 lg:pt-20 lg:pb-16 bg-white animate-on-scroll">
-        <div className="container mx-auto px-4 max-w-7xl">
-          {selectedAudience === 'escolas' ? (
-            <>
-              {/* Planos Semestrais */}
-              <div className="mb-16">
-                <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-8 text-center">Escola Plano Institucional (Semestral)</h3>
-                <div className="grid md:grid-cols-3 gap-6 mx-auto max-w-5xl justify-items-center">
-                  {schoolPlansSemestral.map((plan, index) => (
-                    <Card key={index} className={`relative hover-lift animate-scale-in delay-${index * 200} ${plan.popular ? 'border-2 border-brand-primary shadow-xl' : 'hover:shadow-xl'} transition-all flex flex-col pt-6 w-full max-w-sm`}>
-                      <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 flex gap-2 animate-float">
-                        {plan.popular && (
-                          <Badge className="bg-brand-primary text-white px-3 py-1 text-xs whitespace-nowrap">
-                            Mais escolhido
-                          </Badge>
-                        )}
-                        {plan.credits && (
-                          <Badge className="bg-yellow-500 text-white px-3 py-1 text-xs whitespace-nowrap">
-                            {plan.credits} análises
-                          </Badge>
-                        )}
-                      </div>
-                      <CardHeader className="text-center pb-2">
-                        <h3 className="text-xl font-bold text-slate-900">{plan.name}</h3>
-                        <div className="my-3">
-                          <span className="text-3xl font-bold text-brand-primary">R$</span>
-                          <span className="text-4xl font-bold text-brand-primary">
-                            {plan.monthlyPrice.toLocaleString('pt-BR')}
-                          </span>
-                          <span className="text-slate-600">/6 meses</span>
-                        </div>
-                        <p className="text-slate-600 text-sm">{plan.description}</p>
-                      </CardHeader>
-                      <CardContent className="flex flex-col h-full">
-                        <ul className="space-y-2 mb-6 flex-grow">
-                          {plan.features.map((feature, featureIndex) => (
-                            <li key={featureIndex} className={`flex items-start gap-2 ${feature.highlighted ? 'font-semibold text-brand-primary' : ''}`}>
-                              <Check className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
-                              <span className="text-slate-700 text-sm">{feature.text}</span>
-                            </li>
-                          ))}
-                        </ul>
-                        <Button
-                          className="w-full transition-all duration-300 hover:scale-105 mt-auto bg-[#4A90E2] hover:bg-[#357ABD] text-white"
-                          variant="default"
-                          size="lg"
-                          onClick={() => handleOpenPagamento(plan)}
-                        >
-                          {plan.buttonText}
-                        </Button>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-
-              {/* Planos Anuais */}
-              <div>
-                <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-8 text-center">Planos Anuais para Escolas</h3>
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mx-auto max-w-6xl justify-items-center">
-                  {schoolPlansAnual.map((plan, index) => (
-                    <Card key={index} className={`relative hover-lift animate-scale-in delay-${index * 200} ${plan.popular ? 'border-2 border-brand-primary shadow-xl' : 'hover:shadow-xl'} transition-all flex flex-col pt-6 w-full max-w-xs`}>
-                      <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 flex gap-2 animate-float">
-                        {plan.popular && (
-                          <Badge className="bg-brand-primary text-white px-2 py-1 text-xs whitespace-nowrap">
-                            Mais escolhido
-                          </Badge>
-                        )}
-                        {plan.credits && (
-                          <Badge className="bg-yellow-500 text-white px-2 py-1 text-xs whitespace-nowrap">
-                            {plan.credits} análises
-                          </Badge>
-                        )}
-                      </div>
-                      <CardHeader className="text-center pb-2">
-                        <h3 className="text-xl font-bold text-slate-900">Plano Anual</h3>
-                        <div className="my-3">
-                          <span className="text-3xl font-bold text-brand-primary">R$</span>
-                          <span className="text-4xl font-bold text-brand-primary">
-                            {plan.monthlyPrice.toLocaleString('pt-BR')}
-                          </span>
-                          <span className="text-slate-600">/ano</span>
-                        </div>
-                        <p className="text-slate-600 text-sm">{plan.description}</p>
-                      </CardHeader>
-                      <CardContent className="flex flex-col h-full">
-                        <ul className="space-y-2 mb-6 flex-grow">
-                          {plan.features.map((feature, featureIndex) => (
-                            <li key={featureIndex} className={`flex items-start gap-2 ${feature.highlighted ? 'font-semibold text-brand-primary' : ''}`}>
-                              <Check className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
-                              <span className="text-slate-700 text-sm">{feature.text}</span>
-                            </li>
-                          ))}
-                        </ul>
-                        <Button
-                          className="w-full transition-all duration-300 hover:scale-105 mt-auto bg-[#4A90E2] hover:bg-[#357ABD] text-white"
-                          variant="default"
-                          size="lg"
-                          onClick={() => handleOpenPagamento(plan)}
-                        >
-                          {plan.buttonText}
-                        </Button>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-            </>
-          ) : (
-          <div className={`grid gap-8 mx-auto mt-6 justify-center ${
-            selectedAudience === 'professores' ? 'md:grid-cols-2 lg:grid-cols-2 max-w-5xl' : 
-            'grid-cols-1 max-w-md'
-          }`}>
-            {currentPlans.map((plan, index) => (
-              <Card key={index} className={`relative hover-lift animate-scale-in delay-${index * 200} ${plan.popular ? 'border-2 border-brand-primary shadow-xl' : 'hover:shadow-xl'} transition-all flex flex-col pt-6 w-full`}>
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 flex gap-2 animate-float">
-                  {plan.popular && (
-                    <Badge className="bg-brand-primary text-white px-3 py-1 text-xs whitespace-nowrap">
-                      {plan.badge}
-                    </Badge>
-                  )}
-                  {plan.credits && (
-                    <Badge className="bg-yellow-500 text-white px-3 py-1 text-xs whitespace-nowrap">
-                      {plan.credits} créditos IA
-                    </Badge>
-                  )}
-                </div>
-                <CardHeader className="text-center pb-2">
-                  <div className="mb-1">
-                    {!plan.popular && <Badge variant="secondary" className="text-xs">
-                      {plan.badge}
-                    </Badge>}
-                  </div>
-                  <h3 className="text-xl font-bold text-slate-900">{plan.name}</h3>
-                  <div className="my-3">
-                    {plan.consultation ? (
-                      <div className="text-center">
-                        <span className="text-lg text-slate-600">Valor sob consulta</span>
-                        <p className="text-sm text-slate-500 mt-1">Definido conforme número de alunos e turmas</p>
-                      </div>
-                    ) : (
-                      <>
-                        <span className="text-3xl font-bold text-brand-primary">R$</span>
-                        <span className="text-4xl font-bold text-brand-primary">
-                          {plan.monthlyPrice}
-                        </span>
-                        <span className="text-slate-600">
-                          {plan.name.includes('Trimestral') ? '/3 meses' : 
-                           plan.name.includes('Semestral') ? '/6 meses' : '/mês'}
-                        </span>
-                      </>
+      {/* Pricing Grid - Only for students and teachers */}
+      {(selectedAudience === 'estudantes' || selectedAudience === 'professores') && (
+        <section ref={plansRef} className="pt-12 pb-8 md:pt-16 md:pb-12 lg:pt-20 lg:pb-16 bg-white animate-on-scroll">
+          <div className="container mx-auto px-4 max-w-7xl">
+            <div className={`grid gap-8 mx-auto mt-6 justify-center ${
+              selectedAudience === 'professores' ? 'md:grid-cols-2 lg:grid-cols-2 max-w-5xl' : 
+              'grid-cols-1 max-w-md'
+            }`}>
+              {currentPlans.map((plan, index) => (
+                <Card key={index} className={`relative hover-lift animate-scale-in delay-${index * 200} ${plan.popular ? 'border-2 border-brand-primary shadow-xl' : 'hover:shadow-xl'} transition-all flex flex-col pt-6 w-full`}>
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 flex gap-2 animate-float">
+                    {plan.popular && (
+                      <Badge className="bg-brand-primary text-white px-3 py-1 text-xs whitespace-nowrap">
+                        {plan.badge}
+                      </Badge>
+                    )}
+                    {plan.credits && (
+                      <Badge className="bg-yellow-500 text-white px-3 py-1 text-xs whitespace-nowrap">
+                        {plan.credits} créditos IA
+                      </Badge>
                     )}
                   </div>
-                  <p className="text-slate-600 text-sm">{plan.description}</p>
-                  {plan.subDescription && (
-                    <p className="text-brand-primary text-xs mt-1 font-medium">{plan.subDescription}</p>
-                  )}
-                </CardHeader>
-                <CardContent className="flex flex-col h-full">
-                  <ul className="space-y-2 mb-6 flex-grow">
-                    {plan.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className={`flex items-start gap-2 ${feature.highlighted ? 'font-semibold text-brand-primary' : ''}`}>
-                        <Check className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
-                        <span className="text-slate-700 text-sm">{feature.text}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <Button
-                    className="w-full transition-all duration-300 hover:scale-105 mt-auto bg-[#4A90E2] hover:bg-[#357ABD] text-white"
-                    variant="default"
-                    size="lg"
-                    onClick={() => handleOpenPagamento(plan)}
-                  >
-                    {plan.buttonText}
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
+                  <CardHeader className="text-center pb-4">
+                    <div className="mb-1">
+                      {!plan.popular && <Badge variant="secondary" className="text-xs">
+                        {plan.badge}
+                      </Badge>}
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-900">{plan.name}</h3>
+                    <div className="my-4">
+                      {plan.consultation ? (
+                        <div className="text-center">
+                          <span className="text-lg text-slate-600">Valor sob consulta</span>
+                          <p className="text-sm text-slate-500 mt-1">Definido conforme número de alunos e turmas</p>
+                        </div>
+                      ) : (
+                        <>
+                          <span className="text-3xl font-bold text-brand-primary">R$</span>
+                          <span className="text-4xl font-bold text-brand-primary">
+                            {plan.monthlyPrice}
+                          </span>
+                          <span className="text-slate-600">
+                            {plan.name.includes('Trimestral') ? '/3 meses' : 
+                             plan.name.includes('Semestral') ? '/6 meses' : '/mês'}
+                          </span>
+                        </>
+                      )}
+                    </div>
+                    <p className="text-slate-600 text-sm">{plan.description}</p>
+                    {plan.subDescription && (
+                      <p className="text-brand-primary text-xs mt-1 font-medium">{plan.subDescription}</p>
+                    )}
+                    <div className="mt-4 pt-4 border-t border-slate-100">
+                      <p className="text-sm text-brand-primary font-semibold">
+                        {plan.credits} análises detalhadas de redações {selectedAudience === 'estudantes' ? 'do ENEM ' : ''}por IA
+                      </p>
+                      {selectedAudience === 'professores' && (
+                        <p className="text-xs text-slate-600 mt-1">Correção por foto ou digitada</p>
+                      )}
+                      <p className="text-xs text-slate-500 mt-1">
+                        Acesso por {plan.name.includes('Trimestral') ? '90' : plan.name.includes('Semestral') ? '180' : '30'} dias
+                      </p>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="flex flex-col">
+                    <Button
+                      className="w-full transition-all duration-300 hover:scale-105 mt-auto bg-[#4A90E2] hover:bg-[#357ABD] text-white"
+                      variant="default"
+                      size="lg"
+                      onClick={() => handleOpenPagamento(plan)}
+                    >
+                      {plan.buttonText}
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
-          )}
-        </div>
-      </section>
+        </section>
+      )}
 
-      {/* Credit Packages Section - For all audiences */}
-      {(selectedAudience === 'estudantes' || selectedAudience === 'professores' || selectedAudience === 'escolas') && (
-        <section className="pt-12 pb-8 md:pt-16 md:pb-12 lg:pt-20 lg:pb-16 bg-white">
+      {/* Credit Packages Section - Only for students and teachers */}
+      {(selectedAudience === 'estudantes' || selectedAudience === 'professores') && (
+        <section className="pt-12 pb-8 md:pt-16 md:pb-12 lg:pt-20 lg:pb-16 bg-slate-50">
           <div className="container mx-auto px-4 max-w-7xl">
             <div className="text-center mb-12">
               <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">
-                {selectedAudience === 'escolas' ? 'Pacotes de Créditos' : 'Pacotes de Créditos'}
+                Pacotes de Créditos
               </h2>
               <p className="text-lg text-slate-600 max-w-3xl mx-auto">
                 {selectedAudience === 'estudantes' 
                   ? 'Precisa escrever mais este mês?'
-                  : selectedAudience === 'professores'
-                  ? 'Turma com muitas redações esta semana?'
-                  : 'Para as escolas que necessitam mais análises além do plano contratado.'
+                  : 'Turma com muitas redações esta semana?'
                 }
               </p>
             </div>
             
             <div className={`grid gap-6 mx-auto justify-items-center mt-6 ${
-              selectedAudience === 'escolas' ? 'md:grid-cols-2 max-w-2xl' : 
               selectedAudience === 'professores' ? 'md:grid-cols-2 max-w-2xl' :
               'md:grid-cols-3 max-w-4xl'
             }`}>
@@ -740,7 +680,7 @@ function Precos() {
                     <h3 className="text-lg font-bold text-slate-900">{pkg.name}</h3>
                     <div className="my-2">
                       <span className="text-2xl font-bold text-brand-primary">
-                        R$ {selectedAudience === 'escolas' ? pkg.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : pkg.price}
+                        R$ {pkg.price}
                       </span>
                     </div>
                     <p className="text-slate-600 text-sm">
@@ -770,14 +710,11 @@ function Precos() {
             </div>
             
             <div className="mt-12 text-center max-w-3xl mx-auto">
-              <Card className="bg-slate-50 border-slate-200">
+              <Card className="bg-white border-slate-200">
                 <CardContent className="p-6">
                   <h4 className="text-lg font-bold text-slate-900 mb-3">Como funcionam os créditos?</h4>
                   <p className="text-slate-600 mb-4">
-                    {selectedAudience === 'escolas' 
-                      ? 'Cada crédito equivale a uma análise completa e detalhada da redação de um estudante pela nossa IA especializada. Os créditos têm validade de 90 dias a partir da data de compra e podem ser compartilhados entre os professores da instituição.'
-                      : 'Cada crédito equivale a uma análise completa e detalhada da sua redação pela nossa IA especializada. Os créditos têm validade de 30 dias a partir da data de compra.'
-                    }
+                    Cada crédito equivale a uma análise completa e detalhada da sua redação pela nossa IA especializada. Os créditos têm validade de 30 dias a partir da data de compra.
                   </p>
                   <div className="grid md:grid-cols-3 gap-4">
                     <div className="text-center">
@@ -805,6 +742,44 @@ function Precos() {
           </div>
         </section>
       )}
+
+      {/* Contact Section */}
+      <section className="py-12 md:py-16 lg:py-20 bg-gradient-to-b from-slate-50 to-white">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <Card className="bg-white border-slate-200 shadow-xl overflow-hidden">
+            <CardContent className="p-8 md:p-12">
+              <div className="text-center">
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">
+                  Ficou com dúvidas?
+                </h2>
+                <p className="text-lg text-slate-600 mb-8 max-w-2xl mx-auto">
+                  {selectedAudience === 'escolas' 
+                    ? 'Entre em contato conosco para uma proposta personalizada para sua instituição. Nossa equipe está pronta para ajudar a encontrar a melhor solução para suas necessidades.'
+                    : 'Entre em contato conosco e tire suas dúvidas. Nossa equipe está pronta para ajudar você a escolher o melhor plano para suas necessidades.'
+                  }
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Button
+                    className="bg-[#4A90E2] hover:bg-[#357ABD] text-white px-8 py-3 text-lg"
+                    size="lg"
+                    onClick={() => navigate('/contato')}
+                  >
+                    Fale Conosco
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="border-brand-primary text-brand-primary hover:bg-brand-light px-8 py-3 text-lg"
+                    size="lg"
+                    onClick={() => window.open('https://wa.me/5511999999999', '_blank')}
+                  >
+                    WhatsApp
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
 
     </div>
   )   
