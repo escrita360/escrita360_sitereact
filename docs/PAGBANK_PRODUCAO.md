@@ -211,12 +211,82 @@ console.log(info)
 | Cartões | [Cartões de teste](https://developer.pagbank.com.br/reference/testar-sua-integracao) | Cartões reais |
 | Webhook | Pode ser localhost (via ngrok) | Deve ser HTTPS público |
 | SSL | Opcional | Obrigatório |
+| Certificado mTLS | Opcional | Obrigatório para transferências |
+
+## 🔐 Certificado Digital (mTLS)
+
+### Quando é Necessário?
+
+- **Obrigatório**: API de Transferências
+- **Opcional**: Outras APIs (segurança adicional)
+- **Validade**: 2 anos
+- **Tipo**: mTLS (autenticação mútua)
+
+### Como Criar?
+
+#### 1. Obter Token com Scope `certificate.create`
+
+```bash
+# Use Connect Challenge (OAuth 2.0)
+# Ver documentação completa: docs/PAGBANK_CONNECT.md
+```
+
+#### 2. Solicitar e Criar Certificado
+
+```bash
+# Solicitar challenge
+curl -X POST http://localhost:5000/api/certificate/challenge \
+  -H "Content-Type: application/json" \
+  -d '{"access_token": "token_com_scope_certificate_create"}'
+
+# Decriptar challenge com chave privada RSA
+# Criar certificado
+curl -X POST http://localhost:5000/api/certificate/create \
+  -H "Content-Type: application/json" \
+  -d '{"access_token": "TOKEN", "decrypted_challenge": "CHALLENGE"}'
+```
+
+#### 3. Salvar em Local Seguro
+
+```bash
+# IMPORTANTE: Salvar FORA do diretório do projeto
+# Exemplo: /var/secure/certificates/
+
+# Permissões corretas (Unix/Linux)
+chmod 600 /var/secure/certificates/pagbank_production.key
+chmod 644 /var/secure/certificates/pagbank_production.pem
+chmod 700 /var/secure/certificates/
+```
+
+#### 4. Configurar no Backend
+
+```bash
+# server/.env.production
+PAGBANK_CERT_KEY_PATH=/var/secure/certificates/pagbank_production.key
+PAGBANK_CERT_PEM_PATH=/var/secure/certificates/pagbank_production.pem
+```
+
+### Renovação
+
+- **Quando**: 30 dias antes de expirar
+- **Como**: Repetir processo de criação
+- **Monitoramento**: Use `node test-certificate.js` para verificar validade
+
+### Documentação Completa
+
+📖 Guia detalhado: [PAGBANK_CERTIFICATE.md](./PAGBANK_CERTIFICATE.md)
+
+---
 
 ## ✅ Checklist de Produção
 
 Antes de ativar em produção, verifique:
 
 - [ ] Token de produção configurado corretamente
+- [ ] Chave pública configurada (criada automaticamente no primeiro uso)
+- [ ] Connect OAuth configurado (se usar multi-vendas)
+- [ ] Certificado digital criado (se usar transferências)
+- [ ] Certificado salvo em local seguro com permissões corretas
 - [ ] Todas as URLs são HTTPS (não HTTP)
 - [ ] Certificado SSL válido no domínio
 - [ ] Webhook configurado no painel PagBank
@@ -245,9 +315,16 @@ Antes de ativar em produção, verifique:
    - Webhook: HTTPS
 
 3. **Proteja o token**
-   - Não exponha no frontend
+   - Proteja certificados digitais**
+   - Armazene fora do diretório do projeto
+   - Use permissões restritas (600 para .key, 644 para .pem)
+   - Não commite no Git
+   - Configure backup criptografado
+   - Monitore validade e renove antes de expirar
+
+5. **Não exponha no frontend
    - Use apenas no backend
-   - Renove periodicamente
+6  - Renove periodicamente
 
 4. **Valide webhooks**
    - Verifique origem das requisições
@@ -280,6 +357,7 @@ console.log('🔑 Usando chave pública do cache')
 - Tempo de resposta da API PagBank
 - Erros de chave pública
 - Renovações de chave
+- Validade de certificados (alertar 30 dias antes)
 - Webhooks recebidos vs processados
 
 ## 🐛 Troubleshooting
@@ -303,7 +381,28 @@ console.log('🔑 Usando chave pública do cache')
 2. Certifique-se de que é HTTPS
 3. Verifique logs do servidor
 4. Teste a URL manualmente com curl
+# Erro: "Certificate verification failed"
 
+### PagBank Developer
+
+- [API Reference - Chave Pública](https://developer.pagbank.com.br/reference/criar-chave-publica)
+- [Guia de Chaves Públicas](https://developer.pagbank.com.br/docs/chaves-publicas)
+- [Certificado Digital](https://developer.pagbank.com.br/docs/certificado-digital)
+- [Connect OAuth 2.0](https://developer.pagbank.com.br/docs/connect-visao-geral)
+- [Criptografia e Segurança](https://developer.pagbank.com.br/docs/criptografia)
+
+### Documentação do Projeto
+
+- **Chave Pública**: [PAGBANK_CONFIG.md](./PAGBANK_CONFIG.md)
+- **Connect OAuth**: [PAGBANK_CONNECT.md](./PAGBANK_CONNECT.md)
+- **Certificado Digital**: [PAGBANK_CERTIFICATE.md](./PAGBANK_CERTIFICATE.md)
+- **Implementação Geral**: [PAGBANK_IMPLEMENTACAO.md](../PAGBANK_IMPLEMENTACAO.md
+1. Verifique validade: `node test-certificate.js`
+2. Verifique par key/pem com openssl
+3. Renove se expirado
+4. Consulte: [PAGBANK_CERTIFICATE.md](./PAGBANK_CERTIFICATE.md)
+
+##
 ## 📚 Documentação Oficial
 
 - [API Reference - Chave Pública](https://developer.pagbank.com.br/reference/criar-chave-publica)

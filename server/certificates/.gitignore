@@ -1,0 +1,26 @@
+# Certificados PagBank
+# Nunca commite certificados no Git!
+
+# Certificados de sandbox
+*_sandbox.key
+*_sandbox.pem
+
+# Certificados de produção
+*_production.key
+*_production.pem
+
+# Qualquer arquivo de certificado
+*.key
+*.pem
+*.crt
+*.cer
+*.p12
+*.pfx
+
+# Backup de certificados
+*.key.bak
+*.pem.bak
+
+# Arquivos temporários
+*.tmp
+*.temp

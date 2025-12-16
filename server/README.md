@@ -27,16 +27,20 @@ server/
 │   │   ├── payment.js      # Rotas de pagamento (PagBank)
 │   │   ├── webhook.js      # Webhooks do PagBank
 │   │   ├── connect.js      # PagBank Connect (OAuth)
+│   │   ├── certificate.js  # Certificado Digital mTLS
 │   │   ├── auth.js         # Autenticação
 │   │   └── admin.js        # Administração
 │   └── services/
 │       ├── pagbank_recurrence_service.js    # API Recorrência PagBank
 │       ├── pagbank_subscriptions_service.js # API Assinaturas PagBank
 │       ├── pagbank_orders_service.js        # API Orders PagBank
-│       └── pagbank_connect_service.js       # API Connect PagBank (OAuth)
-├── app.js           # Configuração principal
-├── package.json     # Dependências
-└── .env.example     # Template de variáveis
+│       ├── pagbank_connect_service.js       # API Connect PagBank (OAuth)
+│       └── pagbank_certificate_service.js   # Certificado Digital mTLS
+├── certificates/          # Certificados mTLS (não commitados)
+│   └── .gitignore        # Protege certificados
+├── app.js                # Configuração principal
+├── package.json          # Dependências
+└── .env.example          # Template de variáveis
 ```
 
 ## 🔧 Configuração
@@ -58,6 +62,10 @@ PAGBANK_TOKEN=seu_token_aqui
 PAGBANK_CLIENT_ID=your_client_id_here
 PAGBANK_CLIENT_SECRET=your_client_secret_here
 PAGBANK_REDIRECT_URI=http://localhost:5000/api/connect/callback
+
+# Certificado Digital mTLS (Opcional)
+PAGBANK_CERT_KEY_PATH=./certificates/pagbank_sandbox.key
+PAGBANK_CERT_PEM_PATH=./certificates/pagbank_sandbox.pem
 
 # Modo simulação (true para testes sem chamadas reais)
 PAGBANK_MOCK_MODE=true
@@ -93,7 +101,18 @@ GET  /api/connect/authorize-url          # Gerar URL de autorização
 POST /api/connect/authorize-sms          # Autorização via SMS
 POST /api/connect/token                  # Obter access token
 POST /api/connect/token/refresh          # Renovar token
-POST /api/connect/token/revoke           # Revogar token
+POST /ertificado Digital mTLS
+```http
+GET  /api/certificate/info               # Informações do ambiente
+POST /api/certificate/challenge          # Solicitar challenge
+POST /api/certificate/create             # Criar certificado
+GET  /api/certificate                    # Consultar certificado
+GET  /api/certificate/list               # Listar certificados
+GET  /api/certificate/validity           # Verificar validade
+GET  /api/certificate/load               # Carregar de arquivos
+```
+
+#### Capi/connect/token/revoke           # Revogar token
 GET  /api/connect/callback               # Callback de autorização
 ```
 
