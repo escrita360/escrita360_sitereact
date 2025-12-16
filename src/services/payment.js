@@ -111,6 +111,11 @@ export const paymentService = {
       ? { area_code: phoneClean.substring(0, 2), number: phoneClean.substring(2) }
       : { area_code: phoneClean.substring(0, 2), number: phoneClean.substring(2) }
 
+    // Determinar tipo de plano baseado no audience
+    const planType = (planData.audience === 'professores' || planData.audience === 'docentes') 
+      ? 'professor' 
+      : 'aluno'
+
     const data = {
       plan_name: planData.name,
       plan_description: `Plano ${planData.name} - Escrita360`,
@@ -121,10 +126,18 @@ export const paymentService = {
         name: customerData.name,
         email: customerData.email,
         cpf: customerData.cpf.replace(/\D/g, ''),
-        phone: phoneFormatted
+        phone: phoneFormatted,
+        password: customerData.password // Senha do usuário
       },
       payment_method: paymentMethod,
-      cardData: cardData
+      cardData: cardData,
+      // Incluir no metadata/reference para o webhook identificar
+      metadata: {
+        planType: planType,
+        password: customerData.password,
+        audience: planData.audience
+      },
+      reference: `${planType}|${customerData.password}|${Date.now()}`
     }
 
     const response = await api.post('/payment/create-pagbank-subscription', data)

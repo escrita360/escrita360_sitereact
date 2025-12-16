@@ -42,6 +42,29 @@ const db = getFirestore(app)
 console.log('✅ Firebase inicializado - projeto:', firebaseConfig.projectId)
 
 /**
+ * Helper: Remove campos undefined de um objeto (deep cleaning)
+ * Firestore não aceita valores undefined
+ */
+const removeUndefinedFields = (obj) => {
+  if (obj === null || typeof obj !== 'object') {
+    return obj
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map(removeUndefinedFields).filter(item => item !== undefined)
+  }
+
+  return Object.fromEntries(
+    Object.entries(obj)
+      .filter(([_, value]) => value !== undefined)
+      .map(([key, value]) => [
+        key,
+        typeof value === 'object' ? removeUndefinedFields(value) : value
+      ])
+  )
+}
+
+/**
  * Serviço de Autenticação Firebase
  */
 export const firebaseAuthService = {
@@ -59,7 +82,7 @@ export const firebaseAuthService = {
       console.log('✅ Conta Firebase criada - UID:', user.uid)
       
       // Salvar dados do usuário no Firestore
-      const userDocData = {
+      const userDocData = removeUndefinedFields({
         uid: user.uid,
         email: user.email,
         nome: userData.name || email.split('@')[0],
@@ -70,7 +93,7 @@ export const firebaseAuthService = {
         atualizadoEm: serverTimestamp(),
         emailVerificado: user.emailVerified,
         ...userData
-      }
+      })
       
       await setDoc(doc(db, 'usuarios', user.uid), userDocData)
       console.log('✅ Dados do usuário salvos no Firestore')
@@ -199,7 +222,7 @@ export const firebaseSubscriptionService = {
       }[plan.name] || 0
       
       // Criar documento de assinatura (compatível com AssinaturaModel do Flutter)
-      const assinaturaData = {
+      const assinaturaData = removeUndefinedFields({
         codigo: `WEB_${Date.now()}`,
         tipo: tipoAssinatura,
         tipoNome: plan.name,
@@ -207,17 +230,17 @@ export const firebaseSubscriptionService = {
         dataExpiracao: dataExpiracao.toISOString(),
         ativa: true,
         userId: userId,
-        userName: paymentData.name || '',
-        userEmail: paymentData.email || '',
+        userName: paymentData?.name || '',
+        userEmail: paymentData?.email || '',
         tokens: 10, // 10 tokens por assinatura mensal
         origem: 'site',
         planoOrigem: plan.name,
         valorPago: isYearly ? plan.yearlyPrice : plan.monthlyPrice,
         periodicidade: isYearly ? 'anual' : 'mensal',
-        pagamentoId: paymentData.transactionId || `WEB_PAY_${Date.now()}`,
+        pagamentoId: paymentData?.transactionId || `WEB_PAY_${Date.now()}`,
         criado_em: serverTimestamp(),
         atualizado_em: serverTimestamp()
-      }
+      })
       
       // Salvar no Firestore
       const assinaturaRef = doc(collection(db, 'assinaturas'))
@@ -310,19 +333,19 @@ export const firebasePaymentService = {
    */
   async recordPayment(userId, paymentData) {
     try {
-      const pagamentoData = {
+      const pagamentoData = removeUndefinedFields({
         userId: userId,
-        userEmail: paymentData.email || '',
-        valor: paymentData.amount || 0,
-        status: paymentData.status || 'pending',
-        metodoPagamento: paymentData.paymentMethod || 'card',
-        transacaoId: paymentData.transactionId || `WEB_TXN_${Date.now()}`,
-        plano: paymentData.plan || '',
-        periodicidade: paymentData.isYearly ? 'anual' : 'mensal',
+        userEmail: paymentData?.email || '',
+        valor: paymentData?.amount || 0,
+        status: paymentData?.status || 'pending',
+        metodoPagamento: paymentData?.paymentMethod || 'card',
+        transacaoId: paymentData?.transactionId || `WEB_TXN_${Date.now()}`,
+        plano: paymentData?.plan || '',
+        periodicidade: paymentData?.isYearly ? 'anual' : 'mensal',
         origem: 'site',
         criadoEm: serverTimestamp(),
         dadosCompletos: paymentData || {}
-      }
+      })
       
       const pagamentoRef = doc(collection(db, 'pagamentos'))
       await setDoc(pagamentoRef, pagamentoData)
@@ -368,19 +391,19 @@ export const firebaseCreditService = {
       const { quantity, amount, paymentData } = creditData
       
       // 1. Criar registro de compra de créditos
-      const compraData = {
+      const compraData = removeUndefinedFields({
         userId: userId,
-        userEmail: paymentData.email || '',
+        userEmail: paymentData?.email || '',
         quantidade: quantity,
         valorPago: amount,
         valorUnitario: amount / quantity,
         status: 'paid',
-        metodoPagamento: paymentData.paymentMethod || 'card',
-        transacaoId: paymentData.transactionId || `CREDIT_${Date.now()}`,
+        metodoPagamento: paymentData?.paymentMethod || 'card',
+        transacaoId: paymentData?.transactionId || `CREDIT_${Date.now()}`,
         tipo: 'compra_creditos',
         origem: 'site',
         criadoEm: serverTimestamp()
-      }
+      })
       
       const compraRef = doc(collection(db, 'compras_creditos'))
       await setDoc(compraRef, compraData)

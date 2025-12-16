@@ -13,7 +13,7 @@ import { firebaseAuthService, firebaseSubscriptionService, firebasePaymentServic
 function Pagamento() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { selectedPlan, isYearly } = location.state || {}
+  const { selectedPlan, isYearly, audience } = location.state || {}
   const [paymentSuccess, setPaymentSuccess] = useState(false)
   const [paymentError, setPaymentError] = useState('')
   const [transactionData, setTransactionData] = useState(null)
@@ -405,13 +405,15 @@ function Pagamento() {
                         planData={{
                           planId: selectedPlan.name.toLowerCase(),
                           name: selectedPlan.name,
-                          price: price
+                          price: price,
+                          audience: audience || 'estudantes' // Passa qual tipo de público
                         }}
                         customerData={{
                           name: formData.cardName || formData.email.split('@')[0],
                           email: formData.email,
                           cpf: formData.cpf,
-                          phone: formData.phone
+                          phone: formData.phone,
+                          password: formData.password // Inclui a senha para criar conta
                         }}
                         cardData={{
                           number: formData.cardNumber.replace(/\s/g, ''),
@@ -421,6 +423,7 @@ function Pagamento() {
                           holderName: formData.cardName
                         }}
                         isYearly={isYearly}
+                        audience={audience || 'estudantes'}
                         onSuccess={async (data) => {
                           try {
                             console.log('💳 Pagamento aprovado! Iniciando criação de conta...')
