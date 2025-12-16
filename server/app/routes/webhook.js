@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const PagBankRecurrenceService = require('../services/pagbank_recurrence_service');
+const FirebaseMultiProjectService = require('../services/firebase_multi_project_service');
 
 const pagbankRecurrenceService = new PagBankRecurrenceService();
+const firebaseService = new FirebaseMultiProjectService();
 
 /**
  * Webhook do PagBank para Notificações de Recorrência
@@ -58,42 +60,43 @@ async function processNotification(data, notificationType) {
     const code = data.code;
     const reference = data.reference;
 
+    // Extrair dados do cliente da notificação
+    const customerData = extractCustomerData(data);
+
     switch (status) {
         case 'INITIATED':
             console.log('⏳ Assinatura iniciada, aguardando pagamento');
-            // TODO: Atualizar banco de dados
             break;
 
         case 'PENDING':
             console.log('⏳ Pagamento em análise');
-            // TODO: Atualizar banco de dados
             break;
 
         case 'ACTIVE':
-            console.log('✅ Assinatura ativa e paga');
-            // TODO: Atualizar banco de dados, ativar acesso do usuário
+        case 'PAID':
+            console.log('✅ Pagamento aprovado - criando conta do usuário');
+            await handlePaymentApproved(customerData, data);
             break;
 
         case 'PAYMENT_METHOD_CHANGE':
             console.log('💳 Cartão precisa ser atualizado');
-            // TODO: Notificar usuário para atualizar cartão
             break;
 
         case 'SUSPENDED':
             console.log('⏸️ Assinatura suspensa');
-            // TODO: Suspender acesso do usuário
+            await handleSubscriptionSuspended(customerData, data);
             break;
 
         case 'CANCELLED':
         case 'CANCELLED_BY_RECEIVER':
         case 'CANCELLED_BY_SENDER':
             console.log('❌ Assinatura cancelada');
-            // TODO: Cancelar acesso do usuário
+            await handleSubscriptionCancelled(customerData, data);
             break;
 
         case 'EXPIRED':
             console.log('🕐 Assinatura expirada');
-            // TODO: Remover acesso do usuário
+            await handleSubscriptionExpired(customerData, data);
             break;
 
         default:
@@ -109,6 +112,200 @@ async function processNotification(data, notificationType) {
         data,
         receivedAt: new Date()
     });
+}
+
+/**
+ * Extrai dados do cliente da notificação do PagBank
+ * A estrutura pode variar dependendo do tipo de integração
+ */
+function extractCustomerData(data) {
+    // Estrutura para assinaturas recorrentes
+    if (data.sender) {
+        return {
+            email: data.sender.email,
+            name: data.sender.name,
+            phone: data.sender.phone,
+            // Se a senha vier na referência ou metadata
+            password: data.metadata?.password || data.reference?.split('|')[1] || null
+        };
+    }
+    
+    // Estrutura para pedidos/orders
+    if (data.customer) {
+        return {
+            email: data.customer.email,
+            name: data.customer.name,
+            phone: data.customer.phones?.[0],
+            password: data.customer.password || data.metadata?.password || null
+        };
+    }
+
+    // Estrutura alternativa (charges)
+    if (data.charges?.[0]?.payment_response) {
+        const charge = data.charges[0];
+        return {
+            email: charge.payment_response?.customer?.email || data.reference_id,
+            name: charge.payment_response?.customer?.name,
+            password: data.metadata?.password || null
+        };
+    }
+
+    return {
+        email: data.email || data.reference_id,
+        name: data.name || data.displayName,
+        password: data.password || data.metadata?.password || null
+    };
+}
+
+/**
+ * Determina o tipo de plano baseado nos dados do pagamento
+ */
+function extractPlanType(data) {
+    // Verificar no nome do plano
+    const planName = (data.plan?.name || data.planName || data.reference || '').toLowerCase();
+    
+    if (planName.includes('professor') || planName.includes('teacher') || planName.includes('docente')) {
+        return 'professor';
+    }
+    
+    if (planName.includes('aluno') || planName.includes('estudante') || planName.includes('student')) {
+        return 'aluno';
+    }
+
+    // Verificar no metadata
+    if (data.metadata?.planType) {
+        return data.metadata.planType;
+    }
+
+    // Verificar no reference (formato: planType|password|userId)
+    if (data.reference) {
+        const parts = data.reference.split('|');
+        if (parts[0] === 'professor' || parts[0] === 'aluno') {
+            return parts[0];
+        }
+    }
+
+    // Default
+    return 'aluno';
+}
+
+/**
+ * Handler para pagamento aprovado - cria conta no Firebase
+ */
+async function handlePaymentApproved(customerData, paymentData) {
+    try {
+        const email = customerData.email;
+        const password = customerData.password;
+        const displayName = customerData.name || email?.split('@')[0];
+        const planType = extractPlanType(paymentData);
+
+        if (!email) {
+            console.error('❌ Email não encontrado nos dados do pagamento');
+            return;
+        }
+
+        // Se não tiver senha, gerar uma temporária
+        const finalPassword = password || generateTemporaryPassword();
+
+        console.log(`🔥 Criando conta Firebase para: ${email} (plano: ${planType})`);
+
+        const result = await firebaseService.createUserForPlan({
+            email: email,
+            password: finalPassword,
+            displayName: displayName,
+            planType: planType,
+            subscriptionData: {
+                pagbankCode: paymentData.code,
+                pagbankReference: paymentData.reference,
+                status: paymentData.status,
+                planName: paymentData.plan?.name,
+                amount: paymentData.amount,
+                paymentMethod: paymentData.paymentMethod,
+                approvedAt: new Date().toISOString()
+            }
+        });
+
+        console.log('✅ Conta criada com sucesso:', result);
+
+        // Se a senha foi gerada, logar para fins de debug (em produção, enviar por email)
+        if (!password) {
+            console.log(`⚠️ Senha temporária gerada para ${email}: ${finalPassword}`);
+            // TODO: Implementar envio de email com senha temporária
+            // await sendWelcomeEmail(email, finalPassword, planType);
+        }
+
+        return result;
+    } catch (error) {
+        console.error('❌ Erro ao criar conta após pagamento aprovado:', error.message);
+        // Não throw para não bloquear o webhook
+    }
+}
+
+/**
+ * Handler para assinatura suspensa
+ */
+async function handleSubscriptionSuspended(customerData, paymentData) {
+    try {
+        if (!customerData.email) return;
+
+        const planType = extractPlanType(paymentData);
+        await firebaseService.updateSubscriptionStatus(
+            customerData.email,
+            planType,
+            'suspended',
+            { suspendedAt: new Date().toISOString() }
+        );
+        console.log(`⏸️ Acesso suspenso para: ${customerData.email}`);
+    } catch (error) {
+        console.error('❌ Erro ao suspender acesso:', error.message);
+    }
+}
+
+/**
+ * Handler para assinatura cancelada
+ */
+async function handleSubscriptionCancelled(customerData, paymentData) {
+    try {
+        if (!customerData.email) return;
+
+        const planType = extractPlanType(paymentData);
+        await firebaseService.disableUser(customerData.email, planType);
+        console.log(`❌ Acesso cancelado para: ${customerData.email}`);
+    } catch (error) {
+        console.error('❌ Erro ao cancelar acesso:', error.message);
+    }
+}
+
+/**
+ * Handler para assinatura expirada
+ */
+async function handleSubscriptionExpired(customerData, paymentData) {
+    try {
+        if (!customerData.email) return;
+
+        const planType = extractPlanType(paymentData);
+        await firebaseService.updateSubscriptionStatus(
+            customerData.email,
+            planType,
+            'expired',
+            { expiredAt: new Date().toISOString() }
+        );
+        console.log(`🕐 Assinatura expirada para: ${customerData.email}`);
+    } catch (error) {
+        console.error('❌ Erro ao marcar expiração:', error.message);
+    }
+}
+
+/**
+ * Gera uma senha temporária segura
+ */
+function generateTemporaryPassword() {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!@#$';
+    let password = '';
+    for (let i = 0; i < 12; i++) {
+        password += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return password;
 }
 
 /**
@@ -144,19 +341,147 @@ router.get('/pagbank/test', (req, res) => {
 router.post('/pagbank/transaction', async (req, res) => {
     try {
         console.log('🔔 Webhook de transação PagBank recebido');
+        console.log('📦 Headers:', req.headers);
+        console.log('📦 Body:', JSON.stringify(req.body, null, 2));
+        
         const { notificationCode, notificationType } = req.body;
 
         if (!notificationCode) {
             return res.status(400).json({ error: 'notificationCode é obrigatório' });
         }
 
-        // TODO: Implementar lógica para transações avulsas
-        console.log('📋 Notificação de transação:', notificationCode, notificationType);
+        // Processar pagamento avulso/transação
+        await processTransactionNotification(req.body);
 
         res.status(200).json({ received: true });
     } catch (error) {
         console.error('❌ Erro ao processar webhook de transação:', error.message);
         res.status(200).json({ received: true, error: error.message });
+    }
+});
+
+/**
+ * Webhook para Orders (API moderna do PagBank)
+ * POST /api/webhook/pagbank/orders
+ */
+router.post('/pagbank/orders', async (req, res) => {
+    try {
+        console.log('🔔 Webhook de Order PagBank recebido');
+        console.log('📦 Headers:', req.headers);
+        console.log('📦 Body:', JSON.stringify(req.body, null, 2));
+
+        const orderData = req.body;
+
+        // A API moderna envia o status diretamente no body
+        if (orderData.charges && orderData.charges.length > 0) {
+            const charge = orderData.charges[0];
+            const status = charge.status;
+
+            console.log(`📊 Status da cobrança: ${status}`);
+
+            if (status === 'PAID' || status === 'AUTHORIZED') {
+                const customerData = extractCustomerFromOrder(orderData);
+                await handlePaymentApproved(customerData, {
+                    code: orderData.id,
+                    reference: orderData.reference_id,
+                    status: status,
+                    amount: charge.amount?.value,
+                    metadata: orderData.metadata,
+                    customer: orderData.customer
+                });
+            }
+        }
+
+        res.status(200).json({ received: true });
+    } catch (error) {
+        console.error('❌ Erro ao processar webhook de order:', error.message);
+        res.status(200).json({ received: true, error: error.message });
+    }
+});
+
+/**
+ * Extrai dados do cliente de uma Order
+ */
+function extractCustomerFromOrder(orderData) {
+    const customer = orderData.customer || {};
+    return {
+        email: customer.email,
+        name: customer.name,
+        phone: customer.phones?.[0],
+        password: orderData.metadata?.password || 
+                  orderData.reference_id?.split('|')[1] || 
+                  null
+    };
+}
+
+/**
+ * Processa notificação de transação avulsa
+ */
+async function processTransactionNotification(data) {
+    console.log('📋 Processando transação avulsa...');
+    
+    // Para transações avulsas, verificar se tem dados de pagamento aprovado
+    if (data.status === 'PAID' || data.status === 'APPROVED' || data.status === 3) {
+        const customerData = extractCustomerData(data);
+        await handlePaymentApproved(customerData, data);
+    }
+}
+
+/**
+ * Endpoint de simulação de webhook para testes
+ * POST /api/webhook/pagbank/simulate
+ * 
+ * Permite testar a criação de conta sem precisar de pagamento real
+ */
+router.post('/pagbank/simulate', async (req, res) => {
+    try {
+        console.log('🧪 Simulando webhook de pagamento aprovado');
+        
+        const { 
+            email, 
+            password, 
+            displayName, 
+            planType = 'aluno',
+            status = 'PAID'
+        } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({ 
+                error: 'email e password são obrigatórios',
+                example: {
+                    email: 'teste@exemplo.com',
+                    password: 'senhaSegura123',
+                    displayName: 'Nome do Usuário',
+                    planType: 'aluno ou professor'
+                }
+            });
+        }
+
+        // Simular dados de pagamento
+        const simulatedPaymentData = {
+            code: `SIM_${Date.now()}`,
+            reference: `${planType}|${password}|simulated`,
+            status: status,
+            plan: { name: `Plano ${planType}` },
+            metadata: { password: password, planType: planType }
+        };
+
+        const customerData = {
+            email: email,
+            password: password,
+            name: displayName
+        };
+
+        const result = await handlePaymentApproved(customerData, simulatedPaymentData);
+
+        res.json({
+            success: true,
+            message: 'Conta criada com sucesso via simulação',
+            data: result
+        });
+    } catch (error) {
+        console.error('❌ Erro na simulação:', error.message);
+        res.status(500).json({ error: error.message });
     }
 });
 
