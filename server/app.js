@@ -51,10 +51,12 @@ function createApp() {
     const authRoutes = require('./app/routes/auth');
     const adminRoutes = require('./app/routes/admin');
     const webhookRoutes = require('./app/routes/webhook');
+    const connectRoutes = require('./app/routes/connect');
     app.use('/api/payment', paymentRoutes);
     app.use('/api/auth', authRoutes);
     app.use('/api/admin', adminRoutes);
     app.use('/api/webhook', webhookRoutes);
+    app.use('/api/connect', connectRoutes);
 
     // Health check
     app.get('/health', (req, res) => {

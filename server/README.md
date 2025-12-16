@@ -26,11 +26,14 @@ server/
 │   ├── routes/
 │   │   ├── payment.js      # Rotas de pagamento (PagBank)
 │   │   ├── webhook.js      # Webhooks do PagBank
+│   │   ├── connect.js      # PagBank Connect (OAuth)
 │   │   ├── auth.js         # Autenticação
 │   │   └── admin.js        # Administração
 │   └── services/
 │       ├── pagbank_recurrence_service.js    # API Recorrência PagBank
-│       └── pagbank_subscriptions_service.js # API Assinaturas PagBank
+│       ├── pagbank_subscriptions_service.js # API Assinaturas PagBank
+│       ├── pagbank_orders_service.js        # API Orders PagBank
+│       └── pagbank_connect_service.js       # API Connect PagBank (OAuth)
 ├── app.js           # Configuração principal
 ├── package.json     # Dependências
 └── .env.example     # Template de variáveis
@@ -50,6 +53,11 @@ SECRET_KEY=your_secret_key
 PAGBANK_ENV=sandbox
 PAGBANK_EMAIL=seu_email@example.com
 PAGBANK_TOKEN=seu_token_aqui
+
+# PagBank Connect (OAuth 2.0)
+PAGBANK_CLIENT_ID=your_client_id_here
+PAGBANK_CLIENT_SECRET=your_client_secret_here
+PAGBANK_REDIRECT_URI=http://localhost:5000/api/connect/callback
 
 # Modo simulação (true para testes sem chamadas reais)
 PAGBANK_MOCK_MODE=true
@@ -75,6 +83,19 @@ GET /health
 ```
 
 ### Pagamentos PagBank
+
+#### PagBank Connect (OAuth 2.0)
+```http
+GET  /api/connect/status                 # Verificar configuração
+POST /api/connect/application            # Criar aplicação Connect
+GET  /api/connect/application            # Consultar aplicação
+GET  /api/connect/authorize-url          # Gerar URL de autorização
+POST /api/connect/authorize-sms          # Autorização via SMS
+POST /api/connect/token                  # Obter access token
+POST /api/connect/token/refresh          # Renovar token
+POST /api/connect/token/revoke           # Revogar token
+GET  /api/connect/callback               # Callback de autorização
+```
 
 #### Criar Plano
 ```http
