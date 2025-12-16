@@ -42,7 +42,7 @@ function Precos() {
       yearlyPrice: 588,
       description: 'Projetado para uso individual e motivacional',
       subDescription: 'Aproveite o preço promocional de lançamento da Plataforma Escrita360',
-      credits: 50,
+      credits: 10,
       popular: true,
       features: [
         { text: 'Módulo de escrita digital autorregulada', included: true },
@@ -52,7 +52,7 @@ function Precos() {
         { text: 'Insights para melhoria da escrita', included: true },
         { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
         { text: 'Rubricas qualitativas para (auto)avaliação', included: true },
-        { text: '50 análises detalhadas de redações do ENEM por IA', included: true, highlighted: true },
+        { text: '10 análises detalhadas de redações do ENEM por IA', included: true, highlighted: true },
         { text: 'Acesso por 30 dias', included: true }
       ],
       buttonText: 'Escolher Plano',
