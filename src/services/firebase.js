@@ -1,7 +1,7 @@
 // Firebase Configuration and Services
-// Integração com o mesmo Firebase usado no app Flutter (escrita360aluno)
+// Integração com múltiplos projetos Firebase baseado no tipo de plano
 
-import { initializeApp } from 'firebase/app'
+import { initializeApp, getApps, getApp } from 'firebase/app'
 import { 
   getAuth, 
   createUserWithEmailAndPassword, 
@@ -23,8 +23,8 @@ import {
   serverTimestamp 
 } from 'firebase/firestore'
 
-// Configuração do Firebase - MESMO projeto do app Flutter
-const firebaseConfig = {
+// Configuração do Firebase para ALUNOS (escrita360aluno)
+const firebaseConfigAluno = {
   apiKey: 'AIzaSyBvRxURO1FNwb1ItnlwSwaPKLtlS5sLVjM',
   authDomain: 'escrita360aluno.firebaseapp.com',
   projectId: 'escrita360aluno',
@@ -34,12 +34,59 @@ const firebaseConfig = {
   measurementId: 'G-KG006BD62G'
 }
 
-// Inicializar Firebase
-const app = initializeApp(firebaseConfig)
-const auth = getAuth(app)
-const db = getFirestore(app)
+// Configuração do Firebase para PROFESSORES (indivprof)
+const firebaseConfigProfessor = {
+  apiKey: 'AIzaSyAky9i1wlxY9yUpzAB-CRJvc9Rlp5gHEwY',
+  authDomain: 'indivprof.firebaseapp.com',
+  projectId: 'indivprof',
+  storageBucket: 'indivprof.firebasestorage.app',
+  messagingSenderId: '799589413678',
+  appId: '1:799589413678:web:3edc556a8f1456931dc0bf',
+  measurementId: 'G-M4VM8YLHHF'
+}
 
-console.log('✅ Firebase inicializado - projeto:', firebaseConfig.projectId)
+// Inicializar Firebase Apps
+const getOrCreateApp = (config, name) => {
+  try {
+    return getApp(name)
+  } catch {
+    return initializeApp(config, name)
+  }
+}
+
+// App padrão (aluno) - usado para operações gerais do site
+const appAluno = getApps().length === 0 
+  ? initializeApp(firebaseConfigAluno) 
+  : getApp()
+
+// App para professores
+const appProfessor = getOrCreateApp(firebaseConfigProfessor, 'professor')
+
+// Auth e Firestore para cada projeto
+const authAluno = getAuth(appAluno)
+const dbAluno = getFirestore(appAluno)
+
+const authProfessor = getAuth(appProfessor)
+const dbProfessor = getFirestore(appProfessor)
+
+// Exportar referências padrão (aluno) para compatibilidade
+const auth = authAluno
+const db = dbAluno
+
+console.log('✅ Firebase inicializado - projeto aluno:', firebaseConfigAluno.projectId)
+console.log('✅ Firebase inicializado - projeto professor:', firebaseConfigProfessor.projectId)
+
+/**
+ * Helper: Obtém Auth e DB baseado no tipo de plano/audience
+ */
+const getFirebaseForPlan = (audience) => {
+  const isProfessor = audience === 'professores' || audience === 'docentes' || audience === 'professor'
+  return {
+    auth: isProfessor ? authProfessor : authAluno,
+    db: isProfessor ? dbProfessor : dbAluno,
+    projectId: isProfessor ? firebaseConfigProfessor.projectId : firebaseConfigAluno.projectId
+  }
+}
 
 /**
  * Helper: Remove campos undefined de um objeto (deep cleaning)
@@ -70,16 +117,23 @@ const removeUndefinedFields = (obj) => {
 export const firebaseAuthService = {
   /**
    * Registrar novo usuário
+   * @param {string} email - Email do usuário
+   * @param {string} password - Senha do usuário
+   * @param {Object} userData - Dados adicionais do usuário
+   * @param {string} audience - Tipo de público ('estudantes' ou 'professores')
    */
-  async register(email, password, userData = {}) {
+  async register(email, password, userData = {}, audience = 'estudantes') {
     try {
-      console.log('🔐 Criando conta Firebase para:', email)
+      // Selecionar projeto Firebase baseado no audience
+      const { auth: targetAuth, db: targetDb, projectId } = getFirebaseForPlan(audience)
+      
+      console.log(`🔐 Criando conta Firebase para: ${email} no projeto: ${projectId}`)
       
       // Criar usuário no Firebase Auth
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+      const userCredential = await createUserWithEmailAndPassword(targetAuth, email, password)
       const user = userCredential.user
       
-      console.log('✅ Conta Firebase criada - UID:', user.uid)
+      console.log(`✅ Conta Firebase criada - UID: ${user.uid} no projeto: ${projectId}`)
       
       // Salvar dados do usuário no Firestore
       const userDocData = removeUndefinedFields({
@@ -89,20 +143,22 @@ export const firebaseAuthService = {
         cpf: userData.cpf || '',
         telefone: userData.phone || '',
         origem: 'site', // Identifica que veio do site
+        tipoPlano: audience === 'professores' ? 'professor' : 'aluno',
         criadoEm: serverTimestamp(),
         atualizadoEm: serverTimestamp(),
         emailVerificado: user.emailVerified,
         ...userData
       })
       
-      await setDoc(doc(db, 'usuarios', user.uid), userDocData)
-      console.log('✅ Dados do usuário salvos no Firestore')
+      await setDoc(doc(targetDb, 'usuarios', user.uid), userDocData)
+      console.log(`✅ Dados do usuário salvos no Firestore (${projectId})`)
       
       return {
         success: true,
         uid: user.uid,
         email: user.email,
-        user: userDocData
+        user: userDocData,
+        projectId: projectId
       }
     } catch (error) {
       console.error('❌ Erro ao criar conta:', error)
@@ -202,10 +258,16 @@ export const firebaseAuthService = {
 export const firebaseSubscriptionService = {
   /**
    * Criar assinatura após pagamento
+   * @param {string} userId - ID do usuário
+   * @param {Object} subscriptionData - Dados da assinatura
+   * @param {string} audience - Tipo de público ('estudantes' ou 'professores')
    */
-  async createSubscription(userId, subscriptionData) {
+  async createSubscription(userId, subscriptionData, audience = 'estudantes') {
     try {
-      console.log('📝 Criando assinatura no Firestore para:', userId)
+      // Selecionar projeto Firebase baseado no audience
+      const { db: targetDb, projectId } = getFirebaseForPlan(audience)
+      
+      console.log(`📝 Criando assinatura no Firestore (${projectId}) para:`, userId)
       
       const { plan, isYearly, paymentData } = subscriptionData
       
@@ -232,9 +294,10 @@ export const firebaseSubscriptionService = {
         userId: userId,
         userName: paymentData?.name || '',
         userEmail: paymentData?.email || '',
-        tokens: 10, // 10 tokens por assinatura mensal
+        tokens: plan.credits || 10, // Usar créditos do plano ou 10 como padrão
         origem: 'site',
         planoOrigem: plan.name,
+        tipoPlano: audience === 'professores' ? 'professor' : 'aluno',
         valorPago: isYearly ? plan.yearlyPrice : plan.monthlyPrice,
         periodicidade: isYearly ? 'anual' : 'mensal',
         pagamentoId: paymentData?.transactionId || `WEB_PAY_${Date.now()}`,
@@ -242,14 +305,14 @@ export const firebaseSubscriptionService = {
         atualizado_em: serverTimestamp()
       })
       
-      // Salvar no Firestore
-      const assinaturaRef = doc(collection(db, 'assinaturas'))
+      // Salvar no Firestore do projeto correto
+      const assinaturaRef = doc(collection(targetDb, 'assinaturas'))
       await setDoc(assinaturaRef, assinaturaData)
       
-      console.log('✅ Assinatura criada:', assinaturaRef.id)
+      console.log(`✅ Assinatura criada no projeto ${projectId}:`, assinaturaRef.id)
       
       // Atualizar dados do usuário com a assinatura
-      await updateDoc(doc(db, 'usuarios', userId), {
+      await updateDoc(doc(targetDb, 'usuarios', userId), {
         assinaturaAtiva: true,
         assinaturaId: assinaturaRef.id,
         planoAtual: plan.name,
@@ -259,7 +322,8 @@ export const firebaseSubscriptionService = {
       return {
         success: true,
         assinaturaId: assinaturaRef.id,
-        assinatura: assinaturaData
+        assinatura: assinaturaData,
+        projectId: projectId
       }
     } catch (error) {
       console.error('❌ Erro ao criar assinatura:', error)
@@ -330,9 +394,15 @@ export const firebaseSubscriptionService = {
 export const firebasePaymentService = {
   /**
    * Registrar pagamento
+   * @param {string} userId - ID do usuário
+   * @param {Object} paymentData - Dados do pagamento
+   * @param {string} audience - Tipo de público ('estudantes' ou 'professores')
    */
-  async recordPayment(userId, paymentData) {
+  async recordPayment(userId, paymentData, audience = 'estudantes') {
     try {
+      // Selecionar projeto Firebase baseado no audience
+      const { db: targetDb, projectId } = getFirebaseForPlan(audience)
+      
       const pagamentoData = removeUndefinedFields({
         userId: userId,
         userEmail: paymentData?.email || '',
@@ -342,15 +412,16 @@ export const firebasePaymentService = {
         transacaoId: paymentData?.transactionId || `WEB_TXN_${Date.now()}`,
         plano: paymentData?.plan || '',
         periodicidade: paymentData?.isYearly ? 'anual' : 'mensal',
+        tipoPlano: audience === 'professores' ? 'professor' : 'aluno',
         origem: 'site',
         criadoEm: serverTimestamp(),
         dadosCompletos: paymentData || {}
       })
       
-      const pagamentoRef = doc(collection(db, 'pagamentos'))
+      const pagamentoRef = doc(collection(targetDb, 'pagamentos'))
       await setDoc(pagamentoRef, pagamentoData)
       
-      console.log('✅ Pagamento registrado:', pagamentoRef.id)
+      console.log(`✅ Pagamento registrado no projeto ${projectId}:`, pagamentoRef.id)
       
       return {
         success: true,
@@ -600,4 +671,5 @@ export const firebaseCreditService = {
   }
 }
 
-export { auth, db }
+// Exportar referências padrão e helpers
+export { auth, db, getFirebaseForPlan, authAluno, dbAluno, authProfessor, dbProfessor }

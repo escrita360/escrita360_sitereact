@@ -154,9 +154,9 @@ function Pagamento() {
 
   const createUserAccount = async () => {
     try {
-      console.log('🔐 Iniciando criação de conta Firebase...')
+      console.log(`🔐 Iniciando criação de conta Firebase... (audience: ${audience || 'estudantes'})`)
       
-      // Criar conta com email e senha no Firebase
+      // Criar conta com email e senha no Firebase (projeto baseado no audience)
       const userData = await firebaseAuthService.register(
         formData.email,
         formData.password,
@@ -164,10 +164,11 @@ function Pagamento() {
           name: formData.cardName || formData.email.split('@')[0],
           cpf: formData.cpf,
           phone: formData.phone
-        }
+        },
+        audience || 'estudantes' // Passa o audience para selecionar o projeto Firebase correto
       )
       
-      console.log('✅ Conta Firebase criada com sucesso:', userData)
+      console.log(`✅ Conta Firebase criada com sucesso no projeto: ${userData.projectId}`, userData)
       return userData
     } catch (error) {
       console.error('❌ Erro ao criar conta Firebase:', error)
@@ -177,9 +178,9 @@ function Pagamento() {
 
   const createSubscriptionRecord = async (userId, paymentData) => {
     try {
-      console.log('📝 Criando registro de assinatura...')
+      console.log(`📝 Criando registro de assinatura... (audience: ${audience || 'estudantes'})`)
       
-      // Criar assinatura no Firestore
+      // Criar assinatura no Firestore (projeto baseado no audience)
       const subscriptionResult = await firebaseSubscriptionService.createSubscription(
         userId,
         {
@@ -191,7 +192,8 @@ function Pagamento() {
             transactionId: paymentData?.transaction_id,
             ...paymentData
           }
-        }
+        },
+        audience || 'estudantes' // Passa o audience para selecionar o projeto Firebase correto
       )
       
       // Registrar pagamento
@@ -203,9 +205,9 @@ function Pagamento() {
         transactionId: paymentData?.transaction_id,
         plan: selectedPlan.name,
         isYearly: isYearly
-      })
+      }, audience || 'estudantes')
       
-      console.log('✅ Assinatura e pagamento registrados:', subscriptionResult)
+      console.log(`✅ Assinatura e pagamento registrados no projeto: ${subscriptionResult.projectId}`, subscriptionResult)
       return subscriptionResult
     } catch (error) {
       console.error('❌ Erro ao criar assinatura:', error)
@@ -572,9 +574,14 @@ function Pagamento() {
                     <p className="text-sm text-green-700">
                       <strong>Senha:</strong> ••••••• (use a senha que você cadastrou)
                     </p>
+                    <p className="text-sm text-green-700">
+                      <strong>Plataforma:</strong> {audience === 'professores' ? 'Escrita360 Professor' : 'Escrita360 Aluno'}
+                    </p>
                   </div>
                   <p className="text-sm text-green-600 mt-3">
-                    Você já pode fazer login no site com essas credenciais!
+                    {audience === 'professores' 
+                      ? 'Faça login no app Escrita360 Professor com essas credenciais!' 
+                      : 'Faça login no app Escrita360 Aluno com essas credenciais!'}
                   </p>
                 </div>
                 <Separator />
