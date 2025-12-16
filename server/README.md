@@ -28,6 +28,7 @@ server/
 │   │   ├── webhook.js      # Webhooks do PagBank
 │   │   ├── connect.js      # PagBank Connect (OAuth)
 │   │   ├── certificate.js  # Certificado Digital mTLS
+│   │   ├── customers.js    # API de Clientes PagBank
 │   │   ├── auth.js         # Autenticação
 │   │   └── admin.js        # Administração
 │   └── services/
@@ -35,7 +36,8 @@ server/
 │       ├── pagbank_subscriptions_service.js # API Assinaturas PagBank
 │       ├── pagbank_orders_service.js        # API Orders PagBank
 │       ├── pagbank_connect_service.js       # API Connect PagBank (OAuth)
-│       └── pagbank_certificate_service.js   # Certificado Digital mTLS
+│       ├── pagbank_certificate_service.js   # Certificado Digital mTLS
+│       └── pagbank_customers_service.js     # API de Clientes PagBank
 ├── certificates/          # Certificados mTLS (não commitados)
 │   └── .gitignore        # Protege certificados
 ├── app.js                # Configuração principal

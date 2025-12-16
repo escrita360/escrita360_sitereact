@@ -49,6 +49,19 @@ PAGBANK_TOKEN=e7160b77-a214-4b48-8c61-93732bc6241b2256143d4139951eb97603d812916b
 
 ## 🧪 Como Testar
 
+### API de Clientes
+
+**Criar e gerenciar clientes PagBank**:
+
+```bash
+# Teste completo da API de clientes
+node test-customers.js
+```
+
+📖 **Documentação completa**: [PAGBANK_CUSTOMERS.md](./docs/PAGBANK_CUSTOMERS.md)
+
+### Assinaturas e Pagamentos
+
 ### Opção 1: Via Frontend
 1. Inicie o servidor backend:
    ```bash
