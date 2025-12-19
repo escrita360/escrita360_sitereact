@@ -336,10 +336,10 @@ function Precos() {
 
   const creditPackages = getCurrentCreditPackages()
 
-  // Modelos de assinatura para escolas
+  // Programa Escolas / Institucional para escolas
   const schoolModels = [
     {
-      title: 'Assinatura Institucional',
+      title: 'Modelo correção inteligente',
       focus: 'Facilitar o trabalho docente e otimizar a correção de textos produzidos em sala de aula e avaliações oficiais da escola (provas de redação).',
       description: 'A escola adquire Planos Híbridos (plataforma + créditos de IA), disponíveis nas versões semestral e anual para os professores envolvidos na produção e correção de redações e pode adquirir pacotes adicionais de créditos, conforme a demanda de correções da escola.',
       number: 1
@@ -456,7 +456,7 @@ function Precos() {
             </h2>
             {selectedAudience === 'estudantes' ? (
               <p className="text-slate-600">
-                Esse modelo inclui acesso completo aos seguintes recursos.
+                Esse modelo inclui acesso completo aos seguintes recursos:
               </p>
             ) : selectedAudience === 'professores' ? (
               <p className="text-slate-600">
@@ -498,37 +498,37 @@ function Precos() {
         <section className="py-8 md:py-12 lg:py-16 bg-slate-50">
           <div className="container mx-auto px-4 max-w-7xl">
             <div className="text-center mb-12">
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Modelos de Assinatura</h2>
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">PROGRAMA ESCOLAS / INSTITUCIONAL</h2>
               <p className="text-lg text-slate-600 max-w-3xl mx-auto">
-                Com foco em flexibilidade e integração pedagógica, oferecemos dois modelos de assinatura para instituições de ensino
+                Com foco em flexibilidade e integração pedagógica, oferecemos dois modelos voltados à gestão pedagógica, escala e padronização.
               </p>
             </div>
             
             <div className="space-y-8 max-w-5xl mx-auto">
-              {schoolModels.map((model, index) => (
-                <Card key={index} className={`overflow-hidden hover-lift ${model.highlighted ? 'border-2 border-green-500 shadow-xl' : 'border border-slate-200'}`}>
+              {schoolModels[0] && (
+                <Card className={`overflow-hidden hover-lift ${schoolModels[0].highlighted ? 'border-2 border-green-500 shadow-xl' : 'border border-slate-200'}`}>
                   <CardContent className="p-6">
                     <div className="flex items-start gap-6">
                       <div className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold flex-shrink-0 ${
-                        model.highlighted ? 'bg-green-500 text-white' : 'bg-brand-primary text-white'
+                        schoolModels[0].highlighted ? 'bg-green-500 text-white' : 'bg-brand-primary text-white'
                       }`}>
-                        {model.number}
+                        {schoolModels[0].number}
                       </div>
                       <div className="flex-1">
-                        <h3 className="text-2xl font-bold text-slate-900 mb-3">{model.title}</h3>
+                        <h3 className="text-2xl font-bold text-slate-900 mb-3">{schoolModels[0].title}</h3>
                         <div className="mb-4">
-                          <strong className="text-slate-700">Foco:</strong> {model.focus}
+                          <strong className="text-slate-700">Foco:</strong> {schoolModels[0].focus}
                         </div>
-                        <p className="text-slate-600 mb-4 leading-relaxed">{model.description}</p>
-                        {model.additionalInfo && (
-                          <p className="text-slate-600 mb-4 leading-relaxed">{model.additionalInfo}</p>
+                        <p className="text-slate-600 mb-4 leading-relaxed">{schoolModels[0].description}</p>
+                        {schoolModels[0].additionalInfo && (
+                          <p className="text-slate-600 mb-4 leading-relaxed">{schoolModels[0].additionalInfo}</p>
                         )}
-                        {model.benefits && (
+                        {schoolModels[0].benefits && (
                           <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
-                            <p className="text-green-800 font-medium">{model.benefits}</p>
+                            <p className="text-green-800 font-medium">{schoolModels[0].benefits}</p>
                           </div>
                         )}
-                        {model.consultation && (
+                        {schoolModels[0].consultation && (
                           <div className="bg-brand-light rounded-lg p-4 text-center">
                             <p className="text-brand-primary font-semibold">
                               Valor definido conforme número de alunos e turmas. Entre em contato para receber uma proposta personalizada.
@@ -539,7 +539,364 @@ function Precos() {
                     </div>
                   </CardContent>
                 </Card>
-              ))}
+              )}
+
+              {/* Teacher Solo Plans */}
+              <div className="grid gap-8 mx-auto mt-6 justify-center md:grid-cols-2 lg:grid-cols-2 max-w-5xl">
+                {teacherPlansSolo.map((plan, index) => (
+                  <Card key={index} className={`relative hover-lift animate-scale-in delay-${index * 200} ${plan.popular ? 'border-2 border-brand-primary shadow-xl' : 'hover:shadow-xl'} transition-all flex flex-col pt-6 w-full`}>
+                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 flex gap-2 animate-float">
+                      {plan.popular && (
+                        <Badge className="bg-brand-primary text-white px-3 py-1 text-xs whitespace-nowrap">
+                          {plan.badge}
+                        </Badge>
+                      )}
+                      {plan.credits && (
+                        <Badge className="bg-yellow-500 text-white px-3 py-1 text-xs whitespace-nowrap">
+                          {plan.credits} créditos IA
+                        </Badge>
+                      )}
+                    </div>
+                    <CardHeader className="text-center pb-4">
+                      <div className="mb-1">
+                        {!plan.popular && <Badge variant="secondary" className="text-xs">
+                          {plan.badge}
+                        </Badge>}
+                      </div>
+                      <h3 className="text-xl font-bold text-slate-900">{plan.name}</h3>
+                      <div className="my-4">
+                        {plan.consultation ? (
+                          <div className="text-center">
+                            <span className="text-lg text-slate-600">Valor sob consulta</span>
+                            <p className="text-sm text-slate-500 mt-1">Definido conforme número de alunos e turmas</p>
+                          </div>
+                        ) : (
+                          <>
+                            <span className="text-3xl font-bold text-brand-primary">R$</span>
+                            <span className="text-4xl font-bold text-brand-primary">
+                              {plan.monthlyPrice}
+                            </span>
+                            <span className="text-slate-600">
+                              {plan.name.includes('Trimestral') ? '/3 meses' : 
+                               plan.name.includes('Semestral') ? '/6 meses' : '/mês'}
+                            </span>
+                          </>
+                        )}
+                      </div>
+                      <p className="text-slate-600 text-sm">{plan.description}</p>
+                      {plan.subDescription && (
+                        <p className="text-brand-primary text-xs mt-1 font-medium">{plan.subDescription}</p>
+                      )}
+                      <div className="mt-4 pt-4 border-t border-slate-100">
+                        <p className="text-sm text-slate-600 font-semibold">
+                          {plan.credits} análises detalhadas de redações do ENEM por IA
+                        </p>
+                        <p className="text-xs text-slate-600 mt-1">
+                          Acesso por {plan.name.includes('Trimestral') ? '90' : 
+                                     plan.name.includes('Semestral') ? '180' : 
+                                     plan.name.includes('Progressivo') ? '180' : '30'} dias
+                        </p>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="flex flex-col">
+                      <Button
+                        className="w-full transition-all duration-300 hover:scale-105 mt-auto bg-[#4A90E2] hover:bg-[#357ABD] text-white"
+                        variant="default"
+                        size="lg"
+                        onClick={() => handleOpenPagamento(plan)}
+                      >
+                        {plan.buttonText}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              {schoolModels[1] && (
+                <Card className={`overflow-hidden hover-lift ${schoolModels[1].highlighted ? 'border-2 border-green-500 shadow-xl' : 'border border-slate-200'}`}>
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-6">
+                      <div className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold flex-shrink-0 ${
+                        schoolModels[1].highlighted ? 'bg-green-500 text-white' : 'bg-brand-primary text-white'
+                      }`}>
+                        {schoolModels[1].number}
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-2xl font-bold text-slate-900 mb-3">{schoolModels[1].title}</h3>
+                        <div className="mb-4">
+                          <strong className="text-slate-700">Foco:</strong> {schoolModels[1].focus}
+                        </div>
+                        <p className="text-slate-600 mb-4 leading-relaxed">{schoolModels[1].description}</p>
+                        {schoolModels[1].additionalInfo && (
+                          <p className="text-slate-600 mb-4 leading-relaxed">{schoolModels[1].additionalInfo}</p>
+                        )}
+                        {schoolModels[1].benefits && (
+                          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                            <p className="text-green-800 font-medium">{schoolModels[1].benefits}</p>
+                          </div>
+                        )}
+                        {schoolModels[1].consultation && (
+                          <div className="bg-brand-light rounded-lg p-4 text-center">
+                            <p className="text-brand-primary font-semibold">
+                              Valor definido conforme número de alunos e turmas. Entre em contato para receber uma proposta personalizada.
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+
+            {/* Novos Planos após Assinatura Compartilhada */}
+            <div className="mt-12 space-y-6">
+              <h3 className="text-3xl font-bold text-center text-slate-900 mb-8">Planos Adicionais</h3>
+              
+              <div className="grid gap-6 md:grid-cols-3">
+                {/* Plano Essencial */}
+                <Card className="overflow-hidden hover-lift border border-slate-200">
+                  <CardContent className="p-6">
+                    <div className="text-center mb-6">
+                      <h4 className="text-2xl font-bold text-slate-900 mb-2">Plano Essencial</h4>
+                      <div className="text-3xl font-bold text-brand-primary mb-2">
+                        R$ 1.200,00
+                      </div>
+                      <div className="text-lg text-slate-600 mb-2">
+                        <strong>500 créditos</strong>
+                      </div>
+                      <div className="text-sm text-slate-500 mb-4">
+                        Acesso por 12 meses
+                      </div>
+                      <p className="text-slate-600 text-sm leading-relaxed">
+                        Para escolas que necessitam de mais análises além do plano contratado.
+                      </p>
+                    </div>
+                    <Button
+                      className="w-full bg-[#4A90E2] hover:bg-[#357ABD] text-white"
+                      onClick={() => handleOpenPagamento({
+                        name: 'Plano Essencial',
+                        monthlyPrice: 1200,
+                        yearlyPrice: 1200,
+                        credits: 500,
+                        duration: '12 meses',
+                        buttonText: 'Contratar Plano'
+                      })}
+                    >
+                      Contratar Plano
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                {/* Pacote 1 */}
+                <Card className="overflow-hidden hover-lift border border-slate-200">
+                  <CardContent className="p-6">
+                    <div className="text-center mb-6">
+                      <h4 className="text-2xl font-bold text-slate-900 mb-2">Pacote 1</h4>
+                      <div className="text-3xl font-bold text-brand-primary mb-2">
+                        R$ 1.200,00
+                      </div>
+                      <div className="text-lg text-slate-600 mb-4">
+                        <strong>500 créditos</strong>
+                      </div>
+                      <p className="text-slate-600 text-sm leading-relaxed">
+                        Os créditos extras são utilizados durante a vigência do plano.
+                      </p>
+                    </div>
+                    <Button
+                      className="w-full bg-[#4A90E2] hover:bg-[#357ABD] text-white"
+                      onClick={() => handleOpenPagamento({
+                        name: 'Pacote 1',
+                        monthlyPrice: 1200,
+                        yearlyPrice: 1200,
+                        credits: 500,
+                        buttonText: 'Contratar Pacote'
+                      })}
+                    >
+                      Contratar Pacote
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                {/* Pacote 2 */}
+                <Card className="overflow-hidden hover-lift border border-slate-200">
+                  <CardContent className="p-6">
+                    <div className="text-center mb-6">
+                      <h4 className="text-2xl font-bold text-slate-900 mb-2">Pacote 2</h4>
+                      <div className="text-3xl font-bold text-brand-primary mb-2">
+                        R$ 2.400,00
+                      </div>
+                      <div className="text-lg text-slate-600 mb-4">
+                        <strong>1000 créditos</strong>
+                      </div>
+                      <p className="text-slate-600 text-sm leading-relaxed">
+                        Os créditos extras são utilizados durante a vigência do plano.
+                      </p>
+                    </div>
+                    <Button
+                      className="w-full bg-[#4A90E2] hover:bg-[#357ABD] text-white"
+                      onClick={() => handleOpenPagamento({
+                        name: 'Pacote 2',
+                        monthlyPrice: 2400,
+                        yearlyPrice: 2400,
+                        credits: 1000,
+                        buttonText: 'Contratar Pacote'
+                      })}
+                    >
+                      Contratar Pacote
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Seção Modelo Híbrido - Recursos do Aluno e Planos */}
+      {selectedAudience === 'escolas' && (
+        <section className="py-12 md:py-16 lg:py-20 bg-slate-50">
+          <div className="container mx-auto px-4 max-w-7xl">
+            <h2 className="text-3xl md:text-4xl font-bold text-center text-slate-900 mb-4">
+              Modelo Híbrido - <span className="text-brand-primary">Recursos e Planos</span>
+            </h2>
+            <p className="text-lg text-slate-600 text-center mb-12 max-w-3xl mx-auto">
+              Recursos disponíveis para alunos e planos do Edu Essencial
+            </p>
+
+            {/* Recursos do Aluno */}
+            <div className="mb-12">
+              <h3 className="text-2xl font-bold text-slate-900 mb-6 text-center">Recursos do Aluno</h3>
+              <Card className="bg-white border-slate-200">
+                <CardContent className="p-6">
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="flex items-center gap-3">
+                      <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
+                      <span className="text-slate-700">Acesso completo à plataforma</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
+                      <span className="text-slate-700">Correção automática de redações</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
+                      <span className="text-slate-700">Feedback detalhado</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
+                      <span className="text-slate-700">Relatórios de desempenho</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
+                      <span className="text-slate-700">Exercícios práticos</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
+                      <span className="text-slate-700">Suporte pedagógico</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Planos Edu Essencial */}
+            <div>
+              <h3 className="text-2xl font-bold text-slate-900 mb-6 text-center">
+                Planos Edu Essencial - <span className="text-brand-primary">Acesso anual para alunos e professores</span>
+              </h3>
+              
+              <div className="grid gap-6 md:grid-cols-3 max-w-5xl mx-auto">
+                {/* Estudante */}
+                <Card className="overflow-hidden hover-lift border border-slate-200">
+                  <CardContent className="p-6">
+                    <div className="text-center mb-6">
+                      <h4 className="text-xl font-bold text-slate-900 mb-2">Estudante</h4>
+                      <div className="text-2xl font-bold text-brand-primary mb-2">
+                        R$ 290,00
+                      </div>
+                      <div className="text-sm text-slate-500 mb-4">
+                        Acesso anual
+                      </div>
+                    </div>
+                    <Button
+                      className="w-full bg-[#4A90E2] hover:bg-[#357ABD] text-white"
+                      onClick={() => handleOpenPagamento({
+                        name: 'Edu Essencial - Estudante',
+                        monthlyPrice: 290,
+                        yearlyPrice: 290,
+                        duration: '12 meses',
+                        buttonText: 'Contratar'
+                      })}
+                    >
+                      Contratar
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                {/* Professor */}
+                <Card className="overflow-hidden hover-lift border border-slate-200">
+                  <CardContent className="p-6">
+                    <div className="text-center mb-6">
+                      <h4 className="text-xl font-bold text-slate-900 mb-2">Professor</h4>
+                      <div className="text-2xl font-bold text-brand-primary mb-2">
+                        R$ 1.200,00
+                      </div>
+                      <div className="text-lg text-slate-600 mb-2">
+                        <strong>500 créditos</strong>
+                      </div>
+                      <div className="text-sm text-slate-500 mb-4">
+                        Acesso por 12 meses
+                      </div>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        Para escolas que necessitam de mais análises além do plano contratado.
+                      </p>
+                    </div>
+                    <Button
+                      className="w-full bg-[#4A90E2] hover:bg-[#357ABD] text-white"
+                      onClick={() => handleOpenPagamento({
+                        name: 'Edu Essencial - Professor',
+                        monthlyPrice: 1200,
+                        yearlyPrice: 1200,
+                        credits: 500,
+                        duration: '12 meses',
+                        buttonText: 'Contratar'
+                      })}
+                    >
+                      Contratar
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                {/* Pacote 1 */}
+                <Card className="overflow-hidden hover-lift border border-slate-200">
+                  <CardContent className="p-6">
+                    <div className="text-center mb-6">
+                      <h4 className="text-xl font-bold text-slate-900 mb-2">Pacote 1</h4>
+                      <div className="text-2xl font-bold text-brand-primary mb-2">
+                        R$ 1.200,00
+                      </div>
+                      <div className="text-lg text-slate-600 mb-4">
+                        <strong>500 créditos</strong>
+                      </div>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        Os créditos extras são utilizados durante a vigência do plano.
+                      </p>
+                    </div>
+                    <Button
+                      className="w-full bg-[#4A90E2] hover:bg-[#357ABD] text-white"
+                      onClick={() => handleOpenPagamento({
+                        name: 'Edu Essencial - Pacote 1',
+                        monthlyPrice: 1200,
+                        yearlyPrice: 1200,
+                        credits: 500,
+                        buttonText: 'Contratar'
+                      })}
+                    >
+                      Contratar
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           </div>
         </section>
