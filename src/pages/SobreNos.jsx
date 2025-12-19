@@ -91,21 +91,6 @@ export default function SobreNos() {
                 </svg>
               </button>
             </div>
-            
-            <div className="flex justify-center py-6 space-x-2">
-              {images.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentIndex(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-200 ${
-                    index === currentIndex 
-                      ? 'bg-brand-primary scale-125' 
-                      : 'bg-gray-300 hover:bg-brand-accent'
-                  }`}
-                  aria-label={`Ir para imagem ${index + 1}`}
-                />
-              ))}
-            </div>
           </div>
         </motion.div>
       </div>

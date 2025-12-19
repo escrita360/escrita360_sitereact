@@ -36,31 +36,19 @@ function Precos() {
   // Planos para estudantes
   const studentPlans = [
     {
-      name: 'Plano Mensal',
+      name: 'Plano Básico',
       badge: 'Preço promocional de lançamento',
       monthlyPrice: 49,
       yearlyPrice: 588,
-      description: 'Projetado para uso individual e motivacional',
-      subDescription: 'Aproveite o preço promocional de lançamento da Plataforma Escrita360',
+      subDescription: '',
       credits: 10,
       popular: true,
-      features: [
-        { text: 'Módulo de escrita digital autorregulada', included: true },
-        { text: 'Banco de estratégias para escrita', included: true },
-        { text: 'Sugestão de temas', included: true },
-        { text: 'Recursos de apoio autorregulatório', included: true },
-        { text: 'Insights para melhoria da escrita', included: true },
-        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
-        { text: 'Rubricas qualitativas para (auto)avaliação', included: true },
-        { text: '10 análises detalhadas de redações do ENEM por IA', included: true, highlighted: true },
-        { text: 'Acesso por 30 dias', included: true }
-      ],
       buttonText: 'Escolher Plano',
       buttonVariant: 'default'
     }
   ]
 
-  // Planos para professores
+  // Programa professor independente
   const teacherPlans = [
     {
       name: 'Plano 1 Mensal',
@@ -329,14 +317,14 @@ function Precos() {
       credits: 5,
       price: 20,
       description: '',
-      features: ['Análises detalhadas por IA', 'Validade de 30 dias']
+      features: ['Análises detalhadas por IA']
     },
     {
       name: 'Pacote 2',
       credits: 15,
       price: 45,
       description: '',
-      features: ['Análises detalhadas por IA', 'Validade de 30 dias']
+      features: ['Análises detalhadas por IA']
     },
     {
       name: 'Pacote 3',
@@ -344,7 +332,7 @@ function Precos() {
       price: 60,
       description: '',
       popular: true,
-      features: ['Análises detalhadas por IA', 'Validade de 30 dias', 'Melhor custo-benefício']
+      features: ['Análises detalhadas por IA', 'Melhor custo-benefício']
     }
   ]
 
@@ -355,7 +343,7 @@ function Precos() {
       credits: 100,
       price: 200,
       description: '',
-      features: ['Análises detalhadas por IA', 'Validade de 30 dias']
+      features: ['Análises detalhadas por IA']
     },
     {
       name: 'Pacote 2',
@@ -363,7 +351,7 @@ function Precos() {
       price: 300,
       description: '',
       popular: true,
-      features: ['Análises detalhadas por IA', 'Validade de 30 dias', 'Melhor custo-benefício']
+      features: ['Análises detalhadas por IA', 'Melhor custo-benefício']
     }
   ]
 
@@ -420,8 +408,7 @@ function Precos() {
     if (selectedAudience === 'estudantes') {
       return {
         title: 'Planos para',
-        titleHighlight: 'Estudantes',
-        subtitle: 'Projetado para uso individual e motivacional. Aproveite o preço promocional de lançamento da Plataforma Escrita360.'
+        titleHighlight: 'Estudantes'
       }
     } else if (selectedAudience === 'professores') {
       return {
@@ -450,7 +437,10 @@ function Precos() {
         'Recursos de apoio autorregulatório',
         'Insights para melhoria da escrita',
         'Revisor integrado com recursos de análise ilimitada',
-        'Rubricas qualitativas para (auto)avaliação'
+        'Rubricas qualitativas para (auto)avaliação',
+        'Correção via foto ou texto direto na plataforma',
+        'Avaliação com auxílio de IA',
+        'Relatórios de desempenho (ENEM e habilidades BNCC)'
       ]
     } else if (selectedAudience === 'professores') {
       return [
@@ -497,12 +487,12 @@ function Precos() {
               O que está incluso na plataforma
             </h2>
             <p className="text-slate-600">
-              Todos os planos incluem acesso completo aos recursos da Escrita360
+              Esse modelo inclui o acesso completo aos seguintes recursos:
             </p>
           </div>
           
           <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 md:p-8">
-            <div className="grid sm:grid-cols-2 gap-3 md:gap-4">
+            <div className="space-y-3 md:space-y-4">
               {platformFeatures.map((feature, index) => (
                 <div key={index} className="flex items-start gap-3">
                   <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -718,22 +708,13 @@ function Precos() {
                   </p>
                   <div className="grid md:grid-cols-3 gap-4">
                     <div className="text-center">
-                      <div className="w-12 h-12 bg-brand-primary rounded-full flex items-center justify-center mx-auto mb-2">
-                        <span className="text-white font-bold">1</span>
-                      </div>
-                      <p className="text-sm text-slate-700">Envie sua redação</p>
+                      <p className="text-sm text-slate-700 font-semibold">Envie sua redação</p>
                     </div>
                     <div className="text-center">
-                      <div className="w-12 h-12 bg-brand-primary rounded-full flex items-center justify-center mx-auto mb-2">
-                        <span className="text-white font-bold">2</span>
-                      </div>
-                      <p className="text-sm text-slate-700">IA analisa detalhadamente</p>
+                      <p className="text-sm text-slate-700 font-semibold">IA analisa detalhadamente</p>
                     </div>
                     <div className="text-center">
-                      <div className="w-12 h-12 bg-brand-primary rounded-full flex items-center justify-center mx-auto mb-2">
-                        <span className="text-white font-bold">3</span>
-                      </div>
-                      <p className="text-sm text-slate-700">Receba feedback completo</p>
+                      <p className="text-sm text-slate-700 font-semibold">Receba feedback completo</p>
                     </div>
                   </div>
                 </CardContent>
