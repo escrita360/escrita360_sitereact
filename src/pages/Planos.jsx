@@ -13,6 +13,7 @@ function Precos() {
   const [searchParams] = useSearchParams()
   const audienceFromUrl = searchParams.get('audience') || 'estudantes'
   const [selectedAudience, setSelectedAudience] = useState(audienceFromUrl)
+  const [teacherPlanType, setTeacherPlanType] = useState('hibrido') // 'solo' ou 'hibrido'
   const navigate = useNavigate()
   const plansRef = useScrollAnimation()
 
@@ -48,29 +49,17 @@ function Precos() {
     }
   ]
 
-  // Programa professor independente
-  const teacherPlans = [
+  // Planos solo para professores
+  const teacherPlansSolo = [
     {
-      name: 'Plano 1 Mensal',
+      name: 'Plano Básico',
       badge: 'Preço promocional de lançamento',
       monthlyPrice: 49,
       yearlyPrice: 588,
-      description: 'Plano Híbrido (Plataforma + créditos de IA)',
-      subDescription: 'Aproveite o preço promocional de lançamento da Plataforma Escrita360',
+      subDescription: '',
       credits: 10,
-      features: [
-        { text: 'Módulo de escrita digital autorregulada', included: true },
-        { text: 'Banco de estratégias para escrita', included: true },
-        { text: 'Sugestão de temas', included: true },
-        { text: 'Recursos de apoio autorregulatório', included: true },
-        { text: 'Insights para melhoria da escrita', included: true },
-        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
-        { text: 'Rubricas qualitativas para (auto)avaliação', included: true },
-        { text: '10 análises detalhadas de redações por IA', included: true, highlighted: true },
-        { text: 'Correção por foto ou digitada', included: true },
-        { text: 'Acesso por 30 dias', included: true }
-      ],
-      buttonText: 'Escolher Plano 1',
+      popular: true,
+      buttonText: 'Escolher Plano',
       buttonVariant: 'default'
     },
     {
@@ -78,67 +67,45 @@ function Precos() {
       badge: 'Preço promocional de lançamento',
       monthlyPrice: 120,
       yearlyPrice: 1440,
-      description: 'Plano Híbrido (Plataforma + créditos de IA)',
+      description: 'Estudantes (Programa individual)',
       subDescription: 'Aproveite o preço promocional de lançamento da Plataforma Escrita360',
       credits: 60,
       popular: true,
       features: [
-        { text: 'Módulo de escrita digital autorregulada', included: true },
-        { text: 'Banco de estratégias para escrita', included: true },
-        { text: 'Sugestão de temas', included: true },
-        { text: 'Recursos de apoio autorregulatório', included: true },
-        { text: 'Insights para melhoria da escrita', included: true },
-        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
-        { text: 'Rubricas qualitativas para (auto)avaliação', included: true },
-        { text: '60 análises detalhadas de redações por IA', included: true, highlighted: true },
-        { text: 'Correção por foto ou digitada', included: true },
+        { text: 'Criação e gerenciamento de Turmas', included: true },
+        { text: 'Banco de rubricas para facilitar a avaliação', included: true },
+        { text: 'Correção via foto ou texto direto na plataforma', included: true },
+        { text: 'Relatórios de desempenho com notas (ENEM e texto dissertativo-argumentativo)', included: true },
+        { text: 'Correção com IA (ENEM e texto dissertativo-argumentativo)', included: true, highlighted: true },
+        { text: 'Relatórios consolidados (Habilidades BNCC X ENEM)', included: true },
         { text: 'Acesso por 30 dias', included: true }
       ],
       buttonText: 'Escolher Plano 2',
       buttonVariant: 'default'
-    },
+    }
+  ]
+
+  // Planos híbridos para professores
+  const teacherPlansHibrido = [
     {
-      name: 'Plano Trimestral',
-      badge: 'Economia garantida',
-      monthlyPrice: 390,
-      yearlyPrice: 1560,
-      description: 'Plano Híbrido (Plataforma + créditos de IA)',
-      credits: 200,
-      features: [
-        { text: 'Módulo de escrita digital autorregulada', included: true },
-        { text: 'Banco de estratégias para escrita', included: true },
-        { text: 'Sugestão de temas', included: true },
-        { text: 'Recursos de apoio autorregulatório', included: true },
-        { text: 'Insights para melhoria da escrita', included: true },
-        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
-        { text: 'Rubricas qualitativas para (auto)avaliação', included: true },
-        { text: '200 análises detalhadas de redações por IA', included: true, highlighted: true },
-        { text: 'Correção por foto ou digitada', included: true },
-        { text: 'Acesso por 90 dias', included: true }
-      ],
-      buttonText: 'Escolher Trimestral',
+      name: 'Plano Básico',
+      badge: 'Preço promocional de lançamento',
+      monthlyPrice: 120,
+      yearlyPrice: 1440,
+      subDescription: '',
+      credits: 60,
+      popular: true,
+      buttonText: 'Escolher Plano',
       buttonVariant: 'default'
     },
     {
-      name: 'Plano Semestral',
+      name: 'Plano Progressivo',
       badge: 'Melhor investimento',
       monthlyPrice: 570,
-      yearlyPrice: 1140,
-      description: 'Plano Híbrido (Plataforma + créditos de IA)',
+      yearlyPrice: 3420,
+      subDescription: '',
       credits: 300,
-      features: [
-        { text: 'Módulo de escrita digital autorregulada', included: true },
-        { text: 'Banco de estratégias para escrita', included: true },
-        { text: 'Sugestão de temas', included: true },
-        { text: 'Recursos de apoio autorregulatório', included: true },
-        { text: 'Insights para melhoria da escrita', included: true },
-        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
-        { text: 'Rubricas qualitativas para (auto)avaliação', included: true },
-        { text: '300 análises detalhadas de redações por IA', included: true, highlighted: true },
-        { text: 'Correção por foto ou digitada', included: true },
-        { text: 'Acesso por 180 dias', included: true }
-      ],
-      buttonText: 'Escolher Semestral',
+      buttonText: 'Escolher Plano',
       buttonVariant: 'default'
     }
   ]
@@ -393,7 +360,7 @@ function Precos() {
       case 'estudantes':
         return studentPlans
       case 'professores':
-        return teacherPlans
+        return teacherPlanType === 'solo' ? teacherPlansSolo : teacherPlansHibrido
       case 'escolas':
         return schoolPlans
       default:
@@ -407,14 +374,15 @@ function Precos() {
   const getHeroContent = () => {
     if (selectedAudience === 'estudantes') {
       return {
-        title: 'Planos para',
-        titleHighlight: 'Estudantes'
+        title: '(Programa individual)',
+        titleHighlight: 'Estudantes',
+        subtitle: 'Projetado para uso individual, com foco em escrita, reescrita e feedback. Aproveite o preço promocional de lançamento da Plataforma Escrita360.'
       }
     } else if (selectedAudience === 'professores') {
       return {
-        title: 'Planos para',
-        titleHighlight: 'Professores',
-        subtitle: 'Escolha o plano que acompanha seu fluxo de redações, com correções ilimitadas na própria plataforma e créditos de IA.'
+        title: 'professor independente',
+        titleHighlight: 'Programa ',
+        subtitle: 'Para professores autônomos, cursinhos ou projetos pessoais'
       }
     } else {
       return {
@@ -444,14 +412,12 @@ function Precos() {
       ]
     } else if (selectedAudience === 'professores') {
       return [
-        'Módulo de escrita digital autorregulada',
-        'Banco de estratégias para escrita',
-        'Sugestão de temas',
-        'Recursos de apoio autorregulatório',
-        'Insights para melhoria da escrita',
-        'Revisor integrado com recursos de análise ilimitada',
-        'Rubricas qualitativas para (auto)avaliação',
-        'Correção por foto ou digitada'
+        'Criação e gerenciamento de Turmas',
+        'Banco de rubricas para facilitar a avaliação',
+        'Correção via foto ou texto direto na plataforma',
+        'Relatórios de desempenho com notas (ENEM e texto dissertativo-argumentativo)',
+        'Correção com IA (ENEM e texto dissertativo-argumentativo)',
+        'Relatórios consolidados (Habilidades BNCC X ENEM)'
       ]
     } else {
       return [
@@ -477,6 +443,8 @@ function Precos() {
         title={heroContent.title}
         titleHighlight={heroContent.titleHighlight}
         subtitle={heroContent.subtitle}
+        titleHighlightClass={selectedAudience === 'professores' ? 'bg-gradient-to-r from-[#1d5a91] to-[#3b82f6] bg-clip-text text-transparent' : 'text-brand-primary'}
+        highlightFirst={selectedAudience === 'professores' || selectedAudience === 'estudantes'}
       />
 
       {/* Platform Features Section - For all audiences */}
@@ -486,10 +454,29 @@ function Precos() {
             <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-slate-900 mb-3">
               O que está incluso na plataforma
             </h2>
-            <p className="text-slate-600">
-              Esse modelo inclui o acesso completo aos seguintes recursos:
-            </p>
+            {selectedAudience === 'estudantes' ? (
+              <p className="text-slate-600">
+                Esse modelo inclui acesso completo aos seguintes recursos.
+              </p>
+            ) : selectedAudience === 'professores' ? (
+              <p className="text-slate-600">
+                Escolha o modelo que atende suas necessidades:
+              </p>
+            ) : null}
           </div>
+          
+          {selectedAudience === 'professores' && (
+            <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-8">
+              <div className="bg-white rounded-xl shadow-md border border-slate-100 p-6 hover:shadow-lg transition-shadow duration-300">
+                <h3 className="text-lg font-bold text-slate-900 mb-2">Modelo Professor Solo</h3>
+                <p className="text-slate-600 text-sm">Para professores independentes que querem gerenciar suas próprias turmas</p>
+              </div>
+              <div className="bg-white rounded-xl shadow-md border border-slate-100 p-6 hover:shadow-lg transition-shadow duration-300">
+                <h3 className="text-lg font-bold text-slate-900 mb-2">Modelo Híbrido (Professor + Aluno)</h3>
+                <p className="text-slate-600 text-sm">Integração completa entre módulos de professor e aluno</p>
+              </div>
+            </div>
+          )}
           
           <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 md:p-8">
             <div className="space-y-3 md:space-y-4">
@@ -562,6 +549,35 @@ function Precos() {
       {(selectedAudience === 'estudantes' || selectedAudience === 'professores') && (
         <section ref={plansRef} className="pt-12 pb-8 md:pt-16 md:pb-12 lg:pt-20 lg:pb-16 bg-white animate-on-scroll">
           <div className="container mx-auto px-4 max-w-7xl">
+            
+            {/* Switch para Planos de Professor - Solo vs Híbrido */}
+            {selectedAudience === 'professores' && (
+              <div className="flex justify-center mb-8">
+                <div className="bg-slate-100 rounded-lg p-1 inline-flex">
+                  <button
+                    onClick={() => setTeacherPlanType('solo')}
+                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                      teacherPlanType === 'solo'
+                        ? 'bg-white text-slate-900 shadow-sm'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    Planos Solo
+                  </button>
+                  <button
+                    onClick={() => setTeacherPlanType('hibrido')}
+                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                      teacherPlanType === 'hibrido'
+                        ? 'bg-white text-slate-900 shadow-sm'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    Planos Híbridos
+                  </button>
+                </div>
+              </div>
+            )}
+
             <div className={`grid gap-8 mx-auto mt-6 justify-center ${
               selectedAudience === 'professores' ? 'md:grid-cols-2 lg:grid-cols-2 max-w-5xl' : 
               'grid-cols-1 max-w-md'
@@ -611,14 +627,13 @@ function Precos() {
                       <p className="text-brand-primary text-xs mt-1 font-medium">{plan.subDescription}</p>
                     )}
                     <div className="mt-4 pt-4 border-t border-slate-100">
-                      <p className="text-sm text-brand-primary font-semibold">
-                        {plan.credits} análises detalhadas de redações {selectedAudience === 'estudantes' ? 'do ENEM ' : ''}por IA
+                      <p className="text-sm text-slate-600 font-semibold">
+                        {plan.credits} análises detalhadas de redações {selectedAudience === 'estudantes' ? 'do ENEM ' : 'do ENEM '}por IA
                       </p>
-                      {selectedAudience === 'professores' && (
-                        <p className="text-xs text-slate-600 mt-1">Correção por foto ou digitada</p>
-                      )}
-                      <p className="text-xs text-slate-500 mt-1">
-                        Acesso por {plan.name.includes('Trimestral') ? '90' : plan.name.includes('Semestral') ? '180' : '30'} dias
+                      <p className="text-xs text-slate-600 mt-1">
+                        Acesso por {plan.name.includes('Trimestral') ? '90' : 
+                                   plan.name.includes('Semestral') ? '180' : 
+                                   plan.name.includes('Progressivo') ? '180' : '30'} dias
                       </p>
                     </div>
                   </CardHeader>
