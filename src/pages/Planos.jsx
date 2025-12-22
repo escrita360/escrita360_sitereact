@@ -478,7 +478,7 @@ function Precos() {
             </div>
           )}
           
-          <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 md:p-8">
+          <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 md:p-8 max-w-md mx-auto">
             <div className="space-y-3 md:space-y-4">
               {platformFeatures.map((feature, index) => (
                 <div key={index} className="flex items-start gap-3">

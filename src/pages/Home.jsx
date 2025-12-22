@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent } from '@/components/ui/card.jsx'
 import { Check, X, PenTool, Brain, TrendingUp, GraduationCap, School, Edit, FileText, CheckCircle, Bot, RotateCcw, Trophy, Heart, Target, BarChart, Users, UserCheck, BookOpen, Award, Cloud, Clock } from 'lucide-react'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
-import Pessoas from '@/assets/Cards/cardpessoas_colorido.svg'
+import Banner from '@/assets/Cards/BANNER 01.svg'
 import card1 from '@/assets/Cards/card1.0.svg'
 import escritaAutoregulada from '@/assets/Cards/escrita_autoregulada.png'
 import imersaoTotal from '@/assets/Cards/imersao_total.png'
@@ -48,8 +48,8 @@ function Home() {
             </div>
             <div className="hero-image flex justify-center">
                 <img 
-                  src={Pessoas} 
-                  alt="Plataforma Escrita360" 
+                  src={Banner} 
+                  alt="Banner Escrita360" 
                   className="w-full h-auto lg:scale-105"
                 />
             </div>
@@ -128,7 +128,7 @@ Com soluções inovadoras, o Escrita360 engaja os estudantes na construção con
 
       {/* Differential Section */}
       <section className="differential bg-white py-8 md:py-12 lg:py-16">
-        <div className="container mx-auto px-4 max-w-5xl">
+        <div className="container mx-auto px-4 max-w-4xl">
           <div className="section-header text-center mb-8 md:mb-12">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4" style={{ marginTop: '20px' }}>Conheça os nossos benefícios</h2>
             <p className="text-lg md:text-xl text-slate-600 font-bold">Por que levar a Plataforma Escrita360 para a sua escola?</p>
