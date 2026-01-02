@@ -7,7 +7,7 @@ export function PageHero({ title, titleHighlight, subtitle, titleHighlightClass 
         <div className="grid lg:grid-cols-2 gap-8 items-center">
           {/* Conteúdo do texto */}
           <div className="text-center animate-fade-in-left">
-            <h1 className={`font-bold mb-6 ${title.includes('(Programa individual)') ? 'text-2xl md:text-3xl lg:text-4xl' : 'text-3xl md:text-4xl lg:text-5xl'}`}>
+            <h1 className={`font-bold mb-6 ${title.includes('individual') ? 'text-2xl md:text-3xl lg:text-4xl' : 'text-3xl md:text-4xl lg:text-5xl'}`}>
               {highlightFirst ? (
                 <>
                   {titleHighlight && <span className={titleHighlightClass}>{titleHighlight}</span>}
