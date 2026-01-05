@@ -453,17 +453,8 @@ function Precos() {
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="text-center mb-8">
             <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-slate-900 mb-3">
-              O que está incluso na plataforma
+              Escolha o modelo que atende suas necessidades:
             </h2>
-            {selectedAudience === 'estudantes' ? (
-              <p className="text-slate-600">
-                Esse modelo inclui acesso completo aos seguintes recursos:
-              </p>
-            ) : selectedAudience === 'professores' ? (
-              <p className="text-slate-600">
-                Escolha o modelo que atende suas necessidades:
-              </p>
-            ) : null}
           </div>
           
           {selectedAudience === 'professores' && (
@@ -554,7 +545,7 @@ function Precos() {
             <div className="mt-12 mb-12">
               <div className="text-center mb-8">
                 <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-slate-900 mb-3">
-                  O que está incluso na plataforma
+                  Escolha o modelo que atende suas necessidades:
                 </h3>
               </div>
               
@@ -999,14 +990,6 @@ function Precos() {
                   <p className="text-slate-600 mb-4">
                     Cada crédito equivale a uma análise completa e detalhada da sua redação pela nossa IA especializada. Os créditos têm validade de 30 dias a partir da data de compra.
                   </p>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="text-center">
-                      <p className="text-sm text-slate-700 font-semibold">IA analisa detalhadamente</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-sm text-slate-700 font-semibold">Receba feedback completo</p>
-                    </div>
-                  </div>
                 </CardContent>
               </Card>
             </div>
