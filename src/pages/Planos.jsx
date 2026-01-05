@@ -617,7 +617,7 @@ function Precos() {
                       <h3 className="text-xl font-bold text-slate-900">Básico</h3>
                       <div className="my-4">
                         <span className="text-3xl font-bold text-brand-primary">R$</span>
-                        <span className="text-4xl font-bold text-brand-primary">120</span>
+                        <span className="text-4xl font-bold text-brand-primary">120,00</span>
                         <span className="text-slate-600">/mês</span>
                       </div>
                       <div className="mt-4 pt-4 border-t border-slate-100">
@@ -662,7 +662,7 @@ function Precos() {
                       <h3 className="text-xl font-bold text-slate-900">Plano Progressivo</h3>
                       <div className="my-4">
                         <span className="text-3xl font-bold text-brand-primary">R$</span>
-                        <span className="text-4xl font-bold text-brand-primary">570</span>
+                        <span className="text-4xl font-bold text-brand-primary">570,00</span>
                         <span className="text-slate-600">/6 meses</span>
                       </div>
                       <div className="mt-4 pt-4 border-t border-slate-100">
@@ -712,7 +712,7 @@ function Precos() {
                       <h3 className="text-xl font-bold text-slate-900">Plano Essencial</h3>
                       <div className="my-4">
                         <span className="text-3xl font-bold text-brand-primary">R$</span>
-                        <span className="text-4xl font-bold text-brand-primary">1.200</span>
+                        <span className="text-4xl font-bold text-brand-primary">1.200,00</span>
                         <span className="text-slate-600">/12 meses</span>
                       </div>
                       <div className="mt-4 pt-4 border-t border-slate-100">
@@ -896,7 +896,7 @@ function Precos() {
                         <>
                           <span className="text-3xl font-bold text-brand-primary">R$</span>
                           <span className="text-4xl font-bold text-brand-primary">
-                            {plan.monthlyPrice}
+                            {plan.monthlyPrice.toFixed(2).replace('.', ',')}
                           </span>
                           <span className="text-slate-600">
                             {plan.name.includes('Trimestral') ? '/3 meses' : 
