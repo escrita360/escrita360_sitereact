@@ -1,4 +1,4 @@
-﻿import { Button } from '@/components/ui/button.jsx'
+import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardHeader } from '@/components/ui/card.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion.jsx'
@@ -37,8 +37,8 @@ function Precos() {
   // Planos para estudantes
   const studentPlans = [
     {
-      name: 'Plano BÃ¡sico',
-      badge: 'PreÃ§o promocional de lanÃ§amento',
+      name: 'Plano Básico',
+      badge: 'Preço promocional de lançamento',
       monthlyPrice: 49,
       yearlyPrice: 588,
       subDescription: '',
@@ -52,8 +52,8 @@ function Precos() {
   // Planos solo para professores
   const teacherPlansSolo = [
     {
-      name: 'Plano BÃ¡sico',
-      badge: 'PreÃ§o promocional de lanÃ§amento',
+      name: 'Plano Básico',
+      badge: 'Preço promocional de lançamento',
       monthlyPrice: 49,
       yearlyPrice: 588,
       subDescription: '',
@@ -64,20 +64,20 @@ function Precos() {
     },
     {
       name: 'Plano 2 Mensal',
-      badge: 'PreÃ§o promocional de lanÃ§amento',
+      badge: 'Preço promocional de lançamento',
       monthlyPrice: 120,
       yearlyPrice: 1440,
       description: 'Estudantes (Programa individual)',
-      subDescription: 'Aproveite o preÃ§o promocional de lanÃ§amento da Plataforma Escrita360',
+      subDescription: 'Aproveite o preço promocional de lançamento da Plataforma Escrita360',
       credits: 60,
       popular: true,
       features: [
-        { text: 'CriaÃ§Ã£o e gerenciamento de Turmas', included: true },
-        { text: 'Banco de rubricas para facilitar a avaliaÃ§Ã£o', included: true },
-        { text: 'CorreÃ§Ã£o via foto ou texto direto na plataforma', included: true },
-        { text: 'RelatÃ³rios de desempenho com notas (ENEM e texto dissertativo-argumentativo)', included: true },
-        { text: 'CorreÃ§Ã£o com IA (ENEM e texto dissertativo-argumentativo)', included: true, highlighted: true },
-        { text: 'RelatÃ³rios consolidados (Habilidades BNCC X ENEM)', included: true },
+        { text: 'Criação e gerenciamento de Turmas', included: true },
+        { text: 'Banco de rubricas para facilitar a avaliação', included: true },
+        { text: 'Correção via foto ou texto direto na plataforma', included: true },
+        { text: 'Relatórios de desempenho com notas (ENEM e texto dissertativo-argumentativo)', included: true },
+        { text: 'Correção com IA (ENEM e texto dissertativo-argumentativo)', included: true, highlighted: true },
+        { text: 'Relatórios consolidados (Habilidades BNCC X ENEM)', included: true },
         { text: 'Acesso por 30 dias', included: true }
       ],
       buttonText: 'Escolher Plano 2',
@@ -85,11 +85,11 @@ function Precos() {
     }
   ]
 
-  // Planos hÃ­bridos para professores
+  // Planos híbridos para professores
   const teacherPlansHibrido = [
     {
-      name: 'Plano BÃ¡sico',
-      badge: 'PreÃ§o promocional de lanÃ§amento',
+      name: 'Plano Básico',
+      badge: 'Preço promocional de lançamento',
       monthlyPrice: 120,
       yearlyPrice: 1440,
       subDescription: '',
@@ -116,20 +116,20 @@ function Precos() {
       name: 'Plano Semestral',
       badge: 'Institucional',
       monthlyPrice: 1200,
-      description: 'Plano HÃ­brido (Uso da plataforma + crÃ©ditos de IA)',
+      description: 'Plano Híbrido (Uso da plataforma + créditos de IA)',
       credits: 500,
       planType: 'semestral',
       features: [
-        { text: 'MÃ³dulo de escrita digital autorregulada', included: true },
-        { text: 'Banco de estratÃ©gias para escrita', included: true },
-        { text: 'SugestÃ£o de temas', included: true },
-        { text: 'Recursos de apoio autorregulatÃ³rio', included: true },
+        { text: 'Módulo de escrita digital autorregulada', included: true },
+        { text: 'Banco de estratégias para escrita', included: true },
+        { text: 'Sugestão de temas', included: true },
+        { text: 'Recursos de apoio autorregulatório', included: true },
         { text: 'Insights para melhoria da escrita', included: true },
-        { text: 'Revisor integrado com recursos de anÃ¡lise ilimitada', included: true },
-        { text: 'Rubricas qualitativas para avaliaÃ§Ã£o', included: true },
-        { text: 'CorreÃ§Ã£o por foto ou digitada (OCR)', included: true },
-        { text: 'RelatÃ³rios automÃ¡ticos (autoavaliaÃ§Ã£o, sentimentos, IA)', included: true },
-        { text: 'O acesso permanece ativo durante a vigÃªncia da assinatura', included: true, highlighted: true }
+        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
+        { text: 'Rubricas qualitativas para avaliação', included: true },
+        { text: 'Correção por foto ou digitada (OCR)', included: true },
+        { text: 'Relatórios automáticos (autoavaliação, sentimentos, IA)', included: true },
+        { text: 'O acesso permanece ativo durante a vigência da assinatura', included: true, highlighted: true }
       ],
       buttonText: 'Escolher Plano',
       buttonVariant: 'default'
@@ -138,21 +138,21 @@ function Precos() {
       name: 'Plano Semestral',
       badge: 'Institucional',
       monthlyPrice: 2400,
-      description: 'Plano HÃ­brido (Uso da plataforma + crÃ©ditos de IA)',
+      description: 'Plano Híbrido (Uso da plataforma + créditos de IA)',
       credits: 1000,
       planType: 'semestral',
       popular: true,
       features: [
-        { text: 'MÃ³dulo de escrita digital autorregulada', included: true },
-        { text: 'Banco de estratÃ©gias para escrita', included: true },
-        { text: 'SugestÃ£o de temas', included: true },
-        { text: 'Recursos de apoio autorregulatÃ³rio', included: true },
+        { text: 'Módulo de escrita digital autorregulada', included: true },
+        { text: 'Banco de estratégias para escrita', included: true },
+        { text: 'Sugestão de temas', included: true },
+        { text: 'Recursos de apoio autorregulatório', included: true },
         { text: 'Insights para melhoria da escrita', included: true },
-        { text: 'Revisor integrado com recursos de anÃ¡lise ilimitada', included: true },
-        { text: 'Rubricas qualitativas para avaliaÃ§Ã£o', included: true },
-        { text: 'CorreÃ§Ã£o por foto ou digitada (OCR)', included: true },
-        { text: 'RelatÃ³rios automÃ¡ticos (autoavaliaÃ§Ã£o, sentimentos, IA)', included: true },
-        { text: 'O acesso permanece ativo durante a vigÃªncia da assinatura', included: true, highlighted: true }
+        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
+        { text: 'Rubricas qualitativas para avaliação', included: true },
+        { text: 'Correção por foto ou digitada (OCR)', included: true },
+        { text: 'Relatórios automáticos (autoavaliação, sentimentos, IA)', included: true },
+        { text: 'O acesso permanece ativo durante a vigência da assinatura', included: true, highlighted: true }
       ],
       buttonText: 'Escolher Plano',
       buttonVariant: 'default'
@@ -161,20 +161,20 @@ function Precos() {
       name: 'Plano Semestral',
       badge: 'Institucional',
       monthlyPrice: 4800,
-      description: 'Plano HÃ­brido (Uso da plataforma + crÃ©ditos de IA)',
+      description: 'Plano Híbrido (Uso da plataforma + créditos de IA)',
       credits: 2000,
       planType: 'semestral',
       features: [
-        { text: 'MÃ³dulo de escrita digital autorregulada', included: true },
-        { text: 'Banco de estratÃ©gias para escrita', included: true },
-        { text: 'SugestÃ£o de temas', included: true },
-        { text: 'Recursos de apoio autorregulatÃ³rio', included: true },
+        { text: 'Módulo de escrita digital autorregulada', included: true },
+        { text: 'Banco de estratégias para escrita', included: true },
+        { text: 'Sugestão de temas', included: true },
+        { text: 'Recursos de apoio autorregulatório', included: true },
         { text: 'Insights para melhoria da escrita', included: true },
-        { text: 'Revisor integrado com recursos de anÃ¡lise ilimitada', included: true },
-        { text: 'Rubricas qualitativas para avaliaÃ§Ã£o', included: true },
-        { text: 'CorreÃ§Ã£o por foto ou digitada (OCR)', included: true },
-        { text: 'RelatÃ³rios automÃ¡ticos (autoavaliaÃ§Ã£o, sentimentos, IA)', included: true },
-        { text: 'O acesso permanece ativo durante a vigÃªncia da assinatura', included: true, highlighted: true }
+        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
+        { text: 'Rubricas qualitativas para avaliação', included: true },
+        { text: 'Correção por foto ou digitada (OCR)', included: true },
+        { text: 'Relatórios automáticos (autoavaliação, sentimentos, IA)', included: true },
+        { text: 'O acesso permanece ativo durante a vigência da assinatura', included: true, highlighted: true }
       ],
       buttonText: 'Escolher Plano',
       buttonVariant: 'default'
@@ -187,87 +187,87 @@ function Precos() {
       name: 'Escola Plano Institucional (Anual)',
       badge: 'Anual Institucional',
       monthlyPrice: 2350,
-      description: 'Plano HÃ­brido (Uso da plataforma + crÃ©ditos de IA)',
+      description: 'Plano Híbrido (Uso da plataforma + créditos de IA)',
       credits: 1000,
       planType: 'anual',
       features: [
-        { text: 'MÃ³dulo de escrita digital autorregulada', included: true },
-        { text: 'Banco de estratÃ©gias para escrita', included: true },
-        { text: 'SugestÃ£o de temas', included: true },
-        { text: 'Recursos de apoio autorregulatÃ³rio', included: true },
+        { text: 'Módulo de escrita digital autorregulada', included: true },
+        { text: 'Banco de estratégias para escrita', included: true },
+        { text: 'Sugestão de temas', included: true },
+        { text: 'Recursos de apoio autorregulatório', included: true },
         { text: 'Insights para melhoria da escrita', included: true },
-        { text: 'Revisor integrado com recursos de anÃ¡lise ilimitada', included: true },
-        { text: 'Rubricas qualitativas para avaliaÃ§Ã£o', included: true },
-        { text: 'CorreÃ§Ã£o por foto ou digitada (OCR)', included: true },
-        { text: 'RelatÃ³rios automÃ¡ticos (autoavaliaÃ§Ã£o, sentimentos, IA)', included: true },
-        { text: 'O acesso permanece ativo durante a vigÃªncia da assinatura', included: true, highlighted: true }
+        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
+        { text: 'Rubricas qualitativas para avaliação', included: true },
+        { text: 'Correção por foto ou digitada (OCR)', included: true },
+        { text: 'Relatórios automáticos (autoavaliação, sentimentos, IA)', included: true },
+        { text: 'O acesso permanece ativo durante a vigência da assinatura', included: true, highlighted: true }
       ],
       buttonText: 'Escolher Plano',
       buttonVariant: 'default'
     },
     {
-      name: 'Escola Plano HÃ­brido 360 (Anual)',
+      name: 'Escola Plano Híbrido 360 (Anual)',
       badge: 'Anual',
       monthlyPrice: 2150,
-      description: 'Plano HÃ­brido (Uso da plataforma + crÃ©ditos de IA)',
+      description: 'Plano Híbrido (Uso da plataforma + créditos de IA)',
       credits: 1000,
       planType: 'anual',
       features: [
-        { text: 'MÃ³dulo de escrita digital autorregulada', included: true },
-        { text: 'Banco de estratÃ©gias para escrita', included: true },
-        { text: 'SugestÃ£o de temas', included: true },
-        { text: 'Recursos de apoio autorregulatÃ³rio', included: true },
+        { text: 'Módulo de escrita digital autorregulada', included: true },
+        { text: 'Banco de estratégias para escrita', included: true },
+        { text: 'Sugestão de temas', included: true },
+        { text: 'Recursos de apoio autorregulatório', included: true },
         { text: 'Insights para melhoria da escrita', included: true },
-        { text: 'Revisor integrado com recursos de anÃ¡lise ilimitada', included: true },
-        { text: 'Rubricas qualitativas para avaliaÃ§Ã£o', included: true },
-        { text: 'CorreÃ§Ã£o por foto ou digitada (OCR)', included: true },
-        { text: 'RelatÃ³rios automÃ¡ticos (autoavaliaÃ§Ã£o, sentimentos, IA)', included: true },
-        { text: 'O acesso permanece ativo durante a vigÃªncia da assinatura', included: true, highlighted: true }
+        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
+        { text: 'Rubricas qualitativas para avaliação', included: true },
+        { text: 'Correção por foto ou digitada (OCR)', included: true },
+        { text: 'Relatórios automáticos (autoavaliação, sentimentos, IA)', included: true },
+        { text: 'O acesso permanece ativo durante a vigência da assinatura', included: true, highlighted: true }
       ],
       buttonText: 'Escolher Plano',
       buttonVariant: 'default'
     },
     {
-      name: 'Escola Plano HÃ­brido 360 (Anual)',
+      name: 'Escola Plano Híbrido 360 (Anual)',
       badge: 'Anual',
       monthlyPrice: 4300,
-      description: 'Plano HÃ­brido (Uso da plataforma + crÃ©ditos de IA)',
+      description: 'Plano Híbrido (Uso da plataforma + créditos de IA)',
       credits: 2000,
       planType: 'anual',
       popular: true,
       features: [
-        { text: 'MÃ³dulo de escrita digital autorregulada', included: true },
-        { text: 'Banco de estratÃ©gias para escrita', included: true },
-        { text: 'SugestÃ£o de temas', included: true },
-        { text: 'Recursos de apoio autorregulatÃ³rio', included: true },
+        { text: 'Módulo de escrita digital autorregulada', included: true },
+        { text: 'Banco de estratégias para escrita', included: true },
+        { text: 'Sugestão de temas', included: true },
+        { text: 'Recursos de apoio autorregulatório', included: true },
         { text: 'Insights para melhoria da escrita', included: true },
-        { text: 'Revisor integrado com recursos de anÃ¡lise ilimitada', included: true },
-        { text: 'Rubricas qualitativas para avaliaÃ§Ã£o', included: true },
-        { text: 'CorreÃ§Ã£o por foto ou digitada (OCR)', included: true },
-        { text: 'RelatÃ³rios automÃ¡ticos (autoavaliaÃ§Ã£o, sentimentos, IA)', included: true },
-        { text: 'O acesso permanece ativo durante a vigÃªncia da assinatura', included: true, highlighted: true }
+        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
+        { text: 'Rubricas qualitativas para avaliação', included: true },
+        { text: 'Correção por foto ou digitada (OCR)', included: true },
+        { text: 'Relatórios automáticos (autoavaliação, sentimentos, IA)', included: true },
+        { text: 'O acesso permanece ativo durante a vigência da assinatura', included: true, highlighted: true }
       ],
       buttonText: 'Escolher Plano',
       buttonVariant: 'default'
     },
     {
-      name: 'Escola Plano HÃ­brido 360 (Anual)',
+      name: 'Escola Plano Híbrido 360 (Anual)',
       badge: 'Anual',
       monthlyPrice: 10750,
-      description: 'Plano HÃ­brido (Uso da plataforma + crÃ©ditos de IA)',
+      description: 'Plano Híbrido (Uso da plataforma + créditos de IA)',
       credits: 5000,
       planType: 'anual',
       features: [
-        { text: 'MÃ³dulo de escrita digital autorregulada', included: true },
-        { text: 'Banco de estratÃ©gias para escrita', included: true },
-        { text: 'SugestÃ£o de temas', included: true },
-        { text: 'Recursos de apoio autorregulatÃ³rio', included: true },
+        { text: 'Módulo de escrita digital autorregulada', included: true },
+        { text: 'Banco de estratégias para escrita', included: true },
+        { text: 'Sugestão de temas', included: true },
+        { text: 'Recursos de apoio autorregulatório', included: true },
         { text: 'Insights para melhoria da escrita', included: true },
-        { text: 'Revisor integrado com recursos de anÃ¡lise ilimitada', included: true },
-        { text: 'Rubricas qualitativas para avaliaÃ§Ã£o', included: true },
-        { text: 'CorreÃ§Ã£o por foto ou digitada (OCR)', included: true },
-        { text: 'RelatÃ³rios automÃ¡ticos (autoavaliaÃ§Ã£o, sentimentos, IA)', included: true },
-        { text: 'O acesso permanece ativo durante a vigÃªncia da assinatura', included: true, highlighted: true }
+        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
+        { text: 'Rubricas qualitativas para avaliação', included: true },
+        { text: 'Correção por foto ou digitada (OCR)', included: true },
+        { text: 'Relatórios automáticos (autoavaliação, sentimentos, IA)', included: true },
+        { text: 'O acesso permanece ativo durante a vigência da assinatura', included: true, highlighted: true }
       ],
       buttonText: 'Escolher Plano',
       buttonVariant: 'default'
@@ -277,21 +277,21 @@ function Precos() {
   // Combinar planos de escolas
   const schoolPlans = [...schoolPlansSemestral, ...schoolPlansAnual]
 
-  // Pacotes de crÃ©ditos para estudantes
+  // Pacotes de créditos para estudantes
   const studentCreditPackages = [
     {
       name: 'Pacote 1',
       credits: 5,
       price: 20,
       description: '',
-      features: ['AnÃ¡lises detalhadas por IA']
+      features: ['Análises detalhadas por IA']
     },
     {
       name: 'Pacote 2',
       credits: 15,
       price: 45,
       description: '',
-      features: ['AnÃ¡lises detalhadas por IA']
+      features: ['Análises detalhadas por IA']
     },
     {
       name: 'Pacote 3',
@@ -299,18 +299,18 @@ function Precos() {
       price: 60,
       description: '',
       popular: true,
-      features: ['AnÃ¡lises detalhadas por IA', 'Melhor custo-benefÃ­cio']
+      features: ['Análises detalhadas por IA', 'Melhor custo-benefício']
     }
   ]
 
-  // Pacotes de crÃ©ditos para professores
+  // Pacotes de créditos para professores
   const teacherCreditPackages = [
     {
       name: 'Pacote 1',
       credits: 100,
       price: 200,
       description: '',
-      features: ['AnÃ¡lises detalhadas por IA']
+      features: ['Análises detalhadas por IA']
     },
     {
       name: 'Pacote 2',
@@ -318,11 +318,11 @@ function Precos() {
       price: 300,
       description: '',
       popular: true,
-      features: ['AnÃ¡lises detalhadas por IA', 'Melhor custo-benefÃ­cio']
+      features: ['Análises detalhadas por IA', 'Melhor custo-benefício']
     }
   ]
 
-  // Selecionar pacotes de crÃ©ditos baseado no pÃºblico alvo
+  // Selecionar pacotes de créditos baseado no público alvo
   const getCurrentCreditPackages = () => {
     switch (selectedAudience) {
       case 'estudantes':
@@ -339,22 +339,22 @@ function Precos() {
   // Programa Escolas / Institucional para escolas
   const schoolModels = [
     {
-      title: 'Modelo correÃ§Ã£o inteligente',
-      focus: 'Facilitar o trabalho docente e otimizar a correÃ§Ã£o de textos produzidos em sala de aula e avaliaÃ§Ãµes oficiais da escola (provas de redaÃ§Ã£o).',
-      description: 'A escola adquire Planos HÃ­bridos (plataforma + crÃ©ditos de IA), disponÃ­veis nas versÃµes semestral e anual para os professores envolvidos na produÃ§Ã£o e correÃ§Ã£o de redaÃ§Ãµes e pode adquirir pacotes adicionais de crÃ©ditos, conforme a demanda de correÃ§Ãµes da escola.',
+      title: 'Modelo correção inteligente',
+      focus: 'Facilitar o trabalho docente e otimizar a correção de textos produzidos em sala de aula e avaliações oficiais da escola (provas de redação).',
+      description: 'A escola adquire Planos Híbridos (plataforma + créditos de IA), disponíveis nas versões semestral e anual para os professores envolvidos na produção e correção de redações e pode adquirir pacotes adicionais de créditos, conforme a demanda de correções da escola.',
       number: 1
     },
     {
-      title: 'Assinatura Compartilhada - Plano HÃ­brido 360',
-      focus: 'Ampliar a adesÃ£o e possibilitar o uso contÃ­nuo da plataforma e controle pedagÃ³gico Ã  gestÃ£o.',
-      description: 'O modelo hÃ­brido combina a aquisiÃ§Ã£o de assinaturas individuais, adquiridas pelas famÃ­lias (responsÃ¡veis) e assinaturas para os professores, adquiridas pela escola. AlÃ©m das assinaturas, a escola adquire pacotes de crÃ©ditos de IA, utilizados conforme a necessidade pedagÃ³gica. Esse modelo busca ampliar a adesÃ£o e possibilitar o uso contÃ­nuo da plataforma e controle pedagÃ³gico Ã  gestÃ£o.',
-      additionalInfo: 'Os crÃ©ditos de IA podem ser utilizados para correÃ§Ã£o de textos produzidos pelos estudantes e provas de redaÃ§Ã£o. As modalidades de contrataÃ§Ã£o podem ser semestrais ou anuais. Alunos e professores tÃªm acesso a todos os recursos da plataforma.',
+      title: 'Assinatura Compartilhada - Plano Híbrido 360',
+      focus: 'Ampliar a adesão e possibilitar o uso contínuo da plataforma e controle pedagógico à gestão.',
+      description: 'O modelo híbrido combina a aquisição de assinaturas individuais, adquiridas pelas famílias (responsáveis) e assinaturas para os professores, adquiridas pela escola. Além das assinaturas, a escola adquire pacotes de créditos de IA, utilizados conforme a necessidade pedagógica. Esse modelo busca ampliar a adesão e possibilitar o uso contínuo da plataforma e controle pedagógico à gestão.',
+      additionalInfo: 'Os créditos de IA podem ser utilizados para correção de textos produzidos pelos estudantes e provas de redação. As modalidades de contratação podem ser semestrais ou anuais. Alunos e professores têm acesso a todos os recursos da plataforma.',
       number: 2,
       highlighted: true
     }
   ]
 
-  // Selecionar planos baseado no pÃºblico alvo
+  // Selecionar planos baseado no público alvo
   const getCurrentPlans = () => {
     switch (selectedAudience) {
       case 'estudantes':
@@ -370,66 +370,66 @@ function Precos() {
 
   const currentPlans = getCurrentPlans()
 
-  // ConteÃºdo do hero baseado no pÃºblico selecionado
+  // Conteúdo do hero baseado no público selecionado
   const getHeroContent = () => {
     if (selectedAudience === 'estudantes') {
       return {
         title: '(Programa individual)',
         titleHighlight: 'Estudantes',
-        subtitle: 'Projetado para uso individual, com foco em escrita, reescrita e feedback. Aproveite o preÃ§o promocional de lanÃ§amento da Plataforma Escrita360.'
+        subtitle: 'Projetado para uso individual, com foco em escrita, reescrita e feedback. Aproveite o preço promocional de lançamento da Plataforma Escrita360.'
       }
     } else if (selectedAudience === 'professores') {
       return {
         title: 'professor independente',
         titleHighlight: 'Programa ',
-        subtitle: 'Para professores autÃ´nomos, cursinhos ou projetos pessoais'
+        subtitle: 'Para professores autônomos, cursinhos ou projetos pessoais'
       }
     } else {
       return {
         title: 'Planos para',
         titleHighlight: 'Escolas',
-        subtitle: 'Escolha o plano de adesÃ£o que melhor se adapta Ã s necessidades de produÃ§Ã£o e correÃ§Ã£o de sua instituiÃ§Ã£o.'
+        subtitle: 'Escolha o plano de adesão que melhor se adapta às necessidades de produção e correção de sua instituição.'
       }
     }
   }
 
   const heroContent = getHeroContent()
 
-  // Features da plataforma por pÃºblico
+  // Features da plataforma por público
   const getPlatformFeatures = () => {
     if (selectedAudience === 'estudantes') {
       return [
-        'MÃ³dulo de escrita digital autorregulada',
-        'Banco de estratÃ©gias para escrita',
-        'SugestÃ£o de temas',
-        'Recursos de apoio autorregulatÃ³rio',
+        'Módulo de escrita digital autorregulada',
+        'Banco de estratégias para escrita',
+        'Sugestão de temas',
+        'Recursos de apoio autorregulatório',
         'Insights para melhoria da escrita',
-        'Revisor integrado com recursos de anÃ¡lise ilimitada',
-        'Rubricas qualitativas para (auto)avaliaÃ§Ã£o',
-        'CorreÃ§Ã£o via foto ou texto direto na plataforma',
-        'AvaliaÃ§Ã£o com auxÃ­lio de IA',
-        'RelatÃ³rios de desempenho (ENEM e habilidades BNCC)'
+        'Revisor integrado com recursos de análise ilimitada',
+        'Rubricas qualitativas para (auto)avaliação',
+        'Correção via foto ou texto direto na plataforma',
+        'Avaliação com auxílio de IA',
+        'Relatórios de desempenho (ENEM e habilidades BNCC)'
       ]
     } else if (selectedAudience === 'professores') {
       return [
-        'CriaÃ§Ã£o e gerenciamento de Turmas',
-        'Banco de rubricas para facilitar a avaliaÃ§Ã£o',
-        'CorreÃ§Ã£o via foto ou texto direto na plataforma',
-        'RelatÃ³rios de desempenho com notas (ENEM e texto dissertativo-argumentativo)',
-        'CorreÃ§Ã£o com IA (ENEM e texto dissertativo-argumentativo)',
-        'RelatÃ³rios consolidados (Habilidades BNCC X ENEM)'
+        'Criação e gerenciamento de Turmas',
+        'Banco de rubricas para facilitar a avaliação',
+        'Correção via foto ou texto direto na plataforma',
+        'Relatórios de desempenho com notas (ENEM e texto dissertativo-argumentativo)',
+        'Correção com IA (ENEM e texto dissertativo-argumentativo)',
+        'Relatórios consolidados (Habilidades BNCC X ENEM)'
       ]
     } else {
       return [
-        'MÃ³dulo de escrita digital autorregulada',
-        'Banco de estratÃ©gias para escrita',
-        'SugestÃ£o de temas',
-        'Recursos de apoio autorregulatÃ³rio',
+        'Módulo de escrita digital autorregulada',
+        'Banco de estratégias para escrita',
+        'Sugestão de temas',
+        'Recursos de apoio autorregulatório',
         'Insights para melhoria da escrita',
-        'Revisor integrado com recursos de anÃ¡lise ilimitada',
-        'Rubricas qualitativas para avaliaÃ§Ã£o',
-        'CorreÃ§Ã£o por foto ou digitada (OCR)',
-        'RelatÃ³rios automÃ¡ticos (autoavaliaÃ§Ã£o, sentimentos, IA)'
+        'Revisor integrado com recursos de análise ilimitada',
+        'Rubricas qualitativas para avaliação',
+        'Correção por foto ou digitada (OCR)',
+        'Relatórios automáticos (autoavaliação, sentimentos, IA)'
       ]
     }
   }
@@ -452,7 +452,7 @@ function Precos() {
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="text-center mb-8">
             <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-slate-900 mb-3">
-              O que estÃ¡ incluso na plataforma
+              O que está incluso na plataforma
             </h2>
             {selectedAudience === 'estudantes' ? (
               <p className="text-slate-600">
@@ -469,11 +469,11 @@ function Precos() {
             <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-8">
               <div className="bg-white rounded-xl shadow-md border border-slate-100 p-6 hover:shadow-lg transition-shadow duration-300">
                 <h3 className="text-lg font-bold text-slate-900 mb-2">Modelo Professor Solo</h3>
-                <p className="text-slate-600 text-sm">Para professores independentes que querem gerenciar suas prÃ³prias turmas</p>
+                <p className="text-slate-600 text-sm">Para professores independentes que querem gerenciar suas próprias turmas</p>
               </div>
               <div className="bg-white rounded-xl shadow-md border border-slate-100 p-6 hover:shadow-lg transition-shadow duration-300">
-                <h3 className="text-lg font-bold text-slate-900 mb-2">Modelo HÃ­brido (Professor + Aluno)</h3>
-                <p className="text-slate-600 text-sm">IntegraÃ§Ã£o completa entre mÃ³dulos de professor e aluno</p>
+                <h3 className="text-lg font-bold text-slate-900 mb-2">Modelo Híbrido (Professor + Aluno)</h3>
+                <p className="text-slate-600 text-sm">Integração completa entre módulos de professor e aluno</p>
               </div>
             </div>
           )}
@@ -500,28 +500,46 @@ function Precos() {
             <div className="text-center mb-12">
               <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">PROGRAMA ESCOLAS / INSTITUCIONAL</h2>
               <p className="text-lg text-slate-600 max-w-3xl mx-auto">
-                Com foco em flexibilidade e integraÃ§Ã£o pedagÃ³gica, oferecemos dois modelos voltados Ã  gestÃ£o pedagÃ³gica, escala e padronizaÃ§Ã£o.
+                Com foco em flexibilidade e integração pedagógica, oferecemos dois modelos voltados à gestão pedagógica, escala e padronização.
               </p>
             </div>
             
-            {/* Cards compactos de seleção de modelo */}
-            <div className="grid md:grid-cols-2 gap-4 max-w-3xl mx-auto mb-8">
-              <div className="bg-white rounded-xl shadow-sm p-5 border border-slate-200">
-                <h4 className="text-base font-bold text-slate-900 mb-1">{schoolModels[0].title}</h4>
-                <p className="text-slate-500 text-sm">
-                  {schoolModels[0].focus}
-                </p>
-              </div>
-              
-              <div className="bg-white rounded-xl shadow-sm p-5 border border-slate-200">
-                <h4 className="text-base font-bold text-slate-900 mb-1">{schoolModels[1].title}</h4>
-                <p className="text-slate-500 text-sm">
-                  {schoolModels[1].focus}
-                </p>
-              </div>
-            </div>
-            
             <div className="space-y-8 max-w-5xl mx-auto">
+              {schoolModels[0] && (
+                <Card className={`overflow-hidden hover-lift ${schoolModels[0].highlighted ? 'border-2 border-green-500 shadow-xl' : 'border border-slate-200'}`}>
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-6">
+                      <div className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold flex-shrink-0 ${
+                        schoolModels[0].highlighted ? 'bg-green-500 text-white' : 'bg-brand-primary text-white'
+                      }`}>
+                        {schoolModels[0].number}
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-2xl font-bold text-slate-900 mb-3">{schoolModels[0].title}</h3>
+                        <div className="mb-4">
+                          <strong className="text-slate-700">Foco:</strong> {schoolModels[0].focus}
+                        </div>
+                        <p className="text-slate-600 mb-4 leading-relaxed">{schoolModels[0].description}</p>
+                        {schoolModels[0].additionalInfo && (
+                          <p className="text-slate-600 mb-4 leading-relaxed">{schoolModels[0].additionalInfo}</p>
+                        )}
+                        {schoolModels[0].benefits && (
+                          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                            <p className="text-green-800 font-medium">{schoolModels[0].benefits}</p>
+                          </div>
+                        )}
+                        {schoolModels[0].consultation && (
+                          <div className="bg-brand-light rounded-lg p-4 text-center">
+                            <p className="text-brand-primary font-semibold">
+                              Valor definido conforme número de alunos e turmas. Entre em contato para receber uma proposta personalizada.
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
 
               {/* Teacher Solo Plans */}
               <div className="grid gap-8 mx-auto mt-6 justify-center md:grid-cols-2 lg:grid-cols-2 max-w-5xl">
@@ -535,7 +553,7 @@ function Precos() {
                       )}
                       {plan.credits && (
                         <Badge className="bg-yellow-500 text-white px-3 py-1 text-xs whitespace-nowrap">
-                          {plan.credits} crÃ©ditos IA
+                          {plan.credits} créditos IA
                         </Badge>
                       )}
                     </div>
@@ -550,7 +568,7 @@ function Precos() {
                         {plan.consultation ? (
                           <div className="text-center">
                             <span className="text-lg text-slate-600">Valor sob consulta</span>
-                            <p className="text-sm text-slate-500 mt-1">Definido conforme nÃºmero de alunos e turmas</p>
+                            <p className="text-sm text-slate-500 mt-1">Definido conforme número de alunos e turmas</p>
                           </div>
                         ) : (
                           <>
@@ -560,7 +578,7 @@ function Precos() {
                             </span>
                             <span className="text-slate-600">
                               {plan.name.includes('Trimestral') ? '/3 meses' : 
-                               plan.name.includes('Semestral') ? '/6 meses' : '/mÃªs'}
+                               plan.name.includes('Semestral') ? '/6 meses' : '/mês'}
                             </span>
                           </>
                         )}
@@ -571,7 +589,7 @@ function Precos() {
                       )}
                       <div className="mt-4 pt-4 border-t border-slate-100">
                         <p className="text-sm text-slate-600 font-semibold">
-                          {plan.credits} anÃ¡lises detalhadas de redaÃ§Ãµes do ENEM por IA
+                          {plan.credits} análises detalhadas de redações do ENEM por IA
                         </p>
                         <p className="text-xs text-slate-600 mt-1">
                           Acesso por {plan.name.includes('Trimestral') ? '90' : 
@@ -594,9 +612,44 @@ function Precos() {
                 ))}
               </div>
 
+              {schoolModels[1] && (
+                <Card className={`overflow-hidden hover-lift ${schoolModels[1].highlighted ? 'border-2 border-green-500 shadow-xl' : 'border border-slate-200'}`}>
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-6">
+                      <div className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold flex-shrink-0 ${
+                        schoolModels[1].highlighted ? 'bg-green-500 text-white' : 'bg-brand-primary text-white'
+                      }`}>
+                        {schoolModels[1].number}
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-2xl font-bold text-slate-900 mb-3">{schoolModels[1].title}</h3>
+                        <div className="mb-4">
+                          <strong className="text-slate-700">Foco:</strong> {schoolModels[1].focus}
+                        </div>
+                        <p className="text-slate-600 mb-4 leading-relaxed">{schoolModels[1].description}</p>
+                        {schoolModels[1].additionalInfo && (
+                          <p className="text-slate-600 mb-4 leading-relaxed">{schoolModels[1].additionalInfo}</p>
+                        )}
+                        {schoolModels[1].benefits && (
+                          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                            <p className="text-green-800 font-medium">{schoolModels[1].benefits}</p>
+                          </div>
+                        )}
+                        {schoolModels[1].consultation && (
+                          <div className="bg-brand-light rounded-lg p-4 text-center">
+                            <p className="text-brand-primary font-semibold">
+                              Valor definido conforme número de alunos e turmas. Entre em contato para receber uma proposta personalizada.
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
             </div>
 
-            {/* Novos Planos apÃ³s Assinatura Compartilhada */}
+            {/* Novos Planos após Assinatura Compartilhada */}
             <div className="mt-12 space-y-6">
               <h3 className="text-3xl font-bold text-center text-slate-900 mb-8">Planos Adicionais</h3>
               
@@ -610,13 +663,13 @@ function Precos() {
                         R$ 1.200,00
                       </div>
                       <div className="text-lg text-slate-600 mb-2">
-                        <strong>500 crÃ©ditos</strong>
+                        <strong>500 créditos</strong>
                       </div>
                       <div className="text-sm text-slate-500 mb-4">
                         Acesso por 12 meses
                       </div>
                       <p className="text-slate-600 text-sm leading-relaxed">
-                        Para escolas que necessitam de mais anÃ¡lises alÃ©m do plano contratado.
+                        Para escolas que necessitam de mais análises além do plano contratado.
                       </p>
                     </div>
                     <Button
@@ -644,10 +697,10 @@ function Precos() {
                         R$ 1.200,00
                       </div>
                       <div className="text-lg text-slate-600 mb-4">
-                        <strong>500 crÃ©ditos</strong>
+                        <strong>500 créditos</strong>
                       </div>
                       <p className="text-slate-600 text-sm leading-relaxed">
-                        Os crÃ©ditos extras sÃ£o utilizados durante a vigÃªncia do plano.
+                        Os créditos extras são utilizados durante a vigência do plano.
                       </p>
                     </div>
                     <Button
@@ -674,10 +727,10 @@ function Precos() {
                         R$ 2.400,00
                       </div>
                       <div className="text-lg text-slate-600 mb-4">
-                        <strong>1000 crÃ©ditos</strong>
+                        <strong>1000 créditos</strong>
                       </div>
                       <p className="text-slate-600 text-sm leading-relaxed">
-                        Os crÃ©ditos extras sÃ£o utilizados durante a vigÃªncia do plano.
+                        Os créditos extras são utilizados durante a vigência do plano.
                       </p>
                     </div>
                     <Button
@@ -700,15 +753,15 @@ function Precos() {
         </section>
       )}
 
-      {/* SeÃ§Ã£o Modelo HÃ­brido - Recursos do Aluno e Planos */}
+      {/* Seção Modelo Híbrido - Recursos do Aluno e Planos */}
       {selectedAudience === 'escolas' && (
         <section className="py-12 md:py-16 lg:py-20 bg-slate-50">
           <div className="container mx-auto px-4 max-w-7xl">
             <h2 className="text-3xl md:text-4xl font-bold text-center text-slate-900 mb-4">
-              Modelo HÃ­brido - <span className="text-brand-primary">Recursos e Planos</span>
+              Modelo Híbrido - <span className="text-brand-primary">Recursos e Planos</span>
             </h2>
             <p className="text-lg text-slate-600 text-center mb-12 max-w-3xl mx-auto">
-              Recursos disponÃ­veis para alunos e planos do Edu Essencial
+              Recursos disponíveis para alunos e planos do Edu Essencial
             </p>
 
             {/* Recursos do Aluno */}
@@ -719,11 +772,11 @@ function Precos() {
                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div className="flex items-center gap-3">
                       <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
-                      <span className="text-slate-700">Acesso completo Ã  plataforma</span>
+                      <span className="text-slate-700">Acesso completo à plataforma</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
-                      <span className="text-slate-700">CorreÃ§Ã£o automÃ¡tica de redaÃ§Ãµes</span>
+                      <span className="text-slate-700">Correção automática de redações</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
@@ -731,15 +784,15 @@ function Precos() {
                     </div>
                     <div className="flex items-center gap-3">
                       <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
-                      <span className="text-slate-700">RelatÃ³rios de desempenho</span>
+                      <span className="text-slate-700">Relatórios de desempenho</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
-                      <span className="text-slate-700">ExercÃ­cios prÃ¡ticos</span>
+                      <span className="text-slate-700">Exercícios práticos</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
-                      <span className="text-slate-700">Suporte pedagÃ³gico</span>
+                      <span className="text-slate-700">Suporte pedagógico</span>
                     </div>
                   </div>
                 </CardContent>
@@ -789,13 +842,13 @@ function Precos() {
                         R$ 1.200,00
                       </div>
                       <div className="text-lg text-slate-600 mb-2">
-                        <strong>500 crÃ©ditos</strong>
+                        <strong>500 créditos</strong>
                       </div>
                       <div className="text-sm text-slate-500 mb-4">
                         Acesso por 12 meses
                       </div>
                       <p className="text-xs text-slate-600 leading-relaxed">
-                        Para escolas que necessitam de mais anÃ¡lises alÃ©m do plano contratado.
+                        Para escolas que necessitam de mais análises além do plano contratado.
                       </p>
                     </div>
                     <Button
@@ -823,10 +876,10 @@ function Precos() {
                         R$ 1.200,00
                       </div>
                       <div className="text-lg text-slate-600 mb-4">
-                        <strong>500 crÃ©ditos</strong>
+                        <strong>500 créditos</strong>
                       </div>
                       <p className="text-xs text-slate-600 leading-relaxed">
-                        Os crÃ©ditos extras sÃ£o utilizados durante a vigÃªncia do plano.
+                        Os créditos extras são utilizados durante a vigência do plano.
                       </p>
                     </div>
                     <Button
@@ -854,7 +907,7 @@ function Precos() {
         <section ref={plansRef} className="pt-12 pb-8 md:pt-16 md:pb-12 lg:pt-20 lg:pb-16 bg-white animate-on-scroll">
           <div className="container mx-auto px-4 max-w-7xl">
             
-            {/* Switch para Planos de Professor - Solo vs HÃ­brido */}
+            {/* Switch para Planos de Professor - Solo vs Híbrido */}
             {selectedAudience === 'professores' && (
               <div className="flex justify-center mb-8">
                 <div className="bg-slate-100 rounded-lg p-1 inline-flex">
@@ -876,7 +929,7 @@ function Precos() {
                         : 'text-slate-600 hover:text-slate-900'
                     }`}
                   >
-                    Planos HÃ­bridos
+                    Planos Híbridos
                   </button>
                 </div>
               </div>
@@ -896,7 +949,7 @@ function Precos() {
                     )}
                     {plan.credits && (
                       <Badge className="bg-yellow-500 text-white px-3 py-1 text-xs whitespace-nowrap">
-                        {plan.credits} crÃ©ditos IA
+                        {plan.credits} créditos IA
                       </Badge>
                     )}
                   </div>
@@ -911,7 +964,7 @@ function Precos() {
                       {plan.consultation ? (
                         <div className="text-center">
                           <span className="text-lg text-slate-600">Valor sob consulta</span>
-                          <p className="text-sm text-slate-500 mt-1">Definido conforme nÃºmero de alunos e turmas</p>
+                          <p className="text-sm text-slate-500 mt-1">Definido conforme número de alunos e turmas</p>
                         </div>
                       ) : (
                         <>
@@ -921,7 +974,7 @@ function Precos() {
                           </span>
                           <span className="text-slate-600">
                             {plan.name.includes('Trimestral') ? '/3 meses' : 
-                             plan.name.includes('Semestral') ? '/6 meses' : '/mÃªs'}
+                             plan.name.includes('Semestral') ? '/6 meses' : '/mês'}
                           </span>
                         </>
                       )}
@@ -932,7 +985,7 @@ function Precos() {
                     )}
                     <div className="mt-4 pt-4 border-t border-slate-100">
                       <p className="text-sm text-slate-600 font-semibold">
-                        {plan.credits} anÃ¡lises detalhadas de redaÃ§Ãµes {selectedAudience === 'estudantes' ? 'do ENEM ' : 'do ENEM '}por IA
+                        {plan.credits} análises detalhadas de redações {selectedAudience === 'estudantes' ? 'do ENEM ' : 'do ENEM '}por IA
                       </p>
                       <p className="text-xs text-slate-600 mt-1">
                         Acesso por {plan.name.includes('Trimestral') ? '90' : 
@@ -964,12 +1017,12 @@ function Precos() {
           <div className="container mx-auto px-4 max-w-7xl">
             <div className="text-center mb-12">
               <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">
-                Pacotes de CrÃ©ditos
+                Pacotes de Créditos
               </h2>
               <p className="text-lg text-slate-600 max-w-3xl mx-auto">
                 {selectedAudience === 'estudantes' 
-                  ? 'Precisa escrever mais este mÃªs?'
-                  : 'Turma com muitas redaÃ§Ãµes esta semana?'
+                  ? 'Precisa escrever mais este mês?'
+                  : 'Turma com muitas redações esta semana?'
                 }
               </p>
             </div>
@@ -982,7 +1035,7 @@ function Precos() {
                 <Card key={index} className={`relative hover-lift ${pkg.popular ? 'border-2 border-green-500 shadow-xl' : 'hover:shadow-xl'} transition-all flex flex-col pt-4 w-full max-w-xs`}>
                   {pkg.popular && (
                     <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                      <Badge className="bg-green-500 text-white px-4 py-1">Melhor Custo-BenefÃ­cio</Badge>
+                      <Badge className="bg-green-500 text-white px-4 py-1">Melhor Custo-Benefício</Badge>
                     </div>
                   )}
                   <CardHeader className="text-center pb-2">
@@ -993,7 +1046,7 @@ function Precos() {
                       </span>
                     </div>
                     <p className="text-slate-600 text-sm">
-                      <strong>{pkg.credits} crÃ©ditos</strong>
+                      <strong>{pkg.credits} créditos</strong>
                     </p>
                     <p className="text-slate-600 text-xs mt-1">{pkg.description}</p>
                   </CardHeader>
@@ -1021,13 +1074,13 @@ function Precos() {
             <div className="mt-12 text-center max-w-3xl mx-auto">
               <Card className="bg-white border-slate-200">
                 <CardContent className="p-6">
-                  <h4 className="text-lg font-bold text-slate-900 mb-3">Como funcionam os crÃ©ditos?</h4>
+                  <h4 className="text-lg font-bold text-slate-900 mb-3">Como funcionam os créditos?</h4>
                   <p className="text-slate-600 mb-4">
-                    Cada crÃ©dito equivale a uma anÃ¡lise completa e detalhada da sua redaÃ§Ã£o pela nossa IA especializada. Os crÃ©ditos tÃªm validade de 30 dias a partir da data de compra.
+                    Cada crédito equivale a uma análise completa e detalhada da sua redação pela nossa IA especializada. Os créditos têm validade de 30 dias a partir da data de compra.
                   </p>
                   <div className="grid md:grid-cols-3 gap-4">
                     <div className="text-center">
-                      <p className="text-sm text-slate-700 font-semibold">Envie sua redaÃ§Ã£o</p>
+                      <p className="text-sm text-slate-700 font-semibold">Envie sua redação</p>
                     </div>
                     <div className="text-center">
                       <p className="text-sm text-slate-700 font-semibold">IA analisa detalhadamente</p>
@@ -1050,12 +1103,12 @@ function Precos() {
             <CardContent className="p-8 md:p-12">
               <div className="text-center">
                 <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">
-                  Ficou com dÃºvidas?
+                  Ficou com dúvidas?
                 </h2>
                 <p className="text-lg text-slate-600 mb-8 max-w-2xl mx-auto">
                   {selectedAudience === 'escolas' 
-                    ? 'Entre em contato conosco para uma proposta personalizada para sua instituiÃ§Ã£o. Nossa equipe estÃ¡ pronta para ajudar a encontrar a melhor soluÃ§Ã£o para suas necessidades.'
-                    : 'Entre em contato conosco e tire suas dÃºvidas. Nossa equipe estÃ¡ pronta para ajudar vocÃª a escolher o melhor plano para suas necessidades.'
+                    ? 'Entre em contato conosco para uma proposta personalizada para sua instituição. Nossa equipe está pronta para ajudar a encontrar a melhor solução para suas necessidades.'
+                    : 'Entre em contato conosco e tire suas dúvidas. Nossa equipe está pronta para ajudar você a escolher o melhor plano para suas necessidades.'
                   }
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
