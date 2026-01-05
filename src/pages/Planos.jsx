@@ -612,7 +612,7 @@ function Precos() {
                       </div>
                       <div className="mt-4 pt-4 border-t border-slate-100">
                         <p className="text-sm text-slate-600 font-semibold">
-                          {selectedAudience === 'professores' ? '60 análises detalhadas de redações do ENEM por IA' : '60 correções detalhadas com IA'}
+                          {selectedAudience === 'professores' ? '60 correções detalhadas com IA' : '60 correções detalhadas com IA'}
                         </p>
                         <p className="text-xs text-slate-600 mt-1">
                           Acesso por 30 dias
@@ -656,7 +656,7 @@ function Precos() {
                       </div>
                       <div className="mt-4 pt-4 border-t border-slate-100">
                         <p className="text-sm text-slate-600 font-semibold">
-                          {selectedAudience === 'professores' ? '300 análises detalhadas de redações do ENEM por IA' : '300 correções detalhadas com IA'}
+                          {selectedAudience === 'professores' ? '300 correções detalhadas com IA' : '300 correções detalhadas com IA'}
                         </p>
                         <p className="text-xs text-slate-600 mt-1">
                           Acesso por 180 dias
@@ -895,7 +895,7 @@ function Precos() {
                     )}
                     <div className="mt-4 pt-4 border-t border-slate-100">
                       <p className="text-sm text-slate-600 font-semibold">
-                        {plan.credits} análises detalhadas de redações {selectedAudience === 'estudantes' ? 'do ENEM ' : 'do ENEM '}por IA
+                        {plan.credits} {selectedAudience === 'estudantes' ? 'correções detalhadas com IA' : 'análises detalhadas de redações do ENEM por IA'}
                       </p>
                       <p className="text-xs text-slate-600 mt-1">
                         Acesso por {plan.name.includes('Trimestral') ? '90' : 
