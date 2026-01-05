@@ -769,7 +769,7 @@ function Precos() {
                     <ul className="space-y-1 mb-4">
                       <li className="flex items-center gap-2">
                         <Check className="w-3 h-3 text-green-600 flex-shrink-0" />
-                        <span className="text-slate-700 text-sm">Análises detalhadas por IA</span>
+                        <span className="text-slate-700 text-sm">500 Análises detalhadas por IA</span>
                       </li>
                     </ul>
                     <Button 
@@ -803,7 +803,7 @@ function Precos() {
                     <ul className="space-y-1 mb-4">
                       <li className="flex items-center gap-2">
                         <Check className="w-3 h-3 text-green-600 flex-shrink-0" />
-                        <span className="text-slate-700 text-sm">Análises detalhadas por IA</span>
+                        <span className="text-slate-700 text-sm">1000 Análises detalhadas por IA</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <Check className="w-3 h-3 text-green-600 flex-shrink-0" />
@@ -974,7 +974,9 @@ function Precos() {
                       {pkg.features.map((feature, featureIndex) => (
                         <li key={featureIndex} className="flex items-center gap-2">
                           <Check className="w-3 h-3 text-green-600 flex-shrink-0" />
-                          <span className="text-slate-700 text-sm">{feature}</span>
+                          <span className="text-slate-700 text-sm">
+                            {featureIndex === 0 ? `${pkg.credits} ${feature}` : feature}
+                          </span>
                         </li>
                       ))}
                     </ul>
