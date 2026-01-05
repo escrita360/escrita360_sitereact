@@ -278,7 +278,7 @@ function Precos() {
   // Combinar planos de escolas
   const schoolPlans = [...schoolPlansSemestral, ...schoolPlansAnual]
 
-  // Pacotes de créditos para estudantes
+  // Pacotes de análises detalhadas para estudantes
   const studentCreditPackages = [
     {
       name: 'Pacote 1',
@@ -304,7 +304,7 @@ function Precos() {
     }
   ]
 
-  // Pacotes de créditos para professores
+  // Pacotes de análises detalhadas para professores
   const teacherCreditPackages = [
     {
       name: 'Pacote 1',
@@ -323,7 +323,7 @@ function Precos() {
     }
   ]
 
-  // Selecionar pacotes de créditos baseado no público alvo
+  // Selecionar pacotes de análises detalhadas baseado no público alvo
   const getCurrentCreditPackages = () => {
     switch (selectedAudience) {
       case 'estudantes':
@@ -610,7 +610,7 @@ function Precos() {
                         Plano Inicial
                       </Badge>
                       <Badge className="bg-yellow-500 text-white px-3 py-1 text-xs whitespace-nowrap">
-                        60 créditos IA
+                        60 análises detalhadas IA
                       </Badge>
                     </div>
                     <CardHeader className="text-center pb-4">
@@ -654,7 +654,7 @@ function Precos() {
                         Popular
                       </Badge>
                       <Badge className="bg-yellow-500 text-white px-3 py-1 text-xs whitespace-nowrap">
-                        300 créditos IA
+                        300 análises detalhadas IA
                       </Badge>
                     </div>
                     <CardHeader className="text-center pb-4">
@@ -703,7 +703,7 @@ function Precos() {
                         Recomendado
                       </Badge>
                       <Badge className="bg-yellow-500 text-white px-3 py-1 text-xs whitespace-nowrap">
-                        500 créditos IA
+                        500 análises detalhadas IA
                       </Badge>
                     </div>
                     <CardHeader className="text-center pb-4">
@@ -743,11 +743,11 @@ function Precos() {
               )}
             </div>
 
-            {/* Pacotes de Créditos para Escolas */}
+            {/* Pacotes de Análises Detalhadas para Escolas */}
             <div className="mt-16 space-y-6">
               <h3 className="text-3xl font-bold text-center text-slate-900 mb-4">Pacotes de Créditos</h3>
               <p className="text-lg text-slate-600 text-center max-w-3xl mx-auto mb-8">
-                Turmas com muitas redações? Adquira pacotes extras de créditos para sua instituição.
+                Turmas com muitas redações? Adquira pacotes extras de análises detalhadas para sua instituição.
               </p>
               
               <div className="grid gap-6 mx-auto justify-items-center md:grid-cols-2 max-w-2xl">
@@ -761,9 +761,9 @@ function Precos() {
                       </span>
                     </div>
                     <p className="text-slate-600 text-sm">
-                      <strong>500 créditos</strong>
+                      <strong>500 análises detalhadas</strong>
                     </p>
-                    <p className="text-slate-500 text-xs mt-1">Os créditos extras são utilizados durante a vigência do plano.</p>
+                    <p className="text-slate-500 text-xs mt-1">As análises detalhadas extras são utilizadas durante a vigência do plano.</p>
                   </CardHeader>
                   <CardContent>
                     <ul className="space-y-1 mb-4">
@@ -795,9 +795,9 @@ function Precos() {
                       </span>
                     </div>
                     <p className="text-slate-600 text-sm">
-                      <strong>1000 créditos</strong>
+                      <strong>1000 análises detalhadas</strong>
                     </p>
-                    <p className="text-slate-500 text-xs mt-1">Os créditos extras são utilizados durante a vigência do plano.</p>
+                    <p className="text-slate-500 text-xs mt-1">As análises detalhadas extras são utilizadas durante a vigência do plano.</p>
                   </CardHeader>
                   <CardContent>
                     <ul className="space-y-1 mb-4">
@@ -965,7 +965,7 @@ function Precos() {
                       </span>
                     </div>
                     <p className="text-slate-600 text-sm">
-                      <strong>{pkg.credits} créditos</strong>
+                      <strong>{pkg.credits} análises detalhadas</strong>
                     </p>
                     <p className="text-slate-600 text-xs mt-1">{pkg.description}</p>
                   </CardHeader>
