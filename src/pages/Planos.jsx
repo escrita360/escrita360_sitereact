@@ -408,8 +408,7 @@ function Precos() {
         'Revisor integrado com recursos de análise ilimitada',
         'Rubricas qualitativas para (auto)avaliação',
         'Correção via foto ou texto direto na plataforma',
-        'Avaliação com auxílio de IA',
-        'Relatórios de desempenho (ENEM e habilidades BNCC)'
+        'Avaliação com auxílio de IA'
       ]
     } else if (selectedAudience === 'professores') {
       return [
