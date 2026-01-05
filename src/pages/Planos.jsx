@@ -612,7 +612,7 @@ function Precos() {
                       </div>
                       <div className="mt-4 pt-4 border-t border-slate-100">
                         <p className="text-sm text-slate-600 font-semibold">
-                          60 análises detalhadas de redações do ENEM por IA
+                          {selectedAudience === 'professores' ? '60 análises detalhadas de redações do ENEM por IA' : '60 correções detalhadas com IA'}
                         </p>
                         <p className="text-xs text-slate-600 mt-1">
                           Acesso por 30 dias
@@ -656,7 +656,7 @@ function Precos() {
                       </div>
                       <div className="mt-4 pt-4 border-t border-slate-100">
                         <p className="text-sm text-slate-600 font-semibold">
-                          300 análises detalhadas de redações do ENEM por IA
+                          {selectedAudience === 'professores' ? '300 análises detalhadas de redações do ENEM por IA' : '300 correções detalhadas com IA'}
                         </p>
                         <p className="text-xs text-slate-600 mt-1">
                           Acesso por 180 dias
@@ -705,7 +705,7 @@ function Precos() {
                       </div>
                       <div className="mt-4 pt-4 border-t border-slate-100">
                         <p className="text-sm text-slate-600 font-semibold">
-                          500 análises detalhadas de redações do ENEM por IA
+                          {selectedAudience === 'professores' ? '500 análises detalhadas de redações do ENEM por IA' : '500 correções detalhadas com IA'}
                         </p>
                         <p className="text-xs text-slate-600 mt-1">
                           Acesso por 365 dias
@@ -760,7 +760,7 @@ function Precos() {
                     <ul className="space-y-1 mb-4">
                       <li className="flex items-center gap-2">
                         <Check className="w-3 h-3 text-green-600 flex-shrink-0" />
-                        <span className="text-slate-700 text-sm">500 Análises detalhadas por IA</span>
+                        <span className="text-slate-700 text-sm">500 correções detalhadas com IA</span>
                       </li>
                     </ul>
                     <Button 
@@ -794,7 +794,7 @@ function Precos() {
                     <ul className="space-y-1 mb-4">
                       <li className="flex items-center gap-2">
                         <Check className="w-3 h-3 text-green-600 flex-shrink-0" />
-                        <span className="text-slate-700 text-sm">1000 Análises detalhadas por IA</span>
+                        <span className="text-slate-700 text-sm">1000 correções detalhadas com IA</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <Check className="w-3 h-3 text-green-600 flex-shrink-0" />
@@ -966,7 +966,7 @@ function Precos() {
                         <li key={featureIndex} className="flex items-center gap-2">
                           <Check className="w-3 h-3 text-green-600 flex-shrink-0" />
                           <span className="text-slate-700 text-sm">
-                            {featureIndex === 0 ? `${pkg.credits} ${feature}` : feature}
+                            {featureIndex === 0 ? `${pkg.credits} correções detalhadas com IA` : feature}
                           </span>
                         </li>
                       ))}
