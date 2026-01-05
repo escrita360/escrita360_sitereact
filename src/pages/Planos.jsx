@@ -14,6 +14,7 @@ function Precos() {
   const audienceFromUrl = searchParams.get('audience') || 'estudantes'
   const [selectedAudience, setSelectedAudience] = useState(audienceFromUrl)
   const [teacherPlanType, setTeacherPlanType] = useState('hibrido') // 'solo' ou 'hibrido'
+  const [schoolPlanType, setSchoolPlanType] = useState('correcao') // 'correcao' ou 'hibrido'
   const navigate = useNavigate()
   const plansRef = useScrollAnimation()
 
@@ -553,131 +554,176 @@ function Precos() {
 
             {/* Planos para Escolas */}
             <div className="mt-12 space-y-6">
-              <h3 className="text-3xl font-bold text-center text-slate-900 mb-8">Planos para Escolas</h3>
-              
-              <div className="grid gap-6 mx-auto justify-items-center md:grid-cols-3 max-w-4xl">
-                {/* Plano Básico */}
-                <Card className="relative hover-lift hover:shadow-xl transition-all flex flex-col pt-4 w-full max-w-xs">
-                  <CardHeader className="text-center pb-2">
-                    <h3 className="text-lg font-bold text-slate-900">Básico</h3>
-                    <div className="my-2">
-                      <span className="text-2xl font-bold text-brand-primary">
-                        R$ 120,00
-                      </span>
-                    </div>
-                    <p className="text-slate-600 text-sm">
-                      <strong>60 correções detalhadas com IA</strong>
-                    </p>
-                    <p className="text-slate-600 text-xs mt-1">Acesso por 1 mês</p>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="space-y-1 mb-4">
-                      <li className="flex items-center gap-2">
-                        <Check className="w-3 h-3 text-green-600 flex-shrink-0" />
-                        <span className="text-slate-700 text-sm">Análises detalhadas por IA</span>
-                      </li>
-                    </ul>
-                    <Button
-                      className="w-full bg-[#4A90E2] hover:bg-[#357ABD] text-white"
-                      onClick={() => handleOpenPagamento({
-                        name: 'Básico',
-                        monthlyPrice: 120,
-                        yearlyPrice: 120,
-                        credits: 60,
-                        duration: '1 mês',
-                        buttonText: 'Contratar Plano'
-                      })}
-                    >
-                      Contratar Plano
-                    </Button>
-                  </CardContent>
-                </Card>
-
-                {/* Plano Progressivo */}
-                <Card className="relative hover-lift border-2 border-brand-primary shadow-xl transition-all flex flex-col pt-4 w-full max-w-xs">
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <Badge className="bg-brand-primary text-white px-4 py-1">Popular</Badge>
-                  </div>
-                  <CardHeader className="text-center pb-2">
-                    <h3 className="text-lg font-bold text-slate-900">Plano Progressivo</h3>
-                    <div className="my-2">
-                      <span className="text-2xl font-bold text-brand-primary">
-                        R$ 570,00
-                      </span>
-                    </div>
-                    <p className="text-slate-600 text-sm">
-                      <strong>300 correções detalhadas com IA</strong>
-                    </p>
-                    <p className="text-slate-600 text-xs mt-1">Acesso por 6 meses</p>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="space-y-1 mb-4">
-                      <li className="flex items-center gap-2">
-                        <Check className="w-3 h-3 text-green-600 flex-shrink-0" />
-                        <span className="text-slate-700 text-sm">Análises detalhadas por IA</span>
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <Check className="w-3 h-3 text-green-600 flex-shrink-0" />
-                        <span className="text-slate-700 text-sm">Melhor custo-benefício</span>
-                      </li>
-                    </ul>
-                    <Button
-                      className="w-full bg-[#4A90E2] hover:bg-[#357ABD] text-white"
-                      onClick={() => handleOpenPagamento({
-                        name: 'Plano Progressivo',
-                        monthlyPrice: 570,
-                        yearlyPrice: 570,
-                        credits: 300,
-                        duration: '6 meses',
-                        buttonText: 'Contratar Plano'
-                      })}
-                    >
-                      Contratar Plano
-                    </Button>
-                  </CardContent>
-                </Card>
-
-                {/* Plano Essencial */}
-                <Card className="relative hover-lift hover:shadow-xl transition-all flex flex-col pt-4 w-full max-w-xs">
-                  <CardHeader className="text-center pb-2">
-                    <h3 className="text-lg font-bold text-slate-900">Plano Essencial</h3>
-                    <div className="my-2">
-                      <span className="text-2xl font-bold text-brand-primary">
-                        R$ 1.200,00
-                      </span>
-                    </div>
-                    <p className="text-slate-600 text-sm">
-                      <strong>500 créditos</strong>
-                    </p>
-                    <p className="text-slate-600 text-xs mt-1">Acesso por 12 meses</p>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="space-y-1 mb-4">
-                      <li className="flex items-center gap-2">
-                        <Check className="w-3 h-3 text-green-600 flex-shrink-0" />
-                        <span className="text-slate-700 text-sm">Análises detalhadas por IA</span>
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <Check className="w-3 h-3 text-green-600 flex-shrink-0" />
-                        <span className="text-slate-700 text-sm">Para escolas com alta demanda</span>
-                      </li>
-                    </ul>
-                    <Button
-                      className="w-full bg-[#4A90E2] hover:bg-[#357ABD] text-white"
-                      onClick={() => handleOpenPagamento({
-                        name: 'Plano Essencial',
-                        monthlyPrice: 1200,
-                        yearlyPrice: 1200,
-                        credits: 500,
-                        duration: '12 meses',
-                        buttonText: 'Contratar Plano'
-                      })}
-                    >
-                      Contratar Plano
-                    </Button>
-                  </CardContent>
-                </Card>
+              {/* Switch para Planos de Escolas - Correção Inteligente vs Híbrido */}
+              <div className="flex justify-center mb-8">
+                <div className="bg-slate-100 rounded-lg p-1 inline-flex">
+                  <button
+                    onClick={() => setSchoolPlanType('correcao')}
+                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                      schoolPlanType === 'correcao'
+                        ? 'bg-white text-slate-900 shadow-sm'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    Modelo correção inteligente
+                  </button>
+                  <button
+                    onClick={() => setSchoolPlanType('hibrido')}
+                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                      schoolPlanType === 'hibrido'
+                        ? 'bg-white text-slate-900 shadow-sm'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    Híbrido
+                  </button>
+                </div>
               </div>
+
+              {/* Planos Modelo Correção Inteligente */}
+              {schoolPlanType === 'correcao' && (
+                <div className="grid gap-8 mx-auto mt-6 justify-items-center md:grid-cols-2 lg:grid-cols-2 max-w-3xl">
+                  {/* Plano Básico */}
+                  <Card className="relative hover-lift animate-scale-in hover:shadow-xl transition-all flex flex-col pt-6 w-72 h-72 justify-between">
+                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 flex gap-2 animate-float">
+                      <Badge variant="secondary" className="text-xs whitespace-nowrap">
+                        Plano Inicial
+                      </Badge>
+                      <Badge className="bg-yellow-500 text-white px-3 py-1 text-xs whitespace-nowrap">
+                        60 créditos IA
+                      </Badge>
+                    </div>
+                    <CardHeader className="text-center pb-2 pt-2">
+                      <h3 className="text-lg font-bold text-slate-900">Básico</h3>
+                      <div className="my-2">
+                        <span className="text-2xl font-bold text-brand-primary">R$</span>
+                        <span className="text-3xl font-bold text-brand-primary">120</span>
+                        <span className="text-slate-600 text-sm">/mês</span>
+                      </div>
+                      <div className="mt-2 pt-2 border-t border-slate-100">
+                        <p className="text-xs text-slate-600 font-semibold">
+                          60 análises detalhadas por IA
+                        </p>
+                        <p className="text-xs text-slate-600 mt-1">
+                          Acesso por 30 dias
+                        </p>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="flex flex-col pb-4">
+                      <Button
+                        className="w-full transition-all duration-300 hover:scale-105 mt-auto bg-[#4A90E2] hover:bg-[#357ABD] text-white"
+                        variant="default"
+                        size="default"
+                        onClick={() => handleOpenPagamento({
+                          name: 'Básico',
+                          monthlyPrice: 120,
+                          yearlyPrice: 120,
+                          credits: 60,
+                          duration: '1 mês',
+                          buttonText: 'Contratar Plano'
+                        })}
+                      >
+                        Contratar Plano
+                      </Button>
+                    </CardContent>
+                  </Card>
+
+                  {/* Plano Progressivo */}
+                  <Card className="relative hover-lift animate-scale-in delay-200 border-2 border-brand-primary shadow-xl transition-all flex flex-col pt-6 w-72 h-72 justify-between">
+                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 flex gap-2 animate-float">
+                      <Badge className="bg-brand-primary text-white px-3 py-1 text-xs whitespace-nowrap">
+                        Popular
+                      </Badge>
+                      <Badge className="bg-yellow-500 text-white px-3 py-1 text-xs whitespace-nowrap">
+                        300 créditos IA
+                      </Badge>
+                    </div>
+                    <CardHeader className="text-center pb-2 pt-2">
+                      <h3 className="text-lg font-bold text-slate-900">Plano Progressivo</h3>
+                      <div className="my-2">
+                        <span className="text-2xl font-bold text-brand-primary">R$</span>
+                        <span className="text-3xl font-bold text-brand-primary">570</span>
+                        <span className="text-slate-600 text-sm">/6 meses</span>
+                      </div>
+                      <div className="mt-2 pt-2 border-t border-slate-100">
+                        <p className="text-xs text-slate-600 font-semibold">
+                          300 análises detalhadas por IA
+                        </p>
+                        <p className="text-xs text-slate-600 mt-1">
+                          Acesso por 180 dias
+                        </p>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="flex flex-col pb-4">
+                      <Button
+                        className="w-full transition-all duration-300 hover:scale-105 mt-auto bg-[#4A90E2] hover:bg-[#357ABD] text-white"
+                        variant="default"
+                        size="default"
+                        onClick={() => handleOpenPagamento({
+                          name: 'Plano Progressivo',
+                          monthlyPrice: 570,
+                          yearlyPrice: 570,
+                          credits: 300,
+                          duration: '6 meses',
+                          buttonText: 'Contratar Plano'
+                        })}
+                      >
+                        Contratar Plano
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </div>
+              )}
+
+              {/* Plano Híbrido */}
+              {schoolPlanType === 'hibrido' && (
+                <div className="flex justify-center mt-6">
+                  {/* Plano Essencial */}
+                  <Card className="relative hover-lift animate-scale-in border-2 border-brand-primary shadow-xl transition-all flex flex-col pt-6 w-72 h-72 justify-between">
+                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 flex gap-2 animate-float">
+                      <Badge className="bg-brand-primary text-white px-3 py-1 text-xs whitespace-nowrap">
+                        Recomendado
+                      </Badge>
+                      <Badge className="bg-yellow-500 text-white px-3 py-1 text-xs whitespace-nowrap">
+                        500 créditos IA
+                      </Badge>
+                    </div>
+                    <CardHeader className="text-center pb-2 pt-2">
+                      <h3 className="text-lg font-bold text-slate-900">Plano Essencial</h3>
+                      <div className="my-2">
+                        <span className="text-2xl font-bold text-brand-primary">R$</span>
+                        <span className="text-3xl font-bold text-brand-primary">1.200</span>
+                        <span className="text-slate-600 text-sm">/12 meses</span>
+                      </div>
+                      <div className="mt-2 pt-2 border-t border-slate-100">
+                        <p className="text-xs text-slate-600 font-semibold">
+                          500 análises detalhadas por IA
+                        </p>
+                        <p className="text-xs text-slate-600 mt-1">
+                          Acesso por 365 dias
+                        </p>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="flex flex-col pb-4">
+                      <Button
+                        className="w-full transition-all duration-300 hover:scale-105 mt-auto bg-[#4A90E2] hover:bg-[#357ABD] text-white"
+                        variant="default"
+                        size="default"
+                        onClick={() => handleOpenPagamento({
+                          name: 'Plano Essencial',
+                          monthlyPrice: 1200,
+                          yearlyPrice: 1200,
+                          credits: 500,
+                          duration: '12 meses',
+                          buttonText: 'Contratar Plano'
+                        })}
+                      >
+                        Contratar Plano
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </div>
+              )}
             </div>
 
             {/* Pacotes de Créditos para Escolas */}
