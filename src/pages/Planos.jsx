@@ -997,10 +997,7 @@ function Precos() {
                   <p className="text-slate-600 mb-4">
                     Cada crédito equivale a uma análise completa e detalhada da sua redação pela nossa IA especializada. Os créditos têm validade de 30 dias a partir da data de compra.
                   </p>
-                  <div className="grid md:grid-cols-3 gap-4">
-                    <div className="text-center">
-                      <p className="text-sm text-slate-700 font-semibold">Envie sua redação</p>
-                    </div>
+                  <div className="grid md:grid-cols-2 gap-4">
                     <div className="text-center">
                       <p className="text-sm text-slate-700 font-semibold">IA analisa detalhadamente</p>
                     </div>
