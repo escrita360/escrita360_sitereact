@@ -90,22 +90,22 @@ function Precos() {
   const teacherPlansHibrido = [
     {
       name: 'Plano Básico',
-      badge: 'Preço promocional de lançamento',
-      monthlyPrice: 120,
-      yearlyPrice: 1440,
+      badge: 'Não tem esse mês',
+      monthlyPrice: 49,
+      yearlyPrice: 588,
       subDescription: '',
-      credits: 60,
+      credits: 10,
       popular: true,
       buttonText: 'Escolher Plano',
       buttonVariant: 'default'
     },
     {
-      name: 'Plano Progressivo',
-      badge: 'Melhor investimento',
-      monthlyPrice: 570,
-      yearlyPrice: 3420,
+      name: 'Plano Professor solo',
+      badge: 'Preço promocional de lançamento',
+      monthlyPrice: 120,
+      yearlyPrice: 1440,
       subDescription: '',
-      credits: 300,
+      credits: 60,
       buttonText: 'Escolher Plano',
       buttonVariant: 'default'
     }
@@ -479,9 +479,14 @@ function Precos() {
                       : 'border border-slate-200 hover:border-slate-300'
                   }`}
                 >
-                  <h4 className="text-base font-bold text-slate-900 mb-1">Modelo Professor Independente</h4>
+                  <h4 className="text-base font-bold text-slate-900 mb-1">
+                    {teacherPlanType === 'hibrido' ? 'Módulo Aluno' : 'Modelo Professor Independente'}
+                  </h4>
                   <p className="text-slate-500 text-sm">
-                    Para professores independentes que querem gerenciar suas próprias turmas
+                    {teacherPlanType === 'hibrido' 
+                      ? 'Recursos para escrita autorregulada e desenvolvimento do aluno'
+                      : 'Para professores independentes que querem gerenciar suas próprias turmas'
+                    }
                   </p>
                 </button>
                 
@@ -493,9 +498,14 @@ function Precos() {
                       : 'border border-slate-200 hover:border-slate-300'
                   }`}
                 >
-                  <h4 className="text-base font-bold text-slate-900 mb-1">Modelo Híbrido (Professor + Aluno)</h4>
+                  <h4 className="text-base font-bold text-slate-900 mb-1">
+                    {teacherPlanType === 'hibrido' ? 'Módulo Professor Solo' : 'Modelo Híbrido (Professor + Aluno)'}
+                  </h4>
                   <p className="text-slate-500 text-sm">
-                    Integração completa entre módulos de professor e aluno
+                    {teacherPlanType === 'hibrido'
+                      ? 'Ferramentas para gestão de turmas e correção de redações'
+                      : 'Integração completa entre módulos de professor e aluno'
+                    }
                   </p>
                 </button>
               </div>
