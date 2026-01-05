@@ -502,6 +502,66 @@ function Precos() {
             </>
           )}
           
+          {/* Quadros lado a lado para Modelo Híbrido - apenas para professores */}
+          {selectedAudience === 'professores' && teacherPlanType === 'hibrido' && (
+            <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto mb-8">
+              {/* Quadro Professor */}
+              <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6">
+                <div className="text-center mb-4">
+                  <h4 className="text-lg font-bold text-slate-900 mb-2">Módulo Professor</h4>
+                  <p className="text-slate-600 text-sm">Ferramentas para gestão e correção</p>
+                </div>
+                <div className="space-y-3">
+                  {[
+                    'Criação e gerenciamento de Turmas',
+                    'Banco de rubricas para facilitar a avaliação',
+                    'Correção via foto ou texto direto na plataforma',
+                    'Relatórios de desempenho com notas (ENEM e texto dissertativo-argumentativo)',
+                    'Correção com IA (ENEM e texto dissertativo-argumentativo)',
+                    'Relatórios consolidados (Habilidades BNCC X ENEM)'
+                  ].map((feature, index) => (
+                    <div key={index} className="flex items-start gap-3">
+                      <div className="w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <Check className="w-3 h-3 text-blue-600" />
+                      </div>
+                      <span className="text-slate-700 text-sm">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Quadro Aluno */}
+              <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6">
+                <div className="text-center mb-4">
+                  <h4 className="text-lg font-bold text-slate-900 mb-2">Módulo Aluno</h4>
+                  <p className="text-slate-600 text-sm">Recursos para escrita autorregulada</p>
+                </div>
+                <div className="space-y-3">
+                  {[
+                    'Módulo de escrita digital autorregulada',
+                    'Banco de estratégias para escrita',
+                    'Sugestão de temas',
+                    'Recursos de apoio autorregulatório',
+                    'Insights para melhoria da escrita',
+                    'Revisor integrado com recursos de análise ilimitada',
+                    'Rubricas qualitativas para (auto)avaliação',
+                    'Correção via foto ou texto direto na plataforma',
+                    'Avaliação com auxílio de IA'
+                  ].map((feature, index) => (
+                    <div key={index} className="flex items-start gap-3">
+                      <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <Check className="w-3 h-3 text-green-600" />
+                      </div>
+                      <span className="text-slate-700 text-sm">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Quadro único para outros casos */}
+          {!(selectedAudience === 'professores' && teacherPlanType === 'hibrido') && (
           <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 md:p-8 max-w-md mx-auto">
             <div className="space-y-3 md:space-y-4">
               {platformFeatures.map((feature, index) => (
@@ -514,6 +574,7 @@ function Precos() {
               ))}
             </div>
           </div>
+          )}
         </div>
       </section>
       )}
