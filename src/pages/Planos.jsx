@@ -626,27 +626,37 @@ function Precos() {
 
             {/* Novos Planos após Assinatura Compartilhada */}
             <div className="mt-12 space-y-6">
-              <h3 className="text-3xl font-bold text-center text-slate-900 mb-8">Planos Adicionais</h3>
+              <h3 className="text-3xl font-bold text-center text-slate-900 mb-8">Pacotes de Créditos</h3>
+              <p className="text-lg text-slate-600 max-w-3xl mx-auto text-center mb-8">
+                Precisa de mais créditos para sua escola?
+              </p>
               
-              <div className="grid gap-6 md:grid-cols-3">
+              <div className="grid gap-6 mx-auto justify-items-center md:grid-cols-3 max-w-4xl">
                 {/* Plano Essencial */}
-                <Card className="overflow-hidden hover-lift border border-slate-200">
-                  <CardContent className="p-6">
-                    <div className="text-center mb-6">
-                      <h4 className="text-2xl font-bold text-slate-900 mb-2">Plano Essencial</h4>
-                      <div className="text-3xl font-bold text-brand-primary mb-2">
-                        R$ 1.200,00
-                      </div>
-                      <div className="text-lg text-slate-600 mb-2">
-                        <strong>500 créditos</strong>
-                      </div>
-                      <div className="text-sm text-slate-500 mb-4">
-                        Acesso por 12 meses
-                      </div>
-                      <p className="text-slate-600 text-sm leading-relaxed">
-                        Para escolas que necessitam de mais análises além do plano contratado.
-                      </p>
+                <Card className="relative hover-lift hover:shadow-xl transition-all flex flex-col pt-4 w-full max-w-xs">
+                  <CardHeader className="text-center pb-2">
+                    <h3 className="text-lg font-bold text-slate-900">Plano Essencial</h3>
+                    <div className="my-2">
+                      <span className="text-2xl font-bold text-brand-primary">
+                        R$ 1.200
+                      </span>
                     </div>
+                    <p className="text-slate-600 text-sm">
+                      <strong>500 créditos</strong>
+                    </p>
+                    <p className="text-slate-600 text-xs mt-1">Acesso por 12 meses</p>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-1 mb-4">
+                      <li className="flex items-center gap-2">
+                        <Check className="w-3 h-3 text-green-600 flex-shrink-0" />
+                        <span className="text-slate-700 text-sm">Análises detalhadas por IA</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <Check className="w-3 h-3 text-green-600 flex-shrink-0" />
+                        <span className="text-slate-700 text-sm">Para escolas com alta demanda</span>
+                      </li>
+                    </ul>
                     <Button
                       className="w-full bg-[#4A90E2] hover:bg-[#357ABD] text-white"
                       onClick={() => handleOpenPagamento({
@@ -664,20 +674,30 @@ function Precos() {
                 </Card>
 
                 {/* Pacote 1 */}
-                <Card className="overflow-hidden hover-lift border border-slate-200">
-                  <CardContent className="p-6">
-                    <div className="text-center mb-6">
-                      <h4 className="text-2xl font-bold text-slate-900 mb-2">Pacote 1</h4>
-                      <div className="text-3xl font-bold text-brand-primary mb-2">
-                        R$ 1.200,00
-                      </div>
-                      <div className="text-lg text-slate-600 mb-4">
-                        <strong>500 créditos</strong>
-                      </div>
-                      <p className="text-slate-600 text-sm leading-relaxed">
-                        Os créditos extras são utilizados durante a vigência do plano.
-                      </p>
+                <Card className="relative hover-lift hover:shadow-xl transition-all flex flex-col pt-4 w-full max-w-xs">
+                  <CardHeader className="text-center pb-2">
+                    <h3 className="text-lg font-bold text-slate-900">Pacote 1</h3>
+                    <div className="my-2">
+                      <span className="text-2xl font-bold text-brand-primary">
+                        R$ 1.200
+                      </span>
                     </div>
+                    <p className="text-slate-600 text-sm">
+                      <strong>500 créditos</strong>
+                    </p>
+                    <p className="text-slate-600 text-xs mt-1"></p>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-1 mb-4">
+                      <li className="flex items-center gap-2">
+                        <Check className="w-3 h-3 text-green-600 flex-shrink-0" />
+                        <span className="text-slate-700 text-sm">Análises detalhadas por IA</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <Check className="w-3 h-3 text-green-600 flex-shrink-0" />
+                        <span className="text-slate-700 text-sm">Créditos extras durante vigência</span>
+                      </li>
+                    </ul>
                     <Button
                       className="w-full bg-[#4A90E2] hover:bg-[#357ABD] text-white"
                       onClick={() => handleOpenPagamento({
@@ -694,20 +714,33 @@ function Precos() {
                 </Card>
 
                 {/* Pacote 2 */}
-                <Card className="overflow-hidden hover-lift border border-slate-200">
-                  <CardContent className="p-6">
-                    <div className="text-center mb-6">
-                      <h4 className="text-2xl font-bold text-slate-900 mb-2">Pacote 2</h4>
-                      <div className="text-3xl font-bold text-brand-primary mb-2">
-                        R$ 2.400,00
-                      </div>
-                      <div className="text-lg text-slate-600 mb-4">
-                        <strong>1000 créditos</strong>
-                      </div>
-                      <p className="text-slate-600 text-sm leading-relaxed">
-                        Os créditos extras são utilizados durante a vigência do plano.
-                      </p>
+                <Card className="relative hover-lift border-2 border-green-500 shadow-xl transition-all flex flex-col pt-4 w-full max-w-xs">
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                    <Badge className="bg-green-500 text-white px-4 py-1">Melhor Custo-Benefício</Badge>
+                  </div>
+                  <CardHeader className="text-center pb-2">
+                    <h3 className="text-lg font-bold text-slate-900">Pacote 2</h3>
+                    <div className="my-2">
+                      <span className="text-2xl font-bold text-brand-primary">
+                        R$ 2.400
+                      </span>
                     </div>
+                    <p className="text-slate-600 text-sm">
+                      <strong>1000 créditos</strong>
+                    </p>
+                    <p className="text-slate-600 text-xs mt-1"></p>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-1 mb-4">
+                      <li className="flex items-center gap-2">
+                        <Check className="w-3 h-3 text-green-600 flex-shrink-0" />
+                        <span className="text-slate-700 text-sm">Análises detalhadas por IA</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <Check className="w-3 h-3 text-green-600 flex-shrink-0" />
+                        <span className="text-slate-700 text-sm">Melhor custo-benefício</span>
+                      </li>
+                    </ul>
                     <Button
                       className="w-full bg-[#4A90E2] hover:bg-[#357ABD] text-white"
                       onClick={() => handleOpenPagamento({
