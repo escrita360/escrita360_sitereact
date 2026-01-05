@@ -381,9 +381,11 @@ function Precos() {
       }
     } else if (selectedAudience === 'professores') {
       return {
-        title: 'professor independente',
-        titleHighlight: 'Programa ',
-        subtitle: 'Para professores autônomos, cursinhos ou projetos pessoais'
+        title: 'Independente',
+        titleHighlight: 'Professor ',
+        subtitle: 'Para professores autônomos, cursinhos ou projetos pessoais',
+        titleHighlightClass: 'bg-gradient-to-r from-blue-600 to-black bg-clip-text text-transparent',
+        highlightFirst: true
       }
     } else {
       return {
@@ -443,8 +445,8 @@ function Precos() {
         title={heroContent.title}
         titleHighlight={heroContent.titleHighlight}
         subtitle={heroContent.subtitle}
-        titleHighlightClass={selectedAudience === 'professores' ? 'bg-gradient-to-r from-[#1d5a91] to-[#3b82f6] bg-clip-text text-transparent' : 'text-brand-primary'}
-        highlightFirst={selectedAudience === 'professores' || selectedAudience === 'estudantes'}
+        titleHighlightClass={heroContent.titleHighlightClass || 'text-brand-primary'}
+        highlightFirst={heroContent.highlightFirst || selectedAudience === 'estudantes'}
       />
 
       {/* Platform Features Section - For students and teachers only */}
@@ -461,7 +463,10 @@ function Precos() {
             <>
               {/* Título da seção institucional */}
               <div className="text-center mb-8">
-                <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-2">Professores (Programa professor independente)</h3>
+                <h3 className="text-xl md:text-2xl font-bold mb-2">
+                  <span className="bg-gradient-to-r from-blue-600 to-black bg-clip-text text-transparent">Professor</span>{' '}
+                  <span className="text-slate-900">Independente</span>
+                </h3>
               </div>
 
               {/* Cards de seleção de modelo - estilo compacto */}
