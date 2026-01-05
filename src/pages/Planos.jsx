@@ -470,10 +470,7 @@ function Precos() {
             <>
               {/* Título da seção institucional */}
               <div className="text-center mb-8">
-                <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-2">PROGRAMA ESCOLAS / INSTITUCIONAL</h3>
-                <p className="text-slate-600 max-w-2xl mx-auto">
-                  Com foco em flexibilidade e integração pedagógica, oferecemos dois modelos voltados à gestão pedagógica, escala e padronização.
-                </p>
+                <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-2">Professores (Programa professor independente)</h3>
               </div>
 
               {/* Cards de seleção de modelo - estilo compacto */}
@@ -486,7 +483,7 @@ function Precos() {
                       : 'border border-slate-200 hover:border-slate-300'
                   }`}
                 >
-                  <h4 className="text-base font-bold text-slate-900 mb-1">Modelo correção inteligente</h4>
+                  <h4 className="text-base font-bold text-slate-900 mb-1">Modelo Professor Independente</h4>
                   <p className="text-slate-500 text-sm">
                     Para professores independentes que querem gerenciar suas próprias turmas
                   </p>
@@ -500,7 +497,7 @@ function Precos() {
                       : 'border border-slate-200 hover:border-slate-300'
                   }`}
                 >
-                  <h4 className="text-base font-bold text-slate-900 mb-1">Assinatura Compartilhada - Plano Híbrido 360</h4>
+                  <h4 className="text-base font-bold text-slate-900 mb-1">Modelo Híbrido (Professor + Aluno)</h4>
                   <p className="text-slate-500 text-sm">
                     Integração completa entre módulos de professor e aluno
                   </p>
@@ -582,9 +579,9 @@ function Precos() {
 
               {/* Planos Modelo Correção Inteligente */}
               {schoolPlanType === 'correcao' && (
-                <div className="grid gap-8 mx-auto mt-6 justify-items-center md:grid-cols-2 lg:grid-cols-2 max-w-3xl">
+                <div className="grid gap-8 mx-auto mt-6 justify-center md:grid-cols-2 lg:grid-cols-2 max-w-5xl">
                   {/* Plano Básico */}
-                  <Card className="relative hover-lift animate-scale-in hover:shadow-xl transition-all flex flex-col pt-6 w-72 h-72 justify-between">
+                  <Card className="relative hover-lift animate-scale-in hover:shadow-xl transition-all flex flex-col pt-6 w-full">
                     <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 flex gap-2 animate-float">
                       <Badge variant="secondary" className="text-xs whitespace-nowrap">
                         Plano Inicial
@@ -593,27 +590,27 @@ function Precos() {
                         60 créditos IA
                       </Badge>
                     </div>
-                    <CardHeader className="text-center pb-2 pt-2">
-                      <h3 className="text-lg font-bold text-slate-900">Básico</h3>
-                      <div className="my-2">
-                        <span className="text-2xl font-bold text-brand-primary">R$</span>
-                        <span className="text-3xl font-bold text-brand-primary">120</span>
-                        <span className="text-slate-600 text-sm">/mês</span>
+                    <CardHeader className="text-center pb-4">
+                      <h3 className="text-xl font-bold text-slate-900">Básico</h3>
+                      <div className="my-4">
+                        <span className="text-3xl font-bold text-brand-primary">R$</span>
+                        <span className="text-4xl font-bold text-brand-primary">120</span>
+                        <span className="text-slate-600">/mês</span>
                       </div>
-                      <div className="mt-2 pt-2 border-t border-slate-100">
-                        <p className="text-xs text-slate-600 font-semibold">
-                          60 análises detalhadas por IA
+                      <div className="mt-4 pt-4 border-t border-slate-100">
+                        <p className="text-sm text-slate-600 font-semibold">
+                          60 análises detalhadas de redações do ENEM por IA
                         </p>
                         <p className="text-xs text-slate-600 mt-1">
                           Acesso por 30 dias
                         </p>
                       </div>
                     </CardHeader>
-                    <CardContent className="flex flex-col pb-4">
+                    <CardContent className="flex flex-col">
                       <Button
                         className="w-full transition-all duration-300 hover:scale-105 mt-auto bg-[#4A90E2] hover:bg-[#357ABD] text-white"
                         variant="default"
-                        size="default"
+                        size="lg"
                         onClick={() => handleOpenPagamento({
                           name: 'Básico',
                           monthlyPrice: 120,
@@ -629,7 +626,7 @@ function Precos() {
                   </Card>
 
                   {/* Plano Progressivo */}
-                  <Card className="relative hover-lift animate-scale-in delay-200 border-2 border-brand-primary shadow-xl transition-all flex flex-col pt-6 w-72 h-72 justify-between">
+                  <Card className="relative hover-lift animate-scale-in delay-200 border-2 border-brand-primary shadow-xl transition-all flex flex-col pt-6 w-full">
                     <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 flex gap-2 animate-float">
                       <Badge className="bg-brand-primary text-white px-3 py-1 text-xs whitespace-nowrap">
                         Popular
@@ -638,27 +635,27 @@ function Precos() {
                         300 créditos IA
                       </Badge>
                     </div>
-                    <CardHeader className="text-center pb-2 pt-2">
-                      <h3 className="text-lg font-bold text-slate-900">Plano Progressivo</h3>
-                      <div className="my-2">
-                        <span className="text-2xl font-bold text-brand-primary">R$</span>
-                        <span className="text-3xl font-bold text-brand-primary">570</span>
-                        <span className="text-slate-600 text-sm">/6 meses</span>
+                    <CardHeader className="text-center pb-4">
+                      <h3 className="text-xl font-bold text-slate-900">Plano Progressivo</h3>
+                      <div className="my-4">
+                        <span className="text-3xl font-bold text-brand-primary">R$</span>
+                        <span className="text-4xl font-bold text-brand-primary">570</span>
+                        <span className="text-slate-600">/6 meses</span>
                       </div>
-                      <div className="mt-2 pt-2 border-t border-slate-100">
-                        <p className="text-xs text-slate-600 font-semibold">
-                          300 análises detalhadas por IA
+                      <div className="mt-4 pt-4 border-t border-slate-100">
+                        <p className="text-sm text-slate-600 font-semibold">
+                          300 análises detalhadas de redações do ENEM por IA
                         </p>
                         <p className="text-xs text-slate-600 mt-1">
                           Acesso por 180 dias
                         </p>
                       </div>
                     </CardHeader>
-                    <CardContent className="flex flex-col pb-4">
+                    <CardContent className="flex flex-col">
                       <Button
                         className="w-full transition-all duration-300 hover:scale-105 mt-auto bg-[#4A90E2] hover:bg-[#357ABD] text-white"
                         variant="default"
-                        size="default"
+                        size="lg"
                         onClick={() => handleOpenPagamento({
                           name: 'Plano Progressivo',
                           monthlyPrice: 570,
@@ -677,9 +674,9 @@ function Precos() {
 
               {/* Plano Híbrido */}
               {schoolPlanType === 'hibrido' && (
-                <div className="flex justify-center mt-6">
+                <div className="grid gap-8 mx-auto mt-6 justify-center grid-cols-1 max-w-md">
                   {/* Plano Essencial */}
-                  <Card className="relative hover-lift animate-scale-in border-2 border-brand-primary shadow-xl transition-all flex flex-col pt-6 w-72 h-72 justify-between">
+                  <Card className="relative hover-lift animate-scale-in border-2 border-brand-primary shadow-xl transition-all flex flex-col pt-6 w-full">
                     <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 flex gap-2 animate-float">
                       <Badge className="bg-brand-primary text-white px-3 py-1 text-xs whitespace-nowrap">
                         Recomendado
@@ -688,27 +685,27 @@ function Precos() {
                         500 créditos IA
                       </Badge>
                     </div>
-                    <CardHeader className="text-center pb-2 pt-2">
-                      <h3 className="text-lg font-bold text-slate-900">Plano Essencial</h3>
-                      <div className="my-2">
-                        <span className="text-2xl font-bold text-brand-primary">R$</span>
-                        <span className="text-3xl font-bold text-brand-primary">1.200</span>
-                        <span className="text-slate-600 text-sm">/12 meses</span>
+                    <CardHeader className="text-center pb-4">
+                      <h3 className="text-xl font-bold text-slate-900">Plano Essencial</h3>
+                      <div className="my-4">
+                        <span className="text-3xl font-bold text-brand-primary">R$</span>
+                        <span className="text-4xl font-bold text-brand-primary">1.200</span>
+                        <span className="text-slate-600">/12 meses</span>
                       </div>
-                      <div className="mt-2 pt-2 border-t border-slate-100">
-                        <p className="text-xs text-slate-600 font-semibold">
-                          500 análises detalhadas por IA
+                      <div className="mt-4 pt-4 border-t border-slate-100">
+                        <p className="text-sm text-slate-600 font-semibold">
+                          500 análises detalhadas de redações do ENEM por IA
                         </p>
                         <p className="text-xs text-slate-600 mt-1">
                           Acesso por 365 dias
                         </p>
                       </div>
                     </CardHeader>
-                    <CardContent className="flex flex-col pb-4">
+                    <CardContent className="flex flex-col">
                       <Button
                         className="w-full transition-all duration-300 hover:scale-105 mt-auto bg-[#4A90E2] hover:bg-[#357ABD] text-white"
                         variant="default"
-                        size="default"
+                        size="lg"
                         onClick={() => handleOpenPagamento({
                           name: 'Plano Essencial',
                           monthlyPrice: 1200,
