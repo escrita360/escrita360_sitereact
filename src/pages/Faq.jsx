@@ -33,24 +33,18 @@ const faqData = [
   },
   {
     id: 5,
-    category: 'implementacao',
-    question: 'Como é feita a implementação da plataforma nas escolas?',
-    answer: 'O processo é realizado pela **equipe de suporte do Escrita360**, responsável por criar logins, ativar acessos e organizar as formações iniciais com os educadores.\n\nApós a ativação, a escola ou rede conta com **acompanhamento contínuo** para suporte e formações complementares sempre que necessário.'
-  },
-  {
-    id: 6,
     category: 'recursos',
     question: 'Como o desempenho dos alunos nas habilidades escritas pode ser acompanhado?',
     answer: '#### Para o Estudante:\n\nO estudante pode autoavaliar suas produções escritas com o apoio de rubricas e listas de verificação, acompanhando sua evolução por meio de gráficos e níveis de desempenho. Também tem acesso a recursos de análise textual automatizada, que indicam pontos de melhoria e padrões de escrita.\n\n#### Para o Professor:\n\nO professor conta com três tipos de relatórios:\n\n- **Autoavaliações dos alunos**, com notas e gráficos individuais\n- **Análises automatizadas por IA**\n- **Relatórios comparativos**, que mostram os índices de concordância e divergência entre as avaliações de alunos e professores\n\n#### Para a Escola:\n\nA escola conta com um dashboard completo e personalizável, que pode ser implementado conforme suas necessidades. Entre as possibilidades que a  ferramenta pode oferecer destacam-se o mapeamento de habilidades por turma, médias de desempenho, comparativos entre autoavaliações dos estudantes e avaliações docentes (avaliação por pares), além de relatórios alinhados à BNCC (MEC) e às competências do ENEM (INEP).'
   },
   {
-    id: 7,
+    id: 6,
     category: 'recursos',
     question: 'Como são utilizados os créditos nas correções com IA?',
     answer: 'Quando o usuário solicita a correção, o sistema consome créditos de uso, equivalentes a chamadas à IA. **Cada redação corrigida consome um crédito** (uma unidade de consumo).\n\nEnquanto a assinatura estiver ativa, o usuário poderá utilizar os créditos de IA para correções e análises de textos, conforme o limite do plano contratado.\n\n**Os créditos não utilizados serão acumulados para os meses seguintes**, desde que a assinatura permaneça vigente.'
   },
   {
-    id: 8,
+    id: 7,
     category: 'recursos',
     question: 'Que tipos de recursos de análise estão integrados à plataforma?',
     answer: 'A plataforma possibilita um conjunto de **análises ilimitadas** que incluem:\n\n- **Verificação da estrutura e fluidez do parágrafo**, com a simulação do número de palavras por linha para a redação ENEM\n- **Composição e comprimento das frases**\n- **Frequência de palavras**\n- **Identificação de elementos coesivos** (coesão sequencial e referencial)\n\nIsso permite ajustes em tempo real, para a melhoria contínua da escrita e acompanhamento detalhado das principais dificuldades.'

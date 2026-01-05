@@ -37,6 +37,11 @@ function Recursos() {
 
   const recursosEstudantes = [
     {
+      icon: <Cloud className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
+      title: 'Plataforma automatizada',
+      description: 'Oferece recursos que permitem ao estudante, planejar, escrever, revisar, reescrever e autoavaliar suas produções de forma orientada, eficiente e autônoma.'
+    },
+    {
       icon: <List className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
       title: 'Lista de Acrônimos',
       description: 'Lista de Acrônimos específicos para cada uma das fases (planejamento, produção, autoavaliação).'
@@ -80,19 +85,9 @@ function Recursos() {
 
   const recursosProfessores = [
     {
-      icon: <Cloud className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
-      title: 'Plataforma automatizada',
-      description: 'Oferece recursos que permitem aos estudantes planejar, escrever, revisar, reescrever e autoavaliar suas produções de forma orientada,  eficiente e autônoma.'
-    },
-    {
-      icon: <BookOpen className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
-      title: 'Habilidades da BNCC',
-      description: 'Lista de habilidades da BNCC a serem trabalhadas.'
-    },
-    {
       icon: <ClipboardCheck className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
       title: 'Avaliação Docente Estruturada',
-      description: 'Avaliação docente estruturada, com rubricas alinhadas às habilidades da BNCC e às competências do Enem.'
+      description: 'avaliação apoiada com uso de rubricas alinhadas às habilidades da BNCC e às competências do Enem.'
     },
     {
       icon: <Settings className="w-8 h-8 text-brand-primary animate-pulse-glow" />,

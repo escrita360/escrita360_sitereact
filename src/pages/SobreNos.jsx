@@ -40,7 +40,7 @@ export default function SobreNos() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h1 className="text-5xl font-bold text-brand-dark mb-6">Sobre a Escrita 360</h1>
+          <h1 className="text-5xl font-bold text-brand-dark mb-6">Sobre o Escrita360</h1>
           <p className="text-xl text-slate-600 max-w-4xl mx-auto leading-relaxed text-center">
             Transformamos o ensino da escrita através de tecnologia inovadora e metodologia autorregulada, 
             oferecendo uma plataforma completa para estudantes, professores e instituições educacionais.
