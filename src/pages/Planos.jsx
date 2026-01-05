@@ -448,7 +448,8 @@ function Precos() {
         highlightFirst={selectedAudience === 'professores' || selectedAudience === 'estudantes'}
       />
 
-      {/* Platform Features Section - For all audiences */}
+      {/* Platform Features Section - For students and teachers only */}
+      {selectedAudience !== 'escolas' && (
       <section className="py-8 md:py-12 bg-gradient-to-b from-slate-50 to-white">
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="text-center mb-8">
@@ -520,6 +521,7 @@ function Precos() {
           </div>
         </div>
       </section>
+      )}
 
       {/* School Models Section - Only for schools - FIRST */}
       {selectedAudience === 'escolas' && (
@@ -546,6 +548,28 @@ function Precos() {
                 <p className="text-slate-500 text-sm">
                   {schoolModels[1].focus}
                 </p>
+              </div>
+            </div>
+
+            {/* Platform Features Section - For schools */}
+            <div className="mt-12 mb-12">
+              <div className="text-center mb-8">
+                <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-slate-900 mb-3">
+                  O que está incluso na plataforma
+                </h3>
+              </div>
+              
+              <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 md:p-8 max-w-md mx-auto">
+                <div className="space-y-3 md:space-y-4">
+                  {platformFeatures.map((feature, index) => (
+                    <div key={index} className="flex items-start gap-3">
+                      <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <Check className="w-3 h-3 text-green-600" />
+                      </div>
+                      <span className="text-slate-700 text-sm md:text-base">{feature}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
