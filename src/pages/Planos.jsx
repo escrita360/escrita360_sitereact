@@ -53,24 +53,24 @@ function Precos() {
   // Planos solo para professores
   const teacherPlansSolo = [
     {
-      name: 'Plano Básico',
+      name: 'Plano Professor solo',
       badge: 'Preço promocional de lançamento',
-      monthlyPrice: 49,
-      yearlyPrice: 588,
+      monthlyPrice: 120,
+      yearlyPrice: 1440,
       subDescription: '',
-      credits: 10,
+      credits: 60,
       popular: true,
       buttonText: 'Escolher Plano',
       buttonVariant: 'default'
     },
     {
-      name: 'Plano 2 Mensal',
-      badge: 'Preço promocional de lançamento',
-      monthlyPrice: 120,
-      yearlyPrice: 1440,
-      description: 'Estudantes (Individual)',
-      subDescription: 'Aproveite o preço promocional de lançamento da Plataforma Escrita360',
-      credits: 60,
+      name: 'Plano Progressivo',
+      badge: 'Melhor investimento',
+      monthlyPrice: 570,
+      yearlyPrice: 3420,
+      description: 'Professores (Individual)',
+      subDescription: 'Plano com maior quantidade de correções e acesso estendido',
+      credits: 300,
       popular: true,
       features: [
         { text: 'Criação e gerenciamento de Turmas', included: true },
@@ -79,9 +79,9 @@ function Precos() {
         { text: 'Relatórios de desempenho com notas (ENEM e texto dissertativo-argumentativo)', included: true },
         { text: 'Correção com IA (ENEM e texto dissertativo-argumentativo)', included: true, highlighted: true },
         { text: 'Relatórios consolidados (Habilidades BNCC X ENEM)', included: true },
-        { text: 'Acesso por 30 dias', included: true }
+        { text: 'Acesso por 6 meses', included: true }
       ],
-      buttonText: 'Escolher Plano 2',
+      buttonText: 'Escolher Plano',
       buttonVariant: 'default'
     }
   ]
