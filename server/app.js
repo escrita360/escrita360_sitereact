@@ -54,6 +54,8 @@ function createApp() {
     const connectRoutes = require('./app/routes/connect');
     const certificateRoutes = require('./app/routes/certificate');
     const customersRoutes = require('./app/routes/customers');
+    const pagbankLogger = require('./app/services/pagbank_logger_service');
+    
     app.use('/api/payment', paymentRoutes);
     app.use('/api/auth', authRoutes);
     app.use('/api/admin', adminRoutes);
@@ -61,6 +63,26 @@ function createApp() {
     app.use('/api/connect', connectRoutes);
     app.use('/api/certificate', certificateRoutes);
     app.use('/api/customers', customersRoutes);
+
+    // Rota para visualizar logs do PagBank
+    app.get('/api/logs/pagbank', (req, res) => {
+        try {
+            const logs = pagbankLogger.getAllLogs();
+            res.json(logs);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    });
+
+    // Rota para obter logs em formato Markdown
+    app.get('/api/logs/pagbank/markdown', (req, res) => {
+        try {
+            const markdown = pagbankLogger.getLogsForMarkdown();
+            res.type('text/markdown').send(markdown);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    });
 
     // Health check
     app.get('/health', (req, res) => {

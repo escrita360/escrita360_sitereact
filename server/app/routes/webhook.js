@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const PagBankRecurrenceService = require('../services/pagbank_recurrence_service');
 const FirebaseMultiProjectService = require('../services/firebase_multi_project_service');
+const pagbankLogger = require('../services/pagbank_logger_service');
 
 const pagbankRecurrenceService = new PagBankRecurrenceService();
 const firebaseService = new FirebaseMultiProjectService();
@@ -22,6 +23,10 @@ const firebaseService = new FirebaseMultiProjectService();
 router.post('/pagbank', async (req, res) => {
     try {
         console.log('🔔 Webhook PagBank recebido');
+        
+        // Log do webhook recebido
+        pagbankLogger.logWebhook(req.headers, req.body);
+        
         console.log('📦 Headers:', req.headers);
         console.log('📦 Body:', req.body);
 

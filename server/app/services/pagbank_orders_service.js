@@ -1,4 +1,5 @@
 const axios = require('axios');
+const pagbankLogger = require('./pagbank_logger_service');
 
 /**
  * Serviço para integração com API de Orders do PagBank
@@ -64,7 +65,12 @@ class PagBankOrdersService {
                 notification_urls: orderData.notification_urls || []
             };
 
-            console.log('📤 Enviando para PagBank:', JSON.stringify(payload, null, 2));
+            // Log do request antes de enviar
+            pagbankLogger.logRequest('CREDIT_CARD', {
+                url: `${this.baseUrl}/orders`,
+                method: 'POST',
+                body: payload
+            }, this.environment);
 
             const response = await axios.post(
                 `${this.baseUrl}/orders`,
@@ -77,10 +83,24 @@ class PagBankOrdersService {
                 }
             );
 
+            // Log completo da transação
+            pagbankLogger.logTransaction('CREDIT_CARD', {
+                url: `${this.baseUrl}/orders`,
+                method: 'POST',
+                body: payload
+            }, response, this.environment);
+
             console.log('✅ Pedido criado com sucesso:', response.data.id);
             return response.data;
 
         } catch (error) {
+            // Log do erro
+            pagbankLogger.logTransaction('CREDIT_CARD_ERROR', {
+                url: `${this.baseUrl}/orders`,
+                method: 'POST',
+                body: orderData
+            }, { error: error.response?.data || error.message }, this.environment);
+
             console.error('❌ Erro ao criar pedido:', error.response?.data || error.message);
             throw new Error(
                 error.response?.data?.error_messages?.[0]?.description || 
@@ -121,7 +141,12 @@ class PagBankOrdersService {
                 notification_urls: orderData.notification_urls || []
             };
 
-            console.log('📤 Enviando para PagBank (PIX):', JSON.stringify(payload, null, 2));
+            // Log do request antes de enviar
+            pagbankLogger.logRequest('PIX', {
+                url: `${this.baseUrl}/orders`,
+                method: 'POST',
+                body: payload
+            }, this.environment);
 
             const response = await axios.post(
                 `${this.baseUrl}/orders`,
@@ -134,10 +159,24 @@ class PagBankOrdersService {
                 }
             );
 
+            // Log completo da transação
+            pagbankLogger.logTransaction('PIX', {
+                url: `${this.baseUrl}/orders`,
+                method: 'POST',
+                body: payload
+            }, response, this.environment);
+
             console.log('✅ QR Code PIX gerado:', response.data.id);
             return response.data;
 
         } catch (error) {
+            // Log do erro
+            pagbankLogger.logTransaction('PIX_ERROR', {
+                url: `${this.baseUrl}/orders`,
+                method: 'POST',
+                body: orderData
+            }, { error: error.response?.data || error.message }, this.environment);
+
             console.error('❌ Erro ao criar PIX:', error.response?.data || error.message);
             throw new Error(
                 error.response?.data?.error_messages?.[0]?.description || 
