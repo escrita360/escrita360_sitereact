@@ -246,6 +246,7 @@ ${divider}
     getAllLogs() {
         try {
             return JSON.parse(fs.readFileSync(this.jsonLogFile, 'utf8'));
+        // eslint-disable-next-line no-unused-vars
         } catch (error) {
             return { transactions: [] };
         }
