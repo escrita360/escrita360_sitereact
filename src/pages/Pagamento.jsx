@@ -13,7 +13,13 @@ import { firebaseAuthService, firebaseSubscriptionService, firebasePaymentServic
 function Pagamento() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { selectedPlan, isYearly, audience } = location.state || {}
+  
+  // Tentar obter do location.state primeiro, depois do sessionStorage
+  const stateData = location.state || {
+    selectedPlan: sessionStorage.getItem('selectedPlan') ? JSON.parse(sessionStorage.getItem('selectedPlan')) : null,
+    audience: sessionStorage.getItem('selectedAudience')
+  }
+  const { selectedPlan, isYearly, audience } = stateData
   const [paymentSuccess, setPaymentSuccess] = useState(false)
   const [paymentError, setPaymentError] = useState('')
   const [transactionData, setTransactionData] = useState(null)
@@ -33,11 +39,35 @@ function Pagamento() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   
+  const [isLoading, setIsLoading] = useState(true)
+
   useEffect(() => {
-    if (!selectedPlan) {
-      navigate('/precos')
+    // Aguardar um momento para o estado se estabilizar
+    const timer = setTimeout(() => {
+      if (!selectedPlan) {
+        console.error('❌ Pagamento acessado sem plano selecionado')
+        console.log('🔍 location:', location)
+        console.log('🔍 location.state:', location.state)
+        navigate('/precos', { replace: true })
+      } else {
+        setIsLoading(false)
+      }
+    }, 100)
+    
+    return () => clearTimeout(timer)
+  }, [selectedPlan, navigate, location])
+
+  // Limpar sessionStorage quando componente desmontar
+  useEffect(() => {
+    return () => {
+      sessionStorage.removeItem('selectedPlan')
+      sessionStorage.removeItem('selectedAudience')
     }
-  }, [selectedPlan, navigate])
+  }, [])
+
+  if (isLoading) {
+    return <div className="flex justify-center items-center min-h-screen">Carregando...</div>
+  }
 
   const formatCardNumber = (value) => {
     const cleaned = value.replace(/\s/g, '')
@@ -506,12 +536,18 @@ function Pagamento() {
                   <div className="space-y-2">
                     <p className="text-sm font-medium">Incluso no plano:</p>
                     <ul className="space-y-2">
-                      {selectedPlan.features.slice(0, 5).map((feature, index) => (
+                      {(selectedPlan.features || []).slice(0, 5).map((feature, index) => (
                         <li key={index} className="flex items-start gap-2 text-sm">
                           <CheckCircle2 className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
                           <span className="text-slate-600">{feature.text}</span>
                         </li>
                       ))}
+                      {(!selectedPlan.features || selectedPlan.features.length === 0) && (
+                        <li className="flex items-start gap-2 text-sm">
+                          <CheckCircle2 className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                          <span className="text-slate-600">{selectedPlan.credits} correções detalhadas com IA</span>
+                        </li>
+                      )}
                     </ul>
                   </div>
                   <Separator />

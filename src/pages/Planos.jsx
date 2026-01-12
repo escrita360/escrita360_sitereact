@@ -8,8 +8,10 @@ import React, { useState, useEffect } from 'react'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { PageHero } from '@/components/PageHero.jsx'
+import TestButton from '@/components/TestButton.jsx'
 
 function Precos() {
+  // Force HMR update
   const [searchParams] = useSearchParams()
   const audienceFromUrl = searchParams.get('audience') || 'estudantes'
   const [selectedAudience, setSelectedAudience] = useState(audienceFromUrl)
@@ -32,7 +34,24 @@ function Precos() {
   }, [selectedAudience])
 
   const handleOpenPagamento = (plan) => {
-    navigate('/pagamento', { state: { selectedPlan: plan, audience: selectedAudience } })
+    console.log('� FUNÇÃO CHAMADA! Plano:', plan.name)
+    console.log('🔥 NAVEGANDO PARA PAGAMENTO...')
+    
+    // Salvar no sessionStorage como backup
+    sessionStorage.setItem('selectedPlan', JSON.stringify(plan))
+    sessionStorage.setItem('selectedAudience', selectedAudience)
+    
+    try {
+      navigate('/pagamento', { 
+        state: { 
+          selectedPlan: plan, 
+          audience: selectedAudience 
+        } 
+      })
+      console.log('🔥 NAVIGATE EXECUTADO COM SUCESSO')
+    } catch (error) {
+      console.error('🔥 ERRO NO NAVIGATE:', error)
+    }
   }
 
   // Planos para estudantes
@@ -1116,3 +1135,4 @@ function Precos() {
 }
 
 export default Precos
+
