@@ -282,6 +282,222 @@ ${divider}
     }
 
     /**
+     * Registra erro específico para verificação de integração
+     */
+    logIntegrationError(error, context = {}) {
+        const timestamp = new Date().toISOString();
+        const errorLog = {
+            id: `ERROR_${Date.now()}`,
+            timestamp,
+            environment: 'PRODUCTION',
+            type: 'INTEGRATION_ERROR',
+            error: {
+                message: error.message,
+                stack: error.stack,
+                code: error.code
+            },
+            context,
+            severity: 'HIGH'
+        };
+
+        // Log crítico no console
+        console.log('\n' + '🚨'.repeat(20));
+        console.log('🚨 ERRO CRÍTICO DE INTEGRAÇÃO PAGBANK');
+        console.log('🚨'.repeat(20));
+        console.log(`📅 ${timestamp}`);
+        console.log(`❌ ERRO: ${error.message}`);
+        console.log(`🔍 CONTEXTO:`, context);
+        console.log('🚨'.repeat(20) + '\n');
+
+        this.appendToTextLog(errorLog);
+        this.appendToJsonLog(errorLog);
+
+        return errorLog;
+    }
+
+    /**
+     * Gera relatório de status da integração
+     */
+    generateIntegrationReport() {
+        const logs = this.getAllLogs();
+        const last24h = Date.now() - (24 * 60 * 60 * 1000);
+        
+        const recentLogs = logs.transactions.filter(log => 
+            new Date(log.timestamp).getTime() > last24h
+        );
+
+        const report = {
+            reportId: `INTEGRATION_REPORT_${Date.now()}`,
+            timestamp: new Date().toISOString(),
+            period: 'Últimas 24 horas',
+            totalTransactions: recentLogs.length,
+            transactionsByType: {},
+            errorCount: 0,
+            successCount: 0,
+            criticalIssues: [],
+            recommendations: []
+        };
+
+        // Análise das transações
+        recentLogs.forEach(log => {
+            // Contar por tipo
+            report.transactionsByType[log.type] = (report.transactionsByType[log.type] || 0) + 1;
+
+            // Verificar erros
+            if (log.type === 'INTEGRATION_ERROR' || 
+                (log.response && log.response.error_messages)) {
+                report.errorCount++;
+                if (log.type === 'INTEGRATION_ERROR') {
+                    report.criticalIssues.push({
+                        timestamp: log.timestamp,
+                        error: log.error?.message,
+                        context: log.context
+                    });
+                }
+            } else {
+                report.successCount++;
+            }
+        });
+
+        // Calcular taxa de sucesso
+        const totalNonWebhook = recentLogs.filter(log => log.type !== 'WEBHOOK').length;
+        report.successRate = totalNonWebhook > 0 ? 
+            ((report.successCount / totalNonWebhook) * 100).toFixed(2) + '%' : 'N/A';
+
+        // Gerar recomendações
+        if (report.errorCount > 0) {
+            report.recommendations.push('Investigar erros de integração encontrados');
+        }
+        if (report.successRate && parseFloat(report.successRate) < 95) {
+            report.recommendations.push('Taxa de sucesso baixa - revisar configurações');
+        }
+        if (report.totalTransactions === 0) {
+            report.recommendations.push('Nenhuma transação nas últimas 24h - verificar conectividade');
+        }
+
+        this.logIntegrationReport(report);
+        return report;
+    }
+
+    /**
+     * Registra relatório de integração
+     */
+    logIntegrationReport(report) {
+        console.log('\n' + '📊'.repeat(25));
+        console.log('📊 RELATÓRIO DE INTEGRAÇÃO PAGBANK PRODUÇÃO');
+        console.log('📊'.repeat(25));
+        console.log(`📅 Gerado em: ${report.timestamp}`);
+        console.log(`⏱️  Período: ${report.period}`);
+        console.log(`📈 Total de transações: ${report.totalTransactions}`);
+        console.log(`✅ Sucessos: ${report.successCount}`);
+        console.log(`❌ Erros: ${report.errorCount}`);
+        console.log(`📊 Taxa de sucesso: ${report.successRate}`);
+        
+        console.log('\n📋 TRANSAÇÕES POR TIPO:');
+        Object.entries(report.transactionsByType).forEach(([type, count]) => {
+            console.log(`   ${type}: ${count}`);
+        });
+
+        if (report.criticalIssues.length > 0) {
+            console.log('\n🚨 PROBLEMAS CRÍTICOS:');
+            report.criticalIssues.forEach((issue, index) => {
+                console.log(`   ${index + 1}. ${issue.error} (${issue.timestamp})`);
+            });
+        }
+
+        if (report.recommendations.length > 0) {
+            console.log('\n💡 RECOMENDAÇÕES:');
+            report.recommendations.forEach((rec, index) => {
+                console.log(`   ${index + 1}. ${rec}`);
+            });
+        }
+
+        console.log('📊'.repeat(25) + '\n');
+
+        // Salvar relatório
+        const reportFile = path.join(this.logsDir, `integration_report_${Date.now()}.json`);
+        fs.writeFileSync(reportFile, JSON.stringify(report, null, 2));
+        console.log(`💾 Relatório salvo em: ${reportFile}\n`);
+    }
+
+    /**
+     * Verifica conectividade com PagBank
+     */
+    logConnectivityTest(testResult) {
+        const timestamp = new Date().toISOString();
+        const logEntry = {
+            id: `CONNECTIVITY_${Date.now()}`,
+            timestamp,
+            environment: 'PRODUCTION',
+            type: 'CONNECTIVITY_TEST',
+            result: testResult,
+            status: testResult.success ? 'SUCCESS' : 'FAILED'
+        };
+
+        const icon = testResult.success ? '✅' : '❌';
+        console.log('\n' + '🔍'.repeat(20));
+        console.log('🔍 TESTE DE CONECTIVIDADE PAGBANK');
+        console.log('🔍'.repeat(20));
+        console.log(`📅 ${timestamp}`);
+        console.log(`${icon} Status: ${logEntry.status}`);
+        console.log(`⏱️  Tempo de resposta: ${testResult.responseTime || 'N/A'}ms`);
+        console.log(`📡 Endpoint: ${testResult.endpoint || 'N/A'}`);
+        if (!testResult.success) {
+            console.log(`❌ Erro: ${testResult.error}`);
+        }
+        console.log('🔍'.repeat(20) + '\n');
+
+        this.appendToTextLog(logEntry);
+        this.appendToJsonLog(logEntry);
+
+        return logEntry;
+    }
+
+    /**
+     * Exporta logs para validação com PagBank
+     */
+    exportLogsForValidation(days = 7) {
+        const logs = this.getAllLogs();
+        const cutoffDate = Date.now() - (days * 24 * 60 * 60 * 1000);
+        
+        const validationLogs = logs.transactions
+            .filter(log => new Date(log.timestamp).getTime() > cutoffDate)
+            .map(log => ({
+                timestamp: log.timestamp,
+                type: log.type,
+                order_id: log.summary?.order_id,
+                charge_id: log.summary?.charge_id,
+                status: log.summary?.status,
+                amount: log.summary?.amount,
+                environment: log.environment,
+                payment_code: log.summary?.payment_code,
+                payment_message: log.summary?.payment_message
+            }));
+
+        const exportData = {
+            exportId: `PAGBANK_VALIDATION_${Date.now()}`,
+            generatedAt: new Date().toISOString(),
+            period: `Últimos ${days} dias`,
+            totalLogs: validationLogs.length,
+            logs: validationLogs
+        };
+
+        const exportFile = path.join(this.logsDir, `pagbank_validation_export_${Date.now()}.json`);
+        fs.writeFileSync(exportFile, JSON.stringify(exportData, null, 2));
+
+        console.log('\n' + '📋'.repeat(20));
+        console.log('📋 EXPORTAÇÃO PARA VALIDAÇÃO PAGBANK');
+        console.log('📋'.repeat(20));
+        console.log(`📅 Gerado em: ${exportData.generatedAt}`);
+        console.log(`⏱️  Período: ${exportData.period}`);
+        console.log(`📊 Total de logs: ${exportData.totalLogs}`);
+        console.log(`💾 Arquivo: ${exportFile}`);
+        console.log('📋'.repeat(20) + '\n');
+
+        return exportFile;
+    }
+
+    /**
      * Limpa logs antigos (mantém últimos N)
      */
     cleanOldLogs(keepLast = 100) {
