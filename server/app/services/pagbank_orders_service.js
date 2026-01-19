@@ -118,6 +118,12 @@ class PagBankOrdersService {
         try {
             console.log('📦 Criando pedido PIX no PagBank...');
             
+            // URL de webhook baseada no ambiente
+            const webhookUrl = process.env.PAGBANK_WEBHOOK_URL || 
+                              (this.environment === 'production' 
+                                  ? 'https://escrita360.com/api/webhook/pagbank' 
+                                  : 'http://localhost:5000/api/webhook/pagbank');
+            
             const payload = {
                 reference_id: orderData.reference_id,
                 customer: {
@@ -138,7 +144,10 @@ class PagBankOrdersService {
                     },
                     expiration_date: orderData.qr_codes[0].expiration_date
                 }],
-                notification_urls: orderData.notification_urls || []
+                notification_urls: [
+                    webhookUrl,
+                    `${webhookUrl}/pix` // Webhook específico para PIX
+                ]
             };
 
             // Log do request antes de enviar
@@ -160,13 +169,17 @@ class PagBankOrdersService {
             );
 
             // Log completo da transação
-            pagbankLogger.logTransaction('PIX', {
+            pagbankLogger.logTransaction('PIX_PRODUCTION', {
                 url: `${this.baseUrl}/orders`,
                 method: 'POST',
                 body: payload
             }, response, this.environment);
 
-            console.log('✅ QR Code PIX gerado:', response.data.id);
+            console.log('✅ QR Code PIX gerado em PRODUÇÃO:', response.data.id);
+            console.log('💰 Valor:', (response.data.qr_codes?.[0]?.amount?.value / 100).toFixed(2), 'BRL');
+            console.log('📞 Webhook configurado:', webhookUrl);
+            console.log('⏰ Expira em:', response.data.qr_codes?.[0]?.expiration_date);
+            
             return response.data;
 
         } catch (error) {

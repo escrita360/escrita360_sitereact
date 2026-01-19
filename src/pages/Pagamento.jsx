@@ -33,6 +33,7 @@ function Pagamento() {
     phone: '',
     password: '',
     confirmPassword: '',
+    fullName: '', // Nome completo para PIX/Boleto
     paymentMethod: 'recurring' // 'recurring', 'card', 'pix', 'boleto'
   })
   const [errors, setErrors] = useState({})
@@ -150,6 +151,9 @@ function Pagamento() {
   const validateForm = () => {
     const newErrors = {}
     
+    if (!formData.fullName || formData.fullName.trim().length < 2) {
+      newErrors.fullName = 'Nome completo é obrigatório'
+    }
     if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Email válido é obrigatório'
     }
@@ -191,7 +195,7 @@ function Pagamento() {
         formData.email,
         formData.password,
         {
-          name: formData.cardName || formData.email.split('@')[0],
+          name: formData.fullName || formData.cardName || formData.email.split('@')[0],
           cpf: formData.cpf,
           phone: formData.phone
         },
@@ -217,7 +221,7 @@ function Pagamento() {
           plan: selectedPlan,
           isYearly: isYearly,
           paymentData: {
-            name: formData.cardName,
+            name: formData.fullName || formData.cardName,
             email: formData.email,
             transactionId: paymentData?.transaction_id,
             ...paymentData
@@ -306,6 +310,13 @@ function Pagamento() {
                         Dados Pessoais
                       </h3>
                       <div className="grid grid-cols-2 gap-4">
+                        <div className="col-span-2">
+                          <Label htmlFor="fullName">Nome Completo *</Label>
+                          <Input id="fullName" placeholder="Seu nome completo" 
+                            value={formData.fullName} onChange={(e) => handleInputChange('fullName', e.target.value)}
+                            className={errors.fullName ? 'border-red-500' : ''} />
+                          {errors.fullName && <p className="text-xs text-red-500 mt-1">{errors.fullName}</p>}
+                        </div>
                         <div className="col-span-2">
                           <Label htmlFor="email">E-mail *</Label>
                           <Input id="email" type="email" placeholder="seu@email.com" 
@@ -441,7 +452,7 @@ function Pagamento() {
                           audience: audience || 'estudantes' // Passa qual tipo de público
                         }}
                         customerData={{
-                          name: formData.cardName || formData.email.split('@')[0],
+                          name: formData.fullName || formData.cardName || `Cliente ${formData.email.split('@')[0]}`,
                           email: formData.email,
                           cpf: formData.cpf,
                           phone: formData.phone,

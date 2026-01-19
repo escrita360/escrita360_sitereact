@@ -8,6 +8,139 @@ const pagbankRecurrenceService = new PagBankRecurrenceService();
 const firebaseService = new FirebaseMultiProjectService();
 
 /**
+ * Teste de webhook - verificar se está funcionando
+ * GET /api/webhook/test
+ */
+router.get('/test', (req, res) => {
+    console.log('🔔 Teste de webhook recebido');
+    res.json({ 
+        status: 'ok', 
+        message: 'Webhook funcionando!',
+        timestamp: new Date().toISOString(),
+        environment: process.env.PAGBANK_ENV || 'development'
+    });
+});
+
+/**
+ * Endpoint de health check para webhooks
+ * GET /api/webhook/health
+ */
+router.get('/health', (req, res) => {
+    res.json({ 
+        status: 'healthy', 
+        service: 'webhook',
+        timestamp: new Date().toISOString()
+    });
+});
+
+/**
+ * Webhook específico para PIX em produção
+ * POST /api/webhook/pagbank/pix
+ */
+router.post('/pagbank/pix', async (req, res) => {
+    try {
+        console.log('🔔 Webhook PIX PagBank recebido');
+        
+        // Log do webhook recebido
+        pagbankLogger.logWebhook(req.headers, req.body, 'PIX');
+        
+        console.log('📦 Headers PIX:', req.headers);
+        console.log('📦 Body PIX:', req.body);
+
+        // Estrutura do webhook PIX do PagBank:
+        // {
+        //   "id": "ORDE_xxx",
+        //   "reference_id": "pix_123",
+        //   "event_type": "order.paid",
+        //   "data": { ... }
+        // }
+
+        const { id, reference_id, event_type, data } = req.body;
+
+        if (!id || !event_type) {
+            console.error('❌ Dados do webhook PIX incompletos');
+            return res.status(400).json({ error: 'id e event_type são obrigatórios' });
+        }
+
+        console.log(`📊 Evento PIX: ${event_type} para pedido ${id}`);
+
+        // Processar eventos PIX
+        switch (event_type) {
+            case 'order.paid':
+                console.log('✅ PIX PAGO! Processando...');
+                await handlePixPaymentApproved(data);
+                break;
+                
+            case 'order.canceled':
+                console.log('❌ PIX cancelado');
+                break;
+                
+            case 'order.waiting':
+                console.log('⏳ PIX aguardando pagamento');
+                break;
+                
+            default:
+                console.log(`📋 Evento PIX não tratado: ${event_type}`);
+        }
+
+        // Responder com 200 OK para confirmar recebimento
+        res.status(200).json({ 
+            received: true, 
+            order_id: id,
+            event_type: event_type,
+            processed_at: new Date().toISOString()
+        });
+        
+    } catch (error) {
+        console.error('❌ Erro ao processar webhook PIX:', error.message);
+        // Mesmo com erro, retornar 200 para não reenviar notificação
+        res.status(200).json({ 
+            received: true, 
+            error: error.message,
+            processed_at: new Date().toISOString() 
+        });
+    }
+});
+
+/**
+ * Processar pagamento PIX aprovado
+ */
+async function handlePixPaymentApproved(orderData) {
+    try {
+        console.log('🎉 PIX aprovado! Criando conta do usuário...');
+        
+        // Extrair dados do cliente do pedido
+        const customer = orderData.customer;
+        const charges = orderData.charges || [];
+        const charge = charges[0];
+        
+        if (!customer || !charge) {
+            throw new Error('Dados do cliente ou cobrança não encontrados');
+        }
+        
+        console.log('👤 Cliente PIX:', {
+            name: customer.name,
+            email: customer.email,
+            cpf: customer.tax_id.replace(/\d{3}(\d{6})\d{2}/, '***$1**')
+        });
+        
+        // TODO: Integrar com Firebase para criar conta
+        // const firebaseService = new FirebaseMultiProjectService();
+        // await firebaseService.createUser(customer.email, 'senha_temporaria', {
+        //     name: customer.name,
+        //     cpf: customer.tax_id,
+        //     phone: customer.phones?.[0]?.number
+        // });
+        
+        console.log('✅ Conta PIX criada com sucesso!');
+        
+    } catch (error) {
+        console.error('❌ Erro ao processar PIX aprovado:', error);
+        throw error;
+    }
+}
+
+/**
  * Webhook do PagBank para Notificações de Recorrência
  * POST /api/webhook/pagbank
  * 

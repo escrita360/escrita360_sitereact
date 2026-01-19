@@ -33,19 +33,30 @@ const PixPayment = ({ paymentData, onError }) => {
   const [pixData, setPixData] = useState(null)
   const [isGenerating, setIsGenerating] = useState(false)
   const [timeLeft, setTimeLeft] = useState(1800) // 30 minutos
+  const [hasValidData, setHasValidData] = useState(false)
 
-  useEffect(() => {
-    generatePix()
-  }, [generatePix])
-
-  useEffect(() => {
-    if (pixData && timeLeft > 0) {
-      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000)
-      return () => clearTimeout(timer)
-    }
-  }, [timeLeft, pixData])
+  // Verificar se os dados necessários estão preenchidos
+  const checkValidData = () => {
+    const { customerData } = paymentData
+    const isValid = customerData.name && 
+                   customerData.email && 
+                   customerData.cpf && 
+                   customerData.phone &&
+                   customerData.name.trim().length > 0 &&
+                   customerData.email.includes('@') &&
+                   customerData.cpf.replace(/\D/g, '').length >= 11 &&
+                   customerData.phone.replace(/\D/g, '').length >= 10
+    
+    setHasValidData(isValid)
+    return isValid
+  }
 
   const generatePix = useCallback(async () => {
+    if (!checkValidData()) {
+      onError('Por favor, preencha todos os dados pessoais antes de gerar o PIX')
+      return
+    }
+
     setIsGenerating(true)
     try {
       console.log('🔄 Gerando PIX com PagBank...')
@@ -69,6 +80,17 @@ const PixPayment = ({ paymentData, onError }) => {
     }
   }, [paymentData, onError])
 
+  useEffect(() => {
+    checkValidData()
+  }, [paymentData.customerData])
+
+  useEffect(() => {
+    if (pixData && timeLeft > 0) {
+      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000)
+      return () => clearTimeout(timer)
+    }
+  }, [timeLeft, pixData])
+
   const copyPixCode = () => {
     if (pixData?.qr_codes?.[0]?.text) {
       navigator.clipboard.writeText(pixData.qr_codes[0].text)
@@ -82,12 +104,50 @@ const PixPayment = ({ paymentData, onError }) => {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
   }
 
+  // Se os dados não estão válidos, mostrar mensagem
+  if (!hasValidData) {
+    return (
+      <Card>
+        <CardContent className="flex flex-col items-center justify-center p-8">
+          <AlertCircle className="w-8 h-8 text-yellow-500 mb-4" />
+          <h3 className="text-lg font-semibold mb-2">Dados Necessários</h3>
+          <p className="text-gray-600 text-center mb-4">
+            Preencha todos os dados pessoais acima antes de gerar o PIX:
+          </p>
+          <ul className="text-sm text-gray-600 text-left space-y-1">
+            <li>• Nome completo</li>
+            <li>• E-mail válido</li>
+            <li>• CPF completo</li>
+            <li>• Telefone com DDD</li>
+          </ul>
+        </CardContent>
+      </Card>
+    )
+  }
+
   if (isGenerating) {
     return (
       <Card>
         <CardContent className="flex flex-col items-center justify-center p-8">
           <Loader2 className="w-8 h-8 animate-spin text-blue-600 mb-4" />
           <p className="text-gray-600">Gerando código PIX...</p>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  if (!pixData) {
+    return (
+      <Card>
+        <CardContent className="flex flex-col items-center justify-center p-8">
+          <AlertCircle className="w-8 h-8 text-blue-500 mb-4" />
+          <h3 className="text-lg font-semibold mb-2">Gerar PIX</h3>
+          <p className="text-gray-600 text-center mb-4">
+            Clique no botão abaixo para gerar seu código PIX
+          </p>
+          <Button onClick={generatePix} className="w-full">
+            Gerar Código PIX
+          </Button>
         </CardContent>
       </Card>
     )
@@ -167,10 +227,6 @@ const BoletoPayment = ({ paymentData, onError }) => {
   const [boletoData, setBoletoData] = useState(null)
   const [isGenerating, setIsGenerating] = useState(false)
 
-  useEffect(() => {
-    generateBoleto()
-  }, [generateBoleto])
-
   const generateBoleto = useCallback(async () => {
     setIsGenerating(true)
     try {
@@ -191,6 +247,10 @@ const BoletoPayment = ({ paymentData, onError }) => {
       setIsGenerating(false)
     }
   }, [onError])
+
+  useEffect(() => {
+    generateBoleto()
+  }, [generateBoleto])
 
   if (isGenerating) {
     return (

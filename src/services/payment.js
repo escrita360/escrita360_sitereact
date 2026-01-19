@@ -65,15 +65,31 @@ export const paymentService = {
   async createPagBankPixPayment(paymentData) {
     const { planData, customerData } = paymentData
 
+    // Validar dados obrigatórios
+    if (!customerData.name || !customerData.email || !customerData.cpf || !customerData.phone) {
+      throw new Error('Dados do cliente incompletos. Preencha nome, email, CPF e telefone.')
+    }
+
     // Limpar telefone apenas números
     const phoneClean = customerData.phone.replace(/\D/g, '')
+    
+    // Validar telefone
+    if (phoneClean.length < 10) {
+      throw new Error('Telefone inválido. Digite um número válido com DDD.')
+    }
+
+    // Validar CPF
+    const cpfClean = customerData.cpf.replace(/\D/g, '')
+    if (cpfClean.length !== 11) {
+      throw new Error('CPF inválido. Digite um CPF com 11 dígitos.')
+    }
     
     const data = {
       reference_id: `pix_${Date.now()}`,
       customer: {
-        name: customerData.name,
-        email: customerData.email,
-        tax_id: customerData.cpf.replace(/\D/g, ''),
+        name: customerData.name.trim(),
+        email: customerData.email.trim(),
+        tax_id: cpfClean,
         phones: [{
           country: '55',
           area: phoneClean.substring(0, 2),
@@ -93,8 +109,15 @@ export const paymentService = {
         },
         expiration_date: new Date(Date.now() + 30 * 60 * 1000).toISOString()
       }],
-      notification_urls: []
+      notification_urls: [
+        'https://escrita360.com/api/webhook/pagbank'
+      ]
     }
+
+    console.log('📤 Enviando dados PIX para backend:', {
+      customer: { ...data.customer, tax_id: '***' },
+      planData: planData
+    })
 
     const response = await api.post('/payment/pagbank/create-pix-order', data)
     return response.data
