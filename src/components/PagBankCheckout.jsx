@@ -67,6 +67,11 @@ const PixPayment = ({ paymentData, onError }) => {
       // A resposta agora tem qr_codes em vez de charges
       if (result.qr_codes && result.qr_codes[0]) {
         setPixData(result)
+        console.log('✅ PIX gerado:', {
+          id: result.qr_codes[0].id,
+          text: result.qr_codes[0].text ? 'Código PIX OK' : 'Código PIX ausente',
+          image_url: result.qr_codes[0].links?.find(l => l.media === 'image/png')?.href || 'Imagem não encontrada'
+        })
         toast.success('Código PIX gerado com sucesso!')
       } else {
         throw new Error('Dados do PIX não retornados pela API')
@@ -182,9 +187,27 @@ const PixPayment = ({ paymentData, onError }) => {
               Expira em {formatTime(timeLeft)}
             </Badge>
             
-            {/* QR Code placeholder - em produção, usar biblioteca de QR Code */}
-            <div className="w-48 h-48 mx-auto bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center mb-4">
-              <p className="text-gray-500 text-sm">QR Code PIX</p>
+            {/* QR Code real do PagBank */}
+            <div className="w-64 h-64 mx-auto mb-4 flex items-center justify-center">
+              {pixData.qr_codes?.[0]?.links?.find(l => l.media === 'image/png')?.href ? (
+                <img 
+                  src={pixData.qr_codes[0].links.find(l => l.media === 'image/png').href} 
+                  alt="QR Code PIX" 
+                  className="w-full h-full object-contain"
+                  onError={(e) => {
+                    console.error('Erro ao carregar imagem QR Code:', e)
+                    e.target.style.display = 'none'
+                    e.target.nextSibling.style.display = 'flex'
+                  }}
+                />
+              ) : null}
+              <div className="w-full h-full bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center" 
+                   style={{ display: pixData.qr_codes?.[0]?.links?.find(l => l.media === 'image/png')?.href ? 'none' : 'flex' }}>
+                <div className="text-center">
+                  <p className="text-gray-500 text-sm mb-2">QR Code PIX</p>
+                  <p className="text-xs text-gray-400">Use o código abaixo</p>
+                </div>
+              </div>
             </div>
 
             <p className="text-sm text-gray-600 mb-4">
