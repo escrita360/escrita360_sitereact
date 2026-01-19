@@ -32,7 +32,7 @@ const PaymentMethodCard = ({ icon: Icon, title, description, isSelected, onClick
 const PixPayment = ({ paymentData, onError }) => {
   const [pixData, setPixData] = useState(null)
   const [isGenerating, setIsGenerating] = useState(false)
-  const [timeLeft, setTimeLeft] = useState(1800) // 30 minutos
+  const [timeLeft, setTimeLeft] = useState(7200) // 2 horas (7200 segundos)
   const [hasValidData, setHasValidData] = useState(false)
 
   // Verificar se os dados necessários estão preenchidos
@@ -67,10 +67,18 @@ const PixPayment = ({ paymentData, onError }) => {
       // A resposta agora tem qr_codes em vez de charges
       if (result.qr_codes && result.qr_codes[0]) {
         setPixData(result)
+        
+        // Calcular tempo de expiração real baseado na resposta da API
+        const expirationDate = new Date(result.qr_codes[0].expiration_date)
+        const now = new Date()
+        const timeUntilExpiry = Math.max(0, Math.floor((expirationDate - now) / 1000))
+        setTimeLeft(timeUntilExpiry)
+        
         console.log('✅ PIX gerado:', {
           id: result.qr_codes[0].id,
           text: result.qr_codes[0].text ? 'Código PIX OK' : 'Código PIX ausente',
-          image_url: result.qr_codes[0].links?.find(l => l.media === 'image/png')?.href || 'Imagem não encontrada'
+          image_url: result.qr_codes[0].links?.find(l => l.media === 'image/png')?.href || 'Imagem não encontrada',
+          expires_in: `${Math.floor(timeUntilExpiry / 60)}min`
         })
         toast.success('Código PIX gerado com sucesso!')
       } else {
@@ -103,9 +111,20 @@ const PixPayment = ({ paymentData, onError }) => {
     }
   }
 
+  const generateNewPix = () => {
+    setPixData(null)
+    setTimeLeft(7200) // Reset to 2 hours
+    generatePix()
+  }
+
   const formatTime = (seconds) => {
-    const mins = Math.floor(seconds / 60)
+    const hours = Math.floor(seconds / 3600)
+    const mins = Math.floor((seconds % 3600) / 60)
     const secs = seconds % 60
+    
+    if (hours > 0) {
+      return `${hours}h${mins.toString().padStart(2, '0')}m`
+    }
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
   }
 
@@ -158,20 +177,6 @@ const PixPayment = ({ paymentData, onError }) => {
     )
   }
 
-  if (!pixData) {
-    return (
-      <Card>
-        <CardContent className="flex flex-col items-center justify-center p-8">
-          <AlertCircle className="w-8 h-8 text-red-500 mb-4" />
-          <p className="text-gray-600">Erro ao gerar PIX</p>
-          <Button onClick={generatePix} className="mt-4">
-            Tentar Novamente
-          </Button>
-        </CardContent>
-      </Card>
-    )
-  }
-
   return (
     <div className="space-y-6">
       <Card>
@@ -182,64 +187,85 @@ const PixPayment = ({ paymentData, onError }) => {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="text-center">
-            <Badge variant="outline" className="mb-4">
-              Expira em {formatTime(timeLeft)}
-            </Badge>
-            
-            {/* QR Code real do PagBank */}
-            <div className="w-64 h-64 mx-auto mb-4 flex items-center justify-center">
-              {pixData.qr_codes?.[0]?.links?.find(l => l.media === 'image/png')?.href ? (
-                <img 
-                  src={pixData.qr_codes[0].links.find(l => l.media === 'image/png').href} 
-                  alt="QR Code PIX" 
-                  className="w-full h-full object-contain"
-                  onError={(e) => {
-                    console.error('Erro ao carregar imagem QR Code:', e)
-                    e.target.style.display = 'none'
-                    e.target.nextSibling.style.display = 'flex'
-                  }}
-                />
-              ) : null}
-              <div className="w-full h-full bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center" 
-                   style={{ display: pixData.qr_codes?.[0]?.links?.find(l => l.media === 'image/png')?.href ? 'none' : 'flex' }}>
-                <div className="text-center">
-                  <p className="text-gray-500 text-sm mb-2">QR Code PIX</p>
-                  <p className="text-xs text-gray-400">Use o código abaixo</p>
+          {timeLeft <= 0 ? (
+            // PIX Expirado
+            <div className="text-center">
+              <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold mb-2 text-red-700">PIX Expirado</h3>
+              <p className="text-gray-600 mb-4">
+                O código PIX expirou. Clique no botão abaixo para gerar um novo código.
+              </p>
+              <Button onClick={generateNewPix} className="w-full">
+                Gerar Novo PIX
+              </Button>
+            </div>
+          ) : (
+            // PIX Ativo
+            <div className="text-center">
+              <Badge 
+                variant="outline" 
+                className={`mb-4 ${timeLeft < 300 ? 'border-red-300 text-red-700' : ''}`}
+              >
+                {timeLeft < 300 && '⚠️ '} Expira em {formatTime(timeLeft)}
+              </Badge>
+              
+              {/* QR Code real do PagBank */}
+              <div className="w-64 h-64 mx-auto mb-4 flex items-center justify-center">
+                {pixData.qr_codes?.[0]?.links?.find(l => l.media === 'image/png')?.href ? (
+                  <img 
+                    src={pixData.qr_codes[0].links.find(l => l.media === 'image/png').href} 
+                    alt="QR Code PIX" 
+                    className="w-full h-full object-contain"
+                    onError={(e) => {
+                      console.error('Erro ao carregar imagem QR Code:', e)
+                      e.target.style.display = 'none'
+                      e.target.nextSibling.style.display = 'flex'
+                    }}
+                  />
+                ) : null}
+                <div className="w-full h-full bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center" 
+                     style={{ display: pixData.qr_codes?.[0]?.links?.find(l => l.media === 'image/png')?.href ? 'none' : 'flex' }}>
+                  <div className="text-center">
+                    <p className="text-gray-500 text-sm mb-2">QR Code PIX</p>
+                    <p className="text-xs text-gray-400">Use o código abaixo</p>
+                  </div>
+                </div>
+              </div>
+
+              <p className="text-sm text-gray-600 mb-4">
+                Escaneie o QR Code com o app do seu banco ou copie o código PIX
+              </p>
+
+              <div className="bg-gray-50 p-3 rounded-lg">
+                <p className="text-xs text-gray-600 mb-2">Código PIX:</p>
+                <div className="flex items-center justify-between bg-white p-2 rounded border">
+                  <p className="text-xs font-mono break-all flex-1">
+                    {pixData.qr_codes?.[0]?.text || 'Código não disponível'}
+                  </p>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={copyPixCode}
+                    className="ml-2"
+                  >
+                    <Copy className="w-4 h-4" />
+                  </Button>
                 </div>
               </div>
             </div>
+          )}
 
-            <p className="text-sm text-gray-600 mb-4">
-              Escaneie o QR Code com o app do seu banco ou copie o código PIX
-            </p>
-
-            <div className="bg-gray-50 p-3 rounded-lg">
-              <p className="text-xs text-gray-600 mb-2">Código PIX:</p>
-              <div className="flex items-center justify-between bg-white p-2 rounded border">
-                <p className="text-xs font-mono break-all flex-1">
-                  {pixData.qr_codes?.[0]?.text || 'Código não disponível'}
+          {timeLeft > 0 && (
+            <>
+              <Separator />
+              <div className="text-center text-sm text-gray-600">
+                <p>Após o pagamento, você receberá uma confirmação por email.</p>
+                <p className="mt-2">
+                  <strong>Valor:</strong> R$ {paymentData.planData.price.toFixed(2)}
                 </p>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={copyPixCode}
-                  className="ml-2"
-                >
-                  <Copy className="w-4 h-4" />
-                </Button>
               </div>
-            </div>
-          </div>
-
-          <Separator />
-
-          <div className="text-center text-sm text-gray-600">
-            <p>Após o pagamento, você receberá uma confirmação por email.</p>
-            <p className="mt-2">
-              <strong>Valor:</strong> R$ {paymentData.planData.price.toFixed(2)}
-            </p>
-          </div>
+            </>
+          )}
         </CardContent>
       </Card>
     </div>

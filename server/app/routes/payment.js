@@ -69,7 +69,7 @@ router.post('/create-pagbank-pix-payment', async (req, res) => {
             id: `pix_${data.plan_name.toLowerCase().replace(/\s+/g, '_')}_${Date.now()}`,
             qr_codes: [{
                 text: '00020101021126890014br.gov.bcb.pix0117+55119999999995204000053039865802BR5913ESCrita3606009SAO PAULO62070503***6304ABCD',
-                expiration_date: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
+                expiration_date: new Date(Date.now() + 120 * 60 * 1000).toISOString(), // 2 horas
                 amount: {
                     value: Math.round(data.amount * 100)
                 }

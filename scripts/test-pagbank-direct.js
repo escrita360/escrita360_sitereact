@@ -45,7 +45,7 @@ async function testDirectOrder() {
         amount: {
           value: 2900 // R$ 29,00 em centavos
         },
-        expiration_date: new Date(Date.now() + 30 * 60 * 1000).toISOString() // 30 minutos
+        expiration_date: new Date(Date.now() + 120 * 60 * 1000).toISOString() // 2 horas
       }],
       notification_urls: [
         'https://webhook.site/test-pagbank'

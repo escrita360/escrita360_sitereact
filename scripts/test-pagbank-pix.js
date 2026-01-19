@@ -38,7 +38,7 @@ async function testPixPayment() {
         amount: {
           value: 9900 // R$ 99,00 em centavos
         },
-        expiration_date: new Date(Date.now() + 30 * 60 * 1000).toISOString()
+        expiration_date: new Date(Date.now() + 120 * 60 * 1000).toISOString() // 2 horas
       }
     ],
     notification_urls: [

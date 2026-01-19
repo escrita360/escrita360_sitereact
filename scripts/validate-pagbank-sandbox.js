@@ -204,7 +204,7 @@ async function testPixPayment() {
                 amount: {
                     value: 9900
                 },
-                expiration_date: new Date(Date.now() + 60 * 60 * 1000).toISOString() // 1 hora
+                expiration_date: new Date(Date.now() + 120 * 60 * 1000).toISOString() // 2 horas
             }],
             notification_urls: [
                 'https://webhook.site/escrita360-pix-webhook'

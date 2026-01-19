@@ -88,7 +88,7 @@ function PagBankOneTimePayment({
           amount: {
             value: Math.round(packageData.price * 100)
           },
-          expiration_date: new Date(Date.now() + 30 * 60 * 1000).toISOString() // 30 minutos
+          expiration_date: new Date(Date.now() + 120 * 60 * 1000).toISOString() // 2 horas
         }]
         endpoint = '/payment/pagbank/create-pix-order'
       } else if (paymentMethod === 'boleto') {

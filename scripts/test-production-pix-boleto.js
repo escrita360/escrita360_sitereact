@@ -44,7 +44,7 @@ async function testPixProduction() {
         amount: {
           value: 100 // R$ 1,00 para teste
         },
-        expiration_date: new Date(Date.now() + 30 * 60 * 1000).toISOString()
+        expiration_date: new Date(Date.now() + 120 * 60 * 1000).toISOString() // 2 horas
       }
     ],
     notification_urls: [
