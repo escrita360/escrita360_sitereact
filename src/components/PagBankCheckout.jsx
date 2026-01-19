@@ -274,9 +274,9 @@ const PixPayment = ({ paymentData, onError }) => {
               <p className="text-sm text-gray-600 mb-4">
                 Escaneie o QR Code com o app do seu banco ou copie o código PIX
               </p>              
-              <div className=\"bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4\">
-                <p className=\"text-xs text-blue-800 font-semibold mb-1\">💡 Como usar:</p>
-                <p className=\"text-xs text-blue-700\">
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+                <p className="text-xs text-blue-800 font-semibold mb-1">💡 Como usar:</p>
+                <p className="text-xs text-blue-700">
                   • <strong>Pelo app:</strong> Escaneie o QR Code acima<br/>
                   • <strong>Por código:</strong> Copie o código abaixo e cole no seu app bancário<br/>
                   • <strong>Problemas?</strong> Certifique-se de copiar todo o código sem espaços extras
@@ -298,24 +298,24 @@ const PixPayment = ({ paymentData, onError }) => {
                       )
                     })()}
                   </div>
-                  <div className=\"flex flex-col gap-2\">
+                  <div className="flex flex-col gap-2">
                     <Button
-                      size=\"sm\"
-                      variant=\"outline\"
+                      size="sm"
+                      variant="outline"
                       onClick={copyPixCode}
-                      className=\"shrink-0\"
+                      className="shrink-0"
                     >
-                      <Copy className=\"w-4 h-4\" />
+                      <Copy className="w-4 h-4" />
                     </Button>
                     <Button
-                      size=\"sm\"
-                      variant=\"ghost\"
+                      size="sm"
+                      variant="ghost"
                       onClick={() => {
                         const validation = validatePixCode(pixData.qr_codes[0].text)
                         toast.info(`Validação: ${validation.message}`)
                       }}
-                      className=\"shrink-0 text-xs\"
-                      title=\"Validar código PIX\"
+                      className="shrink-0 text-xs"
+                      title="Validar código PIX"
                     >
                       🔍
                     </Button>
