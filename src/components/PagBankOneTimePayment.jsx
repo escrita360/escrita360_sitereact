@@ -105,14 +105,20 @@ function PagBankOneTimePayment({
             type: 'BOLETO',
             boleto: {
               due_date: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 3 dias
-              instruction_lines: {
-                line_1: `Pagamento de ${packageData.name}`,
-                line_2: `${packageData.credits} créditos de IA`
-              },
               holder: {
                 name: customerData.name,
                 tax_id: customerData.cpf.replace(/\D/g, ''),
-                email: customerData.email
+                email: customerData.email,
+                address: {
+                  street: customerData.address?.street || 'Rua Principal',
+                  number: customerData.address?.number || '123',
+                  locality: customerData.address?.locality || 'Centro',
+                  city: customerData.address?.city || 'São Paulo',
+                  region: customerData.address?.region || 'SP',
+                  region_code: customerData.address?.region_code || 'SP',
+                  country: customerData.address?.country || 'BRA',
+                  postal_code: customerData.address?.postal_code || '01000000'
+                }
               }
             }
           }

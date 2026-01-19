@@ -65,25 +65,106 @@ export const paymentService = {
   async createPagBankPixPayment(paymentData) {
     const { planData, customerData } = paymentData
 
-    // Processar telefone para o formato correto
+    // Limpar telefone apenas números
     const phoneClean = customerData.phone.replace(/\D/g, '')
-    const phoneFormatted = phoneClean.length === 11 
-      ? { area_code: phoneClean.substring(0, 2), number: phoneClean.substring(2) }
-      : { area_code: phoneClean.substring(0, 2), number: phoneClean.substring(2) }
-
+    
     const data = {
-      plan_name: planData.name,
-      amount: Math.round(planData.price * 100), // Converter para centavos
+      reference_id: `pix_${Date.now()}`,
       customer: {
         name: customerData.name,
         email: customerData.email,
-        cpf: customerData.cpf.replace(/\D/g, ''),
-        phone: phoneFormatted
+        tax_id: customerData.cpf.replace(/\D/g, ''),
+        phones: [{
+          country: '55',
+          area: phoneClean.substring(0, 2),
+          number: phoneClean.substring(2),
+          type: 'MOBILE'
+        }]
       },
-      expiration_minutes: 30
+      items: [{
+        reference_id: `item_${Date.now()}`,
+        name: planData.name,
+        quantity: 1,
+        unit_amount: Math.round(planData.price * 100)
+      }],
+      qr_codes: [{
+        amount: {
+          value: Math.round(planData.price * 100)
+        },
+        expiration_date: new Date(Date.now() + 30 * 60 * 1000).toISOString()
+      }],
+      notification_urls: []
     }
 
-    const response = await api.post('/payment/create-pagbank-pix-payment', data)
+    const response = await api.post('/payment/pagbank/create-pix-order', data)
+    return response.data
+  },
+
+  /**
+   * Cria pagamento com boleto via PagBank (através do backend)
+   * @param {Object} paymentData - Dados do pagamento
+   * @returns {Promise<Object>} - Dados do boleto
+   */
+  async createPagBankBoletoPayment(paymentData) {
+    const { planData, customerData } = paymentData
+
+    // Limpar telefone apenas números
+    const phoneClean = customerData.phone.replace(/\D/g, '')
+    
+    const dueDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] // 7 dias
+    
+    const data = {
+      reference_id: `boleto_${Date.now()}`,
+      customer: {
+        name: customerData.name,
+        email: customerData.email,
+        tax_id: customerData.cpf.replace(/\D/g, ''),
+        phones: [{
+          country: '55',
+          area: phoneClean.substring(0, 2),
+          number: phoneClean.substring(2),
+          type: 'MOBILE'
+        }]
+      },
+      items: [{
+        reference_id: `item_${Date.now()}`,
+        name: planData.name,
+        quantity: 1,
+        unit_amount: Math.round(planData.price * 100)
+      }],
+      charges: [{
+        reference_id: `charge_${Date.now()}`,
+        description: `Compra de ${planData.name}`,
+        amount: {
+          value: Math.round(planData.price * 100),
+          currency: 'BRL'
+        },
+        payment_method: {
+          type: 'BOLETO',
+          boleto: {
+            due_date: dueDate,
+            holder: {
+              name: customerData.name,
+              tax_id: customerData.cpf.replace(/\D/g, ''),
+              email: customerData.email,
+              address: {
+                street: customerData.address?.street || 'Rua Principal',
+                number: customerData.address?.number || '123',
+                locality: customerData.address?.locality || 'Centro',
+                city: customerData.address?.city || 'São Paulo',
+                region: customerData.address?.region || 'SP',
+                region_code: customerData.address?.region_code || 'SP',
+                country: customerData.address?.country || 'BRA',
+                postal_code: customerData.address?.postal_code || '01000000'
+              }
+            }
+          }
+        }
+      }],
+      notification_urls: []
+    }
+
+    const response = await api.post('/payment/pagbank/create-boleto-order', data)
     return response.data
   },
 

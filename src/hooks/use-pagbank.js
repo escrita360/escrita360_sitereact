@@ -67,6 +67,23 @@ export const usePagBank = () => {
     }
   }, [])
 
+  // Cria pagamento com Boleto
+  const createBoletoPayment = useCallback(async (paymentData) => {
+    setIsLoading(true)
+    setError(null)
+    
+    try {
+      const result = await paymentService.createPagBankBoletoPayment(paymentData)
+      setPaymentData(result)
+      return result
+    } catch (err) {
+      setError(err.message)
+      throw err
+    } finally {
+      setIsLoading(false)
+    }
+  }, [])
+
   // Consulta status de pagamento
   const checkPaymentStatus = useCallback(async (orderId) => {
     setIsLoading(true)
@@ -176,6 +193,7 @@ export const usePagBank = () => {
     createCheckoutLink,
     processCardPayment,
     createPixPayment,
+    createBoletoPayment,
     checkPaymentStatus,
     listPayments,
     cancelPayment,

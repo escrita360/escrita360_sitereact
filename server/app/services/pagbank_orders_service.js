@@ -219,11 +219,20 @@ class PagBankOrdersService {
                         type: 'BOLETO',
                         boleto: {
                             due_date: orderData.charges[0].payment_method.boleto.due_date,
-                            instruction_lines: orderData.charges[0].payment_method.boleto.instruction_lines,
                             holder: {
                                 name: orderData.charges[0].payment_method.boleto.holder.name,
                                 tax_id: orderData.charges[0].payment_method.boleto.holder.tax_id,
-                                email: orderData.charges[0].payment_method.boleto.holder.email
+                                email: orderData.charges[0].payment_method.boleto.holder.email,
+                                address: {
+                                    street: orderData.charges[0].payment_method.boleto.holder.address?.street || 'Rua Principal',
+                                    number: orderData.charges[0].payment_method.boleto.holder.address?.number || '123',
+                                    locality: orderData.charges[0].payment_method.boleto.holder.address?.locality || 'Centro',
+                                    city: orderData.charges[0].payment_method.boleto.holder.address?.city || 'São Paulo',
+                                    region: orderData.charges[0].payment_method.boleto.holder.address?.region || 'SP',
+                                    region_code: orderData.charges[0].payment_method.boleto.holder.address?.region_code || 'SP',
+                                    country: orderData.charges[0].payment_method.boleto.holder.address?.country || 'BRA',
+                                    postal_code: orderData.charges[0].payment_method.boleto.holder.address?.postal_code || '01000000'
+                                }
                             }
                         }
                     }
