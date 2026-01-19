@@ -108,10 +108,11 @@ export const paymentService = {
           value: Math.round(planData.price * 100)
         },
         expiration_date: new Date(Date.now() + 30 * 60 * 1000).toISOString()
-      }],
-      notification_urls: [
-        'https://escrita360.com/api/webhook/pagbank'
-      ]
+      }]
+      // Removendo notification_urls para desenvolvimento
+      // notification_urls: [
+      //   'https://escrita360.com/api/webhook/pagbank'
+      // ]
     }
 
     console.log('📤 Enviando dados PIX para backend:', {
