@@ -74,12 +74,23 @@ const PixPayment = ({ paymentData, onError }) => {
         const timeUntilExpiry = Math.max(0, Math.floor((expirationDate - now) / 1000))
         setTimeLeft(timeUntilExpiry)
         
+        const pixCode = result.qr_codes[0].text
         console.log('✅ PIX gerado:', {
           id: result.qr_codes[0].id,
-          text: result.qr_codes[0].text ? 'Código PIX OK' : 'Código PIX ausente',
+          text: pixCode ? 'Código PIX OK' : 'Código PIX ausente',
+          code_length: pixCode ? pixCode.length : 0,
+          code_preview: pixCode ? `${pixCode.substring(0, 50)}...` : 'N/A',
           image_url: result.qr_codes[0].links?.find(l => l.media === 'image/png')?.href || 'Imagem não encontrada',
           expires_in: `${Math.floor(timeUntilExpiry / 60)}min`
         })
+        
+        // Validar formato básico do código PIX
+        if (pixCode && pixCode.length > 100 && pixCode.startsWith('00020101')) {
+          console.log('✅ Código PIX parece válido (formato EMV)')
+        } else {
+          console.warn('⚠️ Código PIX pode estar em formato não padrão')
+        }
+        
         toast.success('Código PIX gerado com sucesso!')
       } else {
         throw new Error('Dados do PIX não retornados pela API')
@@ -106,9 +117,37 @@ const PixPayment = ({ paymentData, onError }) => {
 
   const copyPixCode = () => {
     if (pixData?.qr_codes?.[0]?.text) {
-      navigator.clipboard.writeText(pixData.qr_codes[0].text)
-      toast.success('Código PIX copiado!')
+      // Limpar o código PIX removendo possíveis espaços ou quebras de linha
+      const cleanPixCode = pixData.qr_codes[0].text.replace(/\s+/g, '').trim()
+      navigator.clipboard.writeText(cleanPixCode)
+      toast.success('Código PIX copiado e limpo!')
+      
+      // Log para debug
+      console.log('📋 Código PIX copiado:', {
+        original_length: pixData.qr_codes[0].text.length,
+        cleaned_length: cleanPixCode.length,
+        preview: `${cleanPixCode.substring(0, 50)}...`
+      })
     }
+  }
+
+  const validatePixCode = (pixCode) => {
+    if (!pixCode) return { valid: false, message: 'Código ausente' }
+    
+    // Validações básicas do formato EMV QR Code para PIX
+    if (pixCode.length < 100) {
+      return { valid: false, message: 'Código muito curto' }
+    }
+    
+    if (!pixCode.startsWith('0002')) {
+      return { valid: false, message: 'Formato inválido - deve começar com 0002' }
+    }
+    
+    if (!pixCode.includes('br.gov.bcb.pix')) {
+      return { valid: false, message: 'Não é um código PIX válido' }
+    }
+    
+    return { valid: true, message: 'Código válido' }
   }
 
   const generateNewPix = () => {
@@ -234,22 +273,53 @@ const PixPayment = ({ paymentData, onError }) => {
 
               <p className="text-sm text-gray-600 mb-4">
                 Escaneie o QR Code com o app do seu banco ou copie o código PIX
-              </p>
-
+              </p>              
+              <div className=\"bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4\">
+                <p className=\"text-xs text-blue-800 font-semibold mb-1\">💡 Como usar:</p>
+                <p className=\"text-xs text-blue-700\">
+                  • <strong>Pelo app:</strong> Escaneie o QR Code acima<br/>
+                  • <strong>Por código:</strong> Copie o código abaixo e cole no seu app bancário<br/>
+                  • <strong>Problemas?</strong> Certifique-se de copiar todo o código sem espaços extras
+                </p>
+              </div>
               <div className="bg-gray-50 p-3 rounded-lg">
                 <p className="text-xs text-gray-600 mb-2">Código PIX:</p>
-                <div className="flex items-center justify-between bg-white p-2 rounded border">
-                  <p className="text-xs font-mono break-all flex-1">
-                    {pixData.qr_codes?.[0]?.text || 'Código não disponível'}
-                  </p>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={copyPixCode}
-                    className="ml-2"
-                  >
-                    <Copy className="w-4 h-4" />
-                  </Button>
+                <div className="flex items-start justify-between bg-white p-3 rounded border">
+                  <div className="flex-1 mr-2">
+                    <p className="text-xs font-mono break-all leading-relaxed">
+                      {pixData.qr_codes?.[0]?.text || 'Código não disponível'}
+                    </p>
+                    {pixData.qr_codes?.[0]?.text && (() => {
+                      const validation = validatePixCode(pixData.qr_codes[0].text)
+                      return (
+                        <p className={`text-xs mt-2 ${validation.valid ? 'text-green-600' : 'text-red-600'}`}>
+                          {validation.valid ? '✅' : '❌'} {validation.message} ({pixData.qr_codes[0].text.length} caracteres)
+                        </p>
+                      )
+                    })()}
+                  </div>
+                  <div className=\"flex flex-col gap-2\">
+                    <Button
+                      size=\"sm\"
+                      variant=\"outline\"
+                      onClick={copyPixCode}
+                      className=\"shrink-0\"
+                    >
+                      <Copy className=\"w-4 h-4\" />
+                    </Button>
+                    <Button
+                      size=\"sm\"
+                      variant=\"ghost\"
+                      onClick={() => {
+                        const validation = validatePixCode(pixData.qr_codes[0].text)
+                        toast.info(`Validação: ${validation.message}`)
+                      }}
+                      className=\"shrink-0 text-xs\"
+                      title=\"Validar código PIX\"
+                    >
+                      🔍
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
