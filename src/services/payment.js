@@ -119,8 +119,33 @@ export const paymentService = {
       planData: planData
     })
 
-    const response = await api.post('/payment/pagbank/create-pix-order', data)
-    return response.data
+    try {
+      const response = await api.post('/payment/pagbank/create-pix-order', data)
+      return response.data
+    } catch (error) {
+      console.error('❌ Erro na requisição PIX:', error)
+      
+      // Tratamento melhorado de erros
+      if (error.response) {
+        const errorData = error.response.data
+        console.error('📋 Dados do erro:', errorData)
+        
+        if (errorData?.details?.error_messages) {
+          // Erro do PagBank com detalhes
+          const pagbankError = errorData.details.error_messages[0]
+          throw new Error(`PagBank: ${pagbankError.description} (${pagbankError.parameter_name})`)
+        } else if (errorData?.error) {
+          // Erro genérico
+          throw new Error(errorData.error)
+        } else {
+          throw new Error(`Erro ${error.response.status}: ${error.response.statusText}`)
+        }
+      } else if (error.request) {
+        throw new Error('Servidor não respondeu. Verifique sua conexão.')
+      } else {
+        throw new Error('Erro ao configurar requisição: ' + error.message)
+      }
+    }
   },
 
   /**

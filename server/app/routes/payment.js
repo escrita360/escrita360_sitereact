@@ -420,9 +420,31 @@ router.post('/pagbank/create-pix-order', async (req, res) => {
         res.status(201).json(result);
     } catch (error) {
         console.error('❌ Erro ao criar PIX:', error.message);
+        console.error('📋 Stack trace:', error.stack);
+        
+        // Tentar extrair erro detalhado do PagBank
+        let errorMessage = error.message;
+        let errorDetails = null;
+        
+        if (error.response) {
+            console.error('📋 Response status:', error.response.status);
+            console.error('📋 Response data:', error.response.data);
+            
+            if (error.response.data?.error_messages) {
+                const pagbankErrors = error.response.data.error_messages;
+                errorMessage = pagbankErrors.map(e => `${e.parameter_name}: ${e.description}`).join(', ');
+                errorDetails = pagbankErrors;
+            } else if (error.response.data?.error) {
+                errorMessage = error.response.data.error;
+                errorDetails = error.response.data;
+            }
+        }
+        
         res.status(400).json({ 
-            error: error.message, 
-            details: error.response?.data || error.stack 
+            success: false,
+            error: errorMessage, 
+            details: errorDetails || error.response?.data,
+            timestamp: new Date().toISOString()
         });
     }
 });
