@@ -14,14 +14,6 @@ function getPagBankSubscriptionsService() {
     return pagbankSubscriptionsService;
 }
 
-function getPagBankRecurrenceService() {
-    if (!pagbankRecurrenceService) {
-        const PagBankRecurrenceService = require('../services/pagbank_recurrence_service');
-        pagbankRecurrenceService = new PagBankRecurrenceService();
-    }
-    return pagbankRecurrenceService;
-}
-
 function getPagBankOrdersService() {
     if (!pagbankOrdersService) {
         const PagBankOrdersService = require('../services/pagbank_orders_service');
