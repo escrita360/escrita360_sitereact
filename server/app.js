@@ -112,35 +112,41 @@ if (require.main === module) {
     const port = process.env.PORT || 5000;
     console.log(`🔍 Attempting to start server on port ${port}...`);
     
-    const server = app.listen(port, () => {
-        const address = server.address();
-        console.log(`✅ Server running on http://localhost:${address.port}`);
-        console.log(`✅ Health check: http://localhost:${address.port}/health`);
-        console.log(`✅ API ready: http://localhost:${address.port}/api/payment`);
-    });
-
-    server.on('listening', () => {
-        console.log(`🎧 Server is now listening...`);
-    });
-
-    server.on('error', (error) => {
-        console.error('❌ Server error occurred:', error.code, error.message);
-        if (error.code === 'EADDRINUSE') {
-            console.error(`❌ Port ${port} is already in use`);
-            process.exit(1);
-        } else {
-            console.error('❌ Server error:', error);
-        }
-    });
-
-    // Keep process running
-    process.on('SIGINT', () => {
-        console.log('\n🛑 Shutting down server...');
-        server.close(() => {
-            console.log('✅ Server closed');
-            process.exit(0);
+    try {
+        const server = app.listen(port, () => {
+            const address = server.address();
+            console.log(`✅ Server running on http://localhost:${address.port}`);
+            console.log(`✅ Health check: http://localhost:${address.port}/health`);
+            console.log(`✅ API ready: http://localhost:${address.port}/api/payment`);
         });
-    });
+
+        server.on('listening', () => {
+            console.log(`🎧 Server is now listening...`);
+        });
+
+        server.on('error', (error) => {
+            console.error('❌ Server error occurred:', error.code, error.message);
+            if (error.code === 'EADDRINUSE') {
+                console.error(`❌ Port ${port} is already in use`);
+                process.exit(1);
+            } else {
+                console.error('❌ Server error:', error);
+                process.exit(1);
+            }
+        });
+
+        // Keep process running
+        process.on('SIGINT', () => {
+            console.log('\n🛑 Shutting down server...');
+            server.close(() => {
+                console.log('✅ Server closed');
+                process.exit(0);
+            });
+        });
+    } catch (error) {
+        console.error('❌ Failed to start server:', error);
+        process.exit(1);
+    }
 }
 
 module.exports = app;

@@ -142,13 +142,11 @@ class PagBankOrdersService {
                     amount: {
                         value: orderData.qr_codes[0].amount.value
                     },
-                    expiration_date: orderData.qr_codes[0].expiration_date
-                }]
-                // Removendo notification_urls para desenvolvimento
-                // notification_urls: [
-                //     webhookUrl,
-                //     `${webhookUrl}/pix` // Webhook específico para PIX
-                // ]
+                    expiration_date: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+                }],
+                notification_urls: [
+                    webhookUrl
+                ]
             };
 
             // Log do request antes de enviar

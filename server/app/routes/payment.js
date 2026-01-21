@@ -1,20 +1,41 @@
 const express = require('express');
 const router = express.Router();
-const PagBankSubscriptionsService = require('../services/pagbank_subscriptions_service');
-const PagBankRecurrenceService = require('../services/pagbank_recurrence_service');
-const PagBankOrdersService = require('../services/pagbank_orders_service');
 
-// Instâncias dos serviços
-const pagbankSubscriptionsService = new PagBankSubscriptionsService();
-const pagbankRecurrenceService = new PagBankRecurrenceService();
-const pagbankOrdersService = new PagBankOrdersService();
+// Instâncias dos serviços - inicialização lazy
+let pagbankSubscriptionsService;
+let pagbankRecurrenceService;
+let pagbankOrdersService;
+
+function getPagBankSubscriptionsService() {
+    if (!pagbankSubscriptionsService) {
+        const PagBankSubscriptionsService = require('../services/pagbank_subscriptions_service');
+        pagbankSubscriptionsService = new PagBankSubscriptionsService();
+    }
+    return pagbankSubscriptionsService;
+}
+
+function getPagBankRecurrenceService() {
+    if (!pagbankRecurrenceService) {
+        const PagBankRecurrenceService = require('../services/pagbank_recurrence_service');
+        pagbankRecurrenceService = new PagBankRecurrenceService();
+    }
+    return pagbankRecurrenceService;
+}
+
+function getPagBankOrdersService() {
+    if (!pagbankOrdersService) {
+        const PagBankOrdersService = require('../services/pagbank_orders_service');
+        pagbankOrdersService = new PagBankOrdersService();
+    }
+    return pagbankOrdersService;
+}
 
 router.post('/create-pagbank-subscription', async (req, res) => {
     try {
         console.log('📥 Recebendo dados para criar assinatura:', JSON.stringify(req.body, null, 2));
         const data = req.body;
 
-        const result = await pagbankSubscriptionsService.createCompleteSubscription({
+        const result = await getPagBankSubscriptionsService().createCompleteSubscription({
             plan_name: data.plan_name,
             plan_description: data.plan_description,
             amount: data.amount,
@@ -55,33 +76,6 @@ router.post('/create-pagbank-checkout', async (req, res) => {
 
         res.status(201).json(result);
     } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-});
-
-router.post('/create-pagbank-pix-payment', async (req, res) => {
-    try {
-        console.log('📥 Recebendo dados para criar pagamento PIX:', JSON.stringify(req.body, null, 2));
-        const data = req.body;
-
-        // Por enquanto, simulação do PIX - em produção, implementar a API real
-        const result = {
-            id: `pix_${data.plan_name.toLowerCase().replace(/\s+/g, '_')}_${Date.now()}`,
-            qr_codes: [{
-                text: '00020101021126890014br.gov.bcb.pix0117+55119999999995204000053039865802BR5913ESCrita3606009SAO PAULO62070503***6304ABCD',
-                expiration_date: new Date(Date.now() + 120 * 60 * 1000).toISOString(), // 2 horas
-                amount: {
-                    value: Math.round(data.amount * 100)
-                }
-            }],
-            status: 'WAITING',
-            customer: data.customer
-        };
-
-        console.log('✅ PIX gerado:', result);
-        res.status(201).json(result);
-    } catch (error) {
-        console.error('❌ Erro ao criar PIX:', error.message);
         res.status(400).json({ error: error.message });
     }
 });
@@ -414,7 +408,7 @@ router.post('/pagbank/create-pix-order', async (req, res) => {
     try {
         console.log('📥 Criando pedido PIX:', JSON.stringify(req.body, null, 2));
         
-        const result = await pagbankOrdersService.createOrderWithPix(req.body);
+        const result = await getPagBankOrdersService().createOrderWithPix(req.body);
         
         console.log('✅ QR Code PIX gerado:', result.id);
         res.status(201).json(result);

@@ -32,7 +32,7 @@ const PaymentMethodCard = ({ icon: Icon, title, description, isSelected, onClick
 const PixPayment = ({ paymentData, onError }) => {
   const [pixData, setPixData] = useState(null)
   const [isGenerating, setIsGenerating] = useState(false)
-  const [timeLeft, setTimeLeft] = useState(7200) // 2 horas (7200 segundos)
+  const [timeLeft, setTimeLeft] = useState(86400) // 24 horas (86400 segundos)
   const [hasValidData, setHasValidData] = useState(false)
 
   // Verificar se os dados necessários estão preenchidos
