@@ -149,6 +149,15 @@ function Pagamento() {
   }
 
   const validateForm = () => {
+    console.log('🔍 Validando formulário:', {
+      fullName: formData.fullName,
+      email: formData.email,
+      cpf: formData.cpf,
+      phone: formData.phone,
+      cardNumber: formData.cardNumber,
+      cardName: formData.cardName
+    })
+    
     const newErrors = {}
     
     if (!formData.fullName || formData.fullName.trim().length < 2) {
@@ -182,6 +191,7 @@ function Pagamento() {
       newErrors.cvv = 'CVV é obrigatório'
     }
     
+    console.log('🔍 Erros encontrados:', newErrors)
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -452,10 +462,10 @@ function Pagamento() {
                           audience: audience || 'estudantes' // Passa qual tipo de público
                         }}
                         customerData={{
-                          name: formData.fullName || formData.cardName || `Cliente ${formData.email.split('@')[0]}`,
-                          email: formData.email,
-                          cpf: formData.cpf,
-                          phone: formData.phone,
+                          name: formData.fullName?.trim() || formData.cardName?.trim() || `Cliente ${formData.email?.split('@')[0]}`,
+                          email: formData.email?.trim(),
+                          cpf: formData.cpf?.replace(/\D/g, ''),
+                          phone: formData.phone?.replace(/\D/g, ''),
                           password: formData.password // Inclui a senha para criar conta
                         }}
                         cardData={{

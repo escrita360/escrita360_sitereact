@@ -65,9 +65,29 @@ export const paymentService = {
   async createPagBankPixPayment(paymentData) {
     const { planData, customerData } = paymentData
 
-    // Validar dados obrigatórios
-    if (!customerData.name || !customerData.email || !customerData.cpf || !customerData.phone) {
-      throw new Error('Dados do cliente incompletos. Preencha nome, email, CPF e telefone.')
+    console.log('🔍 Validando dados antes de enviar para PagBank...')
+    console.log('📋 Dados recebidos:', {
+      planData: planData,
+      customerData: {
+        name: customerData.name,
+        email: customerData.email,
+        cpf: customerData.cpf ? '***' + customerData.cpf.slice(-3) : 'undefined',
+        phone: customerData.phone ? '***' + customerData.phone.slice(-3) : 'undefined'
+      }
+    })
+
+    // Validações adicionais
+    if (!customerData.name || customerData.name.trim().length < 2) {
+      throw new Error('Nome completo é obrigatório e deve ter pelo menos 2 caracteres.')
+    }
+    if (!customerData.email || !customerData.email.includes('@')) {
+      throw new Error('Email válido é obrigatório.')
+    }
+    if (!customerData.cpf || customerData.cpf.replace(/\D/g, '').length !== 11) {
+      throw new Error('CPF válido com 11 dígitos é obrigatório.')
+    }
+    if (!customerData.phone || customerData.phone.replace(/\D/g, '').length < 10) {
+      throw new Error('Telefone válido com DDD é obrigatório.')
     }
 
     // Limpar telefone apenas números

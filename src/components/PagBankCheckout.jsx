@@ -38,23 +38,49 @@ const PixPayment = ({ paymentData, onError, onSuccess }) => {
 
   // Verificar se os dados necessários estão preenchidos
   const checkValidData = useCallback(() => {
+    console.log('🔍 Verificando dados no PagBankCheckout:', paymentData.customerData)
+    
     const { customerData } = paymentData
-    const isValid = customerData.name && 
-                   customerData.email && 
-                   customerData.cpf && 
-                   customerData.phone &&
+    const isValid = customerData?.name && 
+                   customerData?.email && 
+                   customerData?.cpf && 
+                   customerData?.phone &&
                    customerData.name.trim().length > 0 &&
                    customerData.email.includes('@') &&
                    customerData.cpf.replace(/\D/g, '').length >= 11 &&
                    customerData.phone.replace(/\D/g, '').length >= 10
     
+    console.log('✅ Dados válidos:', isValid, {
+      name: customerData?.name?.length > 0,
+      email: customerData?.email?.includes('@'),
+      cpf: customerData?.cpf?.replace(/\D/g, '').length >= 11,
+      phone: customerData?.phone?.replace(/\D/g, '').length >= 10
+    })
     setHasValidData(isValid)
     return isValid
   }, [paymentData])
 
   const generatePix = useCallback(async () => {
+    console.log('🔄 Iniciando geração de PIX...')
+    console.log('📦 Dados recebidos no PagBankCheckout:', {
+      planData: paymentData.planData,
+      customerData: {
+        ...paymentData.customerData,
+        cpf: paymentData.customerData?.cpf ? '***' + paymentData.customerData.cpf.slice(-3) : 'undefined',
+        phone: paymentData.customerData?.phone ? '***' + paymentData.customerData.phone.slice(-3) : 'undefined'
+      }
+    })
+    
     if (!checkValidData()) {
-      onError('Por favor, preencha todos os dados pessoais antes de gerar o PIX')
+      const errorMsg = 'Dados pessoais incompletos ou inválidos. Preencha todos os campos obrigatórios corretamente.'
+      console.error('❌', errorMsg)
+      console.error('📋 Detalhes dos dados:', {
+        name: paymentData.customerData?.name,
+        email: paymentData.customerData?.email,
+        cpf: paymentData.customerData?.cpf,
+        phone: paymentData.customerData?.phone
+      })
+      onError(errorMsg)
       return
     }
 
@@ -98,8 +124,31 @@ const PixPayment = ({ paymentData, onError, onSuccess }) => {
       }
     } catch (error) {
       console.error('❌ Erro ao gerar PIX:', error)
-      toast.error('Erro ao gerar PIX: ' + error.message)
-      onError('Erro ao gerar PIX: ' + error.message)
+      console.error('📋 Detalhes do erro:', error.response?.data || error.message)
+      
+      let errorMessage = 'Erro ao gerar código PIX'
+      
+      if (error.response) {
+        const status = error.response.status
+        const data = error.response.data
+        
+        if (status === 400 && data?.error_messages) {
+          // Erro de validação do PagBank
+          const errors = data.error_messages.map(e => `${e.parameter_name}: ${e.description}`).join(', ')
+          errorMessage = `Dados inválidos: ${errors}`
+        } else if (status === 401) {
+          errorMessage = 'Erro de autenticação com PagBank'
+        } else if (status === 500) {
+          errorMessage = 'Erro interno do PagBank. Tente novamente em alguns minutos.'
+        } else {
+          errorMessage = `Erro ${status}: ${data?.error || error.message}`
+        }
+      } else if (error.request) {
+        errorMessage = 'Sem conexão com o servidor. Verifique sua internet.'
+      }
+      
+      toast.error(errorMessage, { duration: 8000 })
+      onError(errorMessage)
     } finally {
       setIsGenerating(false)
     }
