@@ -8,7 +8,7 @@ import React, { useState, useEffect } from 'react'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { PageHero } from '@/components/PageHero.jsx'
-import TestButton from '@/components/TestButton.jsx'
+import { plansService } from '@/services/plans.js'
 
 function Precos() {
   // Force HMR update
@@ -20,6 +20,11 @@ function Precos() {
   const navigate = useNavigate()
   const plansRef = useScrollAnimation()
 
+  // Estado para os planos
+  const [plansData, setPlansData] = useState(null)
+  const [loadingPlans, setLoadingPlans] = useState(true)
+  const [plansError, setPlansError] = useState(null)
+
   // Atualizar quando a URL mudar
   useEffect(() => {
     const urlAudience = searchParams.get('audience')
@@ -27,6 +32,28 @@ function Precos() {
       setSelectedAudience(urlAudience)
     }
   }, [searchParams, selectedAudience])
+
+  // Buscar planos da API
+  useEffect(() => {
+    const fetchPlans = async () => {
+      setLoadingPlans(true)
+      setPlansError(null)
+
+      try {
+        console.log('🔄 Buscando planos para audience:', selectedAudience)
+        const data = await plansService.getPlans(selectedAudience)
+        setPlansData(data)
+        console.log('✅ Planos carregados:', data.plans?.length || 0, 'planos')
+      } catch (error) {
+        console.error('❌ Erro ao buscar planos:', error)
+        setPlansError(error.message || 'Erro ao carregar planos')
+      } finally {
+        setLoadingPlans(false)
+      }
+    }
+
+    fetchPlans()
+  }, [selectedAudience])
 
   // Scroll to top when audience changes
   useEffect(() => {
@@ -54,245 +81,12 @@ function Precos() {
     }
   }
 
-  // Planos para estudantes
-  const studentPlans = [
-    {
-      name: 'Plano Básico',
-      badge: 'Preço promocional de lançamento',
-      monthlyPrice: 49,
-      yearlyPrice: 588,
-      subDescription: '',
-      credits: 10,
-      popular: true,
-      buttonText: 'Escolher Plano',
-      buttonVariant: 'default'
-    }
-  ]
-
-  // Planos solo para professores
-  const teacherPlansSolo = [
-    {
-      name: 'Plano Professor solo',
-      badge: 'Preço promocional de lançamento',
-      monthlyPrice: 120,
-      yearlyPrice: 1440,
-      subDescription: '',
-      credits: 60,
-      popular: true,
-      buttonText: 'Escolher Plano',
-      buttonVariant: 'default'
-    },
-    {
-      name: 'Plano Progressivo',
-      badge: 'Melhor investimento',
-      monthlyPrice: 570,
-      yearlyPrice: 3420,
-      description: 'Professores (Individual)',
-      subDescription: 'Plano com maior quantidade de correções e acesso estendido',
-      credits: 300,
-      popular: true,
-      features: [
-        { text: 'Criação e gerenciamento de Turmas', included: true },
-        { text: 'Banco de rubricas para facilitar a avaliação', included: true },
-        { text: 'Correção via foto ou texto direto na plataforma', included: true },
-        { text: 'Relatórios de desempenho com notas (ENEM e texto dissertativo-argumentativo)', included: true },
-        { text: 'Correção com IA (ENEM e texto dissertativo-argumentativo)', included: true, highlighted: true },
-        { text: 'Relatórios consolidados (Habilidades BNCC X ENEM)', included: true },
-        { text: 'Acesso por 6 meses', included: true }
-      ],
-      buttonText: 'Escolher Plano',
-      buttonVariant: 'default'
-    }
-  ]
-
-  // Planos híbridos para professores
-  const teacherPlansHibrido = [
-    {
-      name: 'Plano Básico',
-      badge: 'Não tem esse mês',
-      monthlyPrice: 49,
-      yearlyPrice: 588,
-      subDescription: '',
-      credits: 10,
-      popular: true,
-      buttonText: 'Escolher Plano',
-      buttonVariant: 'default'
-    },
-    {
-      name: 'Plano Professor solo',
-      badge: 'Preço promocional de lançamento',
-      monthlyPrice: 120,
-      yearlyPrice: 1440,
-      subDescription: '',
-      credits: 60,
-      buttonText: 'Escolher Plano',
-      buttonVariant: 'default'
-    }
-  ]
-
-  // Planos para escolas - Semestrais
-  const schoolPlansSemestral = [
-    {
-      name: 'Plano Semestral',
-      badge: 'Institucional',
-      monthlyPrice: 1200,
-      description: 'Plano Híbrido (Uso da plataforma + créditos de IA)',
-      credits: 500,
-      planType: 'semestral',
-      features: [
-        { text: 'Módulo de escrita digital autorregulada', included: true },
-        { text: 'Banco de estratégias para escrita', included: true },
-        { text: 'Sugestão de temas', included: true },
-        { text: 'Recursos de apoio autorregulatório', included: true },
-        { text: 'Insights para melhoria da escrita', included: true },
-        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
-        { text: 'Rubricas qualitativas para avaliação', included: true },
-        { text: 'Correção por foto ou digitada (OCR)', included: true },
-        { text: 'Relatórios automáticos (autoavaliação, sentimentos, IA)', included: true },
-        { text: 'O acesso permanece ativo durante a vigência da assinatura', included: true, highlighted: true }
-      ],
-      buttonText: 'Escolher Plano',
-      buttonVariant: 'default'
-    },
-    {
-      name: 'Plano Semestral',
-      badge: 'Institucional',
-      monthlyPrice: 2400,
-      description: 'Plano Híbrido (Uso da plataforma + créditos de IA)',
-      credits: 1000,
-      planType: 'semestral',
-      popular: true,
-      features: [
-        { text: 'Módulo de escrita digital autorregulada', included: true },
-        { text: 'Banco de estratégias para escrita', included: true },
-        { text: 'Sugestão de temas', included: true },
-        { text: 'Recursos de apoio autorregulatório', included: true },
-        { text: 'Insights para melhoria da escrita', included: true },
-        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
-        { text: 'Rubricas qualitativas para avaliação', included: true },
-        { text: 'Correção por foto ou digitada (OCR)', included: true },
-        { text: 'Relatórios automáticos (autoavaliação, sentimentos, IA)', included: true },
-        { text: 'O acesso permanece ativo durante a vigência da assinatura', included: true, highlighted: true }
-      ],
-      buttonText: 'Escolher Plano',
-      buttonVariant: 'default'
-    },
-    {
-      name: 'Plano Semestral',
-      badge: 'Institucional',
-      monthlyPrice: 4800,
-      description: 'Plano Híbrido (Uso da plataforma + créditos de IA)',
-      credits: 2000,
-      planType: 'semestral',
-      features: [
-        { text: 'Módulo de escrita digital autorregulada', included: true },
-        { text: 'Banco de estratégias para escrita', included: true },
-        { text: 'Sugestão de temas', included: true },
-        { text: 'Recursos de apoio autorregulatório', included: true },
-        { text: 'Insights para melhoria da escrita', included: true },
-        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
-        { text: 'Rubricas qualitativas para avaliação', included: true },
-        { text: 'Correção por foto ou digitada (OCR)', included: true },
-        { text: 'Relatórios automáticos (autoavaliação, sentimentos, IA)', included: true },
-        { text: 'O acesso permanece ativo durante a vigência da assinatura', included: true, highlighted: true }
-      ],
-      buttonText: 'Escolher Plano',
-      buttonVariant: 'default'
-    }
-  ]
-
-  // Planos para escolas - Anuais
-  const schoolPlansAnual = [
-    {
-      name: 'Escola Plano Institucional (Anual)',
-      badge: 'Anual Institucional',
-      monthlyPrice: 2350,
-      description: 'Plano Híbrido (Uso da plataforma + créditos de IA)',
-      credits: 1000,
-      planType: 'anual',
-      features: [
-        { text: 'Módulo de escrita digital autorregulada', included: true },
-        { text: 'Banco de estratégias para escrita', included: true },
-        { text: 'Sugestão de temas', included: true },
-        { text: 'Recursos de apoio autorregulatório', included: true },
-        { text: 'Insights para melhoria da escrita', included: true },
-        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
-        { text: 'Rubricas qualitativas para avaliação', included: true },
-        { text: 'Correção por foto ou digitada (OCR)', included: true },
-        { text: 'Relatórios automáticos (autoavaliação, sentimentos, IA)', included: true },
-        { text: 'O acesso permanece ativo durante a vigência da assinatura', included: true, highlighted: true }
-      ],
-      buttonText: 'Escolher Plano',
-      buttonVariant: 'default'
-    },
-    {
-      name: 'Escola Plano Híbrido 360 (Anual)',
-      badge: 'Anual',
-      monthlyPrice: 2150,
-      description: 'Plano Híbrido (Uso da plataforma + créditos de IA)',
-      credits: 1000,
-      planType: 'anual',
-      features: [
-        { text: 'Módulo de escrita digital autorregulada', included: true },
-        { text: 'Banco de estratégias para escrita', included: true },
-        { text: 'Sugestão de temas', included: true },
-        { text: 'Recursos de apoio autorregulatório', included: true },
-        { text: 'Insights para melhoria da escrita', included: true },
-        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
-        { text: 'Rubricas qualitativas para avaliação', included: true },
-        { text: 'Correção por foto ou digitada (OCR)', included: true },
-        { text: 'Relatórios automáticos (autoavaliação, sentimentos, IA)', included: true },
-        { text: 'O acesso permanece ativo durante a vigência da assinatura', included: true, highlighted: true }
-      ],
-      buttonText: 'Escolher Plano',
-      buttonVariant: 'default'
-    },
-    {
-      name: 'Escola Plano Híbrido 360 (Anual)',
-      badge: 'Anual',
-      monthlyPrice: 4300,
-      description: 'Plano Híbrido (Uso da plataforma + créditos de IA)',
-      credits: 2000,
-      planType: 'anual',
-      popular: true,
-      features: [
-        { text: 'Módulo de escrita digital autorregulada', included: true },
-        { text: 'Banco de estratégias para escrita', included: true },
-        { text: 'Sugestão de temas', included: true },
-        { text: 'Recursos de apoio autorregulatório', included: true },
-        { text: 'Insights para melhoria da escrita', included: true },
-        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
-        { text: 'Rubricas qualitativas para avaliação', included: true },
-        { text: 'Correção por foto ou digitada (OCR)', included: true },
-        { text: 'Relatórios automáticos (autoavaliação, sentimentos, IA)', included: true },
-        { text: 'O acesso permanece ativo durante a vigência da assinatura', included: true, highlighted: true }
-      ],
-      buttonText: 'Escolher Plano',
-      buttonVariant: 'default'
-    },
-    {
-      name: 'Escola Plano Híbrido 360 (Anual)',
-      badge: 'Anual',
-      monthlyPrice: 10750,
-      description: 'Plano Híbrido (Uso da plataforma + créditos de IA)',
-      credits: 5000,
-      planType: 'anual',
-      features: [
-        { text: 'Módulo de escrita digital autorregulada', included: true },
-        { text: 'Banco de estratégias para escrita', included: true },
-        { text: 'Sugestão de temas', included: true },
-        { text: 'Recursos de apoio autorregulatório', included: true },
-        { text: 'Insights para melhoria da escrita', included: true },
-        { text: 'Revisor integrado com recursos de análise ilimitada', included: true },
-        { text: 'Rubricas qualitativas para avaliação', included: true },
-        { text: 'Correção por foto ou digitada (OCR)', included: true },
-        { text: 'Relatórios automáticos (autoavaliação, sentimentos, IA)', included: true },
-        { text: 'O acesso permanece ativo durante a vigência da assinatura', included: true, highlighted: true }
-      ],
-      buttonText: 'Escolher Plano',
-      buttonVariant: 'default'
-    }
-  ]
+  // Planos vêm da API agora
+  const studentPlans = plansData?.plans?.filter(plan => plan.audience === 'estudantes') || []
+  const teacherPlansSolo = plansData?.plans?.filter(plan => plan.audience === 'professores' && plan.id?.includes('solo')) || []
+  const teacherPlansHibrido = plansData?.plans?.filter(plan => plan.audience === 'professores' && plan.id?.includes('hibrido')) || []
+  const schoolPlansSemestral = plansData?.plans?.filter(plan => plan.audience === 'escolas' && plan.planType === 'semestral') || []
+  const schoolPlansAnual = plansData?.plans?.filter(plan => plan.audience === 'escolas' && plan.planType === 'anual') || []
 
   // Combinar planos de escolas
   const schoolPlans = [...schoolPlansSemestral, ...schoolPlansAnual]

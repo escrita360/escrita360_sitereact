@@ -145,14 +145,58 @@ const PixPayment = ({ paymentData, onError, onSuccess }) => {
           }
 
           return true // Pagamento confirmado
-        } else if (charge && charge.status === 'CANCELLED') {
-          console.log('❌ Pagamento PIX cancelado')
-          toast.error('Pagamento PIX foi cancelado')
+        } else if (charge && (charge.status === 'CANCELLED' || charge.status === 'DECLINED')) {
+          console.log('❌ Pagamento PIX cancelado ou declinado')
+          toast.error('Pagamento PIX foi cancelado ou declinado')
+          return false
+        } else if (charge && charge.status === 'WAITING') {
+          console.log('⏳ Pagamento PIX ainda aguardando')
+          // Continua verificando
+          return false
+        } else if (charge && charge.status === 'AUTHORIZED') {
+          console.log('✅ Pagamento PIX autorizado')
+          // Para PIX, autorizado geralmente significa pago
+          toast.success('Pagamento PIX confirmado!')
+          
+          if (onSuccess) {
+            onSuccess({
+              transaction_id: pixData.id,
+              amount: paymentData.planData.price,
+              payment_method: 'pix',
+              status: 'paid'
+            })
+          }
+          
+          return true
+        } else if (charge) {
+          console.log(`ℹ️ Status do PIX: ${charge.status}`)
+          // Continua verificando para outros status
+          return false
+        } else {
+          console.log('⚠️ Nenhum charge encontrado na resposta')
           return false
         }
       } catch (error) {
         console.error('❌ Erro ao verificar status do PIX:', error)
-        // Não mostrar erro para o usuário, apenas log
+        
+        // Tratamento específico de erros
+        const errorMessage = error.message || 'Erro desconhecido'
+        
+        // Se o pedido não foi encontrado (404), pode indicar que expirou
+        if (errorMessage.includes('não encontrado') || errorMessage.includes('expirado') || errorMessage.includes('404')) {
+          console.log('⚠️ PIX pode ter expirado ou pedido não encontrado')
+          toast.warning('PIX pode ter expirado. Gere um novo código se necessário.')
+        } else if (errorMessage.includes('2054')) {
+          console.warn('⚠️ Código 2054 detectado - status especial do PagBank')
+          toast.info('Verificando status do pagamento...')
+        } else if (errorMessage.includes('Token') || errorMessage.includes('autenticação')) {
+          console.error('❌ Problema de autenticação com PagBank')
+        } else if (errorMessage.includes('Limite') || errorMessage.includes('429')) {
+          console.log('⚠️ Limite de requisições excedido, aguardando...')
+        } else {
+          // Para outros erros, apenas log, não mostra toast para não incomodar o usuário
+          console.error('📋 Erro na verificação:', errorMessage)
+        }
       } finally {
         setIsCheckingPayment(false)
       }

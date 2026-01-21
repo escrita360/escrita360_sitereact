@@ -320,6 +320,34 @@ class PagBankOrdersService {
 
         } catch (error) {
             console.error('❌ Erro ao consultar pedido:', error.response?.data || error.message);
+            
+            // Tratamento específico para diferentes códigos de erro
+            if (error.response) {
+                const statusCode = error.response.status;
+                const errorData = error.response.data;
+                
+                console.error('📋 Status code:', statusCode);
+                console.error('📋 Error data:', JSON.stringify(errorData, null, 2));
+                
+                // Código 2054 pode indicar pedido não encontrado ou expirado
+                if (statusCode === 404) {
+                    throw new Error('Pedido não encontrado ou expirado');
+                } else if (statusCode === 401) {
+                    throw new Error('Token de autenticação inválido');
+                } else if (statusCode === 403) {
+                    throw new Error('Acesso negado à API');
+                } else if (statusCode === 429) {
+                    throw new Error('Limite de requisições excedido');
+                } else if (statusCode === 2054) {
+                    // Código específico 2054 - pode indicar status específico
+                    console.warn('⚠️ Código 2054 detectado - possível status especial do PagBank');
+                    throw new Error('Status especial do PagBank (2054) - verifique documentação');
+                } else if (errorData?.error_messages) {
+                    const pagbankError = errorData.error_messages[0];
+                    throw new Error(`PagBank: ${pagbankError.description} (${pagbankError.parameter_name})`);
+                }
+            }
+            
             throw new Error(
                 error.response?.data?.error_messages?.[0]?.description || 
                 error.message || 
