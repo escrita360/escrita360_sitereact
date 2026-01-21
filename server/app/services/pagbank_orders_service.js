@@ -145,13 +145,27 @@ class PagBankOrdersService {
                     amount: {
                         value: totalAmount
                     },
-                    expiration_date: new Date(Date.now() + 1 * 60 * 60 * 1000).toISOString().replace(/\.\d{3}Z$/, 'Z')
-                }]
+                    expiration_date: new Date(Date.now() + 1 * 60 * 60 * 1000).toISOString().replace(/\.\d{3}Z$/, '-03:00')
+                }],
+                shipping: {
+                    address: {
+                        street: "Rua Exemplo",
+                        number: "123",
+                        locality: "Centro",
+                        city: "São Paulo",
+                        region_code: "SP",
+                        country: "BRA",
+                        postal_code: "01234567"
+                    }
+                }
             };
 
             // Só incluir notification_urls se for uma URL válida (não localhost) ou produção
             if (webhookUrl && (webhookUrl.startsWith('https://') || this.environment === 'production')) {
                 payload.notification_urls = [webhookUrl];
+            } else if (this.environment === 'sandbox') {
+                // Para sandbox, usar URL de produção se localhost
+                payload.notification_urls = ['https://escrita360.com/api/webhook/pagbank'];
             }
 
             // Log do request antes de enviar
@@ -182,9 +196,9 @@ class PagBankOrdersService {
             console.log('✅ QR Code PIX gerado em PRODUÇÃO:', response.data.id);
             console.log('💰 Valor:', (response.data.qr_codes?.[0]?.amount?.value / 100).toFixed(2), 'BRL');
             if (payload.notification_urls) {
-                console.log('📞 Webhook configurado:', webhookUrl);
+                console.log('📞 Webhook configurado:', payload.notification_urls[0]);
             } else {
-                console.log('📞 Webhook não configurado (localhost ou inválido)');
+                console.log('📞 Webhook não configurado');
             }
             console.log('⏰ Expira em:', response.data.qr_codes?.[0]?.expiration_date);
             
