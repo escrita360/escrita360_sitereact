@@ -20,16 +20,12 @@ require('dotenv').config();
  */
 class PagBankRecurrenceService {
     constructor() {
-        this.environment = process.env.PAGBANK_ENV || 'sandbox';
+        this.environment = process.env.PAGBANK_ENV || 'production';
         this.email = process.env.PAGBANK_EMAIL;
         this.token = process.env.PAGBANK_TOKEN;
 
-        // URLs base conforme documentação
-        if (this.environment === 'sandbox') {
-            this.baseUrl = 'https://ws.sandbox.pagseguro.uol.com.br';
-        } else {
-            this.baseUrl = 'https://ws.pagseguro.uol.com.br';
-        }
+        // URL base para produção
+        this.baseUrl = 'https://ws.pagseguro.uol.com.br';
 
         // Headers padrão conforme documentação
         this.headers = {

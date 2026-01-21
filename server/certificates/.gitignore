@@ -1,9 +1,9 @@
 # Certificados PagBank
 # Nunca commite certificados no Git!
 
-# Certificados de sandbox
-*_sandbox.key
-*_sandbox.pem
+# Certificados de produção
+*_production.key
+*_production.pem
 
 # Certificados de produção
 *_production.key

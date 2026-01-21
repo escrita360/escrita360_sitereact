@@ -16,17 +16,11 @@ require('dotenv').config();
 
 class PagBankConnectService {
     constructor() {
-        this.environment = process.env.PAGBANK_ENV || 'sandbox';
+        this.environment = process.env.PAGBANK_ENV || 'production';
         
-        // URLs conforme documentação
-        this.baseUrl = this.environment === 'sandbox'
-            ? 'https://sandbox.api.pagseguro.com'
-            : 'https://api.pagseguro.com';
-
-        // URLs de autorização
-        this.authUrl = this.environment === 'sandbox'
-            ? 'https://sandbox.pagseguro.uol.com.br'
-            : 'https://pagseguro.uol.com.br';
+        // URLs para produção
+        this.baseUrl = 'https://api.pagseguro.com';
+        this.authUrl = 'https://pagseguro.uol.com.br';
 
         this.token = process.env.PAGBANK_TOKEN;
         this.clientId = process.env.PAGBANK_CLIENT_ID;

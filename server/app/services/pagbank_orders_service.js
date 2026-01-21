@@ -8,7 +8,7 @@ const pagbankLogger = require('./pagbank_logger_service');
 class PagBankOrdersService {
     constructor() {
         this.token = process.env.PAGBANK_TOKEN;
-        this.environment = process.env.PAGBANK_ENV || 'sandbox';
+        this.environment = process.env.PAGBANK_ENV || 'production';
         this.baseUrl = this.environment === 'production' 
             ? 'https://api.pagseguro.com'
             : 'https://sandbox.api.pagseguro.com';
@@ -160,12 +160,9 @@ class PagBankOrdersService {
                 }
             };
 
-            // Só incluir notification_urls se for uma URL válida (não localhost) ou produção
-            if (webhookUrl && (webhookUrl.startsWith('https://') || this.environment === 'production')) {
+            // Incluir notification_urls para produção
+            if (webhookUrl && webhookUrl.startsWith('https://')) {
                 payload.notification_urls = [webhookUrl];
-            } else if (this.environment === 'sandbox') {
-                // Para sandbox, usar URL de produção se localhost
-                payload.notification_urls = ['https://escrita360.com/api/webhook/pagbank'];
             }
 
             // Log do request antes de enviar

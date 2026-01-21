@@ -14,15 +14,10 @@ const axios = require('axios');
 
 class PagBankCustomersService {
     constructor() {
-        this.environment = process.env.PAGBANK_ENV || 'sandbox';
+        this.environment = process.env.PAGBANK_ENV || 'production';
         this.token = process.env.PAGBANK_TOKEN;
         
-        this.baseUrls = {
-            sandbox: 'https://sandbox.api.pagseguro.com',
-            production: 'https://api.pagseguro.com'
-        };
-        
-        this.baseUrl = this.baseUrls[this.environment];
+        this.baseUrl = 'https://api.pagseguro.com';
     }
 
     /**

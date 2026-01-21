@@ -91,7 +91,7 @@ src/
 │   └── PagBankCheckout.jsx         ✅ Componente de checkout
 └── pages/
     ├── Pagamento.jsx               ✅ Página de pagamento
-    └── PagBankSandbox.jsx          ⚠️  Página de testes (desenvolvimento)
+    └── Pagamento.jsx               📄 Página principal de pagamento
 ```
 
 ### Backend (`/server`)

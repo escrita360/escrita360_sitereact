@@ -56,7 +56,7 @@ NODE_ENV=development
 SECRET_KEY=your_secret_key
 
 # PagBank
-PAGBANK_ENV=sandbox
+PAGBANK_ENV=production
 PAGBANK_EMAIL=seu_email@example.com
 PAGBANK_TOKEN=seu_token_aqui
 
@@ -66,18 +66,18 @@ PAGBANK_CLIENT_SECRET=your_client_secret_here
 PAGBANK_REDIRECT_URI=http://localhost:5000/api/connect/callback
 
 # Certificado Digital mTLS (Opcional)
-PAGBANK_CERT_KEY_PATH=./certificates/pagbank_sandbox.key
-PAGBANK_CERT_PEM_PATH=./certificates/pagbank_sandbox.pem
+PAGBANK_CERT_KEY_PATH=./certificates/pagbank_production.key
+PAGBANK_CERT_PEM_PATH=./certificates/pagbank_production.pem
 
-# Modo simulação (true para testes sem chamadas reais)
-PAGBANK_MOCK_MODE=true
+# Ambiente de produção
+PAGBANK_ENV=production
 ```
 
 ### Obter Credenciais PagBank
 
-**Sandbox (Desenvolvimento):**
-1. Acesse: https://sandbox.pagseguro.uol.com.br/
-2. Crie conta de teste
+**Produção:**
+1. Acesse: https://pagseguro.uol.com.br/
+2. Configure sua conta PagBank para produção
 3. Obtenha email e token
 
 **Produção:**
@@ -158,16 +158,6 @@ Veja documentação completa em: `../.github/docs/BACKEND_PAGBANK.md`
 ```bash
 curl http://localhost:5000/api/webhook/pagbank/test
 ```
-
-## 🧪 Modo Simulação
-
-Para testes sem fazer chamadas reais à API:
-
-```env
-PAGBANK_MOCK_MODE=true
-```
-
-Todos os métodos retornarão respostas simuladas.
 
 ## 📝 Scripts
 

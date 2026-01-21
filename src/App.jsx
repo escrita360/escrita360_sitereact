@@ -14,7 +14,6 @@ import Pagamento from './pages/Pagamento.jsx'
 import PagamentoCreditos from './pages/PagamentoCreditos.jsx'
 import ComprarCreditos from './pages/ComprarCreditos.jsx'
 import PagamentoResultado from './pages/PagamentoResultado.jsx'
-import PagBankSandbox from './pages/PagBankSandbox.jsx'
 import AdminDashboard from './pages/admin/AdminDashboard.jsx'
 import AdminUsers from './pages/admin/AdminUsers.jsx'
 import AdminSubscriptions from './pages/admin/AdminSubscriptions.jsx'
@@ -202,19 +201,6 @@ function App() {
               transition={pageTransition}
             >
               <PagamentoResultado status="cancelled" />
-            </motion.div>
-          </Layout>
-        } />
-        <Route path="/sandbox/pagbank" element={
-          <Layout>
-            <motion.div
-              initial="initial"
-              animate="in"
-              exit="out"
-              variants={pageVariants}
-              transition={pageTransition}
-            >
-              <PagBankSandbox />
             </motion.div>
           </Layout>
         } />

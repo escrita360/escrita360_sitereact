@@ -1,5 +1,5 @@
 /**
- * Script de teste para assinatura recorrente PagBank Sandbox
+ * Script de teste para assinatura recorrente PagBank Produção
  * 
  * Este script testa o fluxo completo de criação de assinatura:
  * 1. Criar um plano
@@ -9,7 +9,7 @@
 const PagBankSubscriptionsService = require('./app/services/pagbank_subscriptions_service');
 
 async function testSubscriptionFlow() {
-    console.log('🚀 Iniciando teste de assinatura PagBank Sandbox\n');
+    console.log('🚀 Iniciando teste de assinatura PagBank Produção\n');
     
     const service = new PagBankSubscriptionsService();
     
@@ -37,7 +37,7 @@ async function testSubscriptionFlow() {
         console.log('1️⃣ Criando plano...');
         const planData = {
             name: 'Plano Teste Básico',
-            description: 'Plano de teste para sandbox',
+            description: 'Plano de teste para produção',
             amount: 29.90,
             interval_unit: 'MONTH',
             interval_value: 1,
