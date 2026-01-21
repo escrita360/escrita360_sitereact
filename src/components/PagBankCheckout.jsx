@@ -36,7 +36,7 @@ const PixPayment = ({ paymentData, onError }) => {
   const [hasValidData, setHasValidData] = useState(false)
 
   // Verificar se os dados necessários estão preenchidos
-  const checkValidData = () => {
+  const checkValidData = useCallback(() => {
     const { customerData } = paymentData
     const isValid = customerData.name && 
                    customerData.email && 
@@ -49,7 +49,7 @@ const PixPayment = ({ paymentData, onError }) => {
     
     setHasValidData(isValid)
     return isValid
-  }
+  }, [paymentData])
 
   const generatePix = useCallback(async () => {
     if (!checkValidData()) {
@@ -102,11 +102,11 @@ const PixPayment = ({ paymentData, onError }) => {
     } finally {
       setIsGenerating(false)
     }
-  }, [paymentData, onError])
+  }, [paymentData, onError, checkValidData])
 
   useEffect(() => {
     checkValidData()
-  }, [paymentData.customerData])
+  }, [paymentData.customerData, checkValidData])
 
   useEffect(() => {
     if (pixData && timeLeft > 0) {
@@ -593,7 +593,7 @@ const RecurringPayment = ({ paymentData, onSuccess, onError, validateBeforeSubmi
   )
 }
 
-export function PagBankCheckout({ planData, customerData, cardData, isYearly, audience, onSuccess, onError, validateBeforeSubmit }) {
+export function PagBankCheckout({ planData, customerData, cardData, isYearly, onSuccess, onError, validateBeforeSubmit }) {
   const [selectedMethod, setSelectedMethod] = useState(isYearly ? 'card' : 'recurring')
 
   const paymentMethods = [

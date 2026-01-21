@@ -1,4 +1,3 @@
-/* global process */
 import axios from 'axios';
 
 // Dados de teste para sandbox com cartão real de teste

@@ -103,7 +103,7 @@ const removeUndefinedFields = (obj) => {
 
   return Object.fromEntries(
     Object.entries(obj)
-      .filter(([_, value]) => value !== undefined)
+      .filter(([, value]) => value !== undefined)
       .map(([key, value]) => [
         key,
         typeof value === 'object' ? removeUndefinedFields(value) : value

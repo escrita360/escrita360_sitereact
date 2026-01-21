@@ -49,7 +49,7 @@ const axios = require('axios');
 
 (async () => {
     try {
-        const response = await axios.get('https://api.pagseguro.com', {
+        const _response = await axios.get('https://api.pagseguro.com', {
             headers: {
                 'Authorization': `Bearer ${process.env.PAGBANK_TOKEN}`,
                 'Content-Type': 'application/json'

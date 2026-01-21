@@ -62,7 +62,7 @@ class FirebaseMultiProjectService {
                 this.apps[name] = admin.app(name);
                 console.log(`✅ Firebase App '${name}' já estava inicializada`);
                 return;
-            } catch (e) {
+            } catch {
                 // App não existe, vamos criar
             }
 
@@ -81,7 +81,7 @@ class FirebaseMultiProjectService {
                     // Tenta decodificar de Base64
                     const decoded = Buffer.from(config.serviceAccountJson, 'base64').toString('utf-8');
                     serviceAccount = JSON.parse(decoded);
-                } catch (e) {
+                } catch {
                     // Se falhar, tenta parse direto
                     serviceAccount = JSON.parse(config.serviceAccountJson);
                 }

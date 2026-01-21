@@ -55,7 +55,7 @@ router.post('/pagbank/pix', async (req, res) => {
         //   "data": { ... }
         // }
 
-        const { id, reference_id, event_type, data } = req.body;
+        const { id, event_type, data } = req.body;
 
         if (!id || !event_type) {
             console.error('❌ Dados do webhook PIX incompletos');
@@ -482,7 +482,7 @@ router.post('/pagbank/transaction', async (req, res) => {
         console.log('📦 Headers:', req.headers);
         console.log('📦 Body:', JSON.stringify(req.body, null, 2));
         
-        const { notificationCode, notificationType } = req.body;
+        const { notificationCode } = req.body;
 
         if (!notificationCode) {
             return res.status(400).json({ error: 'notificationCode é obrigatório' });
