@@ -143,11 +143,13 @@ class PagBankOrdersService {
                         value: orderData.qr_codes[0].amount.value
                     },
                     expiration_date: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
-                }],
-                notification_urls: [
-                    webhookUrl
-                ]
+                }]
             };
+
+            // Só incluir notification_urls se for uma URL válida (não localhost) ou produção
+            if (webhookUrl && (webhookUrl.startsWith('https://') || this.environment === 'production')) {
+                payload.notification_urls = [webhookUrl];
+            }
 
             // Log do request antes de enviar
             pagbankLogger.logRequest('PIX', {
@@ -176,7 +178,11 @@ class PagBankOrdersService {
 
             console.log('✅ QR Code PIX gerado em PRODUÇÃO:', response.data.id);
             console.log('💰 Valor:', (response.data.qr_codes?.[0]?.amount?.value / 100).toFixed(2), 'BRL');
-            console.log('📞 Webhook configurado:', webhookUrl);
+            if (payload.notification_urls) {
+                console.log('📞 Webhook configurado:', webhookUrl);
+            } else {
+                console.log('📞 Webhook não configurado (localhost ou inválido)');
+            }
             console.log('⏰ Expira em:', response.data.qr_codes?.[0]?.expiration_date);
             
             return response.data;
