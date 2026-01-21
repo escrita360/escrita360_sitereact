@@ -107,7 +107,7 @@ export const paymentService = {
         amount: {
           value: Math.round(planData.price * 100)
         },
-        expiration_date: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+        expiration_date: new Date(Date.now() + 1 * 60 * 60 * 1000).toISOString().replace(/\.\d{3}Z$/, 'Z')
       }]
       // Removendo notification_urls para desenvolvimento
       // notification_urls: [

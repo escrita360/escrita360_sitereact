@@ -178,70 +178,7 @@ class PagBankService {
     }
   }
 
-  /**
-   * Cria um novo pedido (Order) - Versão simulada para desenvolvimento
-   */
-  async createOrderSimulated(orderData) {
-    console.log('🧪 PagBank: Simulando criação de pedido (fallback)')
 
-    // Simular delay de API
-    await new Promise(resolve => setTimeout(resolve, 1000))
-
-    // Simular resposta de sucesso
-    const mockResponse = {
-      id: `order_${Date.now()}`,
-      reference_id: orderData.reference_id || `escrita360_${Date.now()}`,
-      created_at: new Date().toISOString(),
-      customer: {
-        name: orderData.customer.name,
-        email: orderData.customer.email,
-        tax_id: orderData.customer.tax_id || orderData.customer.cpf
-      },
-      items: (orderData.items || []).map(item => ({
-        reference_id: item.reference_id || item.id,
-        name: item.name,
-        quantity: item.quantity,
-        unit_amount: item.unit_amount || Math.round(item.price * 100)
-      })),
-      qr_codes: orderData.qr_codes ? orderData.qr_codes.map(qr => ({
-        id: `QRCO_${Date.now()}`,
-        expiration_date: qr.expiration_date,
-        amount: qr.amount,
-        text: '00020101021226830014br.gov.bcb.pix2571api.itau/pix/qr/v2/1234567890abcdefghijklmnop52040000530398654052900.005802BR5913Teste PagBank6009Sao Paulo62070503***6304ABCD',
-        arrangements: ['PIX'],
-        links: [
-          {
-            rel: 'QRCODE.PNG',
-            href: 'https://sandbox.api.pagseguro.com/qrcode/QRCO_SIMULATED/png',
-            media: 'image/png',
-            type: 'GET'
-          },
-          {
-            rel: 'QRCODE.BASE64',
-            href: 'https://sandbox.api.pagseguro.com/qrcode/QRCO_SIMULATED/base64',
-            media: 'text/plain',
-            type: 'GET'
-          }
-        ]
-      })) : undefined,
-      charges: orderData.charges ? orderData.charges.map(charge => ({
-        id: `charge_${Date.now()}`,
-        reference_id: charge.reference_id || `charge_${Date.now()}`,
-        status: 'PAID', // Simular pagamento aprovado
-        amount: {
-          value: charge.amount.value || Math.round(charge.amount * 100),
-          currency: 'BRL'
-        },
-        payment_method: charge.payment_method,
-        created_at: new Date().toISOString(),
-        paid_at: new Date().toISOString()
-      })) : undefined,
-      notification_urls: orderData.notification_urls || []
-    }
-
-    console.log('✅ PagBank: Pedido simulado criado com sucesso', mockResponse)
-    return mockResponse
-  }
 
   /**
    * Cria um checkout link de pagamento
@@ -525,15 +462,9 @@ class PagBankService {
         created_at: order.created_at
       }
     } catch (error) {
-      // If order creation fails, return mock customer data
-      console.warn('Customer registration via order failed, using mock data:', error.message)
-      return {
-        id: `CUST_${Date.now()}`,
-        name: customerData.name,
-        email: customerData.email,
-        tax_id: this.formatTaxId(customerData.tax_id || customerData.cpf),
-        created_at: new Date().toISOString()
-      }
+      // Customer registration failed
+      console.error('Customer registration failed:', error.message)
+      throw error
     }
   }
 

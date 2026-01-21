@@ -124,6 +124,9 @@ class PagBankOrdersService {
                                   ? 'https://escrita360.com/api/webhook/pagbank' 
                                   : 'http://localhost:5000/api/webhook/pagbank');
             
+            // Calcular o valor total dos itens
+            const totalAmount = orderData.items.reduce((sum, item) => sum + (item.unit_amount * item.quantity), 0);
+            
             const payload = {
                 reference_id: orderData.reference_id,
                 customer: {
@@ -140,9 +143,9 @@ class PagBankOrdersService {
                 })),
                 qr_codes: [{
                     amount: {
-                        value: orderData.qr_codes[0].amount.value
+                        value: totalAmount
                     },
-                    expiration_date: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+                    expiration_date: new Date(Date.now() + 1 * 60 * 60 * 1000).toISOString().replace(/\.\d{3}Z$/, 'Z')
                 }]
             };
 

@@ -38,7 +38,7 @@ async function testCreateAccount() {
 async function testCreateSubscription(userId) {
   console.log('🧪 Teste 2: Criando assinatura...')
   
-  const planMock = {
+  const planData = {
     name: 'Intermediário',
     price: 49.90
   }
@@ -47,7 +47,7 @@ async function testCreateSubscription(userId) {
     const result = await firebaseSubscriptionService.createSubscription(
       userId,
       {
-        plan: planMock,
+        plan: planData,
         isYearly: false,
         paymentData: {
           name: 'Usuário Teste',
