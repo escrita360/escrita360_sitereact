@@ -395,6 +395,37 @@ class PagBankOrdersService {
             );
         }
     }
+
+    /**
+     * Consulta um pedido/order
+     * https://dev.pagbank.uol.com.br/reference/consultar-pedido
+     */
+    async getOrder(orderId) {
+        try {
+            console.log('🔍 Consultando pedido:', orderId);
+
+            const response = await axios.get(
+                `${this.baseUrl}/orders/${orderId}`,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${this.token}`
+                    }
+                }
+            );
+
+            console.log('✅ Pedido consultado:', response.data.id);
+            return response.data;
+
+        } catch (error) {
+            console.error('❌ Erro ao consultar pedido:', error.response?.data || error.message);
+            throw new Error(
+                error.response?.data?.error_messages?.[0]?.description || 
+                error.message || 
+                'Erro ao consultar pedido'
+            );
+        }
+    }
 }
 
 module.exports = PagBankOrdersService;

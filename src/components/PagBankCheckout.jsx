@@ -29,11 +29,12 @@ const PaymentMethodCard = ({ icon: Icon, title, description, isSelected, onClick
   </Card>
 )
 
-const PixPayment = ({ paymentData, onError }) => {
+const PixPayment = ({ paymentData, onError, onSuccess }) => {
   const [pixData, setPixData] = useState(null)
   const [isGenerating, setIsGenerating] = useState(false)
   const [timeLeft, setTimeLeft] = useState(86400) // 24 horas (86400 segundos)
   const [hasValidData, setHasValidData] = useState(false)
+  const [isCheckingPayment, setIsCheckingPayment] = useState(false)
 
   // Verificar se os dados necessários estão preenchidos
   const checkValidData = useCallback(() => {
@@ -114,6 +115,60 @@ const PixPayment = ({ paymentData, onError }) => {
       return () => clearTimeout(timer)
     }
   }, [timeLeft, pixData])
+
+  // Polling para verificar status do pagamento PIX
+  useEffect(() => {
+    if (!pixData || isCheckingPayment) return
+
+    const checkPaymentStatus = async () => {
+      try {
+        setIsCheckingPayment(true)
+        console.log('🔍 Verificando status do pagamento PIX...')
+
+        const statusResponse = await paymentService.getPagBankPaymentStatus(pixData.id)
+        console.log('📊 Status do PIX:', statusResponse)
+
+        // Verificar se o pagamento foi aprovado
+        const charge = statusResponse.charges?.[0]
+        if (charge && charge.status === 'PAID') {
+          console.log('✅ Pagamento PIX aprovado!')
+          toast.success('Pagamento PIX confirmado!')
+
+          // Chamar callback de sucesso
+          if (onSuccess) {
+            onSuccess({
+              transaction_id: pixData.id,
+              amount: paymentData.planData.price,
+              payment_method: 'pix',
+              status: 'paid'
+            })
+          }
+
+          return true // Pagamento confirmado
+        } else if (charge && charge.status === 'CANCELLED') {
+          console.log('❌ Pagamento PIX cancelado')
+          toast.error('Pagamento PIX foi cancelado')
+          return false
+        }
+      } catch (error) {
+        console.error('❌ Erro ao verificar status do PIX:', error)
+        // Não mostrar erro para o usuário, apenas log
+      } finally {
+        setIsCheckingPayment(false)
+      }
+      return false
+    }
+
+    // Verificar status a cada 5 segundos nos primeiros 2 minutos, depois a cada 10 segundos
+    const interval = timeLeft > 7080 ? 5000 : 10000 // 7080 = 2 horas - 2 minutos
+
+    const statusTimer = setInterval(checkPaymentStatus, interval)
+
+    // Verificar imediatamente na primeira vez
+    checkPaymentStatus()
+
+    return () => clearInterval(statusTimer)
+  }, [pixData, timeLeft, isCheckingPayment, paymentData.planData.price, onSuccess])
 
   const copyPixCode = () => {
     if (pixData?.qr_codes?.[0]?.text) {

@@ -280,7 +280,7 @@ export const paymentService = {
    * @returns {Promise<Object>} - Status do pagamento
    */
   async getPagBankPaymentStatus(orderId) {
-    const response = await api.get(`/payment/pagbank-status/${orderId}`)
+    const response = await api.get(`/payment/pagbank/order/${orderId}`)
     return response.data
   },
 
