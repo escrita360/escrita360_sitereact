@@ -195,11 +195,10 @@ function Precos() {
       }
     } else if (selectedAudience === 'professores') {
       return {
-        title: 'Independente',
-        titleHighlight: 'Professor ',
-        subtitle: 'Para professores autônomos, cursinhos ou projetos pessoais',
-        titleHighlightClass: 'bg-gradient-to-r from-blue-600 to-black bg-clip-text text-transparent',
-        highlightFirst: true
+        title: '',
+        titleHighlight: 'Professor',
+        titleHighlightClass: 'bg-gradient-to-r from-[#1d5a91] to-[#3b82f6] bg-clip-text text-transparent',
+        subtitle: 'Para professores autônomos, cursinhos ou projetos pessoais'
       }
     } else {
       return {
