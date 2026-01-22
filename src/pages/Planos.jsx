@@ -269,7 +269,7 @@ function Precos() {
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="text-center mb-8">
             <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-slate-900 mb-3">
-              Escolha o modelo que atende suas necessidades:
+              {selectedAudience === 'estudantes' ? 'Recursos disponíveis na Plataforma' : 'Escolha o modelo que atende suas necessidades:'}
             </h2>
           </div>
           
