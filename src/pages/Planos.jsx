@@ -414,25 +414,25 @@ function Precos() {
               {/* Plano Híbrido */}
               {schoolPlanType === 'hibrido' && (
                 <div className="grid gap-8 mx-auto mt-6 justify-center md:grid-cols-2 max-w-5xl">
-                  {/* Plano Básico */}
+                  {/* Plano Básico - Professor */}
                   <Card className="relative hover-lift animate-scale-in hover:shadow-xl transition-all flex flex-col pt-6 w-full">
                     <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 flex gap-2 animate-float">
                       <Badge variant="secondary" className="text-xs whitespace-nowrap">
                         Plano Inicial
                       </Badge>
                       <Badge className="bg-yellow-500 text-white px-3 py-1 text-xs whitespace-nowrap">
-                        60 análises detalhadas IA
+                        500 análises detalhadas IA
                       </Badge>
                     </div>
                     <CardHeader className="text-center pb-4">
-                      <h3 className="text-xl font-bold text-slate-900">Básico</h3>
+                      <h3 className="text-xl font-bold text-slate-900">Professor</h3>
                       <div className="my-4">
                         <span className="text-3xl font-bold text-brand-primary">R$</span>
-                        <span className="text-4xl font-bold text-brand-primary">120,00</span>
+                        <span className="text-4xl font-bold text-brand-primary">1.200,00</span>
                       </div>
                       <div className="mt-4 pt-4 border-t border-slate-100">
                         <p className="text-sm text-slate-600 font-semibold">
-                          60 correções detalhadas com IA
+                          500 correções detalhadas com IA
                         </p>
                         <p className="text-xs text-slate-600 mt-1">
                           Acesso por 30 dias
@@ -445,10 +445,10 @@ function Precos() {
                         variant="default"
                         size="lg"
                         onClick={() => handleOpenPagamento({
-                          name: 'Básico',
-                          monthlyPrice: 120,
-                          yearlyPrice: 120,
-                          credits: 60,
+                          name: 'Professor',
+                          monthlyPrice: 1200,
+                          yearlyPrice: 1200,
+                          credits: 500,
                           duration: '1 mês',
                           buttonText: 'Contratar Plano'
                         })}
@@ -465,19 +465,19 @@ function Precos() {
                         Preço promocional de lançamento
                       </Badge>
                       <Badge className="bg-yellow-500 text-white px-3 py-1 text-xs whitespace-nowrap">
-                        10 créditos IA
+                        500 créditos IA
                       </Badge>
                     </div>
                     <CardHeader className="text-center pb-4">
-                      <h3 className="text-xl font-bold text-slate-900">Plano Básico</h3>
+                      <h3 className="text-xl font-bold text-slate-900">Estudante</h3>
                       <div className="my-4">
                         <span className="text-3xl font-bold text-brand-primary">R$</span>
-                        <span className="text-4xl font-bold text-brand-primary">49,00</span>
+                        <span className="text-4xl font-bold text-brand-primary">290,00</span>
                         <span className="text-sm text-slate-600">/mês</span>
                       </div>
                       <div className="mt-4 pt-4 border-t border-slate-100">
                         <p className="text-sm text-slate-600 font-semibold">
-                          10 correções detalhadas com IA
+                          500 correções detalhadas com IA
                         </p>
                         <p className="text-xs text-slate-600 mt-1">
                           Acesso mensal recorrente
@@ -490,10 +490,10 @@ function Precos() {
                         variant="default"
                         size="lg"
                         onClick={() => handleOpenPagamento({
-                          name: 'Plano Básico',
-                          monthlyPrice: 49,
-                          yearlyPrice: 588,
-                          credits: 10,
+                          name: 'Estudante',
+                          monthlyPrice: 290,
+                          yearlyPrice: 3480,
+                          credits: 500,
                           duration: 'Mensal',
                           buttonText: 'Escolher Plano'
                         })}
