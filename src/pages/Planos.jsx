@@ -363,7 +363,7 @@ function Precos() {
 
               {/* Planos Modelo Correção Inteligente */}
               {schoolPlanType === 'correcao' && (
-                <div className="grid gap-8 mx-auto mt-6 justify-center md:grid-cols-2 lg:grid-cols-2 max-w-5xl">
+                <div className="grid gap-8 mx-auto mt-6 justify-center grid-cols-1 max-w-md">
                   {/* Plano Básico */}
                   <Card className="relative hover-lift animate-scale-in hover:shadow-xl transition-all flex flex-col pt-6 w-full">
                     <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 flex gap-2 animate-float">
@@ -407,29 +407,34 @@ function Precos() {
                       </Button>
                     </CardContent>
                   </Card>
+                </div>
+              )}
 
-                  {/* Plano Progressivo */}
-                  <Card className="relative hover-lift animate-scale-in delay-200 border-2 border-brand-primary shadow-xl transition-all flex flex-col pt-6 w-full">
+              {/* Plano Híbrido */}
+              {schoolPlanType === 'hibrido' && (
+                <div className="grid gap-8 mx-auto mt-6 justify-center md:grid-cols-2 max-w-5xl">
+                  {/* Plano Básico */}
+                  <Card className="relative hover-lift animate-scale-in hover:shadow-xl transition-all flex flex-col pt-6 w-full">
                     <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 flex gap-2 animate-float">
-                      <Badge className="bg-brand-primary text-white px-3 py-1 text-xs whitespace-nowrap">
-                        Popular
+                      <Badge variant="secondary" className="text-xs whitespace-nowrap">
+                        Plano Inicial
                       </Badge>
                       <Badge className="bg-yellow-500 text-white px-3 py-1 text-xs whitespace-nowrap">
-                        300 análises detalhadas IA
+                        60 análises detalhadas IA
                       </Badge>
                     </div>
                     <CardHeader className="text-center pb-4">
-                      <h3 className="text-xl font-bold text-slate-900">Plano Progressivo</h3>
+                      <h3 className="text-xl font-bold text-slate-900">Básico</h3>
                       <div className="my-4">
                         <span className="text-3xl font-bold text-brand-primary">R$</span>
-                        <span className="text-4xl font-bold text-brand-primary">570,00</span>
+                        <span className="text-4xl font-bold text-brand-primary">120,00</span>
                       </div>
                       <div className="mt-4 pt-4 border-t border-slate-100">
                         <p className="text-sm text-slate-600 font-semibold">
-                          {selectedAudience === 'professores' ? '300 correções detalhadas com IA' : '300 correções detalhadas com IA'}
+                          60 correções detalhadas com IA
                         </p>
                         <p className="text-xs text-slate-600 mt-1">
-                          Acesso por 180 dias
+                          Acesso por 30 dias
                         </p>
                       </div>
                     </CardHeader>
@@ -439,11 +444,11 @@ function Precos() {
                         variant="default"
                         size="lg"
                         onClick={() => handleOpenPagamento({
-                          name: 'Plano Progressivo',
-                          monthlyPrice: 570,
-                          yearlyPrice: 570,
-                          credits: 300,
-                          duration: '6 meses',
+                          name: 'Básico',
+                          monthlyPrice: 120,
+                          yearlyPrice: 120,
+                          credits: 60,
+                          duration: '1 mês',
                           buttonText: 'Contratar Plano'
                         })}
                       >
@@ -451,34 +456,30 @@ function Precos() {
                       </Button>
                     </CardContent>
                   </Card>
-                </div>
-              )}
 
-              {/* Plano Híbrido */}
-              {schoolPlanType === 'hibrido' && (
-                <div className="grid gap-8 mx-auto mt-6 justify-center grid-cols-1 max-w-md">
-                  {/* Plano Essencial */}
-                  <Card className="relative hover-lift animate-scale-in border-2 border-brand-primary shadow-xl transition-all flex flex-col pt-6 w-full">
+                  {/* Plano Estudante */}
+                  <Card className="relative hover-lift animate-scale-in delay-200 border-2 border-brand-primary shadow-xl transition-all flex flex-col pt-6 w-full">
                     <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 flex gap-2 animate-float">
                       <Badge className="bg-brand-primary text-white px-3 py-1 text-xs whitespace-nowrap">
-                        Recomendado
+                        Preço promocional de lançamento
                       </Badge>
                       <Badge className="bg-yellow-500 text-white px-3 py-1 text-xs whitespace-nowrap">
-                        500 análises detalhadas IA
+                        10 créditos IA
                       </Badge>
                     </div>
                     <CardHeader className="text-center pb-4">
-                      <h3 className="text-xl font-bold text-slate-900">Plano Essencial</h3>
+                      <h3 className="text-xl font-bold text-slate-900">Plano Básico</h3>
                       <div className="my-4">
                         <span className="text-3xl font-bold text-brand-primary">R$</span>
-                        <span className="text-4xl font-bold text-brand-primary">1.200,00</span>
+                        <span className="text-4xl font-bold text-brand-primary">49,00</span>
+                        <span className="text-sm text-slate-600">/mês</span>
                       </div>
                       <div className="mt-4 pt-4 border-t border-slate-100">
                         <p className="text-sm text-slate-600 font-semibold">
-                          {selectedAudience === 'professores' ? '500 análises detalhadas de redações do ENEM por IA' : '500 correções detalhadas com IA'}
+                          10 correções detalhadas com IA
                         </p>
                         <p className="text-xs text-slate-600 mt-1">
-                          Acesso por 365 dias
+                          Acesso mensal recorrente
                         </p>
                       </div>
                     </CardHeader>
@@ -488,15 +489,15 @@ function Precos() {
                         variant="default"
                         size="lg"
                         onClick={() => handleOpenPagamento({
-                          name: 'Plano Essencial',
-                          monthlyPrice: 1200,
-                          yearlyPrice: 1200,
-                          credits: 500,
-                          duration: '12 meses',
-                          buttonText: 'Contratar Plano'
+                          name: 'Plano Básico',
+                          monthlyPrice: 49,
+                          yearlyPrice: 588,
+                          credits: 10,
+                          duration: 'Mensal',
+                          buttonText: 'Escolher Plano'
                         })}
                       >
-                        Contratar Plano
+                        Escolher Plano
                       </Button>
                     </CardContent>
                   </Card>
