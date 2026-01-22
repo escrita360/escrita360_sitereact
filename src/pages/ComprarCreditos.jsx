@@ -18,6 +18,7 @@ import {
 } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { formatPrice } from '@/lib/utils.js'
 import PagBankCheckout from '@/components/PagBankCheckout.jsx'
 import { firebaseCreditService, firebaseAuthService, firebaseSubscriptionService } from '@/services/firebase.js'
 
@@ -318,7 +319,7 @@ function ComprarCreditos() {
                 <div className="space-y-3 text-left">
                   <div className="flex justify-between">
                     <span className="text-slate-600">Valor Pago</span>
-                    <span className="font-medium text-lg">R$ {selectedPackage.price.toFixed(2)}</span>
+                    <span className="font-medium text-lg">{formatPrice(selectedPackage.price)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-600">Créditos Anteriores</span>
@@ -430,7 +431,7 @@ function ComprarCreditos() {
                   </div>
                   <CardTitle className="text-2xl">{pkg.name}</CardTitle>
                   <CardDescription className="text-lg font-semibold text-brand-primary mt-2">
-                    R$ {pkg.price.toFixed(2)}
+                    {formatPrice(pkg.price)}
                   </CardDescription>
                   {pkg.discount && (
                     <Badge className="mt-2 bg-green-100 text-green-800">
@@ -445,7 +446,7 @@ function ComprarCreditos() {
                   </div>
                   <Separator />
                   <p className="text-xs text-slate-500">
-                    R$ {pkg.pricePerCredit.toFixed(2)} por crédito
+                    R$ {formatPriceValue(pkg.pricePerCredit)} por crédito
                   </p>
                 </CardContent>
               </Card>
@@ -479,7 +480,7 @@ function ComprarCreditos() {
                 <Separator />
                 <div className="flex justify-between text-lg">
                   <span className="font-bold">Total:</span>
-                  <span className="font-bold text-brand-primary">R$ {selectedPackage.price.toFixed(2)}</span>
+                  <span className="font-bold text-brand-primary">{formatPrice(selectedPackage.price)}</span>
                 </div>
               </div>
 

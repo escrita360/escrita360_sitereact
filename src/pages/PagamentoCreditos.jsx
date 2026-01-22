@@ -8,6 +8,7 @@ import { CreditCard, Lock, Calendar, User, Shield, CheckCircle2, ArrowLeft, Aler
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import PagBankOneTimePayment from '@/components/PagBankOneTimePayment.jsx'
+import { formatPrice } from '@/lib/utils.js'
 
 function PagamentoCreditos() {
   const navigate = useNavigate()
@@ -373,7 +374,7 @@ function PagamentoCreditos() {
                       <div className="flex justify-between text-sm">
                         <span className="text-slate-600">Subtotal</span>
                         <span className="font-medium">
-                          R$ {typeof price === 'number' ? price.toFixed(2) : price}
+                          {formatPrice(price)}
                         </span>
                       </div>
                     </div>
@@ -382,7 +383,7 @@ function PagamentoCreditos() {
                       <span className="text-lg font-bold">Total</span>
                       <div className="text-right">
                         <p className="text-2xl font-bold text-brand-primary">
-                          R$ {typeof total === 'number' ? total.toFixed(2) : total}
+                          {formatPrice(total)}
                         </p>
                         <p className="text-xs text-slate-600">pagamento único</p>
                       </div>
@@ -442,7 +443,7 @@ function PagamentoCreditos() {
                   <div className="flex justify-between">
                     <span className="text-slate-600">Valor Pago</span>
                     <span className="font-medium text-lg">
-                      R$ {typeof total === 'number' ? total.toFixed(2) : total}
+                      {formatPrice(total)}
                     </span>
                   </div>
                   <div className="flex justify-between">

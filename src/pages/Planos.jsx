@@ -9,6 +9,7 @@ import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { PageHero } from '@/components/PageHero.jsx'
 import { plansService } from '@/services/plans.js'
+import { formatPrice } from '@/lib/utils.js'
 
 function Precos() {
   // Force HMR update
@@ -582,7 +583,7 @@ function Precos() {
                     <h3 className="text-lg font-bold text-slate-900">Pacote 1</h3>
                     <div className="my-2">
                       <span className="text-2xl font-bold text-brand-primary">
-                        R$ 1.200,00
+                        {formatPrice(1200)}
                       </span>
                     </div>
                     <p className="text-slate-600 text-sm">
@@ -613,7 +614,7 @@ function Precos() {
                     <h3 className="text-lg font-bold text-slate-900">Pacote 2</h3>
                     <div className="my-2">
                       <span className="text-2xl font-bold text-brand-primary">
-                        R$ 2.400,00
+                        {formatPrice(2400)}
                       </span>
                     </div>
                     <p className="text-slate-600 text-sm">
@@ -742,7 +743,7 @@ function Precos() {
                     <h3 className="text-lg font-bold text-slate-900">{pkg.name}</h3>
                     <div className="my-2">
                       <span className="text-2xl font-bold text-brand-primary">
-                        R$ {pkg.price}
+                        {formatPrice(pkg.price)}
                       </span>
                     </div>
                     <p className="text-slate-600 text-sm">
