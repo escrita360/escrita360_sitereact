@@ -173,7 +173,7 @@ function Precos() {
       case 'estudantes':
         return studentPlans
       case 'professores':
-        return teacherPlansSolo
+        return teacherPlansSolo.slice(0,1)
       case 'escolas':
         return schoolPlans
       default:
@@ -595,10 +595,7 @@ function Precos() {
       {(selectedAudience === 'estudantes' || selectedAudience === 'professores') && (
         <section ref={plansRef} className="pt-12 pb-8 md:pt-16 md:pb-12 lg:pt-20 lg:pb-16 bg-white animate-on-scroll">
           <div className="container mx-auto px-4 max-w-7xl">
-            <div className={`grid gap-8 mx-auto mt-6 justify-center ${
-              selectedAudience === 'professores' ? 'md:grid-cols-2 lg:grid-cols-2 max-w-5xl' : 
-              'grid-cols-1 max-w-md'
-            }`}>
+            <div className={`grid gap-8 mx-auto mt-6 justify-center grid-cols-1 max-w-md`}>
               {currentPlans.map((plan, index) => (
                 <Card key={index} className={`relative hover-lift animate-scale-in delay-${index * 200} ${plan.popular ? 'border-2 border-brand-primary shadow-xl' : 'hover:shadow-xl'} transition-all flex flex-col pt-6 w-full`}>
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 flex gap-2 animate-float">
