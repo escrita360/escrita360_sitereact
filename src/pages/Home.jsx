@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent } from '@/components/ui/card.jsx'
 import { Check, X, PenTool, Brain, TrendingUp, GraduationCap, School, Edit, FileText, CheckCircle, Bot, RotateCcw, Trophy, Heart, Target, BarChart, Users, UserCheck, BookOpen, Award, Cloud, Clock } from 'lucide-react'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
-import Banner from '@/assets/Cards/BANNER 01.svg'
+import Banner from '@/assets/Cards/BANNER_HOME01.svg'
 import card1 from '@/assets/Cards/card1.0.svg'
 import escritaAutoregulada from '@/assets/Cards/escrita_autoregulada.png'
 import imersaoTotal from '@/assets/Cards/imersao_total.png'
@@ -28,9 +28,6 @@ function Home() {
                 <span className="font-normal">unindo </span>
                 <span className="font-normal">autorregulação e inteligência artificial.</span>
               </h1>
-              <p className="hero-description text-base md:text-lg text-slate-600 mb-2 leading-relaxed text-center">
-                Revisão como apoio, não como atalho, respeitando o processo de aprendizagem. A correção complementar com Inteligência Artificial valoriza o processo de reescrita e garante que o aprendizado esteja no centro da experiência.
-              </p>
               <div className="hero-stats flex flex-wrap gap-4 justify-center mt-8">
                 <div className="stat bg-white rounded-xl shadow-md border border-slate-100 px-6 py-4 text-center hover:shadow-lg hover:border-[#2b7475]/20 transition-all duration-300">
                   <strong className="block font-bold text-base mb-2" style={{ color: '#2b7475' }}>Processo</strong>
