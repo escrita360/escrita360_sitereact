@@ -294,29 +294,29 @@ function Precos() {
         <section className="py-8 md:py-12 lg:py-16 bg-slate-50">
           <div className="container mx-auto px-4 max-w-7xl">
             
-            {/* Cards compactos de seleção de modelo - UPDATED */}
-            <div className="grid md:grid-cols-2 gap-4 max-w-3xl mx-auto mb-8">
-              <div className="bg-white rounded-xl shadow-sm p-5 border border-slate-200">
-                <h4 className="text-base font-bold text-slate-900 mb-1">{schoolModels[0].title}</h4>
-                <p className="text-slate-500 text-sm">
-                  {schoolModels[0].focus}
-                </p>
-              </div>
-              
-              <div className="bg-white rounded-xl shadow-sm p-5 border border-slate-200">
-                <h4 className="text-base font-bold text-slate-900 mb-1">{schoolModels[1].title}</h4>
-                <p className="text-slate-500 text-sm">
-                  {schoolModels[1].focus}
-                </p>
-              </div>
-            </div>
-
             {/* Platform Features Section - For schools */}
             <div className="mt-12 mb-12">
               <div className="text-center mb-8">
                 <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-slate-900 mb-3">
                   Escolha o modelo que atende suas necessidades:
                 </h3>
+              </div>
+              
+              {/* Cards compactos de seleção de modelo */}
+              <div className="grid md:grid-cols-2 gap-4 max-w-3xl mx-auto mb-8">
+                <div className="bg-white rounded-xl shadow-sm p-5 border border-slate-200">
+                  <h4 className="text-base font-bold text-slate-900 mb-1">{schoolModels[0].title}</h4>
+                  <p className="text-slate-500 text-sm">
+                    {schoolModels[0].focus}
+                  </p>
+                </div>
+                
+                <div className="bg-white rounded-xl shadow-sm p-5 border border-slate-200">
+                  <h4 className="text-base font-bold text-slate-900 mb-1">{schoolModels[1].title}</h4>
+                  <p className="text-slate-500 text-sm">
+                    {schoolModels[1].focus}
+                  </p>
+                </div>
               </div>
               
               <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 md:p-8 max-w-md mx-auto">
