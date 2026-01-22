@@ -274,14 +274,6 @@ function Precos() {
           
           {selectedAudience === 'professores' && (
             <>
-              {/* Título da seção institucional */}
-              <div className="text-center mb-8">
-                <h3 className="text-xl md:text-2xl font-bold mb-2">
-                  <span className="bg-gradient-to-r from-blue-600 to-black bg-clip-text text-transparent">Professor</span>{' '}
-                  <span className="text-slate-900">Independente</span>
-                </h3>
-              </div>
-
               {/* Cards de seleção de modelo - estilo compacto */}
               <div className="grid md:grid-cols-2 gap-4 max-w-3xl mx-auto mb-8">
                 <button
