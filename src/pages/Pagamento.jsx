@@ -4,10 +4,9 @@ import { Label } from '@/components/ui/label.jsx'
 import { Card, CardContent } from '@/components/ui/card.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
 import { Separator } from '@/components/ui/separator.jsx'
-import { CreditCard, Lock, Calendar, User, Shield, CheckCircle2, ArrowLeft, AlertCircle, Eye, EyeOff } from 'lucide-react'
+import { CreditCard, Lock, Calendar, User, Shield, CheckCircle2, ArrowLeft, AlertCircle, Eye, EyeOff, QrCode, DollarSign } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import PagBankCheckout from '@/components/PagBankCheckout.jsx'
 import { firebaseAuthService, firebaseSubscriptionService, firebasePaymentService } from '@/services/firebase.js'
 
 function Pagamento() {
@@ -34,7 +33,7 @@ function Pagamento() {
     password: '',
     confirmPassword: '',
     fullName: '', // Nome completo para PIX/Boleto
-    paymentMethod: 'recurring' // 'recurring', 'card', 'pix', 'boleto'
+    paymentMethod: 'card' // 'card', 'pix', 'pay_later'
   })
   const [errors, setErrors] = useState({})
   const [showPassword, setShowPassword] = useState(false)
@@ -114,6 +113,11 @@ function Pagamento() {
     else if (field === 'phone') formattedValue = formatPhone(value)
     else if (field === 'cardName') formattedValue = value.toUpperCase()
     
+    // Log quando método de pagamento mudar
+    if (field === 'paymentMethod') {
+      console.log('💳 Método de pagamento alterado para:', value)
+    }
+    
     setFormData(prev => ({ ...prev, [field]: formattedValue }))
     if (errors[field]) setErrors(prev => ({ ...prev, [field]: '' }))
   }
@@ -154,12 +158,14 @@ function Pagamento() {
       email: formData.email,
       cpf: formData.cpf,
       phone: formData.phone,
+      paymentMethod: formData.paymentMethod,
       cardNumber: formData.cardNumber,
       cardName: formData.cardName
     })
     
     const newErrors = {}
     
+    // Validações gerais (sempre obrigatórias)
     if (!formData.fullName || formData.fullName.trim().length < 2) {
       newErrors.fullName = 'Nome completo é obrigatório'
     }
@@ -178,17 +184,21 @@ function Pagamento() {
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'As senhas não coincidem'
     }
-    if (!formData.cardNumber || formData.cardNumber.replace(/\s/g, '').length < 13) {
-      newErrors.cardNumber = 'Número do cartão é obrigatório'
-    }
-    if (!formData.cardName || formData.cardName.trim().length < 2) {
-      newErrors.cardName = 'Nome no cartão é obrigatório'
-    }
-    if (!formData.expiryDate || !/^\d{2}\/\d{4}$/.test(formData.expiryDate)) {
-      newErrors.expiryDate = 'Data de validade é obrigatória (MM/AAAA)'
-    }
-    if (!formData.cvv || formData.cvv.length < 3) {
-      newErrors.cvv = 'CVV é obrigatório'
+    
+    // Validações específicas para cartão de crédito
+    if (formData.paymentMethod === 'card') {
+      if (!formData.cardNumber || formData.cardNumber.replace(/\s/g, '').length < 13) {
+        newErrors.cardNumber = 'Número do cartão é obrigatório'
+      }
+      if (!formData.cardName || formData.cardName.trim().length < 2) {
+        newErrors.cardName = 'Nome no cartão é obrigatório'
+      }
+      if (!formData.expiryDate || !/^\d{2}\/\d{4}$/.test(formData.expiryDate)) {
+        newErrors.expiryDate = 'Data de validade é obrigatória (MM/AAAA)'
+      }
+      if (!formData.cvv || formData.cvv.length < 3) {
+        newErrors.cvv = 'CVV é obrigatório'
+      }
     }
     
     console.log('🔍 Erros encontrados:', newErrors)
@@ -263,7 +273,10 @@ function Pagamento() {
 
   if (!selectedPlan) return null
   
-  const price = isYearly ? selectedPlan.yearlyPrice : selectedPlan.monthlyPrice
+  const basePrice = isYearly ? selectedPlan.yearlyPrice : selectedPlan.monthlyPrice
+  // Aplicar desconto de R$ 5,00 para PIX e "Pagar no dia"
+  const discount = (formData.paymentMethod === 'pix' || formData.paymentMethod === 'pay_later') ? 5 : 0
+  const price = Math.max(0, basePrice - discount)
   const total = price
   const installments = isYearly ? 12 : 1
   const installmentValue = isYearly ? (price / installments).toFixed(2) : price
@@ -403,107 +416,189 @@ function Pagamento() {
                     <Separator />
 
                     <div className="space-y-4">
-                      <h3 className="text-lg font-semibold">Dados do Cartão *</h3>
-                      <p className="text-sm text-slate-600">Preencha os dados do cartão de crédito para o pagamento</p>
+                      <h3 className="text-lg font-semibold">SELECIONE A FORMA DE PAGAMENTO</h3>
                       
-                      <div className="space-y-4">
-                        <div>
-                          <Label htmlFor="cardNumber">Número do Cartão</Label>
-                          <div className="relative">
-                            <Input id="cardNumber" placeholder="0000 0000 0000 0000" maxLength={19}
-                              value={formData.cardNumber} onChange={(e) => handleInputChange('cardNumber', e.target.value)}
-                              className={`pl-10 ${errors.cardNumber ? 'border-red-500' : ''}`} />
-                            <CreditCard className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
-                          </div>
-                          {errors.cardNumber && <p className="text-xs text-red-500 mt-1">{errors.cardNumber}</p>}
-                        </div>
-                        <div>
-                          <Label htmlFor="cardName">Nome no Cartão</Label>
-                          <Input id="cardName" placeholder="NOME COMO ESTÁ NO CARTÃO" 
-                            value={formData.cardName} onChange={(e) => handleInputChange('cardName', e.target.value)}
-                            className={errors.cardName ? 'border-red-500' : ''} />
-                          {errors.cardName && <p className="text-xs text-red-500 mt-1">{errors.cardName}</p>}
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div>
-                            <Label htmlFor="expiryDate">Validade</Label>
-                            <div className="relative">
-                              <Input id="expiryDate" placeholder="MM/AAAA" maxLength={7}
-                                value={formData.expiryDate} onChange={(e) => handleInputChange('expiryDate', e.target.value)}
-                                className={`pl-10 ${errors.expiryDate ? 'border-red-500' : ''}`} />
-                              <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {/* Cartão de Crédito */}
+                        <div 
+                          className={`relative cursor-pointer border-2 rounded-lg p-4 transition-all hover:border-brand-primary ${
+                            formData.paymentMethod === 'card' 
+                              ? 'border-brand-primary bg-brand-primary/5' 
+                              : 'border-gray-200'
+                          }`}
+                          onClick={() => handleInputChange('paymentMethod', 'card')}
+                        >
+                          <div className="flex flex-col items-center text-center space-y-3">
+                            <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                              <CreditCard className="w-6 h-6 text-gray-600" />
                             </div>
-                            {errors.expiryDate && <p className="text-xs text-red-500 mt-1">{errors.expiryDate}</p>}
-                          </div>
-                          <div>
-                            <Label htmlFor="cvv">CVV</Label>
-                            <div className="relative">
-                              <Input id="cvv" type="password" placeholder="000" maxLength={4}
-                                value={formData.cvv} onChange={(e) => handleInputChange('cvv', e.target.value)}
-                                className={`pl-10 ${errors.cvv ? 'border-red-500' : ''}`} />
-                              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                            <div>
+                              <p className="font-medium text-gray-900">Cartão</p>
+                              <p className="text-sm text-gray-600">de crédito</p>
                             </div>
-                            {errors.cvv && <p className="text-xs text-red-500 mt-1">{errors.cvv}</p>}
+                          </div>
+                        </div>
+
+                        {/* PIX */}
+                        <div 
+                          className={`relative cursor-pointer border-2 rounded-lg p-4 transition-all hover:border-brand-primary ${
+                            formData.paymentMethod === 'pix' 
+                              ? 'border-brand-primary bg-brand-primary/5' 
+                              : 'border-gray-200'
+                          }`}
+                          onClick={() => handleInputChange('paymentMethod', 'pix')}
+                        >
+                          {/* Badge de Economia */}
+                          <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
+                            <Badge className="bg-green-600 text-white text-xs px-2 py-1 whitespace-nowrap">
+                              ECONOMIZE R$ 5,00
+                            </Badge>
+                          </div>
+                          <div className="flex flex-col items-center text-center space-y-3 pt-2">
+                            <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center">
+                              <svg className="w-8 h-8 text-teal-600" viewBox="0 0 32 32" fill="currentColor">
+                                <path d="M11.4 4h9.2A7.4 7.4 0 0 1 28 11.4v9.2a7.4 7.4 0 0 1-7.4 7.4h-9.2A7.4 7.4 0 0 1 4 20.6v-9.2A7.4 7.4 0 0 1 11.4 4zm0 1.6A5.8 5.8 0 0 0 5.6 11.4v9.2a5.8 5.8 0 0 0 5.8 5.8h9.2a5.8 5.8 0 0 0 5.8-5.8v-9.2a5.8 5.8 0 0 0-5.8-5.8h-9.2z"/>
+                                <path d="M21.9 11.8c0 .9-.7 1.6-1.6 1.6s-1.6-.7-1.6-1.6.7-1.6 1.6-1.6 1.6.7 1.6 1.6zM13.3 11.8c0 .9-.7 1.6-1.6 1.6s-1.6-.7-1.6-1.6.7-1.6 1.6-1.6 1.6.7 1.6 1.6z"/>
+                                <path d="M10.1 16h11.8c.4 0 .8.4.8.8s-.4.8-.8.8H10.1c-.4 0-.8-.4-.8-.8s.4-.8.8-.8z"/>
+                                <path d="M13.3 20.2c0 .9-.7 1.6-1.6 1.6s-1.6-.7-1.6-1.6.7-1.6 1.6-1.6 1.6.7 1.6 1.6zM21.9 20.2c0 .9-.7 1.6-1.6 1.6s-1.6-.7-1.6-1.6.7-1.6 1.6-1.6 1.6.7 1.6 1.6z"/>
+                              </svg>
+                            </div>
+                            <div>
+                              <p className="font-medium text-gray-900 text-lg">PIX</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Pagar no Dia */}
+                        <div 
+                          className={`relative cursor-pointer border-2 rounded-lg p-4 transition-all hover:border-brand-primary ${
+                            formData.paymentMethod === 'pay_later' 
+                              ? 'border-brand-primary bg-brand-primary/5' 
+                              : 'border-gray-200'
+                          }`}
+                          onClick={() => handleInputChange('paymentMethod', 'pay_later')}
+                        >
+                          {/* Badge de Economia */}
+                          <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
+                            <Badge className="bg-green-600 text-white text-xs px-2 py-1 whitespace-nowrap">
+                              ECONOMIZE R$ 5,00
+                            </Badge>
+                          </div>
+                          <div className="flex flex-col items-center text-center space-y-3 pt-2">
+                            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                              <Calendar className="w-6 h-6 text-blue-600" />
+                            </div>
+                            <div>
+                              <p className="font-medium text-gray-900">Pagar</p>
+                              <p className="text-sm text-gray-600">no dia</p>
+                            </div>
                           </div>
                         </div>
                       </div>
+
+                      {/* Informações do método selecionado */}
+                      {formData.paymentMethod === 'pix' && (
+                        <div className="mt-6 p-4 bg-teal-50 border border-teal-200 rounded-lg">
+                          <div className="flex items-start gap-3">
+                            <QrCode className="w-5 h-5 text-teal-600 mt-0.5" />
+                            <div>
+                              <p className="font-medium text-teal-900">Pagamento via PIX</p>
+                              <p className="text-sm text-teal-700 mt-1">
+                                Após confirmar os dados, você receberá o QR Code para pagamento instantâneo.
+                                <br />
+                                <strong>Desconto de R$ 5,00</strong> aplicado automaticamente.
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {formData.paymentMethod === 'pay_later' && (
+                        <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                          <div className="flex items-start gap-3">
+                            <Calendar className="w-5 h-5 text-blue-600 mt-0.5" />
+                            <div>
+                              <p className="font-medium text-blue-900">Pagar no Dia</p>
+                              <p className="text-sm text-blue-700 mt-1">
+                                Pagamento através de boleto bancário. Seu acesso será liberado após a confirmação do pagamento.
+                                <br />
+                                <strong>Desconto de R$ 5,00</strong> aplicado automaticamente.
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
+
+                    {/* Dados do Cartão - só mostrar se cartão estiver selecionado */}
+                    {formData.paymentMethod === 'card' && (
+                      <>
+                        <Separator />
+
+                        <div className="space-y-4">
+                          <h3 className="text-lg font-semibold">Dados do Cartão *</h3>
+                          <p className="text-sm text-slate-600">Preencha os dados do cartão de crédito para o pagamento</p>
+                          
+                          <div className="space-y-4">
+                            <div>
+                              <Label htmlFor="cardNumber">Número do Cartão</Label>
+                              <div className="relative">
+                                <Input id="cardNumber" placeholder="0000 0000 0000 0000" maxLength={19}
+                                  value={formData.cardNumber} onChange={(e) => handleInputChange('cardNumber', e.target.value)}
+                                  className={`pl-10 ${errors.cardNumber ? 'border-red-500' : ''}`} />
+                                <CreditCard className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                              </div>
+                              {errors.cardNumber && <p className="text-xs text-red-500 mt-1">{errors.cardNumber}</p>}
+                            </div>
+                            <div>
+                              <Label htmlFor="cardName">Nome no Cartão</Label>
+                              <Input id="cardName" placeholder="NOME COMO ESTÁ NO CARTÃO" 
+                                value={formData.cardName} onChange={(e) => handleInputChange('cardName', e.target.value)}
+                                className={errors.cardName ? 'border-red-500' : ''} />
+                              {errors.cardName && <p className="text-xs text-red-500 mt-1">{errors.cardName}</p>}
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                              <div>
+                                <Label htmlFor="expiryDate">Validade</Label>
+                                <div className="relative">
+                                  <Input id="expiryDate" placeholder="MM/AAAA" maxLength={7}
+                                    value={formData.expiryDate} onChange={(e) => handleInputChange('expiryDate', e.target.value)}
+                                    className={`pl-10 ${errors.expiryDate ? 'border-red-500' : ''}`} />
+                                  <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                                </div>
+                                {errors.expiryDate && <p className="text-xs text-red-500 mt-1">{errors.expiryDate}</p>}
+                              </div>
+                              <div>
+                                <Label htmlFor="cvv">CVV</Label>
+                                <div className="relative">
+                                  <Input id="cvv" type="password" placeholder="000" maxLength={4}
+                                    value={formData.cvv} onChange={(e) => handleInputChange('cvv', e.target.value)}
+                                    className={`pl-10 ${errors.cvv ? 'border-red-500' : ''}`} />
+                                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                                </div>
+                                {errors.cvv && <p className="text-xs text-red-500 mt-1">{errors.cvv}</p>}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    )}
 
                     <Separator />
 
                     <div className="space-y-4">
-                      <h3 className="text-lg font-semibold">Método de Pagamento</h3>
-                      
-                      <PagBankCheckout
-                        planData={{
-                          planId: selectedPlan.name.toLowerCase(),
-                          name: selectedPlan.name,
-                          price: price,
-                          audience: audience || 'estudantes' // Passa qual tipo de público
-                        }}
-                        customerData={{
-                          name: formData.fullName?.trim() || formData.cardName?.trim() || `Cliente ${formData.email?.split('@')[0]}`,
-                          email: formData.email?.trim(),
-                          cpf: formData.cpf?.replace(/\D/g, ''),
-                          phone: formData.phone?.replace(/\D/g, ''),
-                          password: formData.password // Inclui a senha para criar conta
-                        }}
-                        cardData={{
-                          number: formData.cardNumber.replace(/\s/g, ''),
-                          expiryMonth: formData.expiryDate.split('/')[0],
-                          expiryYear: formData.expiryDate.split('/')[1], // Já vem como AAAA (ex: 2026)
-                          cvv: formData.cvv,
-                          holderName: formData.cardName
-                        }}
-                        isYearly={isYearly}
-                        audience={audience || 'estudantes'}
-                        onSuccess={async (data) => {
-                          try {
-                            console.log('💳 Pagamento aprovado! Iniciando criação de conta...')
-                            
-                            // 1. Criar conta do usuário no Firebase
-                            const userResult = await createUserAccount()
-                            console.log('✅ Conta criada - UID:', userResult.uid)
-                            
-                            // 2. Criar assinatura e registrar pagamento no Firestore
-                            await createSubscriptionRecord(userResult.uid, data)
-                            console.log('✅ Assinatura ativada!')
-                            
-                            // 3. Marcar como sucesso
-                            setPaymentSuccess(true)
-                            setTransactionData(data)
-                            
-                            console.log('🎉 Processo completo! Usuário pode fazer login no app Flutter com as mesmas credenciais.')
-                          } catch (error) {
-                            setPaymentError(error.message || 'Pagamento aprovado, mas houve um erro ao criar sua conta. Entre em contato com o suporte.')
-                            console.error('❌ Erro ao processar sucesso do pagamento:', error)
-                          }
-                        }}
-                        onError={(error) => {
-                          setPaymentError(error)
-                        }}
-                        validateBeforeSubmit={validateForm}
-                      />
+                      <Button 
+                        size="lg" 
+                        className="w-full bg-brand-primary hover:bg-brand-secondary text-white py-4 text-lg font-semibold"
+                        onClick={validateForm}
+                      >
+                        {formData.paymentMethod === 'pix' && 'Gerar PIX'}
+                        {formData.paymentMethod === 'pay_later' && 'Gerar Boleto'}
+                        {formData.paymentMethod === 'card' && 'Finalizar Pagamento'}
+                      </Button>
+                      <p className="text-xs text-slate-500 text-center">
+                        Ao finalizar, você concorda com os termos de uso e política de privacidade
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -529,12 +624,20 @@ function Pagamento() {
                     <div className="space-y-2">
                       <div className="flex justify-between text-sm">
                         <span className="text-slate-600">Subtotal</span>
-                        <span className="font-medium">R$ {price.toFixed(2)}</span>
+                        <span className="font-medium">R$ {basePrice.toFixed(2)}</span>
                       </div>
                       {isYearly && (
                         <div className="flex justify-between text-sm">
-                          <span className="text-green-600 font-medium">Desconto (30%)</span>
-                          <span className="text-green-600 font-medium">- R$ {((selectedPlan.monthlyPrice * 12 - price * 12) / 12).toFixed(2)}</span>
+                          <span className="text-green-600 font-medium">Desconto Anual (30%)</span>
+                          <span className="text-green-600 font-medium">- R$ {((selectedPlan.monthlyPrice * 12 - basePrice * 12) / 12).toFixed(2)}</span>
+                        </div>
+                      )}
+                      {discount > 0 && (
+                        <div className="flex justify-between text-sm">
+                          <span className="text-green-600 font-medium">
+                            Desconto {formData.paymentMethod === 'pix' ? 'PIX' : 'Pagamento no Dia'}
+                          </span>
+                          <span className="text-green-600 font-medium">- R$ {discount.toFixed(2)}</span>
                         </div>
                       )}
                     </div>
