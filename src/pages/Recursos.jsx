@@ -215,7 +215,7 @@ function Recursos() {
           </div>
 
           {/* Resources Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className={`grid gap-6 ${activeTab === 'professores' ? 'grid-cols-2 md:grid-cols-4' : 'md:grid-cols-2 lg:grid-cols-3'}`}>
             {getCurrentResources().map((recurso, index) => (
               <Card 
                 key={index} 
