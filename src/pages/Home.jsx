@@ -12,7 +12,6 @@ import iaAssistente from '@/assets/Cards/ia_assistente.png'
 
 function Home() {
   const heroRef = useScrollAnimation()
-  const statsRef = useScrollAnimation()
   const aboutRef = useScrollAnimation()
 
   return (
@@ -51,62 +50,6 @@ function Home() {
                 />
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section ref={statsRef} className="stats bg-slate-50 py-8 md:py-12 lg:py-16 animate-on-scroll">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <h2 className="section-title text-2xl md:text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-8 md:mb-12 animate-fade-in-up">
-            Para Quem é o Escrita360?
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8 items-stretch">
-            <Card className="p-6 hover-lift border-brand-accent/30 animate-fade-in-up delay-100 flex flex-col h-full">
-              <CardContent className="pt-4 text-center flex flex-col justify-between h-full">
-                <div>
-                  <GraduationCap className="w-12 h-12 text-brand-primary mx-auto mb-4 animate-pulse-glow" />
-                  <h3 className="text-xl font-bold text-slate-900 mb-3">Estudantes</h3>
-                  <p className="text-slate-700 leading-relaxed mb-4 text-sm">
-                    <strong style={{ color: '#2b7475' }}>Ideal para quem quer desenvolver habilidades de escrita exigidas pela escola, pelo ENEM e pelas competências do século XXI.</strong> Aqui, o aluno vivencia uma imersão autorregulada, em que pode escrever, reescrever e analisar, com análises ilimitadas e insights inteligentes. A IA atua como assistente de escrita, ajudando a aprimorar argumentos, estrutura e linguagem.
-                  </p>
-                </div>
-                <p className="text-slate-700 font-bold text-sm mt-auto">
-                  Mais do que corrigir, é aprender a escrever.
-                </p>
-              </CardContent>
-            </Card>
-            
-            <Card className="p-6 hover-lift border-brand-accent/30 animate-fade-in-up delay-200 flex flex-col h-full">
-              <CardContent className="pt-4 text-center flex flex-col justify-between h-full">
-                <div>
-                  <Users className="w-12 h-12 text-brand-primary mx-auto mb-4 animate-pulse-glow" />
-                  <h3 className="text-xl font-bold text-slate-900 mb-3">Professores</h3>
-                  <p className="text-slate-700 leading-relaxed mb-4 text-sm">
-                    <strong style={{ color: '#2b7475' }}>Pensado para educadores que atuam em cursos preparatórios ou plataformas online, o Escrita360 otimiza o tempo de correção e amplia o alcance do ensino de redação.</strong> Com relatórios automáticos e acompanhamento por versão, o professor foca no que importa: orientar o aprendizado.
-                  </p>
-                </div>
-                <p className="text-slate-700 font-bold text-sm mt-auto">
-                  Mais produtividade para o professor, mais aprendizado para o aluno.
-                </p>
-              </CardContent>
-            </Card>
-            
-            <Card className="p-6 hover-lift border-brand-accent/30 animate-fade-in-up delay-300 flex flex-col h-full">
-              <CardContent className="pt-4 text-center flex flex-col justify-between h-full">
-                <div>
-                  <School className="w-12 h-12 text-brand-primary mx-auto mb-4 animate-pulse-glow" />
-                  <h3 className="text-xl font-bold text-slate-900 mb-3">Escolas</h3>
-                  <p className="text-slate-700 leading-relaxed mb-4 text-sm">
-                    <strong style={{ color: '#2b7475' }}>Plataforma completa para integrar a escrita autoral ao currículo, desenvolvendo autonomia e autorregulação nos alunos.</strong> Permite acompanhar turmas em tempo real, gerar relatórios personalizados e promover práticas de escrita formativas em larga escala.
-                  </p>
-                </div>
-                <p className="text-slate-700 font-bold text-sm mt-auto">
-                  Ideal para redações escolares e preparatórios para o ENEM.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-          
         </div>
       </section>
 
