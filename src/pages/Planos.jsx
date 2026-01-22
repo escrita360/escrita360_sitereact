@@ -153,13 +153,13 @@ function Precos() {
   // Programa Escolas / Institucional para escolas
   const schoolModels = [
     {
-      title: 'Modelo correção inteligente',
+      title: 'Plano Essencial',
       focus: 'Facilitar o trabalho docente e otimizar a correção de textos produzidos em sala de aula e avaliações oficiais da escola (provas de redação).',
       description: 'A escola adquire Planos Híbridos (plataforma + créditos de IA), disponíveis nas versões semestral e anual para os professores envolvidos na produção e correção de redações e pode adquirir pacotes adicionais de créditos, conforme a demanda de correções da escola.',
       number: 1
     },
     {
-      title: 'Assinatura Compartilhada - Plano Híbrido 360',
+      title: 'Edu Essencial',
       focus: 'Ampliar a adesão e possibilitar o uso contínuo da plataforma e controle pedagógico à gestão.',
       description: 'O modelo híbrido combina a aquisição de assinaturas individuais, adquiridas pelas famílias (responsáveis) e assinaturas para os professores, adquiridas pela escola. Além das assinaturas, a escola adquire pacotes de créditos de IA, utilizados conforme a necessidade pedagógica. Esse modelo busca ampliar a adesão e possibilitar o uso contínuo da plataforma e controle pedagógico à gestão.',
       additionalInfo: 'Os créditos de IA podem ser utilizados para correção de textos produzidos pelos estudantes e provas de redação. As modalidades de contratação podem ser semestrais ou anuais. Alunos e professores têm acesso a todos os recursos da plataforma.',
@@ -362,7 +362,7 @@ function Precos() {
 
             {/* Planos para Escolas */}
             <div className="mt-12 space-y-6">
-              {/* Planos Modelo Correção Inteligente */}
+              {/* Plano Essencial */}
               {schoolPlanType === 'correcao' && (
                 <div className="grid gap-8 mx-auto mt-6 justify-center grid-cols-1 max-w-md">
                   {/* Plano Básico */}
@@ -372,18 +372,18 @@ function Precos() {
                         Plano Inicial
                       </Badge>
                       <Badge className="bg-yellow-500 text-white px-3 py-1 text-xs whitespace-nowrap">
-                        60 análises detalhadas IA
+                        500 análises detalhadas IA
                       </Badge>
                     </div>
                     <CardHeader className="text-center pb-4">
                       <h3 className="text-xl font-bold text-slate-900">Básico</h3>
                       <div className="my-4">
                         <span className="text-3xl font-bold text-brand-primary">R$</span>
-                        <span className="text-4xl font-bold text-brand-primary">120,00</span>
+                        <span className="text-4xl font-bold text-brand-primary">1.200,00</span>
                       </div>
                       <div className="mt-4 pt-4 border-t border-slate-100">
                         <p className="text-sm text-slate-600 font-semibold">
-                          {selectedAudience === 'professores' ? '60 correções detalhadas com IA' : '60 correções detalhadas com IA'}
+                          {selectedAudience === 'professores' ? '500 correções detalhadas com IA' : '500 correções detalhadas com IA'}
                         </p>
                         <p className="text-xs text-slate-600 mt-1">
                           Acesso por 30 dias
@@ -397,9 +397,9 @@ function Precos() {
                         size="lg"
                         onClick={() => handleOpenPagamento({
                           name: 'Básico',
-                          monthlyPrice: 120,
-                          yearlyPrice: 120,
-                          credits: 60,
+                          monthlyPrice: 1200,
+                          yearlyPrice: 1200,
+                          credits: 500,
                           duration: '1 mês',
                           buttonText: 'Contratar Plano'
                         })}
