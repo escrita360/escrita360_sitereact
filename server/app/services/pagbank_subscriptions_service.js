@@ -7,9 +7,14 @@ class PagBankSubscriptionsService {
         this.environment = process.env.PAGBANK_ENV || 'production';
         this.token = process.env.PAGBANK_TOKEN;
         
-        // URLs da API v4 do PagBank (Connect) para produção
-        this.subscriptionsBaseUrl = 'https://api.assinaturas.pagseguro.com';
-        this.paymentsBaseUrl = 'https://api.pagseguro.com';
+        // URLs da API v4 do PagBank (Connect) - Sandbox ou Produção
+        if (this.environment === 'sandbox') {
+            this.subscriptionsBaseUrl = 'https://sandbox.api.pagseguro.com';
+            this.paymentsBaseUrl = 'https://sandbox.api.pagseguro.com';
+        } else {
+            this.subscriptionsBaseUrl = 'https://api.assinaturas.pagseguro.com';
+            this.paymentsBaseUrl = 'https://api.pagseguro.com';
+        }
 
         this.headers = {
             'Authorization': `Bearer ${this.token}`,
