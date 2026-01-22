@@ -113,7 +113,7 @@ function Precos() {
       price: 60,
       description: '',
       popular: true,
-      features: ['Análises detalhadas por IA', 'Melhor custo-benefício']
+      features: ['Análises detalhadas por IA']
     }
   ]
 
@@ -132,7 +132,7 @@ function Precos() {
       price: 300,
       description: '',
       popular: true,
-      features: ['Análises detalhadas por IA', 'Melhor custo-benefício']
+      features: ['Análises detalhadas por IA']
     }
   ]
 
@@ -608,10 +608,7 @@ function Precos() {
                 </Card>
 
                 {/* Pacote 2 */}
-                <Card className="relative hover-lift border-2 border-green-500 shadow-xl transition-all flex flex-col pt-4 w-full max-w-xs">
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <Badge className="bg-green-500 text-white px-4 py-1">Melhor Custo-Benefício</Badge>
-                  </div>
+                <Card className="relative hover-lift hover:shadow-xl transition-all flex flex-col pt-4 w-full max-w-xs">
                   <CardHeader className="text-center pb-2">
                     <h3 className="text-lg font-bold text-slate-900">Pacote 2</h3>
                     <div className="my-2">
@@ -630,15 +627,11 @@ function Precos() {
                         <Check className="w-3 h-3 text-green-600 flex-shrink-0" />
                         <span className="text-slate-700 text-sm">1000 correções detalhadas com IA</span>
                       </li>
-                      <li className="flex items-center gap-2">
-                        <Check className="w-3 h-3 text-green-600 flex-shrink-0" />
-                        <span className="text-slate-700 text-sm">Melhor custo-benefício</span>
-                      </li>
                     </ul>
                     <Button 
                       className="w-full bg-[#4A90E2] hover:bg-[#357ABD] text-white" 
                       variant="default"
-                      onClick={() => navigate('/pagamento-creditos', { state: { selectedPackage: { name: 'Pacote 2', credits: 1000, price: 2400, popular: true, features: ['Análises detalhadas por IA', 'Melhor custo-benefício'] }, audience: 'escolas' } })}
+                      onClick={() => navigate('/pagamento-creditos', { state: { selectedPackage: { name: 'Pacote 2', credits: 1000, price: 2400, popular: true, features: ['Análises detalhadas por IA'] }, audience: 'escolas' } })}
                     >
                       Adquirir Pacote
                     </Button>
@@ -745,11 +738,6 @@ function Precos() {
             }`}>
               {creditPackages.map((pkg, index) => (
                 <Card key={index} className={`relative hover-lift ${pkg.popular ? 'border-2 border-green-500 shadow-xl' : 'hover:shadow-xl'} transition-all flex flex-col pt-4 w-full max-w-xs`}>
-                  {pkg.popular && (
-                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                      <Badge className="bg-green-500 text-white px-4 py-1">Melhor Custo-Benefício</Badge>
-                    </div>
-                  )}
                   <CardHeader className="text-center pb-2">
                     <h3 className="text-lg font-bold text-slate-900">{pkg.name}</h3>
                     <div className="my-2">
