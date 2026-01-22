@@ -201,8 +201,9 @@ function Precos() {
       }
     } else {
       return {
-        title: 'Planos para',
+        title: '',
         titleHighlight: 'Escolas',
+        titleHighlightClass: 'bg-gradient-to-r from-[#1d5a91] to-[#3b82f6] bg-clip-text text-transparent',
         subtitle: 'Escolha o plano de adesão que melhor se adapta às necessidades de produção e correção de sua instituição.'
       }
     }
