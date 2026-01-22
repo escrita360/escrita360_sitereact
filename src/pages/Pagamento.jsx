@@ -274,9 +274,7 @@ function Pagamento() {
   if (!selectedPlan) return null
   
   const basePrice = isYearly ? selectedPlan.yearlyPrice : selectedPlan.monthlyPrice
-  // Aplicar desconto de R$ 5,00 para PIX e "Pagar no dia"
-  const discount = (formData.paymentMethod === 'pix' || formData.paymentMethod === 'pay_later') ? 5 : 0
-  const price = Math.max(0, basePrice - discount)
+  const price = basePrice
   const total = price
   const installments = isYearly ? 12 : 1
   const installmentValue = isYearly ? (price / installments).toFixed(2) : price
@@ -448,13 +446,7 @@ function Pagamento() {
                           }`}
                           onClick={() => handleInputChange('paymentMethod', 'pix')}
                         >
-                          {/* Badge de Economia */}
-                          <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
-                            <Badge className="bg-green-600 text-white text-xs px-2 py-1 whitespace-nowrap">
-                              ECONOMIZE R$ 5,00
-                            </Badge>
-                          </div>
-                          <div className="flex flex-col items-center text-center space-y-3 pt-2">
+                          <div className="flex flex-col items-center text-center space-y-3">
                             <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center">
                               <svg className="w-8 h-8 text-teal-600" viewBox="0 0 32 32" fill="currentColor">
                                 <path d="M11.4 4h9.2A7.4 7.4 0 0 1 28 11.4v9.2a7.4 7.4 0 0 1-7.4 7.4h-9.2A7.4 7.4 0 0 1 4 20.6v-9.2A7.4 7.4 0 0 1 11.4 4zm0 1.6A5.8 5.8 0 0 0 5.6 11.4v9.2a5.8 5.8 0 0 0 5.8 5.8h9.2a5.8 5.8 0 0 0 5.8-5.8v-9.2a5.8 5.8 0 0 0-5.8-5.8h-9.2z"/>
@@ -469,7 +461,7 @@ function Pagamento() {
                           </div>
                         </div>
 
-                        {/* Pagar no Dia */}
+                        {/* Boleto */}
                         <div 
                           className={`relative cursor-pointer border-2 rounded-lg p-4 transition-all hover:border-brand-primary ${
                             formData.paymentMethod === 'pay_later' 
@@ -478,19 +470,12 @@ function Pagamento() {
                           }`}
                           onClick={() => handleInputChange('paymentMethod', 'pay_later')}
                         >
-                          {/* Badge de Economia */}
-                          <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
-                            <Badge className="bg-green-600 text-white text-xs px-2 py-1 whitespace-nowrap">
-                              ECONOMIZE R$ 5,00
-                            </Badge>
-                          </div>
-                          <div className="flex flex-col items-center text-center space-y-3 pt-2">
+                          <div className="flex flex-col items-center text-center space-y-3">
                             <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                               <Calendar className="w-6 h-6 text-blue-600" />
                             </div>
                             <div>
-                              <p className="font-medium text-gray-900">Pagar</p>
-                              <p className="text-sm text-gray-600">no dia</p>
+                              <p className="font-medium text-gray-900">Boleto</p>
                             </div>
                           </div>
                         </div>
@@ -505,8 +490,6 @@ function Pagamento() {
                               <p className="font-medium text-teal-900">Pagamento via PIX</p>
                               <p className="text-sm text-teal-700 mt-1">
                                 Após confirmar os dados, você receberá o QR Code para pagamento instantâneo.
-                                <br />
-                                <strong>Desconto de R$ 5,00</strong> aplicado automaticamente.
                               </p>
                             </div>
                           </div>
@@ -518,11 +501,9 @@ function Pagamento() {
                           <div className="flex items-start gap-3">
                             <Calendar className="w-5 h-5 text-blue-600 mt-0.5" />
                             <div>
-                              <p className="font-medium text-blue-900">Pagar no Dia</p>
+                              <p className="font-medium text-blue-900">Boleto</p>
                               <p className="text-sm text-blue-700 mt-1">
                                 Pagamento através de boleto bancário. Seu acesso será liberado após a confirmação do pagamento.
-                                <br />
-                                <strong>Desconto de R$ 5,00</strong> aplicado automaticamente.
                               </p>
                             </div>
                           </div>
@@ -630,14 +611,6 @@ function Pagamento() {
                         <div className="flex justify-between text-sm">
                           <span className="text-green-600 font-medium">Desconto Anual (30%)</span>
                           <span className="text-green-600 font-medium">- R$ {((selectedPlan.monthlyPrice * 12 - basePrice * 12) / 12).toFixed(2)}</span>
-                        </div>
-                      )}
-                      {discount > 0 && (
-                        <div className="flex justify-between text-sm">
-                          <span className="text-green-600 font-medium">
-                            Desconto {formData.paymentMethod === 'pix' ? 'PIX' : 'Pagamento no Dia'}
-                          </span>
-                          <span className="text-green-600 font-medium">- R$ {discount.toFixed(2)}</span>
                         </div>
                       )}
                     </div>
