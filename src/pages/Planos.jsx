@@ -293,12 +293,6 @@ function Precos() {
       {selectedAudience === 'escolas' && (
         <section className="py-8 md:py-12 lg:py-16 bg-slate-50">
           <div className="container mx-auto px-4 max-w-7xl">
-            <div className="text-center mb-8">
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">PROGRAMA ESCOLAS / INSTITUCIONAL</h2>
-              <p className="text-lg text-slate-600 max-w-3xl mx-auto">
-                Com foco em flexibilidade e integração pedagógica, oferecemos dois modelos voltados à gestão pedagógica, escala e padronização.
-              </p>
-            </div>
             
             {/* Cards compactos de seleção de modelo - UPDATED */}
             <div className="grid md:grid-cols-2 gap-4 max-w-3xl mx-auto mb-8">
