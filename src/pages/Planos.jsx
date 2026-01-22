@@ -15,7 +15,6 @@ function Precos() {
   const [searchParams] = useSearchParams()
   const audienceFromUrl = searchParams.get('audience') || 'estudantes'
   const [selectedAudience, setSelectedAudience] = useState(audienceFromUrl)
-  const [teacherPlanType, setTeacherPlanType] = useState('hibrido') // 'solo' ou 'hibrido'
   const [schoolPlanType, setSchoolPlanType] = useState('correcao') // 'correcao' ou 'hibrido'
   const navigate = useNavigate()
   const plansRef = useScrollAnimation()
@@ -174,7 +173,7 @@ function Precos() {
       case 'estudantes':
         return studentPlans
       case 'professores':
-        return teacherPlanType === 'solo' ? teacherPlansSolo : teacherPlansHibrido
+        return teacherPlansSolo
       case 'escolas':
         return schoolPlans
       default:
@@ -272,111 +271,7 @@ function Precos() {
             </h2>
           </div>
           
-          {selectedAudience === 'professores' && (
-            <>
-              {/* Cards de seleção de modelo - estilo compacto */}
-              <div className="grid md:grid-cols-2 gap-4 max-w-3xl mx-auto mb-8">
-                <button
-                  onClick={() => setTeacherPlanType('solo')}
-                  className={`bg-white rounded-xl shadow-sm p-5 text-left transition-all duration-300 hover:shadow-md ${
-                    teacherPlanType === 'solo'
-                      ? 'border-2 border-brand-primary'
-                      : 'border border-slate-200 hover:border-slate-300'
-                  }`}
-                >
-                  <h4 className="text-base font-bold text-slate-900 mb-1">
-                    {teacherPlanType === 'hibrido' ? 'Módulo Aluno' : 'Modelo Independente'}
-                  </h4>
-                  <p className="text-slate-500 text-sm">
-                    {teacherPlanType === 'hibrido' 
-                      ? 'Recursos para escrita autorregulada e desenvolvimento do aluno'
-                      : 'Para professores independentes que querem gerenciar suas próprias turmas'
-                    }
-                  </p>
-                </button>
-                
-                <button
-                  onClick={() => setTeacherPlanType('hibrido')}
-                  className={`bg-white rounded-xl shadow-sm p-5 text-left transition-all duration-300 hover:shadow-md ${
-                    teacherPlanType === 'hibrido'
-                      ? 'border-2 border-brand-primary'
-                      : 'border border-slate-200 hover:border-slate-300'
-                  }`}
-                >
-                  <h4 className="text-base font-bold text-slate-900 mb-1">
-                    {teacherPlanType === 'hibrido' ? 'Módulo Professor Solo' : 'Modelo Híbrido (Professor + Aluno)'}
-                  </h4>
-                  <p className="text-slate-500 text-sm">
-                    {teacherPlanType === 'hibrido'
-                      ? 'Ferramentas para gestão de turmas e correção de redações'
-                      : 'Integração completa entre módulos de professor e aluno'
-                    }
-                  </p>
-                </button>
-              </div>
-            </>
-          )}
-          
-          {/* Quadros lado a lado para Modelo Híbrido - apenas para professores */}
-          {selectedAudience === 'professores' && teacherPlanType === 'hibrido' && (
-            <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto mb-8">
-              {/* Quadro Professor */}
-              <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6">
-                <div className="text-center mb-4">
-                  <h4 className="text-lg font-bold text-slate-900 mb-2">Módulo Professor</h4>
-                  <p className="text-slate-600 text-sm">Ferramentas para gestão e correção</p>
-                </div>
-                <div className="space-y-3">
-                  {[
-                    'Criação e gerenciamento de Turmas',
-                    'Banco de rubricas para facilitar a avaliação',
-                    'Correção via foto ou texto direto na plataforma',
-                    'Relatórios de desempenho com notas (ENEM e texto dissertativo-argumentativo)',
-                    'Correção com IA (ENEM e texto dissertativo-argumentativo)',
-                    'Relatórios consolidados (Habilidades BNCC X ENEM)'
-                  ].map((feature, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <div className="w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <Check className="w-3 h-3 text-blue-600" />
-                      </div>
-                      <span className="text-slate-700 text-sm">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Quadro Aluno */}
-              <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6">
-                <div className="text-center mb-4">
-                  <h4 className="text-lg font-bold text-slate-900 mb-2">Módulo Aluno</h4>
-                  <p className="text-slate-600 text-sm">Recursos para escrita autorregulada</p>
-                </div>
-                <div className="space-y-3">
-                  {[
-                    'Módulo de escrita digital autorregulada',
-                    'Banco de estratégias para escrita',
-                    'Sugestão de temas',
-                    'Recursos de apoio autorregulatório',
-                    'Insights para melhoria da escrita',
-                    'Revisor integrado com recursos de análise ilimitada',
-                    'Rubricas qualitativas para (auto)avaliação',
-                    'Correção via foto ou texto direto na plataforma',
-                    'Avaliação com auxílio de IA'
-                  ].map((feature, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <Check className="w-3 h-3 text-green-600" />
-                      </div>
-                      <span className="text-slate-700 text-sm">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Quadro único para outros casos */}
-          {!(selectedAudience === 'professores' && teacherPlanType === 'hibrido') && (
+          {/* Quadro único para todos os casos */}
           <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 md:p-8 max-w-md mx-auto">
             <div className="space-y-3 md:space-y-4">
               {platformFeatures.map((feature, index) => (
@@ -389,7 +284,6 @@ function Precos() {
               ))}
             </div>
           </div>
-          )}
         </div>
       </section>
       )}
@@ -701,35 +595,6 @@ function Precos() {
       {(selectedAudience === 'estudantes' || selectedAudience === 'professores') && (
         <section ref={plansRef} className="pt-12 pb-8 md:pt-16 md:pb-12 lg:pt-20 lg:pb-16 bg-white animate-on-scroll">
           <div className="container mx-auto px-4 max-w-7xl">
-            
-            {/* Switch para Planos de Professor - Solo vs Híbrido */}
-            {selectedAudience === 'professores' && (
-              <div className="flex justify-center mb-8">
-                <div className="bg-slate-100 rounded-lg p-1 inline-flex">
-                  <button
-                    onClick={() => setTeacherPlanType('solo')}
-                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
-                      teacherPlanType === 'solo'
-                        ? 'bg-white text-slate-900 shadow-sm'
-                        : 'text-slate-600 hover:text-slate-900'
-                    }`}
-                  >
-                    Planos Solo
-                  </button>
-                  <button
-                    onClick={() => setTeacherPlanType('hibrido')}
-                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
-                      teacherPlanType === 'hibrido'
-                        ? 'bg-white text-slate-900 shadow-sm'
-                        : 'text-slate-600 hover:text-slate-900'
-                    }`}
-                  >
-                    Planos Híbridos
-                  </button>
-                </div>
-              </div>
-            )}
-
             <div className={`grid gap-8 mx-auto mt-6 justify-center ${
               selectedAudience === 'professores' ? 'md:grid-cols-2 lg:grid-cols-2 max-w-5xl' : 
               'grid-cols-1 max-w-md'
