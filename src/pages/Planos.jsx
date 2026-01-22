@@ -304,63 +304,38 @@ function Precos() {
               
               {/* Cards compactos de seleção de modelo */}
               <div className="grid md:grid-cols-2 gap-4 max-w-3xl mx-auto mb-8">
-                <div className="bg-white rounded-xl shadow-sm p-5 border border-slate-200">
+                <div 
+                  className={`bg-white rounded-xl shadow-sm p-5 border cursor-pointer transition-all ${
+                    schoolPlanType === 'correcao' 
+                      ? 'border-brand-primary bg-blue-50 shadow-md' 
+                      : 'border-slate-200 hover:border-slate-300'
+                  }`}
+                  onClick={() => setSchoolPlanType('correcao')}
+                >
                   <h4 className="text-base font-bold text-slate-900 mb-1">{schoolModels[0].title}</h4>
                   <p className="text-slate-500 text-sm">
                     {schoolModels[0].focus}
                   </p>
                 </div>
                 
-                <div className="bg-white rounded-xl shadow-sm p-5 border border-slate-200">
+                <div 
+                  className={`bg-white rounded-xl shadow-sm p-5 border cursor-pointer transition-all ${
+                    schoolPlanType === 'hibrido' 
+                      ? 'border-brand-primary bg-blue-50 shadow-md' 
+                      : 'border-slate-200 hover:border-slate-300'
+                  }`}
+                  onClick={() => setSchoolPlanType('hibrido')}
+                >
                   <h4 className="text-base font-bold text-slate-900 mb-1">{schoolModels[1].title}</h4>
                   <p className="text-slate-500 text-sm">
                     {schoolModels[1].focus}
                   </p>
                 </div>
               </div>
-              
-              <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 md:p-8 max-w-md mx-auto">
-                <div className="space-y-3 md:space-y-4">
-                  {platformFeatures.map((feature, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <Check className="w-3 h-3 text-green-600" />
-                      </div>
-                      <span className="text-slate-700 text-sm md:text-base">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
             </div>
 
             {/* Planos para Escolas */}
             <div className="mt-12 space-y-6">
-              {/* Switch para Planos de Escolas - Correção Inteligente vs Híbrido */}
-              <div className="flex justify-center mb-8">
-                <div className="bg-slate-100 rounded-lg p-1 inline-flex">
-                  <button
-                    onClick={() => setSchoolPlanType('correcao')}
-                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
-                      schoolPlanType === 'correcao'
-                        ? 'bg-white text-slate-900 shadow-sm'
-                        : 'text-slate-600 hover:text-slate-900'
-                    }`}
-                  >
-                    Modelo correção inteligente
-                  </button>
-                  <button
-                    onClick={() => setSchoolPlanType('hibrido')}
-                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
-                      schoolPlanType === 'hibrido'
-                        ? 'bg-white text-slate-900 shadow-sm'
-                        : 'text-slate-600 hover:text-slate-900'
-                    }`}
-                  >
-                    Híbrido
-                  </button>
-                </div>
-              </div>
-
               {/* Planos Modelo Correção Inteligente */}
               {schoolPlanType === 'correcao' && (
                 <div className="grid gap-8 mx-auto mt-6 justify-center grid-cols-1 max-w-md">
@@ -504,6 +479,24 @@ function Precos() {
                 </div>
               )}
             </div>
+
+            {/* Tabela de Funções - Após Cards de Preço */}  
+            {selectedAudience === 'escolas' && (
+              <div className="mt-12 mb-8">
+                <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 md:p-8 max-w-md mx-auto">
+                  <div className="space-y-3 md:space-y-4">
+                    {platformFeatures.map((feature, index) => (
+                      <div key={index} className="flex items-start gap-3">
+                        <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <Check className="w-3 h-3 text-green-600" />
+                        </div>
+                        <span className="text-slate-700 text-sm md:text-base">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Pacotes de Análises Detalhadas para Escolas */}
             <div className="mt-16 space-y-6">
