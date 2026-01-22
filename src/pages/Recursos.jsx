@@ -1,82 +1,243 @@
+import { useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card.jsx'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
 import { PageHero } from '@/components/PageHero.jsx'
 import {
-  CheckCircle
+  List,
+  Target,
+  Settings,
+  Smile,
+  CheckCircle,
+  Edit,
+  Cloud,
+  BookOpen,
+  Eye,
+  ClipboardCheck,
+  BarChart3,
+  Users,
+  HandHeart,
+  PieChart,
+  Link,
+  Palette,
+  Headphones,
+  GraduationCap,
+  Presentation,
+  Building2
 } from 'lucide-react'
 
 function Recursos() {
-  const resourcesRef = useScrollAnimation()
+  const [activeTab, setActiveTab] = useState('estudantes')
+  const tabsRef = useScrollAnimation()
 
-  const recursosProfessor = [
-    'Criação e gerenciamento de Turmas',
-    'Banco de rubricas para facilitar a avaliação',
-    'Correção via foto ou texto direto na plataforma',
-    'Relatórios de desempenho com notas (ENEM e texto dissertativo-argumentativo)',
-    'Correção com IA (ENEM e texto dissertativo-argumentativo)',
-    'Relatórios consolidados (Habilidades BNCC X ENEM)'
+  const tabs = [
+    { id: 'estudantes', label: 'Para Estudantes', icon: <GraduationCap className="w-5 h-5" /> },   
+    { id: 'professores', label: 'Para Professores', icon: <Presentation className="w-5 h-5" /> },  
+    { id: 'escolas', label: 'Para Escolas', icon: <Building2 className="w-5 h-5" /> }
   ]
 
+  const recursosEstudantes = [
+    {
+      icon: <Cloud className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
+      title: 'Plataforma automatizada',
+      description: 'Oferece recursos que permitem ao estudante, planejar, escrever, revisar, reescrever e autoavaliar suas produções de forma orientada, eficiente e autônoma.'
+    },
+    {
+      icon: <List className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
+      title: 'Lista de Acrônimos',
+      description: 'Lista de Acrônimos específicos para cada uma das fases (planejamento, produção, autoavaliação).'
+    },
+    {
+      icon: <Target className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
+      title: 'Planejamento de Metas',
+      description: 'Planejamento de metas e prazos para organizar o processo de escrita.'
+    },
+    {
+      icon: <Settings className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
+      title: 'Estratégias Autorreguladas',
+      description: 'Estratégias autorreguladas de curto, médio e longo prazo, aplicadas em cada fase (planejamento, produção, autoavaliação).'
+    },
+    {
+      icon: <Smile className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
+      title: 'Painel de Sentimentos',
+      description: 'Painel de Sentimentos para monitorar motivação, confiança e emoções ligadas à escrita.'
+    },
+    {
+      icon: <CheckCircle className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
+      title: 'Autoavaliação Estruturada',
+      description: 'Autoavaliação estruturada, com rubricas alinhadas às habilidades da BNCC e às competências do Enem.'
+    },
+    {
+      icon: <Edit className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
+      title: 'Módulo de Escrita',
+      description: 'Módulo de Escrita: acompanhamento desde a construção do parágrafo padrão até a redação final.'
+    },
+    {
+      icon: <Eye className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
+      title: 'Correções Detalhadas',
+      description: 'Correções ilimitadas e detalhadas, no módulo de escrita. Inclui a análise de: Estrutura e fluídez textual, Coesão textual e Frequência de palavras.'
+    },
+    {
+      icon: <Cloud className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
+      title: 'Feedback com IA',
+      description: 'Feedback com IA no final do processo — não para substituir, mas para complementar a revisão.'
+    }
+  ]
 
+  const recursosProfessores = [
+    {
+      icon: <ClipboardCheck className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
+      title: 'Avaliação Docente Estruturada',
+      description: 'avaliação apoiada com uso de rubricas alinhadas às habilidades da BNCC e às competências do Enem.'
+    },
+    {
+      icon: <Settings className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
+      title: 'Correções com IA',
+      description: 'Correções detalhadas com IA (como elemento de revisão adicional para feedbacks personalizados).'
+    },
+    {
+      icon: <BarChart3 className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
+      title: 'Relatórios Completos',
+      description: 'Relatórios completos de desempenho, com dados qualitativos, gráficos de evolução por habilidade e notas.'
+    },
+    {
+      icon: <Target className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
+      title: 'Redução de Carga',
+      description: 'Redução da carga de trabalho, com correções apoiadas em critérios qualitativos claros, compartilhados e previamente selecionados.'
+    }
+  ]
+
+  const recursosEscolas = [
+    {
+      icon: <HandHeart className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
+      title: 'Suporte para Professores',
+      description: 'Suporte para professores com redução de carga de trabalho.'
+    },
+    {
+      icon: <Users className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
+      title: 'Desenvolvimento da Autorregulação',
+      description: 'Plataforma que permite o desenvolvimento da autorregulação dos alunos, a produção escrita e os resultados gerais de aprovação.'
+    },
+    {
+      icon: <PieChart className="w-8 h-8 text-brand-primary animate-pulse-glow" />,
+      title: 'Dashboards Personalizados',
+      description: 'Dashboards personalizados, mostrando: Quantitativo de redações produzidas, Habilidades da BNCC trabalhadas, Níveis de desempenho por aluno, turma ou escola.'
+    }
+  ]
+
+  const getCurrentResources = () => {
+    switch (activeTab) {
+      case 'estudantes':
+        return recursosEstudantes
+      case 'professores':
+        return recursosProfessores
+      case 'escolas':
+        return recursosEscolas
+      default:
+        return recursosEstudantes
+    }
+  }
+
+  const getCurrentTitle = () => {
+    switch (activeTab) {
+      case 'estudantes':
+        return 'Recursos para Estudantes'
+      case 'professores':
+        return 'Recursos para Professores'
+      case 'escolas':
+        return 'Recursos para Escolas'
+      default:
+        return 'Recursos para Estudantes'
+    }
+  }
+
+  const getCurrentDescription = () => {
+    switch (activeTab) {
+      case 'estudantes':
+        return 'Desenvolva sua escrita de forma autônoma com ferramentas que guiam cada etapa do processo'
+      case 'professores':
+        return 'Otimize seu tempo e potencialize o aprendizado dos alunos com ferramentas de gestão e acompanhamento'
+      case 'escolas':
+        return 'Solução institucional completa para transformar a cultura de escrita na sua escola'
+      default:
+        return 'Desenvolva sua escrita de forma autônoma com ferramentas que guiam cada etapa do processo'
+    }
+  }
+
+  const getHeroContent = () => {
+    return {
+      title: 'Recursos da',
+      titleHighlight: 'Plataforma',
+      subtitle: 'Descubra todas as ferramentas e funcionalidades que vão transformar o processo de escrita e aprendizagem.'
+    }
+  }
+
+  const heroContent = getHeroContent()
 
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <PageHero 
-        title="Recursos"
-        titleHighlight="Disponíveis"
-        subtitle="Conheça as funcionalidades disponíveis para professores independentes."
+      <PageHero
+        title={heroContent.title}
+        titleHighlight={heroContent.titleHighlight}
+        subtitle={heroContent.subtitle}
       />
 
-      {/* Resources Section */}
-      <section ref={resourcesRef} className="py-16 bg-slate-50 animate-on-scroll">
-        <div className="container mx-auto px-4 max-w-4xl">
-          {/* Model Cards */}
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
-            {/* Modelo Independente */}
-            <Card className="p-6 border-2 border-brand-primary bg-white shadow-lg">
-              <CardContent className="pt-0">
-                <h3 className="text-2xl font-bold text-slate-900 mb-4">
-                  Modelo Independente
-                </h3>
-                <p className="text-slate-600 mb-6">
-                  Para professores independentes que querem gerenciar suas próprias turmas
-                </p>
-              </CardContent>
-            </Card>
-
-            {/* Modelo Híbrido - Grayed out */}
-            <Card className="p-6 border-2 border-slate-200 bg-slate-50 shadow-lg opacity-60">
-              <CardContent className="pt-0">
-                <h3 className="text-2xl font-bold text-slate-400 mb-4">
-                  Modelo Híbrido (Professor + Aluno)
-                </h3>
-                <p className="text-slate-400 mb-6">
-                  Integração completa entre módulos de professor e aluno
-                </p>
-              </CardContent>
-            </Card>
+      {/* Resource Categories Tabs */}
+      <section ref={tabsRef} className="py-16 bg-slate-50 animate-on-scroll">
+        <div className="container mx-auto px-4 max-w-7xl">
+          {/* Tabs */}
+          <div className="flex flex-wrap justify-center gap-4 mb-12 sticky top-20 z-40 bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-sm animate-fade-in-down">
+            {tabs.map((tab, index) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:scale-105 animate-fade-in-up ${
+                  activeTab === tab.id
+                    ? 'bg-brand-primary text-white shadow-lg scale-105'
+                    : 'bg-white text-slate-700 border border-slate-200 hover:border-brand-accent hover:shadow-md'
+                }`}
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <span className="animate-float" style={{ animationDelay: `${index * 150}ms` }}>{tab.icon}</span>
+                {tab.label}
+              </button>
+            ))}
           </div>
 
-          {/* Features List */}
-          <div className="max-w-2xl mx-auto">
-            <div className="space-y-4">
-              {recursosProfessor.map((recurso, index) => (
-                <div 
-                  key={index}
-                  className="flex items-start gap-3 p-4 bg-white rounded-lg shadow-sm animate-fade-in-up"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-1" />
-                  <span className="text-slate-700 text-lg leading-relaxed">
-                    {recurso}
-                  </span>
-                </div>
-              ))}
-            </div>
+          {/* Category Content */}
+          <div className="text-center mb-12 animate-fade-in-up">
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">
+              {getCurrentTitle()}
+            </h2>
+            <p className="text-xl text-slate-600 max-w-2xl mx-auto">
+              {getCurrentDescription()}
+            </p>
+          </div>
+
+          {/* Resources Grid */}
+          <div className={`grid gap-6 ${activeTab === 'professores' ? 'grid-cols-2 md:grid-cols-4' : 'md:grid-cols-2 lg:grid-cols-3'}`}>
+            {getCurrentResources().map((recurso, index) => (
+              <Card
+                key={index}
+                className={`p-4 hover-lift border-0 shadow-lg animate-scale-in delay-${Math.min(index * 100, 800)} aspect-square flex flex-col`}
+              >
+                <CardContent className="pt-4 flex flex-col justify-center items-center text-center h-full">
+                  <div className="flex items-center justify-center w-12 h-12 bg-brand-light rounded-lg mb-4 mx-auto transition-transform duration-500 hover:rotate-12 hover:scale-110 animate-float" style={{ animationDelay: `${index * 100}ms` }}>
+                    {recurso.icon}
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-3 text-center">
+                    {recurso.title}
+                  </h3>
+                  <p className="text-slate-700 mb-4 text-center leading-relaxed text-sm">
+                    {recurso.description}
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
+
     </div>
   )
 }
