@@ -16,6 +16,7 @@ function Precos() {
   const audienceFromUrl = searchParams.get('audience') || 'estudantes'
   const [selectedAudience, setSelectedAudience] = useState(audienceFromUrl)
   const [schoolPlanType, setSchoolPlanType] = useState('correcao') // 'correcao' ou 'hibrido'
+  const [showHybridFeatures, setShowHybridFeatures] = useState(false)
   const navigate = useNavigate()
   const plansRef = useScrollAnimation()
 
@@ -251,6 +252,28 @@ function Precos() {
 
   const platformFeatures = getPlatformFeatures()
 
+  // Features específicas para o modelo híbrido
+  const studentFeatures = [
+    'Módulo de escrita digital autorregulada',
+    'Banco de estratégias para escrita',
+    'Sugestão de temas',
+    'Recursos de apoio autorregulatório',
+    'Insights para melhoria da escrita',
+    'Revisor integrado com recursos de análise ilimitada',
+    'Rubricas qualitativas para (auto)avaliação',
+    'Correção via foto ou texto direto na plataforma',
+    'Avaliação com auxílio de IA'
+  ]
+
+  const teacherFeatures = [
+    'Criação e gerenciamento de Turmas',
+    'Banco de rubricas para facilitar a avaliação',
+    'Correção via foto ou texto direto na plataforma',
+    'Relatórios de desempenho com notas (ENEM e texto dissertativo-argumentativo)',
+    'Correção com IA (ENEM e texto dissertativo-argumentativo)',
+    'Relatórios consolidados (Habilidades BNCC X ENEM)'
+  ]
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -324,7 +347,10 @@ function Precos() {
                       ? 'border-brand-primary bg-blue-50 shadow-md' 
                       : 'border-slate-200 hover:border-slate-300'
                   }`}
-                  onClick={() => setSchoolPlanType('hibrido')}
+                  onClick={() => {
+                    setSchoolPlanType('hibrido')
+                    setShowHybridFeatures(true)
+                  }}
                 >
                   <h4 className="text-base font-bold text-slate-900 mb-1">{schoolModels[1].title}</h4>
                   <p className="text-slate-500 text-sm">
@@ -480,8 +506,52 @@ function Precos() {
               )}
             </div>
 
-            {/* Tabela de Funções - Após Cards de Preço */}  
-            {selectedAudience === 'escolas' && (
+            {/* Quadro de Funções Híbrido - Aluno + Professor */}
+            {schoolPlanType === 'hibrido' && selectedAudience === 'escolas' && (
+              <div className="mt-12 mb-8">
+                <div className="flex items-center justify-center gap-8 max-w-6xl mx-auto">
+                  {/* Funções do Aluno */}
+                  <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 flex-1 max-w-md">
+                    <h4 className="text-lg font-bold text-slate-900 mb-4 text-center">Funções do Aluno</h4>
+                    <div className="space-y-3">
+                      {studentFeatures.map((feature, index) => (
+                        <div key={index} className="flex items-start gap-3">
+                          <div className="w-4 h-4 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <Check className="w-2.5 h-2.5 text-green-600" />
+                          </div>
+                          <span className="text-slate-700 text-sm">{feature}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Símbolo + */}
+                  <div className="flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-full bg-brand-primary flex items-center justify-center">
+                      <span className="text-white text-2xl font-bold">+</span>
+                    </div>
+                  </div>
+
+                  {/* Funções do Professor */}
+                  <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 flex-1 max-w-md">
+                    <h4 className="text-lg font-bold text-slate-900 mb-4 text-center">Funções do Professor</h4>
+                    <div className="space-y-3">
+                      {teacherFeatures.map((feature, index) => (
+                        <div key={index} className="flex items-start gap-3">
+                          <div className="w-4 h-4 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <Check className="w-2.5 h-2.5 text-green-600" />
+                          </div>
+                          <span className="text-slate-700 text-sm">{feature}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Tabela de Funções - Após Cards de Preço */}
+            {selectedAudience === 'escolas' && schoolPlanType !== 'hibrido' && (
               <div className="mt-12 mb-8">
                 <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 md:p-8 max-w-md mx-auto">
                   <div className="space-y-3 md:space-y-4">
