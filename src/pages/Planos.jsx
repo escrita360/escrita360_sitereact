@@ -538,7 +538,7 @@ function Precos() {
             <div className="mt-16 space-y-6">
               <h3 className="text-3xl font-bold text-center text-slate-900 mb-4">Pacotes de Créditos</h3>
               <p className="text-lg text-slate-600 text-center max-w-3xl mx-auto mb-8">
-                Turmas com muitas redações? Adquira pacotes extras de análises detalhadas com IA para sua instituição.
+                Para escolas que necessitam de mais análises além do plano adquirido. .
               </p>
               
               <div className="grid gap-6 mx-auto justify-items-center md:grid-cols-2 max-w-2xl">
@@ -554,7 +554,7 @@ function Precos() {
                     <p className="text-slate-600 text-sm">
                       <strong>500 análises detalhadas com IA</strong>
                     </p>
-                    <p className="text-slate-500 text-xs mt-1">As análises detalhadas com IA extras são utilizadas durante a vigência do plano.</p>
+                    <p className="text-slate-500 text-xs mt-1">Os créditos extras são utilizados durante a vigência do plano</p>
                   </CardHeader>
                   <CardContent>
                     <Button 
@@ -579,7 +579,7 @@ function Precos() {
                     <p className="text-slate-600 text-sm">
                       <strong>1000 análises detalhadas com IA</strong>
                     </p>
-                    <p className="text-slate-500 text-xs mt-1">As análises detalhadas com IA extras são utilizadas durante a vigência do plano.</p>
+                    <p className="text-slate-500 text-xs mt-1">Os créditos extras são utilizados durante a vigência do plano</p>
                   </CardHeader>
                   <CardContent>
                     <Button 
