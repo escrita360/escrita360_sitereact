@@ -146,12 +146,17 @@ function Pagamento() {
 
       // Preparar dados do cliente
       const customerData = {
-        name: user ? user.nome : formData.fullName,
+        name: user ? (user.nome || formData.fullName) : formData.fullName,
         email: user ? user.email : formData.email,
-        cpf: user ? user.cpf : formData.cpf.replace(/\D/g, ''),
-        phone: user ? user.telefone : formData.phone.replace(/\D/g, ''),
+        cpf: (user ? (user.cpf || formData.cpf) : formData.cpf).replace(/\D/g, ''),
+        phone: (user ? (user.telefone || formData.phone) : formData.phone).replace(/\D/g, ''),
         ...(user ? {} : { password: formData.password })
       }
+
+      console.log('👤 Dados do cliente preparados:', {
+        ...customerData,
+        cpf: customerData.cpf ? '***' + customerData.cpf.slice(-3) : 'VAZIO'
+      })
 
       // Preparar dados do plano
       const planData = {
@@ -340,9 +345,22 @@ function Pagamento() {
     if (!user && (!formData.email || !/\S+@\S+\.\S+/.test(formData.email))) {
       newErrors.email = 'Email válido é obrigatório'
     }
-    if (!user && (!formData.cpf || !validateCPF(formData.cpf))) {
+    
+    // Para PIX e Boleto, CPF é sempre obrigatório (mesmo se logado)
+    if (formData.paymentMethod === 'pix' || formData.paymentMethod === 'pay_later') {
+      const cpfToValidate = user ? (user.cpf || formData.cpf) : formData.cpf
+      if (!cpfToValidate || !validateCPF(cpfToValidate)) {
+        newErrors.cpf = 'CPF válido é obrigatório para pagamentos via PIX ou Boleto'
+      }
+      
+      const phoneToValidate = user ? (user.telefone || formData.phone) : formData.phone
+      if (!phoneToValidate || phoneToValidate.replace(/\D/g, '').length < 10) {
+        newErrors.phone = 'Telefone válido é obrigatório para pagamentos via PIX ou Boleto'
+      }
+    } else if (!user && (!formData.cpf || !validateCPF(formData.cpf))) {
       newErrors.cpf = 'CPF inválido. Verifique os dígitos.'
     }
+    
     if (!user && (!formData.phone || formData.phone.replace(/\D/g, '').length < 10)) {
       newErrors.phone = 'Telefone válido é obrigatório'
     }
@@ -439,6 +457,38 @@ function Pagamento() {
               <Card className="shadow-lg">
                 <CardContent className="p-6">
                   <div className="space-y-6">
+                    {/* CPF e Telefone obrigatórios para PIX/Boleto mesmo se logado */}
+                    {user && (formData.paymentMethod === 'pix' || formData.paymentMethod === 'pay_later') && (
+                      <>
+                        <div className="space-y-4">
+                          <h3 className="text-lg font-semibold flex items-center gap-2">
+                            <User className="w-5 h-5 text-brand-primary" />
+                            Dados para Pagamento
+                          </h3>
+                          <p className="text-sm text-slate-600">CPF e telefone são obrigatórios para pagamentos via PIX ou Boleto</p>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <Label htmlFor="cpf">CPF *</Label>
+                              <Input id="cpf" placeholder="000.000.000-00" 
+                                value={formData.cpf || (user?.cpf || '')} 
+                                onChange={(e) => handleInputChange('cpf', e.target.value)}
+                                className={errors.cpf ? 'border-red-500' : ''} />
+                              {errors.cpf && <p className="text-xs text-red-500 mt-1">{errors.cpf}</p>}
+                            </div>
+                            <div>
+                              <Label htmlFor="phone">Telefone *</Label>
+                              <Input id="phone" placeholder="(00) 00000-0000" 
+                                value={formData.phone || (user?.telefone || '')} 
+                                onChange={(e) => handleInputChange('phone', e.target.value)}
+                                className={errors.phone ? 'border-red-500' : ''} />
+                              {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone}</p>}
+                            </div>
+                          </div>
+                        </div>
+                        <Separator />
+                      </>
+                    )}
+
                     {!user && (
                       <>
                         <div className="space-y-4">
