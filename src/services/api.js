@@ -4,7 +4,7 @@ import axios from 'axios'
 const getApiUrl = () => {
   // Em produção EasyPanel, usar o backend separado
   if (typeof window !== 'undefined' && window.location.hostname.includes('easypanel.host')) {
-    return 'https://escrita360-escrita360-backend.nnjeij.easypanel.host/api'
+    return 'https://financa.escrita360.com.br/api'
   }
   // Produção em escrita360.com.br usa backend em financa.escrita360.com.br
   if (typeof window !== 'undefined' && window.location.hostname === 'escrita360.com.br') {
