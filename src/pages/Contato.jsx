@@ -101,7 +101,6 @@ function Contato() {
             <Card className="p-6 shadow-lg hover-lift animate-fade-in-left">
               <CardHeader>
                 <CardTitle className="text-2xl text-slate-900 animate-fade-in-up">Envie sua mensagem</CardTitle>
-                <p className="text-slate-600 animate-fade-in-up delay-100">Preencha o formulário abaixo e retornaremos em até 24 horas</p>
               </CardHeader>
               <CardContent>
                 <form className="space-y-6" onSubmit={handleSubmit}>
@@ -175,8 +174,9 @@ function Contato() {
                   <div className="flex items-start space-x-2">
                     <Checkbox id="aceito" checked={formData.aceito} onCheckedChange={(checked) => setFormData({...formData, aceito: checked})} required />
                     <Label htmlFor="aceito" className="text-sm leading-relaxed">
-                      Aceito receber comunicações da Escrita360 e concordo com a{' '}
-                      <a href="#" className="text-brand-primary hover:underline">Política de Privacidade</a>
+                      Concordo com a{' '}
+                      <a href="#" className="text-brand-primary hover:underline">Política de Privacidade</a> e os{' '}
+                      <a href="#" className="text-brand-primary hover:underline">Termos e Condições gerais de uso</a>
                     </Label>
                   </div>
 
