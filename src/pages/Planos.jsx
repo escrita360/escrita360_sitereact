@@ -196,7 +196,7 @@ function Precos() {
         title: '',
         titleHighlight: 'Escolas',
         titleHighlightClass: 'bg-gradient-to-r from-[#1d5a91] to-[#3b82f6] bg-clip-text text-transparent',
-        subtitle: 'Escolha o plano de adesão que melhor se adapta às necessidades de produção e correção de sua instituição.'
+        subtitle: 'Com foco em flexibilidade e integração pedagógica, oferecemos dois modelos. Escolha o que melhor se adapta às necessidades de sua instituição. '
       }
     }
   }

@@ -190,50 +190,6 @@ function Contato() {
 
             {/* Contact Info */}
             <div className="space-y-6 animate-fade-in-right">
-              {/* Contact Methods */}
-              <Card className="p-4 shadow-lg hover-lift animate-scale-in delay-200 flex flex-col h-fit">
-                <CardHeader className="text-center">
-                  <CardTitle className="text-lg text-slate-900">Outras formas de contato</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-start gap-2 mb-2">
-                    <div className="w-8 h-8 bg-brand-light rounded-full flex items-center justify-center flex-shrink-0">
-                      <Mail className="w-4 h-4 text-brand-primary animate-pulse-glow" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-slate-900">E-mail</h4>
-                      <p className="text-slate-600">contato@escrita360.com.br</p>
-                      <p className="text-sm text-slate-500">Respondemos em até 24h</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-2 mb-2">
-                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <MessageCircle className="w-4 h-4 text-green-600 animate-pulse-glow" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-slate-900">WhatsApp</h4>
-                      <p className="text-slate-600">(11) 99999-9999</p>
-                      <p className="text-sm text-slate-500">Atendimento: Seg-Sex, 9h-18h</p>
-                      <Button variant="outline" size="sm" className="mt-2 transition-all hover:scale-105">
-                        Iniciar Conversa
-                      </Button>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-2">
-                    <div className="w-8 h-8 bg-brand-light rounded-full flex items-center justify-center flex-shrink-0">
-                      <Phone className="w-4 h-4 text-brand-primary animate-pulse-glow" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-slate-900">Telefone</h4>
-                      <p className="text-slate-600">(11) 3000-0000</p>
-                      <p className="text-sm text-slate-500">Atendimento: Seg-Sex, 9h-18h</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
               {/* Social Media */}
               <Card className="p-4 shadow-lg hover-lift animate-scale-in delay-300 flex flex-col h-fit">
                 <CardHeader className="text-center">
@@ -249,29 +205,6 @@ function Contato() {
                     </Button>
                     <Button variant="outline" size="icon" className="w-12 h-12 transition-all hover:scale-110 hover:rotate-6">
                       <MessageCircle className="w-5 h-5 text-brand-primary" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Quick Actions */}
-              <Card className="p-4 shadow-lg hover-lift animate-scale-in delay-400 flex flex-col h-fit">
-                <CardHeader className="text-center">
-                  <CardTitle className="text-lg text-slate-900">Ações rápidas</CardTitle>
-                </CardHeader>
-                <CardContent className="pt-4">
-                  <div className="grid grid-cols-2 gap-1">
-                    <Button variant="default" className="h-auto p-2 flex flex-col items-center gap-1 transition-all hover:scale-105 bg-[#4A90E2] hover:bg-[#357ABD] text-white">
-                      <Rocket className="w-3 h-3 text-white animate-float" />
-                      <span className="text-xs">Começar</span>
-                    </Button>
-                    <Button variant="outline" className="h-auto p-2 flex flex-col items-center gap-1 transition-all hover:scale-105 border-[#4A90E2] text-[#4A90E2] hover:bg-[#4A90E2] hover:text-white">
-                      <BookOpen className="w-3 h-3 animate-float" style={{animationDelay: '200ms'}} />
-                      <span className="text-xs">Recursos</span>
-                    </Button>
-                    <Button variant="outline" className="h-auto p-2 flex flex-col items-center gap-1 transition-all hover:scale-105 border-[#4A90E2] text-[#4A90E2] hover:bg-[#4A90E2] hover:text-white">
-                      <HelpCircle className="w-3 h-3 animate-float" style={{animationDelay: '400ms'}} />
-                      <span className="text-xs">Ajuda</span>
                     </Button>
                   </div>
                 </CardContent>

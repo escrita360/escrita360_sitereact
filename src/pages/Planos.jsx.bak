@@ -388,7 +388,7 @@ function Precos() {
       return {
         title: 'Planos para',
         titleHighlight: 'Escolas',
-        subtitle: 'Escolha o plano de adesão que melhor se adapta às necessidades de produção e correção de sua instituição.'
+        subtitle: 'Com foco em flexibilidade e integração pedagógica, oferecemos dois modelos. Escolha o que melhor se adapta às necessidades de sua instituição. '
       }
     }
   }
