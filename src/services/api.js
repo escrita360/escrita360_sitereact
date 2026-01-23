@@ -2,7 +2,11 @@ import axios from 'axios'
 
 // Compatibilidade com Node.js e navegador
 const getApiUrl = () => {
-  // Em produção, usar a URL do mesmo host (backend e frontend no mesmo domínio)
+  // Em produção EasyPanel, usar o backend separado
+  if (typeof window !== 'undefined' && window.location.hostname.includes('easypanel.host')) {
+    return 'https://escrita360-escrita360-backend.nnjeij.easypanel.host/api'
+  }
+  // Outros ambientes de produção (mesmo domínio)
   if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
     return `${window.location.protocol}//${window.location.hostname}/api`
   }
