@@ -152,21 +152,6 @@ function PagamentoCreditos() {
             </p>
           </div>
 
-          {/* Banner de ambiente de teste */}
-          <div className="mb-6 max-w-4xl mx-auto">
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start gap-3">
-              <Shield className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="text-sm font-medium text-blue-900">Ambiente de Teste - Use o cartão abaixo</p>
-                <p className="text-sm text-blue-700 mt-1">
-                  Cartão: <span className="font-mono font-semibold">5555 6666 7777 8884</span> | 
-                  Validade: <span className="font-mono">12/26</span> | 
-                  CVV: <span className="font-mono">123</span> | 
-                  Nome: <span className="font-mono">TESTE PAGBANK</span>
-                </p>
-              </div>
-            </div>
-          </div>
 
           {paymentError && (
             <div className="mb-6 max-w-4xl mx-auto">
