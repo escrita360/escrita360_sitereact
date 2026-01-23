@@ -354,6 +354,71 @@ export const paymentService = {
   },
 
   /**
+   * Cria pagamento com cartão de crédito via PagBank Orders API (através do backend)
+   * @param {Object} paymentData - Dados do pagamento
+   * @returns {Promise<Object>} - Dados do pedido criado
+   */
+  async createPagBankCardOrder(paymentData) {
+    const { planData, customerData, cardData, installments } = paymentData
+
+    // Limpar telefone apenas números
+    const phoneClean = customerData.phone.replace(/\D/g, '')
+    
+    const data = {
+      reference_id: `card_${Date.now()}`,
+      customer: {
+        name: customerData.name,
+        email: customerData.email,
+        tax_id: customerData.cpf,
+        phones: [{
+          country: '55',
+          area: phoneClean.substring(0, 2),
+          number: phoneClean.substring(2),
+          type: 'MOBILE'
+        }]
+      },
+      items: [{
+        reference_id: `item_${Date.now()}`,
+        name: planData.name,
+        quantity: 1,
+        unit_amount: Math.round(planData.price * 100)
+      }],
+      charges: [{
+        reference_id: `charge_${Date.now()}`,
+        description: `Compra de ${planData.name}`,
+        amount: {
+          value: Math.round(planData.price * 100),
+          currency: 'BRL'
+        },
+        payment_method: {
+          type: 'CREDIT_CARD',
+          installments: installments || 1,
+          capture: true,
+          card: {
+            number: cardData.number,
+            exp_month: cardData.expiryMonth,
+            exp_year: cardData.expiryYear,
+            security_code: cardData.cvv,
+            holder: {
+              name: cardData.holderName
+            }
+          }
+        }
+      }],
+      notification_urls: []
+    }
+
+    console.log('💳 Enviando dados do cartão para backend:', {
+      customer: { ...data.customer, tax_id: '***' },
+      planData: planData,
+      card: { ...data.charges[0].payment_method.card, number: '**** **** **** ' + cardData.number.slice(-4) }
+    })
+
+    const response = await api.post('/payment/pagbank/create-order', data)
+    return response.data
+  },
+
+  /**
    * Obtém bandeira do cartão
    * @param {string} cardNumber - Número do cartão
    * @returns {string} - Bandeira do cartão

@@ -9,6 +9,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { firebasePaymentService } from '@/services/firebase'
+import { paymentService } from '@/services/payment'
 
 function Pagamento() {
   const navigate = useNavigate()
@@ -131,6 +132,105 @@ function Pagamento() {
       expiryDate: '',
       cvv: ''
     }))
+  }
+
+  const handlePaymentSubmit = async () => {
+    if (!validateForm()) return
+
+    setIsLoading(true)
+    setPaymentError('')
+
+    try {
+      console.log('💳 Iniciando processamento de pagamento...')
+      console.log('📋 Método selecionado:', formData.paymentMethod)
+
+      // Preparar dados do cliente
+      const customerData = {
+        name: user ? user.nome : formData.fullName,
+        email: user ? user.email : formData.email,
+        cpf: user ? user.cpf : formData.cpf.replace(/\D/g, ''),
+        phone: user ? user.telefone : formData.phone.replace(/\D/g, ''),
+        ...(user ? {} : { password: formData.password })
+      }
+
+      // Preparar dados do plano
+      const planData = {
+        ...selectedPlan,
+        price: total,
+        audience: audience
+      }
+
+      let result
+
+      if (formData.paymentMethod === 'card') {
+        // Pagamento com cartão de crédito
+        console.log('💳 Processando pagamento com cartão...')
+
+        const cardData = selectedSavedCard ? {
+          number: selectedSavedCard.card.last4, // Para cartão salvo, usar apenas o último 4 dígitos
+          expiryMonth: selectedSavedCard.card.expiryMonth,
+          expiryYear: selectedSavedCard.card.expiryYear,
+          cvv: formData.cvv,
+          holderName: selectedSavedCard.card.holderName
+        } : {
+          number: formData.cardNumber.replace(/\s/g, ''),
+          expiryMonth: parseInt(formData.expiryDate.split('/')[0]),
+          expiryYear: parseInt(formData.expiryDate.split('/')[1]),
+          cvv: formData.cvv,
+          holderName: formData.cardName
+        }
+
+        const paymentData = {
+          planData,
+          customerData,
+          cardData,
+          installments: isYearly ? 12 : 1
+        }
+
+        // Para pagamentos únicos com cartão, usar a rota de orders
+        result = await paymentService.createPagBankCardOrder(paymentData)
+
+      } else if (formData.paymentMethod === 'pix') {
+        // Pagamento PIX
+        console.log('📱 Gerando PIX...')
+
+        const paymentData = {
+          planData,
+          customerData
+        }
+
+        result = await paymentService.createPagBankPixPayment(paymentData)
+
+      } else if (formData.paymentMethod === 'pay_later') {
+        // Boleto
+        console.log('📄 Gerando boleto...')
+
+        const paymentData = {
+          planData,
+          customerData
+        }
+
+        result = await paymentService.createPagBankBoletoPayment(paymentData)
+      }
+
+      console.log('✅ Pagamento processado com sucesso:', result)
+
+      // Salvar dados da transação
+      setTransactionData(result)
+      setPaymentSuccess(true)
+
+      // Se for usuário novo, criar conta
+      if (!user) {
+        console.log('👤 Criando conta para novo usuário...')
+        // A criação da conta será feita pelo webhook quando o pagamento for confirmado
+      }
+
+    } catch (error) {
+      console.error('❌ Erro no processamento do pagamento:', error)
+      setPaymentError(error.message || 'Erro ao processar pagamento. Tente novamente.')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   if (isLoading) {
@@ -684,11 +784,16 @@ function Pagamento() {
                       <Button 
                         size="lg" 
                         className="w-full bg-brand-primary hover:bg-brand-secondary text-white py-4 text-lg font-semibold"
-                        onClick={validateForm}
+                        onClick={handlePaymentSubmit}
+                        disabled={isLoading}
                       >
-                        {formData.paymentMethod === 'pix' && 'Gerar PIX'}
-                        {formData.paymentMethod === 'pay_later' && 'Gerar Boleto'}
-                        {formData.paymentMethod === 'card' && 'Finalizar Pagamento'}
+                        {isLoading ? 'Processando...' : (
+                          <>
+                            {formData.paymentMethod === 'pix' && 'Gerar PIX'}
+                            {formData.paymentMethod === 'pay_later' && 'Gerar Boleto'}
+                            {formData.paymentMethod === 'card' && 'Finalizar Pagamento'}
+                          </>
+                        )}
                       </Button>
                       <p className="text-xs text-slate-500 text-center">
                         Ao finalizar, você concorda com os termos de uso e política de privacidade
