@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { firebaseAuthService } from '@/services/firebase'
+import { useAuth } from '@/contexts/AuthContext'
 import { cn } from '@/lib/utils'
 import escrita360Logo from '@/assets/Logo/Escrita360.png'
 import robo from '@/assets/Logo/robo.svg'
@@ -28,6 +28,7 @@ const BRAND_COLORS = {
 const Login = () => {
   const navigate = useNavigate()
   const location = useLocation()
+  const { login, register } = useAuth()
   
   // Estilos para animações customizadas
   const customStyles = `
@@ -134,18 +135,11 @@ const Login = () => {
     setError('')
 
     try {
-      console.log('🔐 Fazendo login no Firebase...')
-      const result = await firebaseAuthService.login(formData.email.trim(), formData.password)
+      console.log('🔐 Fazendo login...')
+      const result = await login(formData.email.trim(), formData.password)
       
       if (result.success) {
         console.log('✅ Login realizado com sucesso!', result.uid)
-        
-        // Salvar dados do usuário no localStorage
-        localStorage.setItem('user', JSON.stringify({
-          uid: result.uid,
-          email: result.email,
-          ...result.user
-        }))
         
         // Verificar se é admin
         const isAdmin = result.user?.role === 'admin'
@@ -189,8 +183,8 @@ const Login = () => {
     setError('')
 
     try {
-      console.log('🔐 Criando conta no Firebase...')
-      const result = await firebaseAuthService.register(
+      console.log('🔐 Criando conta...')
+      const result = await register(
         registerData.email.trim(),
         registerData.password,
         {
@@ -202,13 +196,6 @@ const Login = () => {
       
       if (result.success) {
         console.log('✅ Conta criada com sucesso!', result.uid)
-        
-        // Salvar dados do usuário no localStorage
-        localStorage.setItem('user', JSON.stringify({
-          uid: result.uid,
-          email: result.email,
-          ...result.user
-        }))
         
         // Redirecionar para home
         navigate('/')

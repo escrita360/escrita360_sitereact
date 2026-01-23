@@ -1,5 +1,6 @@
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion' // eslint-disable-line no-unused-vars
+import { AuthProvider } from './contexts/AuthContext.jsx'
 import Layout from './components/Layout.jsx'
 import AdminRoute from './components/AdminRoute.jsx'
 import Home from './pages/Home.jsx'
@@ -46,8 +47,9 @@ function App() {
   }
 
   return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
+    <AuthProvider>
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
         <Route path="/" element={
           <Layout>
             <motion.div
@@ -303,6 +305,7 @@ function App() {
         } />
       </Routes>
     </AnimatePresence>
+    </AuthProvider>
   )
 }
 
