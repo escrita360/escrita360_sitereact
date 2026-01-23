@@ -42,13 +42,6 @@ const Perfil = () => {
     email: ''
   })
 
-  // Carregar métodos de pagamento ao montar o componente
-  useEffect(() => {
-    if (user?.uid) {
-      loadPaymentMethods()
-    }
-  }, [user, loadPaymentMethods])
-
   const loadPaymentMethods = useCallback(async () => {
     try {
       setLoading(true)
@@ -61,6 +54,13 @@ const Perfil = () => {
       setLoading(false)
     }
   }, [user?.uid, user?.tipoPlano])
+
+  // Carregar métodos de pagamento ao montar o componente
+  useEffect(() => {
+    if (user?.uid) {
+      loadPaymentMethods()
+    }
+  }, [user, loadPaymentMethods])
 
   const loadTransactionHistory = async () => {
     try {

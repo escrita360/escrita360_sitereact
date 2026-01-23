@@ -22,6 +22,7 @@ import AdminSubscriptions from './pages/admin/AdminSubscriptions.jsx'
 import AdminPayments from './pages/admin/AdminPayments.jsx'
 import AdminPagBank from './pages/admin/AdminPagBank.jsx'
 import { Toaster } from './components/ui/sonner.jsx'
+import './App.css'
 
 function App() {
   const location = useLocation()
