@@ -308,7 +308,7 @@ function Layout({ children }) {
       {/* Footer */}
       <footer className="bg-slate-900 text-white py-8 md:py-12">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-5 gap-8 mb-8">
+          <div className="grid md:grid-cols-2 gap-8 mb-8">
             <div>
               <Link to="/" className="mb-4 block flex items-center gap-2">
                 <img src={logo} alt="Logo Escrita360" className="h-16 w-auto transition-transform duration-500 hover:scale-110" style={{ filter: 'brightness(0) invert(1)' }} />
@@ -319,41 +319,11 @@ function Layout({ children }) {
               </p>
             </div>
             <div>
-              <h3 className="font-bold mb-4">Plataformas</h3>
-              <ul className="space-y-2 text-slate-400">
-                <li><Link to="/para-quem" className="hover:text-white transition-colors">Estudantes</Link></li>
-                <li><Link to="/para-quem" className="hover:text-white transition-colors">Professores</Link></li>
-                <li><Link to="/para-quem" className="hover:text-white transition-colors">Famílias</Link></li>
-                <li><Link to="/para-quem" className="hover:text-white transition-colors">Escolas</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-bold mb-4">Recursos</h3>
-              <ul className="space-y-2 text-slate-400">
-                <li><Link to="/recursos" className="hover:text-white transition-colors">Editor Inteligente</Link></li>
-                <li><Link to="/recursos" className="hover:text-white transition-colors">Rubricas</Link></li>
-                <li><Link to="/recursos" className="hover:text-white transition-colors">Dashboard</Link></li>
-                <li><Link to="/recursos" className="hover:text-white transition-colors">Gestão Escolar</Link></li>
-              </ul>
-            </div>
-            <div>
               <h3 className="font-bold mb-4">Institucional</h3>
               <ul className="space-y-2 text-slate-400">
-                <li><Link to="/sobre-nos" className="hover:text-white transition-colors">Sobre Nós</Link></li>
-                <li><Link to="/carreiras" className="hover:text-white transition-colors">Carreiras</Link></li>
                 <li><Link to="/termos-servico" className="hover:text-white transition-colors">Termos de Serviço</Link></li>
                 <li><Link to="/politica-privacidade" className="hover:text-white transition-colors">Políticas de Privacidade</Link></li>
                 <li><Link to="/programa-integridade" className="hover:text-white transition-colors">Programa de Integridade</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-bold mb-4">Contato</h3>
-              <ul className="space-y-2 text-slate-400">
-                <li><Link to="/contato" className="hover:text-white transition-colors">Suporte</Link></li>
-                <li><Link to="/faq" className="hover:text-white transition-colors">FAQ</Link></li>
-                <li><Link to="/contato" className="hover:text-white transition-colors">Blog</Link></li>
-                <li><Link to="/contato" className="hover:text-white transition-colors">Sobre</Link></li>
-                <li><Link to="/politica-cookies" className="hover:text-white transition-colors">Política de Cookies</Link></li>
               </ul>
             </div>
           </div>
