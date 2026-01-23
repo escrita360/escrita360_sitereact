@@ -4,13 +4,16 @@ import { Label } from '@/components/ui/label.jsx'
 import { Card, CardContent } from '@/components/ui/card.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
 import { Separator } from '@/components/ui/separator.jsx'
-import { CreditCard, Lock, Calendar, User, Shield, CheckCircle2, ArrowLeft, AlertCircle, Eye, EyeOff, QrCode, DollarSign } from 'lucide-react'
+import { CreditCard, Lock, Calendar, User, Shield, CheckCircle2, ArrowLeft, AlertCircle, Eye, EyeOff, QrCode, DollarSign, Plus } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { useAuth } from '@/contexts/AuthContext'
+import { firebasePaymentService } from '@/services/firebase'
 
 function Pagamento() {
   const navigate = useNavigate()
   const location = useLocation()
+  const { user } = useAuth()
   
   // Tentar obter do location.state primeiro, depois do sessionStorage
   const stateData = location.state || {
@@ -42,6 +45,8 @@ function Pagamento() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   
   const [isLoading, setIsLoading] = useState(true)
+  const [savedPaymentMethods, setSavedPaymentMethods] = useState([])
+  const [selectedSavedCard, setSelectedSavedCard] = useState(null)
 
   useEffect(() => {
     // Aguardar um momento para o estado se estabilizar
@@ -66,6 +71,67 @@ function Pagamento() {
       sessionStorage.removeItem('selectedAudience')
     }
   }, [])
+
+  // Preencher dados automaticamente se usuário estiver logado
+  useEffect(() => {
+    if (user) {
+      setFormData(prev => ({
+        ...prev,
+        fullName: user.nome || prev.fullName,
+        email: user.email || prev.email,
+        cpf: user.cpf || prev.cpf,
+        phone: user.telefone || prev.phone
+      }))
+      
+      // Carregar métodos de pagamento salvos
+      loadSavedPaymentMethods()
+    }
+  }, [user])
+
+  const loadSavedPaymentMethods = async () => {
+    if (!user) return
+    
+    try {
+      const methods = await firebasePaymentService.getPaymentMethods(
+        user.uid, 
+        user.tipoPlano === 'professor' ? 'professores' : 'estudantes'
+      )
+      const activeMethods = methods.filter(method => !method.deleted)
+      setSavedPaymentMethods(activeMethods)
+      
+      // Selecionar automaticamente o cartão padrão se existir
+      const defaultCard = activeMethods.find(method => method.isDefault && method.type === 'card')
+      if (defaultCard) {
+        setSelectedSavedCard(defaultCard)
+        handleSelectSavedCard(defaultCard)
+      }
+    } catch (error) {
+      console.error('Erro ao carregar métodos de pagamento:', error)
+    }
+  }
+
+  const handleSelectSavedCard = (cardMethod) => {
+    setSelectedSavedCard(cardMethod)
+    setFormData(prev => ({
+      ...prev,
+      paymentMethod: 'card',
+      cardNumber: `**** **** **** ${cardMethod.card.last4}`,
+      cardName: cardMethod.card.holderName || '',
+      expiryDate: `${cardMethod.card.expiryMonth}/${cardMethod.card.expiryYear}`,
+      cvv: '' // CVV não é salvo por segurança
+    }))
+  }
+
+  const handleUseNewCard = () => {
+    setSelectedSavedCard(null)
+    setFormData(prev => ({
+      ...prev,
+      cardNumber: '',
+      cardName: '',
+      expiryDate: '',
+      cvv: ''
+    }))
+  }
 
   if (isLoading) {
     return <div className="flex justify-center items-center min-h-screen">Carregando...</div>
@@ -167,39 +233,48 @@ function Pagamento() {
     
     const newErrors = {}
     
-    // Validações gerais (sempre obrigatórias)
-    if (!formData.fullName || formData.fullName.trim().length < 2) {
+    // Validações gerais (sempre obrigatórias, exceto se usuário estiver logado)
+    if (!user && (!formData.fullName || formData.fullName.trim().length < 2)) {
       newErrors.fullName = 'Nome completo é obrigatório'
     }
-    if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email)) {
+    if (!user && (!formData.email || !/\S+@\S+\.\S+/.test(formData.email))) {
       newErrors.email = 'Email válido é obrigatório'
     }
-    if (!formData.cpf || !validateCPF(formData.cpf)) {
+    if (!user && (!formData.cpf || !validateCPF(formData.cpf))) {
       newErrors.cpf = 'CPF inválido. Verifique os dígitos.'
     }
-    if (!formData.phone || formData.phone.replace(/\D/g, '').length < 10) {
+    if (!user && (!formData.phone || formData.phone.replace(/\D/g, '').length < 10)) {
       newErrors.phone = 'Telefone válido é obrigatório'
     }
-    if (!formData.password || formData.password.length < 6) {
+    if (!user && (!formData.password || formData.password.length < 6)) {
       newErrors.password = 'Senha deve ter no mínimo 6 caracteres'
     }
-    if (formData.password !== formData.confirmPassword) {
+    if (!user && formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'As senhas não coincidem'
     }
     
     // Validações específicas para cartão de crédito
     if (formData.paymentMethod === 'card') {
-      if (!formData.cardNumber || formData.cardNumber.replace(/\s/g, '').length < 13) {
-        newErrors.cardNumber = 'Número do cartão é obrigatório'
+      // Se não há cartão salvo selecionado, validar campos do novo cartão
+      if (!selectedSavedCard) {
+        if (!formData.cardNumber || formData.cardNumber.replace(/\s/g, '').length < 13) {
+          newErrors.cardNumber = 'Número do cartão é obrigatório'
+        }
+        if (!formData.cardName || formData.cardName.trim().length < 2) {
+          newErrors.cardName = 'Nome no cartão é obrigatório'
+        }
+        if (!formData.expiryDate || !/^\d{2}\/\d{4}$/.test(formData.expiryDate)) {
+          newErrors.expiryDate = 'Data de validade é obrigatória (MM/AAAA)'
+        }
+        if (!formData.cvv || formData.cvv.length < 3) {
+          newErrors.cvv = 'CVV é obrigatório'
+        }
       }
-      if (!formData.cardName || formData.cardName.trim().length < 2) {
-        newErrors.cardName = 'Nome no cartão é obrigatório'
-      }
-      if (!formData.expiryDate || !/^\d{2}\/\d{4}$/.test(formData.expiryDate)) {
-        newErrors.expiryDate = 'Data de validade é obrigatória (MM/AAAA)'
-      }
-      if (!formData.cvv || formData.cvv.length < 3) {
-        newErrors.cvv = 'CVV é obrigatório'
+      // Se há cartão salvo selecionado, apenas validar CVV
+      else {
+        if (!formData.cvv || formData.cvv.length < 3) {
+          newErrors.cvv = 'CVV é obrigatório para confirmar o pagamento'
+        }
       }
     }
     
@@ -264,93 +339,168 @@ function Pagamento() {
               <Card className="shadow-lg">
                 <CardContent className="p-6">
                   <div className="space-y-6">
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-semibold flex items-center gap-2">
-                        <User className="w-5 h-5 text-brand-primary" />
-                        Dados Pessoais
-                      </h3>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="col-span-2">
-                          <Label htmlFor="fullName">Nome Completo *</Label>
-                          <Input id="fullName" placeholder="Seu nome completo" 
-                            value={formData.fullName} onChange={(e) => handleInputChange('fullName', e.target.value)}
-                            className={errors.fullName ? 'border-red-500' : ''} />
-                          {errors.fullName && <p className="text-xs text-red-500 mt-1">{errors.fullName}</p>}
-                        </div>
-                        <div className="col-span-2">
-                          <Label htmlFor="email">E-mail *</Label>
-                          <Input id="email" type="email" placeholder="seu@email.com" 
-                            value={formData.email} onChange={(e) => handleInputChange('email', e.target.value)}
-                            className={errors.email ? 'border-red-500' : ''} />
-                          {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
-                          <p className="text-xs text-slate-500 mt-1">Use seu email pessoal para receber o acesso</p>
-                        </div>
-                        <div>
-                          <Label htmlFor="cpf">CPF *</Label>
-                          <Input id="cpf" placeholder="000.000.000-00" 
-                            value={formData.cpf} onChange={(e) => handleInputChange('cpf', e.target.value)}
-                            className={errors.cpf ? 'border-red-500' : ''} />
-                          {errors.cpf && <p className="text-xs text-red-500 mt-1">{errors.cpf}</p>}
-                        </div>
-                        <div>
-                          <Label htmlFor="phone">Telefone *</Label>
-                          <Input id="phone" placeholder="(00) 00000-0000" 
-                            value={formData.phone} onChange={(e) => handleInputChange('phone', e.target.value)}
-                            className={errors.phone ? 'border-red-500' : ''} />
-                          {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone}</p>}
-                        </div>
-                      </div>
-                      
-                      <div className="grid grid-cols-2 gap-4 mt-4">
-                        <div>
-                          <Label htmlFor="password">Senha *</Label>
-                          <div className="relative">
-                            <Input 
-                              id="password" 
-                              type={showPassword ? 'text' : 'password'}
-                              placeholder="Mínimo 6 caracteres"
-                              value={formData.password} 
-                              onChange={(e) => handleInputChange('password', e.target.value)}
-                              className={errors.password ? 'border-red-500 pr-10' : 'pr-10'} 
-                            />
-                            <button
-                              type="button"
-                              onClick={() => setShowPassword(!showPassword)}
-                              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                            >
-                              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                            </button>
+                    {!user && (
+                      <>
+                        <div className="space-y-4">
+                          <h3 className="text-lg font-semibold flex items-center gap-2">
+                            <User className="w-5 h-5 text-brand-primary" />
+                            Dados Pessoais
+                          </h3>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="col-span-2">
+                              <Label htmlFor="fullName">Nome Completo *</Label>
+                              <Input id="fullName" placeholder="Seu nome completo" 
+                                value={formData.fullName} onChange={(e) => handleInputChange('fullName', e.target.value)}
+                                className={errors.fullName ? 'border-red-500' : ''} />
+                              {errors.fullName && <p className="text-xs text-red-500 mt-1">{errors.fullName}</p>}
+                            </div>
+                            <div className="col-span-2">
+                              <Label htmlFor="email">E-mail *</Label>
+                              <Input id="email" type="email" placeholder="seu@email.com" 
+                                value={formData.email} onChange={(e) => handleInputChange('email', e.target.value)}
+                                className={errors.email ? 'border-red-500' : ''} />
+                              {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
+                              <p className="text-xs text-slate-500 mt-1">Use seu email pessoal para receber o acesso</p>
+                            </div>
+                            <div>
+                              <Label htmlFor="cpf">CPF *</Label>
+                              <Input id="cpf" placeholder="000.000.000-00" 
+                                value={formData.cpf} onChange={(e) => handleInputChange('cpf', e.target.value)}
+                                className={errors.cpf ? 'border-red-500' : ''} />
+                              {errors.cpf && <p className="text-xs text-red-500 mt-1">{errors.cpf}</p>}
+                            </div>
+                            <div>
+                              <Label htmlFor="phone">Telefone *</Label>
+                              <Input id="phone" placeholder="(00) 00000-0000" 
+                                value={formData.phone} onChange={(e) => handleInputChange('phone', e.target.value)}
+                                className={errors.phone ? 'border-red-500' : ''} />
+                              {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone}</p>}
+                            </div>
                           </div>
-                          {errors.password && <p className="text-xs text-red-500 mt-1">{errors.password}</p>}
-                        </div>
-                        <div>
-                          <Label htmlFor="confirmPassword">Confirmar Senha *</Label>
-                          <div className="relative">
-                            <Input 
-                              id="confirmPassword" 
-                              type={showConfirmPassword ? 'text' : 'password'}
-                              placeholder="Repita a senha"
-                              value={formData.confirmPassword} 
-                              onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
-                              className={errors.confirmPassword ? 'border-red-500 pr-10' : 'pr-10'} 
-                            />
-                            <button
-                              type="button"
-                              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                            >
-                              {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                            </button>
+                          
+                          <div className="grid grid-cols-2 gap-4 mt-4">
+                            <div>
+                              <Label htmlFor="password">Senha *</Label>
+                              <div className="relative">
+                                <Input 
+                                  id="password" 
+                                  type={showPassword ? 'text' : 'password'}
+                                  placeholder="Mínimo 6 caracteres"
+                                  value={formData.password} 
+                                  onChange={(e) => handleInputChange('password', e.target.value)}
+                                  className={errors.password ? 'border-red-500 pr-10' : 'pr-10'} 
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => setShowPassword(!showPassword)}
+                                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                                >
+                                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                </button>
+                              </div>
+                              {errors.password && <p className="text-xs text-red-500 mt-1">{errors.password}</p>}
+                            </div>
+                            <div>
+                              <Label htmlFor="confirmPassword">Confirmar Senha *</Label>
+                              <div className="relative">
+                                <Input 
+                                  id="confirmPassword" 
+                                  type={showConfirmPassword ? 'text' : 'password'}
+                                  placeholder="Repita a senha"
+                                  value={formData.confirmPassword} 
+                                  onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
+                                  className={errors.confirmPassword ? 'border-red-500 pr-10' : 'pr-10'} 
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                                >
+                                  {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                </button>
+                              </div>
+                              {errors.confirmPassword && <p className="text-xs text-red-500 mt-1">{errors.confirmPassword}</p>}
+                            </div>
                           </div>
-                          {errors.confirmPassword && <p className="text-xs text-red-500 mt-1">{errors.confirmPassword}</p>}
+                          <p className="text-xs text-slate-600 mt-2">
+                            Esta senha será usada para acessar sua conta no site
+                          </p>
                         </div>
-                      </div>
-                      <p className="text-xs text-slate-600 mt-2">
-                        Esta senha será usada para acessar sua conta no site
-                      </p>
-                    </div>
 
-                    <Separator />
+                        <Separator />
+                      </>
+                    )}
+
+                    {/* Cartões Salvos - só mostrar se usuário estiver logado e tiver cartões */}
+                    {user && savedPaymentMethods.filter(method => method.type === 'card').length > 0 && (
+                      <>
+                        <div className="space-y-4">
+                          <h3 className="text-lg font-semibold flex items-center gap-2">
+                            <CreditCard className="w-5 h-5 text-brand-primary" />
+                            Cartões Salvos
+                          </h3>
+                          <p className="text-sm text-slate-600">Selecione um cartão salvo ou use um novo</p>
+                          
+                          <div className="space-y-3">
+                            {savedPaymentMethods
+                              .filter(method => method.type === 'card')
+                              .map((method) => (
+                                <div 
+                                  key={method.id}
+                                  className={`relative cursor-pointer border-2 rounded-lg p-4 transition-all hover:border-brand-primary ${
+                                    selectedSavedCard?.id === method.id 
+                                      ? 'border-brand-primary bg-brand-primary/5' 
+                                      : 'border-gray-200'
+                                  }`}
+                                  onClick={() => handleSelectSavedCard(method)}
+                                >
+                                  <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-3">
+                                      <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                        <CreditCard className="w-5 h-5 text-blue-600" />
+                                      </div>
+                                      <div>
+                                        <p className="font-medium text-sm">
+                                          •••• •••• •••• {method.card.last4}
+                                        </p>
+                                        <p className="text-xs text-slate-500">
+                                          {method.card.brand} • Expira {method.card.expiryMonth}/{method.card.expiryYear}
+                                        </p>
+                                      </div>
+                                    </div>
+                                    {method.isDefault && (
+                                      <Badge variant="default" className="text-xs">
+                                        Padrão
+                                      </Badge>
+                                    )}
+                                  </div>
+                                </div>
+                              ))}
+                            
+                            <div 
+                              className={`relative cursor-pointer border-2 rounded-lg p-4 transition-all hover:border-brand-primary ${
+                                !selectedSavedCard && formData.paymentMethod === 'card'
+                                  ? 'border-brand-primary bg-brand-primary/5' 
+                                  : 'border-gray-200 border-dashed'
+                              }`}
+                              onClick={handleUseNewCard}
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+                                  <Plus className="w-5 h-5 text-gray-600" />
+                                </div>
+                                <div>
+                                  <p className="font-medium text-sm">Usar novo cartão</p>
+                                  <p className="text-xs text-slate-500">Adicionar dados de um cartão diferente</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <Separator />
+                      </>
+                    )}
 
                     <div className="space-y-4">
                       <h3 className="text-lg font-semibold">SELECIONE A FORMA DE PAGAMENTO</h3>
@@ -457,38 +607,62 @@ function Pagamento() {
 
                         <div className="space-y-4">
                           <h3 className="text-lg font-semibold">Dados do Cartão *</h3>
-                          <p className="text-sm text-slate-600">Preencha os dados do cartão de crédito para o pagamento</p>
+                          {selectedSavedCard ? (
+                            <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                              <div className="flex items-center gap-3 mb-3">
+                                <CreditCard className="w-5 h-5 text-blue-600" />
+                                <div>
+                                  <p className="font-medium text-sm text-blue-900">
+                                    Cartão selecionado: •••• •••• •••• {selectedSavedCard.card.last4}
+                                  </p>
+                                  <p className="text-xs text-blue-700">
+                                    {selectedSavedCard.card.brand} • Expira {selectedSavedCard.card.expiryMonth}/{selectedSavedCard.card.expiryYear}
+                                  </p>
+                                </div>
+                              </div>
+                              <p className="text-sm text-blue-700">Digite apenas o CVV para confirmar o pagamento</p>
+                            </div>
+                          ) : (
+                            <p className="text-sm text-slate-600">Preencha os dados do cartão de crédito para o pagamento</p>
+                          )}
                           
                           <div className="space-y-4">
-                            <div>
-                              <Label htmlFor="cardNumber">Número do Cartão</Label>
-                              <div className="relative">
-                                <Input id="cardNumber" placeholder="0000 0000 0000 0000" maxLength={19}
-                                  value={formData.cardNumber} onChange={(e) => handleInputChange('cardNumber', e.target.value)}
-                                  className={`pl-10 ${errors.cardNumber ? 'border-red-500' : ''}`} />
-                                <CreditCard className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
-                              </div>
-                              {errors.cardNumber && <p className="text-xs text-red-500 mt-1">{errors.cardNumber}</p>}
-                            </div>
-                            <div>
-                              <Label htmlFor="cardName">Nome no Cartão</Label>
-                              <Input id="cardName" placeholder="NOME COMO ESTÁ NO CARTÃO" 
-                                value={formData.cardName} onChange={(e) => handleInputChange('cardName', e.target.value)}
-                                className={errors.cardName ? 'border-red-500' : ''} />
-                              {errors.cardName && <p className="text-xs text-red-500 mt-1">{errors.cardName}</p>}
-                            </div>
-                            <div className="grid grid-cols-2 gap-4">
-                              <div>
-                                <Label htmlFor="expiryDate">Validade</Label>
-                                <div className="relative">
-                                  <Input id="expiryDate" placeholder="MM/AAAA" maxLength={7}
-                                    value={formData.expiryDate} onChange={(e) => handleInputChange('expiryDate', e.target.value)}
-                                    className={`pl-10 ${errors.expiryDate ? 'border-red-500' : ''}`} />
-                                  <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                            {!selectedSavedCard && (
+                              <>
+                                <div>
+                                  <Label htmlFor="cardNumber">Número do Cartão</Label>
+                                  <div className="relative">
+                                    <Input id="cardNumber" placeholder="0000 0000 0000 0000" maxLength={19}
+                                      value={formData.cardNumber} onChange={(e) => handleInputChange('cardNumber', e.target.value)}
+                                      className={`pl-10 ${errors.cardNumber ? 'border-red-500' : ''}`} />
+                                    <CreditCard className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                                  </div>
+                                  {errors.cardNumber && <p className="text-xs text-red-500 mt-1">{errors.cardNumber}</p>}
                                 </div>
-                                {errors.expiryDate && <p className="text-xs text-red-500 mt-1">{errors.expiryDate}</p>}
-                              </div>
-                              <div>
+                                <div>
+                                  <Label htmlFor="cardName">Nome no Cartão</Label>
+                                  <Input id="cardName" placeholder="NOME COMO ESTÁ NO CARTÃO" 
+                                    value={formData.cardName} onChange={(e) => handleInputChange('cardName', e.target.value)}
+                                    className={errors.cardName ? 'border-red-500' : ''} />
+                                  {errors.cardName && <p className="text-xs text-red-500 mt-1">{errors.cardName}</p>}
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div>
+                                    <Label htmlFor="expiryDate">Validade</Label>
+                                    <div className="relative">
+                                      <Input id="expiryDate" placeholder="MM/AAAA" maxLength={7}
+                                        value={formData.expiryDate} onChange={(e) => handleInputChange('expiryDate', e.target.value)}
+                                        className={`pl-10 ${errors.expiryDate ? 'border-red-500' : ''}`} />
+                                      <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                                    </div>
+                                    {errors.expiryDate && <p className="text-xs text-red-500 mt-1">{errors.expiryDate}</p>}
+                                  </div>
+                                </div>
+                              </>
+                            )}
+                            
+                            <div className={selectedSavedCard ? "w-full max-w-xs" : "grid grid-cols-2 gap-4"}>
+                              <div className={selectedSavedCard ? "" : "col-start-2"}>
                                 <Label htmlFor="cvv">CVV</Label>
                                 <div className="relative">
                                   <Input id="cvv" type="password" placeholder="000" maxLength={4}
