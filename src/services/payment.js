@@ -438,4 +438,19 @@ export const paymentService = {
     
     return 'unknown'
   },
+
+  /**
+   * Consulta status de um pedido
+   * @param {string} orderId - ID do pedido
+   * @returns {Promise<Object>} - Status do pedido
+   */
+  async checkOrderStatus(orderId) {
+    try {
+      const response = await api.get(`/payment/pagbank/order/${orderId}`)
+      return response.data
+    } catch (error) {
+      console.error('Erro ao consultar status do pedido:', error)
+      throw error
+    }
+  },
 }

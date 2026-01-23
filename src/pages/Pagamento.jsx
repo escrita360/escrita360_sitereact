@@ -4,8 +4,8 @@ import { Label } from '@/components/ui/label.jsx'
 import { Card, CardContent } from '@/components/ui/card.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
 import { Separator } from '@/components/ui/separator.jsx'
-import { CreditCard, Lock, Calendar, User, Shield, CheckCircle2, ArrowLeft, AlertCircle, Eye, EyeOff, QrCode, DollarSign, Plus } from 'lucide-react'
-import React, { useState, useEffect } from 'react'
+import { CreditCard, Lock, Calendar, User, Shield, CheckCircle2, ArrowLeft, AlertCircle, Eye, EyeOff, QrCode, DollarSign, Plus, Copy, Clock, FileText, RefreshCw } from 'lucide-react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { firebasePaymentService } from '@/services/firebase'
@@ -28,6 +28,12 @@ function Pagamento() {
   const [paymentError, setPaymentError] = useState('')
   // eslint-disable-next-line no-unused-vars
   const [transactionData, setTransactionData] = useState(null)
+  // Estado para aguardar pagamento PIX/Boleto
+  const [awaitingPayment, setAwaitingPayment] = useState(false)
+  const [pixData, setPixData] = useState(null)
+  const [boletoData, setBoletoData] = useState(null)
+  const [copiedToClipboard, setCopiedToClipboard] = useState(false)
+  const [checkingPayment, setCheckingPayment] = useState(false)
   const [formData, setFormData] = useState({
     cardNumber: '',
     cardName: '',
@@ -222,6 +228,45 @@ function Pagamento() {
 
       // Salvar dados da transação
       setTransactionData(result)
+
+      // Para PIX e Boleto, mostrar dados de pagamento e aguardar confirmação
+      if (formData.paymentMethod === 'pix') {
+        console.log('📱 PIX gerado, aguardando pagamento...')
+        // Extrair dados do QR Code da resposta
+        const qrCodeData = result.qr_codes?.[0] || result.charges?.[0]?.payment_method?.qr_codes?.[0]
+        if (qrCodeData) {
+          setPixData({
+            qrCode: qrCodeData.links?.find(l => l.media === 'image/png')?.href || qrCodeData.text,
+            qrCodeText: qrCodeData.text,
+            expirationDate: qrCodeData.expiration_date,
+            orderId: result.id
+          })
+        } else {
+          // Fallback: tentar extrair de outra estrutura
+          setPixData({
+            qrCodeText: result.pix_code || result.qr_code,
+            orderId: result.id
+          })
+        }
+        setAwaitingPayment(true)
+        return
+      } else if (formData.paymentMethod === 'pay_later') {
+        console.log('📄 Boleto gerado, aguardando pagamento...')
+        // Extrair dados do boleto da resposta
+        const boletoInfo = result.charges?.[0]?.payment_method?.boleto || result.boleto
+        const boletoLinks = result.charges?.[0]?.links || result.links || []
+        setBoletoData({
+          barcode: boletoInfo?.barcode || result.barcode,
+          formattedBarcode: boletoInfo?.formatted_barcode || result.formatted_barcode,
+          dueDate: boletoInfo?.due_date || result.due_date,
+          pdfLink: boletoLinks.find(l => l.media === 'application/pdf')?.href || result.pdf_url,
+          orderId: result.id
+        })
+        setAwaitingPayment(true)
+        return
+      }
+
+      // Para cartão, marcar como sucesso imediatamente
       setPaymentSuccess(true)
 
       // Se for usuário novo, criar conta
@@ -237,6 +282,66 @@ function Pagamento() {
       setIsLoading(false)
     }
   }
+
+  // Função para copiar código PIX para clipboard
+  const copyPixCode = async () => {
+    if (pixData?.qrCodeText) {
+      try {
+        await navigator.clipboard.writeText(pixData.qrCodeText)
+        setCopiedToClipboard(true)
+        setTimeout(() => setCopiedToClipboard(false), 3000)
+      } catch (err) {
+        console.error('Erro ao copiar:', err)
+      }
+    }
+  }
+
+  // Função para copiar código de barras do boleto
+  const copyBoletoCode = async () => {
+    if (boletoData?.barcode || boletoData?.formattedBarcode) {
+      try {
+        await navigator.clipboard.writeText(boletoData.formattedBarcode || boletoData.barcode)
+        setCopiedToClipboard(true)
+        setTimeout(() => setCopiedToClipboard(false), 3000)
+      } catch (err) {
+        console.error('Erro ao copiar:', err)
+      }
+    }
+  }
+
+  // Função para verificar status do pagamento
+  const checkPaymentStatus = useCallback(async () => {
+    const orderId = pixData?.orderId || boletoData?.orderId
+    if (!orderId) return
+
+    setCheckingPayment(true)
+    try {
+      const status = await paymentService.checkOrderStatus(orderId)
+      console.log('📊 Status do pagamento:', status)
+      
+      // Verificar se pagamento foi confirmado
+      const chargeStatus = status.charges?.[0]?.status
+      if (chargeStatus === 'PAID' || chargeStatus === 'AUTHORIZED') {
+        setPaymentSuccess(true)
+        setAwaitingPayment(false)
+      }
+    } catch (error) {
+      console.error('Erro ao verificar status:', error)
+    } finally {
+      setCheckingPayment(false)
+    }
+  }, [pixData?.orderId, boletoData?.orderId])
+
+  // Polling para verificar pagamento a cada 10 segundos
+  useEffect(() => {
+    if (awaitingPayment && (pixData || boletoData)) {
+      const interval = setInterval(() => {
+        checkPaymentStatus()
+      }, 10000) // Verificar a cada 10 segundos
+      
+      return () => clearInterval(interval)
+    }
+  }, [awaitingPayment, pixData, boletoData, checkPaymentStatus])
 
   if (isLoading) {
     return <div className="flex justify-center items-center min-h-screen">Carregando...</div>
@@ -428,7 +533,213 @@ function Pagamento() {
         </div>
       </div>
 
-      {!paymentSuccess ? (
+      {/* Tela de aguardar pagamento PIX */}
+      {awaitingPayment && pixData && (
+        <div className="container mx-auto px-4 max-w-4xl py-20">
+          <div className="text-center space-y-6">
+            <div className="flex justify-center">
+              <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center">
+                <QrCode className="w-16 h-16 text-green-600" />
+              </div>
+            </div>
+            <div className="space-y-3">
+              <h2 className="text-4xl font-bold">Pague com PIX</h2>
+              <p className="text-xl text-slate-600">Escaneie o QR Code ou copie o código para pagar</p>
+            </div>
+            <Card className="max-w-2xl mx-auto shadow-xl">
+              <CardContent className="p-6 space-y-6">
+                {/* QR Code */}
+                <div className="flex justify-center">
+                  {pixData.qrCode ? (
+                    <img 
+                      src={pixData.qrCode} 
+                      alt="QR Code PIX" 
+                      className="w-64 h-64 border-4 border-slate-200 rounded-lg"
+                    />
+                  ) : (
+                    <div className="w-64 h-64 bg-slate-100 rounded-lg flex items-center justify-center">
+                      <QrCode className="w-32 h-32 text-slate-400" />
+                    </div>
+                  )}
+                </div>
+
+                {/* Código PIX para copiar */}
+                {pixData.qrCodeText && (
+                  <div className="space-y-2">
+                    <Label>Código PIX (Copia e Cola)</Label>
+                    <div className="flex gap-2">
+                      <Input 
+                        value={pixData.qrCodeText} 
+                        readOnly 
+                        className="font-mono text-xs"
+                      />
+                      <Button onClick={copyPixCode} variant="outline" className="flex-shrink-0">
+                        {copiedToClipboard ? (
+                          <CheckCircle2 className="w-4 h-4 text-green-600" />
+                        ) : (
+                          <Copy className="w-4 h-4" />
+                        )}
+                      </Button>
+                    </div>
+                    {copiedToClipboard && (
+                      <p className="text-sm text-green-600">✓ Código copiado!</p>
+                    )}
+                  </div>
+                )}
+
+                <Separator />
+
+                {/* Informações do pedido */}
+                <div className="space-y-3 text-left">
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">Plano</span>
+                    <span className="font-medium">{selectedPlan.name}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">Valor</span>
+                    <span className="font-bold text-lg text-green-600">R$ {total.toFixed(2)}</span>
+                  </div>
+                  {pixData.expirationDate && (
+                    <div className="flex justify-between">
+                      <span className="text-slate-600">Válido até</span>
+                      <span className="font-medium">{new Date(pixData.expirationDate).toLocaleString('pt-BR')}</span>
+                    </div>
+                  )}
+                </div>
+
+                <Separator />
+
+                {/* Status de verificação */}
+                <div className="bg-yellow-50 p-4 rounded-lg flex items-center gap-3">
+                  <Clock className="w-5 h-5 text-yellow-600 animate-pulse" />
+                  <div className="text-left">
+                    <p className="text-sm font-medium text-yellow-900">Aguardando pagamento...</p>
+                    <p className="text-xs text-yellow-700">O pagamento será confirmado automaticamente</p>
+                  </div>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={checkPaymentStatus}
+                    disabled={checkingPayment}
+                    className="ml-auto"
+                  >
+                    <RefreshCw className={`w-4 h-4 ${checkingPayment ? 'animate-spin' : ''}`} />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+              <Button variant="outline" onClick={() => { setAwaitingPayment(false); setPixData(null); }}>
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Voltar e escolher outro método
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Tela de aguardar pagamento Boleto */}
+      {awaitingPayment && boletoData && (
+        <div className="container mx-auto px-4 max-w-4xl py-20">
+          <div className="text-center space-y-6">
+            <div className="flex justify-center">
+              <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center">
+                <FileText className="w-16 h-16 text-blue-600" />
+              </div>
+            </div>
+            <div className="space-y-3">
+              <h2 className="text-4xl font-bold">Boleto Gerado!</h2>
+              <p className="text-xl text-slate-600">Copie o código de barras ou baixe o PDF para pagar</p>
+            </div>
+            <Card className="max-w-2xl mx-auto shadow-xl">
+              <CardContent className="p-6 space-y-6">
+                {/* Código de barras */}
+                {(boletoData.formattedBarcode || boletoData.barcode) && (
+                  <div className="space-y-2">
+                    <Label>Código de Barras</Label>
+                    <div className="flex gap-2">
+                      <Input 
+                        value={boletoData.formattedBarcode || boletoData.barcode} 
+                        readOnly 
+                        className="font-mono text-sm"
+                      />
+                      <Button onClick={copyBoletoCode} variant="outline" className="flex-shrink-0">
+                        {copiedToClipboard ? (
+                          <CheckCircle2 className="w-4 h-4 text-green-600" />
+                        ) : (
+                          <Copy className="w-4 h-4" />
+                        )}
+                      </Button>
+                    </div>
+                    {copiedToClipboard && (
+                      <p className="text-sm text-green-600">✓ Código copiado!</p>
+                    )}
+                  </div>
+                )}
+
+                {/* Botão para baixar PDF */}
+                {boletoData.pdfLink && (
+                  <Button 
+                    className="w-full" 
+                    onClick={() => window.open(boletoData.pdfLink, '_blank')}
+                  >
+                    <FileText className="w-4 h-4 mr-2" />
+                    Baixar Boleto em PDF
+                  </Button>
+                )}
+
+                <Separator />
+
+                {/* Informações do pedido */}
+                <div className="space-y-3 text-left">
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">Plano</span>
+                    <span className="font-medium">{selectedPlan.name}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-600">Valor</span>
+                    <span className="font-bold text-lg text-blue-600">R$ {total.toFixed(2)}</span>
+                  </div>
+                  {boletoData.dueDate && (
+                    <div className="flex justify-between">
+                      <span className="text-slate-600">Vencimento</span>
+                      <span className="font-medium">{new Date(boletoData.dueDate + 'T00:00:00').toLocaleDateString('pt-BR')}</span>
+                    </div>
+                  )}
+                </div>
+
+                <Separator />
+
+                {/* Status de verificação */}
+                <div className="bg-yellow-50 p-4 rounded-lg flex items-center gap-3">
+                  <Clock className="w-5 h-5 text-yellow-600 animate-pulse" />
+                  <div className="text-left">
+                    <p className="text-sm font-medium text-yellow-900">Aguardando pagamento...</p>
+                    <p className="text-xs text-yellow-700">O pagamento será confirmado em até 3 dias úteis após o pagamento</p>
+                  </div>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={checkPaymentStatus}
+                    disabled={checkingPayment}
+                    className="ml-auto"
+                  >
+                    <RefreshCw className={`w-4 h-4 ${checkingPayment ? 'animate-spin' : ''}`} />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+              <Button variant="outline" onClick={() => { setAwaitingPayment(false); setBoletoData(null); }}>
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Voltar e escolher outro método
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {!paymentSuccess && !awaitingPayment ? (
         <div className="container mx-auto px-4 max-w-7xl py-12">
           <div className="mb-8">
             <h1 className="text-4xl font-bold mb-2 flex items-center gap-3">
@@ -926,7 +1237,10 @@ function Pagamento() {
             </div>
           </div>
         </div>
-      ) : (
+      ) : null}
+
+      {/* Tela de sucesso do pagamento */}
+      {paymentSuccess && (
         <div className="container mx-auto px-4 max-w-4xl py-20">
           <div className="text-center space-y-6">
             <div className="flex justify-center">
