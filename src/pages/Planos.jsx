@@ -168,7 +168,7 @@ function Precos() {
       case 'estudantes':
         return studentPlans
       case 'professores':
-        return teacherPlans
+        return teacherPlans.filter(plan => !['Básico', 'Professor Solo'].includes(plan.name))
       case 'escolas':
         return schoolPlans
       default:
