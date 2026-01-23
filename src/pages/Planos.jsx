@@ -714,44 +714,6 @@ function Precos() {
         </section>
       )}
 
-      {/* Contact Section */}
-      <section className="py-12 md:py-16 lg:py-20 bg-gradient-to-b from-slate-50 to-white">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <Card className="bg-white border-slate-200 shadow-xl overflow-hidden">
-            <CardContent className="p-8 md:p-12">
-              <div className="text-center">
-                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4">
-                  Ficou com dúvidas?
-                </h2>
-                <p className="text-lg text-slate-600 mb-8 max-w-2xl mx-auto">
-                  {selectedAudience === 'escolas' 
-                    ? 'Entre em contato conosco para uma proposta personalizada para sua instituição. Nossa equipe está pronta para ajudar a encontrar a melhor solução para suas necessidades.'
-                    : 'Entre em contato conosco e tire suas dúvidas. Nossa equipe está pronta para ajudar você a escolher o melhor plano para suas necessidades.'
-                  }
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button
-                    className="bg-[#4A90E2] hover:bg-[#357ABD] text-white px-8 py-3 text-lg"
-                    size="lg"
-                    onClick={() => navigate('/contato')}
-                  >
-                    Fale Conosco
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="border-brand-primary text-brand-primary hover:bg-brand-light px-8 py-3 text-lg"
-                    size="lg"
-                    onClick={() => window.open('https://wa.me/5511999999999', '_blank')}
-                  >
-                    WhatsApp
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
-
     </div>
   )   
 }
