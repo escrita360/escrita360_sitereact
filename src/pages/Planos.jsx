@@ -403,7 +403,7 @@ function Precos() {
                           buttonText: 'Contratar Plano'
                         })}
                       >
-                        Contratar Plano
+                        Escolher Plano
                       </Button>
                     </CardContent>
                   </Card>
@@ -444,7 +444,7 @@ function Precos() {
                           buttonText: 'Contratar Plano'
                         })}
                       >
-                        Contratar Plano
+                        Escolher Plano
                       </Button>
                     </CardContent>
                   </Card>
