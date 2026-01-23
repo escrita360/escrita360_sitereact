@@ -581,12 +581,6 @@ function Precos() {
                     <p className="text-slate-500 text-xs mt-1">As análises detalhadas extras são utilizadas durante a vigência do plano.</p>
                   </CardHeader>
                   <CardContent>
-                    <ul className="space-y-1 mb-4">
-                      <li className="flex items-center gap-2">
-                        <Check className="w-3 h-3 text-green-600 flex-shrink-0" />
-                        <span className="text-slate-700 text-sm">500 correções detalhadas com IA</span>
-                      </li>
-                    </ul>
                     <Button 
                       className="w-full bg-[#4A90E2] hover:bg-[#357ABD] text-white" 
                       variant="default"
@@ -612,12 +606,6 @@ function Precos() {
                     <p className="text-slate-500 text-xs mt-1">As análises detalhadas extras são utilizadas durante a vigência do plano.</p>
                   </CardHeader>
                   <CardContent>
-                    <ul className="space-y-1 mb-4">
-                      <li className="flex items-center gap-2">
-                        <Check className="w-3 h-3 text-green-600 flex-shrink-0" />
-                        <span className="text-slate-700 text-sm">1000 correções detalhadas com IA</span>
-                      </li>
-                    </ul>
                     <Button 
                       className="w-full bg-[#4A90E2] hover:bg-[#357ABD] text-white" 
                       variant="default"
@@ -741,16 +729,6 @@ function Precos() {
                     <p className="text-slate-600 text-xs mt-1">{pkg.description}</p>
                   </CardHeader>
                   <CardContent>
-                    <ul className="space-y-1 mb-4">
-                      {pkg.features.map((feature, featureIndex) => (
-                        <li key={featureIndex} className="flex items-center gap-2">
-                          <Check className="w-3 h-3 text-green-600 flex-shrink-0" />
-                          <span className="text-slate-700 text-sm">
-                            {featureIndex === 0 ? `${pkg.credits} correções detalhadas com IA` : feature}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
                     <Button 
                       className="w-full bg-[#4A90E2] hover:bg-[#357ABD] text-white" 
                       variant="default"
