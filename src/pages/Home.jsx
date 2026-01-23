@@ -9,6 +9,7 @@ import imersaoTotal from '@/assets/Cards/imersao_total.png'
 import painelSentimentos from '@/assets/Cards/painel_sentimentos.png'
 import usoRubricas from '@/assets/Cards/card5.1.svg'
 import iaAssistente from '@/assets/Cards/ia_assistente.png'
+import computadorEscrita2 from '@/assets/Cards/computador_escrita2.svg'
 
 function Home() {
   const heroRef = useScrollAnimation()
@@ -161,13 +162,18 @@ Com soluções inovadoras, o Escrita360 engaja os estudantes na construção con
           <h3 className="text-center mb-20 text-2xl md:text-3xl text-slate-900">
             O Escrita360 surge como uma solução inovadora que transforma a redação em uma jornada formativa. Aqui, você aprende a escrever de verdade.
           </h3>
-          <h3 className="text-center mb-20 text-2xl md:text-3xl text-brand-primary font-bold">
-            Escreva. Reescreva. Evolua.
-          </h3>
-          <div className="process-emphasis">
-            <h4 className="text-center mb-20 font-bold text-xl md:text-2xl text-slate-900">
-              Escrita360: inteligência e autoria caminhando juntas.
-            </h4>
+          <div className="grid lg:grid-cols-2 gap-8 items-center">
+            <div>
+              <h3 className="text-2xl md:text-3xl text-brand-primary font-bold mb-4">
+                Escreva. Reescreva. Evolua.
+              </h3>
+              <h4 className="font-bold text-xl md:text-2xl text-slate-900">
+                Escrita360: inteligência e autoria caminhando juntas.
+              </h4>
+            </div>
+            <div className="flex items-center justify-center">
+              <img src={computadorEscrita2} alt="Computador Escrita" className="w-full max-w-md h-auto" />
+            </div>
           </div>
         </div>
       </section>
