@@ -1171,7 +1171,6 @@ function Pagamento() {
                         <p className="font-medium">Plano {selectedPlan.name}</p>
                         <p className="text-sm text-slate-600">{isYearly ? 'Cobrança Anual' : 'Cobrança Mensal'}</p>
                       </div>
-                      <Badge className="bg-brand-primary text-white">{selectedPlan.badge}</Badge>
                     </div>
                     <Separator />
                     <div className="space-y-2">

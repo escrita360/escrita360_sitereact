@@ -75,7 +75,7 @@ function Precos() {
 
   // Planos vêm da API agora
   const studentPlans = plansData?.plans?.filter(plan => plan.audience === 'estudantes') || []
-  const teacherPlansSolo = plansData?.plans?.filter(plan => plan.audience === 'professores' && plan.id?.includes('solo')) || []
+  const teacherPlans = plansData?.plans?.filter(plan => plan.audience === 'professores') || []
   const schoolPlansSemestral = plansData?.plans?.filter(plan => plan.audience === 'escolas' && plan.planType === 'semestral') || []
   const schoolPlansAnual = plansData?.plans?.filter(plan => plan.audience === 'escolas' && plan.planType === 'anual') || []
 
@@ -89,14 +89,14 @@ function Precos() {
       credits: 5,
       price: 20,
       description: '',
-      features: ['Análises detalhadas por IA']
+      features: ['Análises detalhadas com IA']
     },
     {
       name: 'Pacote 2',
       credits: 15,
       price: 45,
       description: '',
-      features: ['Análises detalhadas por IA']
+      features: ['Análises detalhadas com IA']
     },
     {
       name: 'Pacote 3',
@@ -104,7 +104,7 @@ function Precos() {
       price: 60,
       description: '',
       popular: true,
-      features: ['Análises detalhadas por IA']
+      features: ['Análises detalhadas com IA']
     }
   ]
 
@@ -115,7 +115,7 @@ function Precos() {
       credits: 100,
       price: 200,
       description: '',
-      features: ['Análises detalhadas por IA']
+      features: ['Análises detalhadas com IA']
     },
     {
       name: 'Pacote 2',
@@ -123,7 +123,7 @@ function Precos() {
       price: 300,
       description: '',
       popular: true,
-      features: ['Análises detalhadas por IA']
+      features: ['Análises detalhadas com IA']
     }
   ]
 
@@ -165,7 +165,7 @@ function Precos() {
       case 'estudantes':
         return studentPlans
       case 'professores':
-        return teacherPlansSolo.slice(0,1)
+        return teacherPlans
       case 'escolas':
         return schoolPlans
       default:
@@ -357,14 +357,6 @@ function Precos() {
                 <div className="grid gap-8 mx-auto mt-6 justify-center grid-cols-1 max-w-md">
                   {/* Plano Básico */}
                   <Card className="relative hover-lift animate-scale-in hover:shadow-xl transition-all flex flex-col pt-6 w-full">
-                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 flex gap-2 animate-float">
-                      <Badge variant="secondary" className="text-xs whitespace-nowrap">
-                        Plano Inicial
-                      </Badge>
-                      <Badge className="bg-yellow-500 text-white px-3 py-1 text-xs whitespace-nowrap">
-                        500 análises detalhadas IA
-                      </Badge>
-                    </div>
                     <CardHeader className="text-center pb-4">
                       <h3 className="text-xl font-bold text-slate-900">Básico</h3>
                       <div className="my-4">
@@ -406,14 +398,6 @@ function Precos() {
                 <div className="grid gap-8 mx-auto mt-6 justify-center md:grid-cols-2 max-w-5xl">
                   {/* Plano Básico - Professor */}
                   <Card className="relative hover-lift animate-scale-in hover:shadow-xl transition-all flex flex-col pt-6 w-full">
-                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 flex gap-2 animate-float">
-                      <Badge variant="secondary" className="text-xs whitespace-nowrap">
-                        Plano Inicial
-                      </Badge>
-                      <Badge className="bg-yellow-500 text-white px-3 py-1 text-xs whitespace-nowrap">
-                        500 análises detalhadas IA
-                      </Badge>
-                    </div>
                     <CardHeader className="text-center pb-4">
                       <h3 className="text-xl font-bold text-slate-900">Professor</h3>
                       <div className="my-4">
@@ -450,14 +434,6 @@ function Precos() {
 
                   {/* Plano Estudante */}
                   <Card className="relative hover-lift animate-scale-in delay-200 border-2 border-brand-primary shadow-xl transition-all flex flex-col pt-6 w-full">
-                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 flex gap-2 animate-float">
-                      <Badge className="bg-brand-primary text-white px-3 py-1 text-xs whitespace-nowrap">
-                        Preço promocional de lançamento
-                      </Badge>
-                      <Badge className="bg-yellow-500 text-white px-3 py-1 text-xs whitespace-nowrap">
-                        500 créditos IA
-                      </Badge>
-                    </div>
                     <CardHeader className="text-center pb-4">
                       <h3 className="text-xl font-bold text-slate-900">Estudante</h3>
                       <div className="my-4">
@@ -562,7 +538,7 @@ function Precos() {
             <div className="mt-16 space-y-6">
               <h3 className="text-3xl font-bold text-center text-slate-900 mb-4">Pacotes de Créditos</h3>
               <p className="text-lg text-slate-600 text-center max-w-3xl mx-auto mb-8">
-                Turmas com muitas redações? Adquira pacotes extras de análises detalhadas para sua instituição.
+                Turmas com muitas redações? Adquira pacotes extras de análises detalhadas com IA para sua instituição.
               </p>
               
               <div className="grid gap-6 mx-auto justify-items-center md:grid-cols-2 max-w-2xl">
@@ -576,15 +552,15 @@ function Precos() {
                       </span>
                     </div>
                     <p className="text-slate-600 text-sm">
-                      <strong>500 análises detalhadas</strong>
+                      <strong>500 análises detalhadas com IA</strong>
                     </p>
-                    <p className="text-slate-500 text-xs mt-1">As análises detalhadas extras são utilizadas durante a vigência do plano.</p>
+                    <p className="text-slate-500 text-xs mt-1">As análises detalhadas com IA extras são utilizadas durante a vigência do plano.</p>
                   </CardHeader>
                   <CardContent>
                     <Button 
                       className="w-full bg-[#4A90E2] hover:bg-[#357ABD] text-white" 
                       variant="default"
-                      onClick={() => navigate('/pagamento-creditos', { state: { selectedPackage: { name: 'Pacote 1', credits: 500, price: 1200, features: ['Análises detalhadas por IA'] }, audience: 'escolas' } })}
+                      onClick={() => navigate('/pagamento-creditos', { state: { selectedPackage: { name: 'Pacote 1', credits: 500, price: 1200, features: ['Análises detalhadas com IA'] }, audience: 'escolas' } })}
                     >
                       Adquirir Pacote
                     </Button>
@@ -601,15 +577,15 @@ function Precos() {
                       </span>
                     </div>
                     <p className="text-slate-600 text-sm">
-                      <strong>1000 análises detalhadas</strong>
+                      <strong>1000 análises detalhadas com IA</strong>
                     </p>
-                    <p className="text-slate-500 text-xs mt-1">As análises detalhadas extras são utilizadas durante a vigência do plano.</p>
+                    <p className="text-slate-500 text-xs mt-1">As análises detalhadas com IA extras são utilizadas durante a vigência do plano.</p>
                   </CardHeader>
                   <CardContent>
                     <Button 
                       className="w-full bg-[#4A90E2] hover:bg-[#357ABD] text-white" 
                       variant="default"
-                      onClick={() => navigate('/pagamento-creditos', { state: { selectedPackage: { name: 'Pacote 2', credits: 1000, price: 2400, popular: true, features: ['Análises detalhadas por IA'] }, audience: 'escolas' } })}
+                      onClick={() => navigate('/pagamento-creditos', { state: { selectedPackage: { name: 'Pacote 2', credits: 1000, price: 2400, popular: true, features: ['Análises detalhadas com IA'] }, audience: 'escolas' } })}
                     >
                       Adquirir Pacote
                     </Button>
@@ -625,27 +601,10 @@ function Precos() {
       {(selectedAudience === 'estudantes' || selectedAudience === 'professores') && (
         <section ref={plansRef} className="pt-12 pb-8 md:pt-16 md:pb-12 lg:pt-20 lg:pb-16 bg-white animate-on-scroll">
           <div className="container mx-auto px-4 max-w-7xl">
-            <div className={`grid gap-8 mx-auto mt-6 justify-center grid-cols-1 max-w-md`}>
+            <div className={`grid gap-8 mx-auto mt-6 justify-center ${currentPlans.length > 1 ? 'grid-cols-1 md:grid-cols-2 max-w-4xl' : 'grid-cols-1 max-w-md'}`}>
               {currentPlans.map((plan, index) => (
                 <Card key={index} className={`relative hover-lift animate-scale-in delay-${index * 200} ${plan.popular ? 'border-2 border-brand-primary shadow-xl' : 'hover:shadow-xl'} transition-all flex flex-col pt-6 w-full`}>
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 flex gap-2 animate-float">
-                    {plan.popular && (
-                      <Badge className="bg-brand-primary text-white px-3 py-1 text-xs whitespace-nowrap">
-                        {plan.badge}
-                      </Badge>
-                    )}
-                    {plan.credits && (
-                      <Badge className="bg-yellow-500 text-white px-3 py-1 text-xs whitespace-nowrap">
-                        {plan.credits} créditos IA
-                      </Badge>
-                    )}
-                  </div>
                   <CardHeader className="text-center pb-4">
-                    <div className="mb-1">
-                      {!plan.popular && <Badge variant="secondary" className="text-xs">
-                        {plan.badge}
-                      </Badge>}
-                    </div>
                     <h3 className="text-xl font-bold text-slate-900">{plan.name}</h3>
                     <div className="my-4">
                       {plan.consultation ? (
@@ -724,7 +683,7 @@ function Precos() {
                       </span>
                     </div>
                     <p className="text-slate-600 text-sm">
-                      <strong>{pkg.credits} análises detalhadas</strong>
+                      <strong>{pkg.credits} análises detalhadas com IA</strong>
                     </p>
                     <p className="text-slate-600 text-xs mt-1">{pkg.description}</p>
                   </CardHeader>

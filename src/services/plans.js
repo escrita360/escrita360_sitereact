@@ -53,13 +53,17 @@ export const plansService = {
     const teacherPlans = [
       {
         id: 'professor_solo',
-        name: 'Plano Professor solo',
+        name: 'Plano Básico',
         badge: 'Preço promocional de lançamento',
         monthlyPrice: 120,
         yearlyPrice: 1440,
         subDescription: '',
         credits: 60,
         popular: true,
+        features: [
+          { text: '60 correções detalhadas com IA', included: true },
+          { text: 'Acesso por 1 mês', included: true }
+        ],
         buttonText: 'Escolher Plano',
         buttonVariant: 'default',
         audience: 'professores'
@@ -70,8 +74,6 @@ export const plansService = {
         badge: 'Melhor investimento',
         monthlyPrice: 570,
         yearlyPrice: 3420,
-        description: 'Professores (Individual)',
-        subDescription: 'Plano com maior quantidade de correções e acesso estendido',
         credits: 300,
         popular: true,
         features: [
@@ -81,6 +83,7 @@ export const plansService = {
           { text: 'Relatórios de desempenho com notas (ENEM e texto dissertativo-argumentativo)', included: true },
           { text: 'Correção com IA (ENEM e texto dissertativo-argumentativo)', included: true, highlighted: true },
           { text: 'Relatórios consolidados (Habilidades BNCC X ENEM)', included: true },
+          { text: '300 correções detalhadas com IA', included: true },
           { text: 'Acesso por 6 meses', included: true }
         ],
         buttonText: 'Escolher Plano',
