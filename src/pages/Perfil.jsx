@@ -8,12 +8,20 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { User, Mail, Calendar, CreditCard, LogOut, Plus, CreditCardIcon, Smartphone, Banknote, Eye, Trash2, Star } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { firebasePaymentService } from '@/services/firebase'
+import { firebasePaymentService, getFirebaseForPlan } from '@/services/firebase'
+import { updateDoc, doc } from 'firebase/firestore'
 import { toast } from 'sonner'
 
 const Perfil = () => {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
+
+  // Estados para edição de perfil
+  const [isEditingProfile, setIsEditingProfile] = useState(false)
+  const [profileForm, setProfileForm] = useState({
+    name: '',
+    cpf: ''
+  })
 
   // Estados para métodos de pagamento
   const [paymentMethods, setPaymentMethods] = useState([])
@@ -33,10 +41,6 @@ const Perfil = () => {
     brand: ''
   })
   const [expiryFormatted, setExpiryFormatted] = useState('')
-  const [pixForm, setPixForm] = useState({
-    key: '',
-    keyType: 'cpf' // cpf, cnpj, email, phone, random
-  })
   const [boletoForm, setBoletoForm] = useState({
     name: '',
     cpf: '',
@@ -62,6 +66,16 @@ const Perfil = () => {
       loadPaymentMethods()
     }
   }, [user, loadPaymentMethods])
+
+  // Inicializar formulário de perfil
+  useEffect(() => {
+    if (user) {
+      setProfileForm({
+        name: user.nome || '',
+        cpf: user.cpf || ''
+      })
+    }
+  }, [user])
 
   const loadTransactionHistory = async () => {
     try {
@@ -140,19 +154,6 @@ const Perfil = () => {
             brand: brand
           }
         }
-      } else if (selectedPaymentType === 'pix') {
-        if (!pixForm.key) {
-          toast.error('Preencha a chave PIX')
-          return
-        }
-
-        paymentData = {
-          type: 'pix',
-          pix: {
-            key: pixForm.key,
-            keyType: pixForm.keyType
-          }
-        }
       } else if (selectedPaymentType === 'boleto') {
         if (!boletoForm.name || !boletoForm.cpf || !boletoForm.email) {
           toast.error('Preencha todos os campos do boleto')
@@ -195,10 +196,6 @@ const Perfil = () => {
       brand: ''
     })
     setExpiryFormatted('')
-    setPixForm({
-      key: '',
-      keyType: 'cpf'
-    })
     setBoletoForm({
       name: '',
       cpf: '',
@@ -235,6 +232,26 @@ const Perfil = () => {
     }
   }
 
+  const handleSaveProfile = async () => {
+    try {
+      setLoading(true)
+      const db = getFirebaseForPlan(user.tipoPlano === 'professor' ? 'professor' : 'aluno')
+      const userDocRef = doc(db, 'users', user.uid)
+      await updateDoc(userDocRef, {
+        nome: profileForm.name,
+        cpf: profileForm.cpf
+      })
+      toast.success('Perfil atualizado com sucesso')
+      setIsEditingProfile(false)
+      // Atualizar o contexto do usuário se necessário
+    } catch (error) {
+      console.error('Erro ao atualizar perfil:', error)
+      toast.error('Erro ao atualizar perfil')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const handleLogout = async () => {
     try {
       await logout()
@@ -244,8 +261,15 @@ const Perfil = () => {
     }
   }
 
+  // Verificar se usuário está logado
+  useEffect(() => {
+    if (!user) {
+      navigate('/login')
+    }
+  }, [user, navigate])
+
+  // Não renderizar se usuário não estiver logado
   if (!user) {
-    navigate('/login')
     return null
   }
 
@@ -263,49 +287,100 @@ const Perfil = () => {
             <div className="md:col-span-2 space-y-6">
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <User className="w-5 h-5" />
-                    Informações Pessoais
+                  <CardTitle className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <User className="w-5 h-5" />
+                      Informações Pessoais
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => setIsEditingProfile(!isEditingProfile)}
+                    >
+                      {isEditingProfile ? 'Cancelar' : 'Editar'}
+                    </Button>
                   </CardTitle>
                   <CardDescription>
                     Suas informações básicas de cadastro
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="flex items-center gap-3">
-                    <User className="w-4 h-4 text-slate-500" />
-                    <div>
-                      <p className="font-medium">{user.nome || 'Nome não informado'}</p>
-                      <p className="text-sm text-slate-500">Nome completo</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <Mail className="w-4 h-4 text-slate-500" />
-                    <div>
-                      <p className="font-medium">{user.email}</p>
-                      <p className="text-sm text-slate-500">Email</p>
-                    </div>
-                  </div>
-
-                  {user.criadoEm && (
-                    <div className="flex items-center gap-3">
-                      <Calendar className="w-4 h-4 text-slate-500" />
+                  {isEditingProfile ? (
+                    <div className="space-y-4">
                       <div>
-                        <p className="font-medium">
-                          {new Date(user.criadoEm.seconds * 1000).toLocaleDateString('pt-BR')}
-                        </p>
-                        <p className="text-sm text-slate-500">Membro desde</p>
+                        <Label htmlFor="profileName">Nome completo</Label>
+                        <Input
+                          id="profileName"
+                          value={profileForm.name}
+                          onChange={(e) => setProfileForm({...profileForm, name: e.target.value})}
+                          placeholder="Seu nome completo"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="profileCpf">CPF</Label>
+                        <Input
+                          id="profileCpf"
+                          value={profileForm.cpf}
+                          onChange={(e) => setProfileForm({...profileForm, cpf: e.target.value.replace(/[^0-9]/g, '')})}
+                          placeholder="000.000.000-00"
+                          maxLength={11}
+                        />
+                      </div>
+                      <div className="flex gap-2">
+                        <Button onClick={handleSaveProfile} disabled={loading}>
+                          {loading ? 'Salvando...' : 'Salvar'}
+                        </Button>
+                        <Button variant="outline" onClick={() => setIsEditingProfile(false)}>
+                          Cancelar
+                        </Button>
                       </div>
                     </div>
-                  )}
+                  ) : (
+                    <>
+                      <div className="flex items-center gap-3">
+                        <User className="w-4 h-4 text-slate-500" />
+                        <div>
+                          <p className="font-medium">{user.nome || 'Nome não informado'}</p>
+                          <p className="text-sm text-slate-500">Nome completo</p>
+                        </div>
+                      </div>
 
-                  <div className="flex items-center gap-3">
-                    <Badge variant={user.emailVerificado ? "default" : "secondary"}>
-                      {user.emailVerificado ? "Verificado" : "Não verificado"}
-                    </Badge>
-                    <span className="text-sm text-slate-500">Status do email</span>
-                  </div>
+                      <div className="flex items-center gap-3">
+                        <User className="w-4 h-4 text-slate-500" />
+                        <div>
+                          <p className="font-medium">{user.cpf || 'CPF não informado'}</p>
+                          <p className="text-sm text-slate-500">CPF</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-3">
+                        <Mail className="w-4 h-4 text-slate-500" />
+                        <div>
+                          <p className="font-medium">{user.email}</p>
+                          <p className="text-sm text-slate-500">Email</p>
+                        </div>
+                      </div>
+
+                      {user.criadoEm && (
+                        <div className="flex items-center gap-3">
+                          <Calendar className="w-4 h-4 text-slate-500" />
+                          <div>
+                            <p className="font-medium">
+                              {new Date(user.criadoEm.seconds * 1000).toLocaleDateString('pt-BR')}
+                            </p>
+                            <p className="text-sm text-slate-500">Membro desde</p>
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="flex items-center gap-3">
+                        <Badge variant={user.emailVerificado ? "default" : "secondary"}>
+                          {user.emailVerificado ? "Verificado" : "Não verificado"}
+                        </Badge>
+                        <span className="text-sm text-slate-500">Status do email</span>
+                      </div>
+                    </>
+                  )}
                 </CardContent>
               </Card>
 
@@ -426,17 +501,6 @@ const Perfil = () => {
 
                       <div 
                         className="flex items-center gap-3 p-3 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors cursor-pointer"
-                        onClick={() => handleAddPaymentMethod('pix')}
-                      >
-                        <Smartphone className="w-5 h-5 text-green-600" />
-                        <div>
-                          <p className="font-medium text-sm">PIX</p>
-                          <p className="text-xs text-slate-500">Pagamento instantâneo</p>
-                        </div>
-                      </div>
-
-                      <div 
-                        className="flex items-center gap-3 p-3 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors cursor-pointer"
                         onClick={() => handleAddPaymentMethod('boleto')}
                       >
                         <Banknote className="w-5 h-5 text-purple-600" />
@@ -454,7 +518,6 @@ const Perfil = () => {
                       <div className="flex items-center justify-between mb-4">
                         <h3 className="text-lg font-semibold">
                           {selectedPaymentType === 'card' && 'Adicionar Cartão de Crédito'}
-                          {selectedPaymentType === 'pix' && 'Adicionar Chave PIX'}
                           {selectedPaymentType === 'boleto' && 'Adicionar Dados para Boleto'}
                         </h3>
                         <Button variant="ghost" size="sm" onClick={handleCancelAdd}>
@@ -515,42 +578,6 @@ const Perfil = () => {
                                 placeholder="Nome como aparece no cartão"
                                 value={cardForm.holderName}
                                 onChange={(e) => setCardForm({...cardForm, holderName: e.target.value})}
-                              />
-                            </div>
-                          </div>
-                        )}
-
-                        {selectedPaymentType === 'pix' && (
-                          <div className="space-y-4">
-                            <div>
-                              <Label htmlFor="pixKeyType">Tipo da Chave</Label>
-                              <Select value={pixForm.keyType} onValueChange={(value) => setPixForm({...pixForm, keyType: value})}>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Selecione o tipo" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="cpf">CPF</SelectItem>
-                                  <SelectItem value="cnpj">CNPJ</SelectItem>
-                                  <SelectItem value="email">E-mail</SelectItem>
-                                  <SelectItem value="phone">Telefone</SelectItem>
-                                  <SelectItem value="random">Chave Aleatória</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </div>
-
-                            <div>
-                              <Label htmlFor="pixKey">Chave PIX</Label>
-                              <Input
-                                id="pixKey"
-                                placeholder={
-                                  pixForm.keyType === 'cpf' ? '000.000.000-00' :
-                                  pixForm.keyType === 'cnpj' ? '00.000.000/0000-00' :
-                                  pixForm.keyType === 'email' ? 'seu@email.com' :
-                                  pixForm.keyType === 'phone' ? '(00) 00000-0000' :
-                                  'Chave aleatória'
-                                }
-                                value={pixForm.key}
-                                onChange={(e) => setPixForm({...pixForm, key: e.target.value})}
                               />
                             </div>
                           </div>

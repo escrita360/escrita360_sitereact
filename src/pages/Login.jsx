@@ -90,6 +90,7 @@ const Login = () => {
   
   const [registerData, setRegisterData] = useState({
     name: '',
+    cpf: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -97,6 +98,8 @@ const Login = () => {
   })
   
   const [obscurePassword, setObscurePassword] = useState(true)
+  const [obscureRegisterPassword, setObscureRegisterPassword] = useState(true)
+  const [obscureConfirmPassword, setObscureConfirmPassword] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [focusedField, setFocusedField] = useState('')
@@ -164,7 +167,7 @@ const Login = () => {
   const handleRegister = async (e) => {
     e.preventDefault()
     
-    if (!registerData.name || !registerData.email || !registerData.password) {
+    if (!registerData.name || !registerData.cpf || !registerData.email || !registerData.password) {
       setError('Por favor, preencha todos os campos obrigatórios')
       return
     }
@@ -189,6 +192,7 @@ const Login = () => {
         registerData.password,
         {
           name: registerData.name,
+          cpf: registerData.cpf,
           userType: 'aluno',
           origem: 'cadastro_direto'
         }
@@ -390,6 +394,31 @@ const Login = () => {
 
                   <div className={cn(
                     "relative transition-all duration-300 ease-in-out rounded-lg p-3",
+                    focusedField === 'register-cpf' ? 'bg-blue-50 border border-blue-200 shadow-sm' : ''
+                  )}>
+                    <Shield className="absolute left-6 top-1/2 transform -translate-y-1/2 w-4 h-4" style={{ color: BRAND_COLORS.primary }} />
+                    <Input
+                      type="text"
+                      name="cpf"
+                      placeholder="CPF (000.000.000-00)"
+                      value={registerData.cpf}
+                      onChange={handleRegisterInputChange}
+                      onFocus={() => setFocusedField('register-cpf')}
+                      onBlur={() => setFocusedField('')}
+                      className={cn(
+                        "pl-10 h-12 border-2 transition-all duration-300 ease-in-out",
+                        focusedField === 'register-cpf' ? 'border-blue-300 shadow-md' : ''
+                      )}
+                      style={{ 
+                        borderColor: focusedField === 'register-cpf' ? BRAND_COLORS.accent : BRAND_COLORS.primary + '40',
+                        boxShadow: focusedField === 'register-cpf' ? `0 0 0 3px ${BRAND_COLORS.accent}20` : ''
+                      }}
+                      maxLength={14}
+                    />
+                  </div>
+
+                  <div className={cn(
+                    "relative transition-all duration-300 ease-in-out rounded-lg p-3",
                     focusedField === 'register-email' ? 'bg-blue-50 border border-blue-200 shadow-sm' : ''
                   )}>
                     <Mail className="absolute left-6 top-1/2 transform -translate-y-1/2 w-4 h-4" style={{ color: BRAND_COLORS.primary }} />
@@ -418,7 +447,7 @@ const Login = () => {
                   )}>
                     <Lock className="absolute left-6 top-1/2 transform -translate-y-1/2 w-4 h-4" style={{ color: BRAND_COLORS.primary }} />
                     <Input
-                      type="password"
+                      type={obscureRegisterPassword ? "password" : "text"}
                       name="password"
                       placeholder="Senha"
                       value={registerData.password}
@@ -426,7 +455,7 @@ const Login = () => {
                       onFocus={() => setFocusedField('register-password')}
                       onBlur={() => setFocusedField('')}
                       className={cn(
-                        "pl-10 h-12 border-2 transition-all duration-300 ease-in-out",
+                        "pl-10 pr-10 h-12 border-2 transition-all duration-300 ease-in-out",
                         focusedField === 'register-password' ? 'border-blue-300 shadow-md' : ''
                       )}
                       style={{ 
@@ -434,6 +463,14 @@ const Login = () => {
                         boxShadow: focusedField === 'register-password' ? `0 0 0 3px ${BRAND_COLORS.accent}20` : ''
                       }}
                     />
+                    <button
+                      type="button"
+                      onClick={() => setObscureRegisterPassword(!obscureRegisterPassword)}
+                      className="absolute right-6 top-1/2 transform -translate-y-1/2 transition-colors duration-200 hover:opacity-75"
+                      style={{ color: BRAND_COLORS.primary }}
+                    >
+                      {obscureRegisterPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
                   </div>
 
                   <div className={cn(
@@ -442,7 +479,7 @@ const Login = () => {
                   )}>
                     <Lock className="absolute left-6 top-1/2 transform -translate-y-1/2 w-4 h-4" style={{ color: BRAND_COLORS.primary }} />
                     <Input
-                      type="password"
+                      type={obscureConfirmPassword ? "password" : "text"}
                       name="confirmPassword"
                       placeholder="Confirmar senha"
                       value={registerData.confirmPassword}
@@ -450,7 +487,7 @@ const Login = () => {
                       onFocus={() => setFocusedField('register-confirmPassword')}
                       onBlur={() => setFocusedField('')}
                       className={cn(
-                        "pl-10 h-12 border-2 transition-all duration-300 ease-in-out",
+                        "pl-10 pr-10 h-12 border-2 transition-all duration-300 ease-in-out",
                         focusedField === 'register-confirmPassword' ? 'border-blue-300 shadow-md' : ''
                       )}
                       style={{ 
@@ -458,6 +495,14 @@ const Login = () => {
                         boxShadow: focusedField === 'register-confirmPassword' ? `0 0 0 3px ${BRAND_COLORS.accent}20` : ''
                       }}
                     />
+                    <button
+                      type="button"
+                      onClick={() => setObscureConfirmPassword(!obscureConfirmPassword)}
+                      className="absolute right-6 top-1/2 transform -translate-y-1/2 transition-colors duration-200 hover:opacity-75"
+                      style={{ color: BRAND_COLORS.primary }}
+                    >
+                      {obscureConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
                   </div>
 
                   <div className={cn(
