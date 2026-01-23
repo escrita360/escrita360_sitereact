@@ -20,7 +20,9 @@ import {
   where, 
   getDocs,
   updateDoc,
-  serverTimestamp 
+  serverTimestamp,
+  orderBy,
+  startAfter
 } from 'firebase/firestore'
 
 // Configuração do Firebase para ALUNOS (escrita360aluno)
@@ -389,9 +391,336 @@ export const firebaseSubscriptionService = {
 }
 
 /**
- * Serviço de Pagamentos no Firestore
+ * Serviço de Pagamentos Firebase
+ * Gerencia métodos de pagamento, cartões salvos e transações
  */
 export const firebasePaymentService = {
+  /**
+   * Adicionar método de pagamento
+   * @param {string} userId - ID do usuário
+   * @param {Object} paymentMethodData - Dados do método de pagamento
+   * @param {string} audience - Tipo de público ('estudantes' ou 'professores')
+   */
+  async addPaymentMethod(userId, paymentMethodData, audience = 'estudantes') {
+    try {
+      const { db: targetDb, projectId } = getFirebaseForPlan(audience)
+
+      console.log(`💳 Adicionando método de pagamento para: ${userId} no projeto: ${projectId}`)
+
+      const paymentMethodId = `pm_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+
+      const paymentMethodDoc = {
+        id: paymentMethodId,
+        userId: userId,
+        type: paymentMethodData.type, // 'card', 'pix', 'boleto'
+        isDefault: paymentMethodData.isDefault || false,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+        ...paymentMethodData
+      }
+
+      // Se for cartão, mascarar dados sensíveis
+      if (paymentMethodData.type === 'card') {
+        paymentMethodDoc.card = {
+          last4: paymentMethodData.card.number.slice(-4),
+          brand: paymentMethodData.card.brand,
+          expiryMonth: paymentMethodData.card.expiryMonth,
+          expiryYear: paymentMethodData.card.expiryYear,
+          holderName: paymentMethodData.card.holderName
+        }
+        // Remover dados sensíveis que não devem ser salvos
+        delete paymentMethodDoc.card.number
+        delete paymentMethodDoc.card.cvv
+      }
+
+      // Salvar método de pagamento
+      await setDoc(doc(targetDb, 'payment_methods', paymentMethodId), paymentMethodDoc)
+
+      // Se for padrão, remover padrão dos outros métodos
+      if (paymentMethodData.isDefault) {
+        await this.setDefaultPaymentMethod(userId, paymentMethodId, audience)
+      }
+
+      console.log(`✅ Método de pagamento adicionado: ${paymentMethodId}`)
+
+      return {
+        success: true,
+        paymentMethodId: paymentMethodId,
+        paymentMethod: paymentMethodDoc
+      }
+    } catch (error) {
+      console.error('❌ Erro ao adicionar método de pagamento:', error)
+      throw error
+    }
+  },
+
+  /**
+   * Buscar métodos de pagamento do usuário
+   * @param {string} userId - ID do usuário
+   * @param {string} audience - Tipo de público ('estudantes' ou 'professores')
+   */
+  async getPaymentMethods(userId, audience = 'estudantes') {
+    try {
+      const { db: targetDb } = getFirebaseForPlan(audience)
+
+      const q = query(
+        collection(targetDb, 'payment_methods'),
+        where('userId', '==', userId)
+      )
+
+      const querySnapshot = await getDocs(q)
+      const paymentMethods = []
+
+      querySnapshot.forEach(doc => {
+        paymentMethods.push({
+          id: doc.id,
+          ...doc.data()
+        })
+      })
+
+      // Ordenar por data de criação (mais recente primeiro)
+      paymentMethods.sort((a, b) => {
+        const aDate = a.createdAt?.toDate?.() || new Date(0)
+        const bDate = b.createdAt?.toDate?.() || new Date(0)
+        return bDate - aDate
+      })
+
+      return paymentMethods
+    } catch (error) {
+      console.error('❌ Erro ao buscar métodos de pagamento:', error)
+      throw error
+    }
+  },
+
+  /**
+   * Definir método de pagamento padrão
+   * @param {string} userId - ID do usuário
+   * @param {string} paymentMethodId - ID do método de pagamento
+   * @param {string} audience - Tipo de público ('estudantes' ou 'professores')
+   */
+  async setDefaultPaymentMethod(userId, paymentMethodId, audience = 'estudantes') {
+    try {
+      const { db: targetDb } = getFirebaseForPlan(audience)
+
+      console.log(`🎯 Definindo método de pagamento padrão: ${paymentMethodId}`)
+
+      // Buscar todos os métodos do usuário
+      const paymentMethods = await this.getPaymentMethods(userId, audience)
+
+      // Atualizar cada método: definir como padrão apenas o selecionado
+      const updatePromises = paymentMethods.map(method => {
+        const isDefault = method.id === paymentMethodId
+        return updateDoc(doc(targetDb, 'payment_methods', method.id), {
+          isDefault: isDefault,
+          updatedAt: serverTimestamp()
+        })
+      })
+
+      await Promise.all(updatePromises)
+
+      console.log(`✅ Método de pagamento padrão atualizado`)
+
+      return { success: true }
+    } catch (error) {
+      console.error('❌ Erro ao definir método de pagamento padrão:', error)
+      throw error
+    }
+  },
+
+  /**
+   * Remover método de pagamento
+   * @param {string} userId - ID do usuário
+   * @param {string} paymentMethodId - ID do método de pagamento
+   * @param {string} audience - Tipo de público ('estudantes' ou 'professores')
+   */
+  async removePaymentMethod(userId, paymentMethodId, audience = 'estudantes') {
+    try {
+      const { db: targetDb } = getFirebaseForPlan(audience)
+
+      console.log(`🗑️ Removendo método de pagamento: ${paymentMethodId}`)
+
+      // Verificar se o método pertence ao usuário
+      const paymentMethodDoc = await getDoc(doc(targetDb, 'payment_methods', paymentMethodId))
+
+      if (!paymentMethodDoc.exists()) {
+        throw new Error('Método de pagamento não encontrado')
+      }
+
+      const paymentMethod = paymentMethodDoc.data()
+
+      if (paymentMethod.userId !== userId) {
+        throw new Error('Método de pagamento não pertence ao usuário')
+      }
+
+      // Remover o método
+      await updateDoc(doc(targetDb, 'payment_methods', paymentMethodId), {
+        deleted: true,
+        deletedAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      })
+
+      console.log(`✅ Método de pagamento removido`)
+
+      return { success: true }
+    } catch (error) {
+      console.error('❌ Erro ao remover método de pagamento:', error)
+      throw error
+    }
+  },
+
+  /**
+   * Efetuar pagamento
+   * @param {string} userId - ID do usuário
+   * @param {Object} paymentData - Dados do pagamento
+   * @param {string} audience - Tipo de público ('estudantes' ou 'professores')
+   */
+  async processPayment(userId, paymentData, audience = 'estudantes') {
+    try {
+      const { db: targetDb, projectId } = getFirebaseForPlan(audience)
+
+      console.log(`💰 Processando pagamento para: ${userId} no projeto: ${projectId}`)
+
+      const {
+        amount,
+        currency = 'BRL',
+        paymentMethodId,
+        description,
+        metadata = {}
+      } = paymentData
+
+      // Buscar método de pagamento
+      let paymentMethod = null
+      if (paymentMethodId) {
+        const paymentMethodDoc = await getDoc(doc(targetDb, 'payment_methods', paymentMethodId))
+        if (paymentMethodDoc.exists()) {
+          paymentMethod = {
+            id: paymentMethodDoc.id,
+            ...paymentMethodDoc.data()
+          }
+        }
+      }
+
+      // Se não encontrou método salvo, usar dados diretos (para pagamentos únicos)
+      if (!paymentMethod && paymentData.paymentMethod) {
+        paymentMethod = paymentData.paymentMethod
+      }
+
+      if (!paymentMethod) {
+        throw new Error('Método de pagamento não encontrado')
+      }
+
+      // Criar registro de transação
+      const transactionId = `txn_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+
+      const transactionData = {
+        id: transactionId,
+        userId: userId,
+        amount: amount,
+        currency: currency,
+        paymentMethodId: paymentMethodId,
+        paymentMethodType: paymentMethod.type,
+        description: description,
+        status: 'pending', // pending, processing, completed, failed, cancelled
+        metadata: metadata,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      }
+
+      // Salvar transação no Firestore
+      await setDoc(doc(targetDb, 'transactions', transactionId), transactionData)
+
+      console.log(`📝 Transação criada: ${transactionId}`)
+
+      // Aqui seria integrada com PagBank ou outro gateway
+      // Por enquanto, simulamos um processamento bem-sucedido
+      try {
+        // TODO: Integrar com PagBank API
+        // const pagBankResult = await processWithPagBank(paymentData)
+
+        // Simulação de processamento
+        await new Promise(resolve => setTimeout(resolve, 1000))
+
+        // Atualizar status da transação
+        await updateDoc(doc(targetDb, 'transactions', transactionId), {
+          status: 'completed',
+          processedAt: serverTimestamp(),
+          updatedAt: serverTimestamp(),
+          // Adicionar dados do gateway de pagamento
+          gatewayResponse: {
+            transactionId: `pagbank_${Date.now()}`,
+            status: 'approved'
+          }
+        })
+
+        console.log(`✅ Pagamento processado com sucesso: ${transactionId}`)
+
+        return {
+          success: true,
+          transactionId: transactionId,
+          status: 'completed',
+          message: 'Pagamento processado com sucesso'
+        }
+
+      } catch (gatewayError) {
+        // Atualizar status em caso de erro
+        await updateDoc(doc(targetDb, 'transactions', transactionId), {
+          status: 'failed',
+          error: gatewayError.message,
+          updatedAt: serverTimestamp()
+        })
+
+        throw new Error(`Falha no processamento do pagamento: ${gatewayError.message}`)
+      }
+
+    } catch (error) {
+      console.error('❌ Erro ao processar pagamento:', error)
+      throw error
+    }
+  },
+
+  /**
+   * Buscar histórico de transações do usuário
+   * @param {string} userId - ID do usuário
+   * @param {Object} options - Opções de filtro e paginação
+   * @param {string} audience - Tipo de público ('estudantes' ou 'professores')
+   */
+  async getTransactionHistory(userId, options = {}, audience = 'estudantes') {
+    try {
+      const { db: targetDb } = getFirebaseForPlan(audience)
+
+      const { limit = 20, status, startAfter } = options
+
+      let q = query(
+        collection(targetDb, 'transactions'),
+        where('userId', '==', userId),
+        orderBy('createdAt', 'desc'),
+        limit(limit)
+      )
+
+      if (status) {
+        q = query(q, where('status', '==', status))
+      }
+
+      if (startAfter) {
+        q = query(q, startAfter(startAfter))
+      }
+
+      const querySnapshot = await getDocs(q)
+      const transactions = []
+
+      querySnapshot.forEach(doc => {
+        transactions.push({
+          id: doc.id,
+          ...doc.data()
+        })
+      })
+
+      return transactions
+    } catch (error) {
+      console.error('❌ Erro ao buscar histórico de transações:', error)
+      throw error
+    }
+  },
   /**
    * Registrar pagamento
    * @param {string} userId - ID do usuário

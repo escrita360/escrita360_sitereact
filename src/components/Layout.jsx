@@ -1,9 +1,10 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Menu, ChevronDown, GraduationCap, School, UserCheck } from 'lucide-react'
+import { Menu, ChevronDown, GraduationCap, School, UserCheck, User, LogOut } from 'lucide-react'
 import { useState, useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button.jsx'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet.jsx'
 import { cn } from '@/lib/utils'
+import { useAuth } from '@/contexts/AuthContext'
 import ChatBot from '@/components/ChatBot.jsx'
 import CookieConsent from '@/components/CookieConsent.jsx'
 import logo from '@/assets/Logo/logo2.svg'
@@ -11,9 +12,12 @@ import logo from '@/assets/Logo/logo2.svg'
 function Layout({ children }) {
   const [isOpen, setIsOpen] = useState(false)
   const [isPlansDropdownOpen, setIsPlansDropdownOpen] = useState(false)
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false)
   const plansDropdownRef = useRef(null)
+  const profileDropdownRef = useRef(null)
   const location = useLocation()
   const navigate = useNavigate()
+  const { user, logout } = useAuth()
 
   const plansOptions = [
     { key: 'estudantes', label: 'Estudantes', icon: GraduationCap },
@@ -31,6 +35,9 @@ function Layout({ children }) {
       if (plansDropdownRef.current && !plansDropdownRef.current.contains(event.target)) {
         setIsPlansDropdownOpen(false)
       }
+      if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target)) {
+        setIsProfileDropdownOpen(false)
+      }
     }
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
@@ -39,6 +46,16 @@ function Layout({ children }) {
   const handlePlanSelect = (planKey) => {
     setIsPlansDropdownOpen(false)
     navigate(`/precos?audience=${planKey}`)
+  }
+
+  const handleLogout = async () => {
+    try {
+      await logout()
+      setIsProfileDropdownOpen(false)
+      navigate('/')
+    } catch (error) {
+      console.error('Erro ao fazer logout:', error)
+    }
   }
 
   return (
@@ -99,9 +116,65 @@ function Layout({ children }) {
             </div>
 
             <Link to="/contato" className={cn("text-slate-700 hover:text-brand-primary transition-all duration-300 hover:scale-105", location.pathname === "/contato" ? "border-b-2 border-brand-primary pb-1" : "")}>Contato</Link>
-            <Button asChild size="lg" className="bg-[var(--brand-primary)] text-white hover:bg-[var(--brand-dark)]">
-              <Link to="/login">Entrar</Link>
-            </Button>
+            
+            {/* User Profile or Login Button */}
+            {user ? (
+              <div className="relative" ref={profileDropdownRef}>
+                <button
+                  onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+                  className="flex items-center gap-2 px-4 py-2 bg-[var(--brand-primary)] text-white rounded-lg hover:bg-[var(--brand-dark)] transition-all duration-300 hover:scale-105"
+                >
+                  <User className="w-4 h-4" />
+                  <span className="font-medium">
+                    {user.nome || user.email?.split('@')[0] || 'Usuário'}
+                  </span>
+                  <ChevronDown 
+                    className={`w-4 h-4 transition-transform duration-200 ${
+                      isProfileDropdownOpen ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
+
+                {/* Profile Dropdown Menu */}
+                {isProfileDropdownOpen && (
+                  <div className="absolute top-full right-0 mt-2 w-64 bg-white border border-slate-200 rounded-lg shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 z-50">
+                    <div className="px-4 py-3 border-b border-slate-200">
+                      <p className="font-medium text-slate-900">
+                        {user.nome || 'Usuário'}
+                      </p>
+                      <p className="text-sm text-slate-500">
+                        {user.email}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setIsProfileDropdownOpen(false)
+                        navigate('/perfil')
+                      }}
+                      className="w-full flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-colors text-left"
+                    >
+                      <User className="w-4 h-4 text-slate-600" />
+                      <span className="font-medium text-slate-700">
+                        Meu Perfil
+                      </span>
+                    </button>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-colors text-left"
+                    >
+                      <LogOut className="w-4 h-4 text-slate-600" />
+                      <span className="font-medium text-slate-700">
+                        Sair
+                      </span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Button asChild size="lg" className="bg-[var(--brand-primary)] text-white hover:bg-[var(--brand-dark)]">
+                <Link to="/login">Entrar</Link>
+              </Button>
+            )}
           </div>
 
           {/* Mobile Navigation */}
@@ -180,9 +253,47 @@ function Layout({ children }) {
                 >
                   Contato
                 </Link>
-                <Button asChild className="mt-4 w-full bg-[var(--brand-primary)] text-white hover:bg-[var(--brand-dark)]">
-                  <Link to="/login" onClick={() => setIsOpen(false)}>Entrar</Link>
-                </Button>
+                
+                {/* User Profile or Login Button - Mobile */}
+                {user ? (
+                  <div className="border-t pt-4 mt-4">
+                    <div className="flex items-center gap-3 px-2 py-2 mb-2">
+                      <User className="w-5 h-5 text-brand-primary" />
+                      <div>
+                        <p className="font-medium text-slate-900">
+                          {user.nome || 'Usuário'}
+                        </p>
+                        <p className="text-sm text-slate-500">
+                          {user.email}
+                        </p>
+                      </div>
+                    </div>
+                    <Button
+                      onClick={() => {
+                        navigate('/perfil')
+                        setIsOpen(false)
+                      }}
+                      variant="outline"
+                      className="w-full mb-2"
+                    >
+                      Meu Perfil
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        handleLogout()
+                        setIsOpen(false)
+                      }}
+                      variant="outline"
+                      className="w-full"
+                    >
+                      Sair
+                    </Button>
+                  </div>
+                ) : (
+                  <Button asChild className="mt-4 w-full bg-[var(--brand-primary)] text-white hover:bg-[var(--brand-dark)]">
+                    <Link to="/login" onClick={() => setIsOpen(false)}>Entrar</Link>
+                  </Button>
+                )}
               </nav>
             </SheetContent>
           </Sheet>

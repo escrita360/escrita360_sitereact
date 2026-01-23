@@ -11,6 +11,7 @@ import Contato from './pages/Contato.jsx'
 import Faq from './pages/Faq.jsx'
 import SobreNos from './pages/SobreNos.jsx'
 import Login from './pages/Login.jsx'
+import Perfil from './pages/Perfil.jsx'
 import Pagamento from './pages/Pagamento.jsx'
 import PagamentoCreditos from './pages/PagamentoCreditos.jsx'
 import ComprarCreditos from './pages/ComprarCreditos.jsx'
@@ -216,6 +217,19 @@ function App() {
           >
             <Login />
           </motion.div>
+        } />
+        <Route path="/perfil" element={
+          <Layout>
+            <motion.div
+              initial="initial"
+              animate="in"
+              exit="out"
+              variants={pageVariants}
+              transition={pageTransition}
+            >
+              <Perfil />
+            </motion.div>
+          </Layout>
         } />
         <Route path="/admin" element={
           <AdminRoute>
