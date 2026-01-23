@@ -321,9 +321,8 @@ function Layout({ children }) {
             <div>
               <h3 className="font-bold mb-4">Institucional</h3>
               <ul className="space-y-2 text-slate-400">
-                <li><Link to="/termos-servico" className="hover:text-white transition-colors">Termos de Serviço</Link></li>
-                <li><Link to="/politica-privacidade" className="hover:text-white transition-colors">Políticas de Privacidade</Link></li>
-                <li><Link to="/programa-integridade" className="hover:text-white transition-colors">Programa de Integridade</Link></li>
+                <li><Link to="/termos-servico" className="hover:text-white transition-colors">Termos e condições gerais de uso</Link></li>
+                <li><Link to="/politica-privacidade" className="hover:text-white transition-colors">Política de privacidade</Link></li>
               </ul>
             </div>
           </div>
