@@ -663,8 +663,8 @@ function Precos() {
               </h2>
               <p className="text-lg text-slate-600 max-w-3xl mx-auto">
                 {selectedAudience === 'estudantes' 
-                  ? 'Precisa escrever mais este mês?'
-                  : 'Turma com muitas redações esta semana?'
+                  ? 'Necessita de mais créditos para análises das redações?'
+                  : 'Necessita de mais créditos para correções das redações?'
                 }
               </p>
             </div>
