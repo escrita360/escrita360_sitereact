@@ -17,6 +17,8 @@ function Precos() {
   const audienceFromUrl = searchParams.get('audience') || 'estudantes'
   const [selectedAudience, setSelectedAudience] = useState(audienceFromUrl)
   const [schoolPlanType, setSchoolPlanType] = useState('correcao') // 'correcao' ou 'hibrido'
+  const [expandedHibrido, setExpandedHibrido] = useState(false)
+  const [expandedInstitucional, setExpandedInstitucional] = useState(false)
   const navigate = useNavigate()
   const plansRef = useScrollAnimation()
 
@@ -144,16 +146,15 @@ function Precos() {
   // Programa Escolas / Institucional para escolas
   const schoolModels = [
     {
-      title: 'Plano Essencial',
-      focus: 'Facilitar o trabalho docente e otimizar a correção de textos produzidos em sala de aula e avaliações oficiais da escola (provas de redação).',
-      description: 'A escola adquire Planos Híbridos (plataforma + créditos de IA), disponíveis nas versões semestral e anual para os professores envolvidos na produção e correção de redações e pode adquirir pacotes adicionais de créditos, conforme a demanda de correções da escola.',
+      title: 'Modelo Institucional',
+      focus: 'Foco: Facilitar o trabalho docente e otimizar a correção de textos produzidos em sala de aula e provas de redação.',
+      description: 'A escola adquire planos e pacotes para otimizar as correções das redações produzidas pelos estudantes em sala de aula.',
       number: 1
     },
     {
-      title: 'Edu Essencial',
-      focus: 'Ampliar a adesão e possibilitar o uso contínuo da plataforma e controle pedagógico à gestão.',
-      description: 'O modelo híbrido combina a aquisição de assinaturas individuais, adquiridas pelas famílias (responsáveis) e assinaturas para os professores, adquiridas pela escola. Além das assinaturas, a escola adquire pacotes de créditos de IA, utilizados conforme a necessidade pedagógica. Esse modelo busca ampliar a adesão e possibilitar o uso contínuo da plataforma e controle pedagógico à gestão.',
-      additionalInfo: 'Os créditos de IA podem ser utilizados para correção de textos produzidos pelos estudantes e provas de redação. As modalidades de contratação podem ser semestrais ou anuais. Alunos e professores têm acesso a todos os recursos da plataforma.',
+      title: 'Modelo híbrido 360',
+      focus: 'Foco: Ampliar o uso contínuo da plataforma por professores e estudantes, otimizando o processo de desenvolvimento da produção e avaliação escrita.',
+      description: 'O modelo híbrido combina a contratação de planos individuais, adquiridos pelas famílias ou com custos compartilhados entre a escola e os responsáveis, conforme a política de cada instituição, com a aquisição, pela escola, de planos ou pacotes de créditos destinados aos professores. Esses créditos de IA podem ser utilizados tanto pelos estudantes, para fins de autoavaliação e geração de relatórios encaminhados aos docentes, quanto pelos professores, especialmente na correção de provas de redação.',
       number: 2,
       highlighted: true
     }
@@ -327,9 +328,14 @@ function Precos() {
                   onClick={() => setSchoolPlanType('correcao')}
                 >
                   <h4 className="text-base font-bold text-slate-900 mb-1">{schoolModels[0].title}</h4>
-                  <p className="text-slate-500 text-sm">
+                  <p className="text-slate-500 text-sm cursor-pointer" onClick={(e) => { e.stopPropagation(); setExpandedInstitucional(!expandedInstitucional); }}>
                     {schoolModels[0].focus}
                   </p>
+                  {expandedInstitucional && (
+                    <p className="text-slate-500 text-sm">
+                      {schoolModels[0].description}
+                    </p>
+                  )}
                 </div>
                 
                 <div 
@@ -343,9 +349,14 @@ function Precos() {
                   }}
                 >
                   <h4 className="text-base font-bold text-slate-900 mb-1">{schoolModels[1].title}</h4>
-                  <p className="text-slate-500 text-sm">
+                  <p className="text-slate-500 text-sm cursor-pointer" onClick={(e) => { e.stopPropagation(); setExpandedHibrido(!expandedHibrido); }}>
                     {schoolModels[1].focus}
                   </p>
+                  {expandedHibrido && (
+                    <p className="text-slate-500 text-sm">
+                      {schoolModels[1].description}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
