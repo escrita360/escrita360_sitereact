@@ -6,6 +6,10 @@ const getApiUrl = () => {
   if (typeof window !== 'undefined' && window.location.hostname.includes('easypanel.host')) {
     return 'https://escrita360-escrita360-backend.nnjeij.easypanel.host/api'
   }
+  // Produção em escrita360.com.br usa backend em financa.escrita360.com.br
+  if (typeof window !== 'undefined' && window.location.hostname === 'escrita360.com.br') {
+    return 'https://financa.escrita360.com.br/api'
+  }
   // Outros ambientes de produção (mesmo domínio)
   if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
     return `${window.location.protocol}//${window.location.hostname}/api`
