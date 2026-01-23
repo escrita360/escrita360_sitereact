@@ -364,6 +364,15 @@ export const paymentService = {
     // Limpar telefone apenas números
     const phoneClean = customerData.phone.replace(/\D/g, '')
     
+    // Garantir que o ano tenha 4 dígitos
+    let expYear = cardData.expiryYear
+    if (expYear < 100) {
+      expYear = 2000 + expYear
+    }
+    
+    // Garantir que o mês tenha formato correto (string com 2 dígitos)
+    const expMonth = String(cardData.expiryMonth).padStart(2, '0')
+    
     const data = {
       reference_id: `card_${Date.now()}`,
       customer: {
@@ -395,9 +404,9 @@ export const paymentService = {
           installments: installments || 1,
           capture: true,
           card: {
-            number: cardData.number,
-            exp_month: cardData.expiryMonth,
-            exp_year: cardData.expiryYear,
+            number: cardData.number.replace(/\s/g, ''),
+            exp_month: expMonth,
+            exp_year: String(expYear),
             security_code: cardData.cvv,
             holder: {
               name: cardData.holderName
@@ -411,7 +420,11 @@ export const paymentService = {
     console.log('💳 Enviando dados do cartão para backend:', {
       customer: { ...data.customer, tax_id: '***' },
       planData: planData,
-      card: { ...data.charges[0].payment_method.card, number: '**** **** **** ' + cardData.number.slice(-4) }
+      card: { 
+        ...data.charges[0].payment_method.card, 
+        number: '**** **** **** ' + cardData.number.slice(-4),
+        security_code: '***'
+      }
     })
 
     const response = await api.post('/payment/pagbank/create-order', data)
