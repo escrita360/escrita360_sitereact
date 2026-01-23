@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Eye, EyeOff, Mail, Lock, Shield, User, X, AlertCircle, UserPlus, LogIn } from 'lucide-react'
+import { Eye, EyeOff, Mail, Lock, Shield, User, X, AlertCircle, UserPlus, LogIn, Calendar } from 'lucide-react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -76,6 +76,18 @@ const Login = () => {
     .tab-login {
       animation: slideInRight 0.4s ease-out;
     }
+    
+    input::placeholder {
+      color: #64748b !important;
+    }
+    
+    input[type="date"] {
+      color: #64748b;
+    }
+    
+    input[type="date"]:focus {
+      color: #000;
+    }
   `
   
   const userType = location.pathname.includes('admin') || location.search.includes('type=admin') 
@@ -91,7 +103,9 @@ const Login = () => {
   const [registerData, setRegisterData] = useState({
     name: '',
     cpf: '',
+    birthDate: '',
     email: '',
+    confirmEmail: '',
     password: '',
     confirmPassword: '',
     acceptTerms: false
@@ -167,8 +181,13 @@ const Login = () => {
   const handleRegister = async (e) => {
     e.preventDefault()
     
-    if (!registerData.name || !registerData.cpf || !registerData.email || !registerData.password) {
+    if (!registerData.name || !registerData.cpf || !registerData.birthDate || !registerData.email || !registerData.confirmEmail || !registerData.password) {
       setError('Por favor, preencha todos os campos obrigatórios')
+      return
+    }
+    
+    if (registerData.email !== registerData.confirmEmail) {
+      setError('Os emails não coincidem')
       return
     }
     
@@ -179,6 +198,19 @@ const Login = () => {
     
     if (!registerData.acceptTerms) {
       setError('Você deve aceitar os termos de uso')
+      return
+    }
+
+    // Validação de idade (mínimo 18 anos)
+    const birthDate = new Date(registerData.birthDate)
+    const today = new Date()
+    let age = today.getFullYear() - birthDate.getFullYear()
+    const monthDiff = today.getMonth() - birthDate.getMonth()
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--
+    }
+    if (age < 18) {
+      setError('Você deve ter pelo menos 18 anos para se cadastrar')
       return
     }
 
@@ -193,6 +225,7 @@ const Login = () => {
         {
           name: registerData.name,
           cpf: registerData.cpf,
+          birthDate: registerData.birthDate,
           userType: 'aluno',
           origem: 'cadastro_direto'
         }
@@ -419,6 +452,30 @@ const Login = () => {
 
                   <div className={cn(
                     "relative transition-all duration-300 ease-in-out rounded-lg p-3",
+                    focusedField === 'register-birthDate' ? 'bg-blue-50 border border-blue-200 shadow-sm' : ''
+                  )}>
+                    <Calendar className="absolute left-6 top-1/2 transform -translate-y-1/2 w-4 h-4" style={{ color: BRAND_COLORS.primary }} />
+                    <Input
+                      type="date"
+                      name="birthDate"
+                      placeholder="Data de nascimento"
+                      value={registerData.birthDate}
+                      onChange={handleRegisterInputChange}
+                      onFocus={() => setFocusedField('register-birthDate')}
+                      onBlur={() => setFocusedField('')}
+                      className={cn(
+                        "pl-10 h-12 border-2 transition-all duration-300 ease-in-out",
+                        focusedField === 'register-birthDate' ? 'border-blue-300 shadow-md' : ''
+                      )}
+                      style={{ 
+                        borderColor: focusedField === 'register-birthDate' ? BRAND_COLORS.accent : BRAND_COLORS.primary + '40',
+                        boxShadow: focusedField === 'register-birthDate' ? `0 0 0 3px ${BRAND_COLORS.accent}20` : ''
+                      }}
+                    />
+                  </div>
+
+                  <div className={cn(
+                    "relative transition-all duration-300 ease-in-out rounded-lg p-3",
                     focusedField === 'register-email' ? 'bg-blue-50 border border-blue-200 shadow-sm' : ''
                   )}>
                     <Mail className="absolute left-6 top-1/2 transform -translate-y-1/2 w-4 h-4" style={{ color: BRAND_COLORS.primary }} />
@@ -437,6 +494,30 @@ const Login = () => {
                       style={{ 
                         borderColor: focusedField === 'register-email' ? BRAND_COLORS.accent : BRAND_COLORS.primary + '40',
                         boxShadow: focusedField === 'register-email' ? `0 0 0 3px ${BRAND_COLORS.accent}20` : ''
+                      }}
+                    />
+                  </div>
+
+                  <div className={cn(
+                    "relative transition-all duration-300 ease-in-out rounded-lg p-3",
+                    focusedField === 'register-confirmEmail' ? 'bg-blue-50 border border-blue-200 shadow-sm' : ''
+                  )}>
+                    <Mail className="absolute left-6 top-1/2 transform -translate-y-1/2 w-4 h-4" style={{ color: BRAND_COLORS.primary }} />
+                    <Input
+                      type="email"
+                      name="confirmEmail"
+                      placeholder="Confirmar email"
+                      value={registerData.confirmEmail}
+                      onChange={handleRegisterInputChange}
+                      onFocus={() => setFocusedField('register-confirmEmail')}
+                      onBlur={() => setFocusedField('')}
+                      className={cn(
+                        "pl-10 h-12 border-2 transition-all duration-300 ease-in-out",
+                        focusedField === 'register-confirmEmail' ? 'border-blue-300 shadow-md' : ''
+                      )}
+                      style={{ 
+                        borderColor: focusedField === 'register-confirmEmail' ? BRAND_COLORS.accent : BRAND_COLORS.primary + '40',
+                        boxShadow: focusedField === 'register-confirmEmail' ? `0 0 0 3px ${BRAND_COLORS.accent}20` : ''
                       }}
                     />
                   </div>
