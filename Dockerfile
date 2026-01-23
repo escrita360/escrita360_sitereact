@@ -31,19 +31,6 @@ WORKDIR /app
 # Copy built frontend files
 COPY --from=build /app/dist ./dist
 
-# Copy server files
-COPY --from=build /app/server ./server
-
-# Copy package.json for server dependencies
-COPY --from=build /app/server/package.json ./server/
-
-# Install only server dependencies
-WORKDIR /app/server
-RUN npm install --production
-
-# Set working directory back to app
-WORKDIR /app
-
 # Create nginx configuration
 RUN mkdir -p /etc/nginx/http.d && \
     echo 'server {' > /etc/nginx/http.d/default.conf && \
@@ -90,39 +77,21 @@ RUN mkdir -p /etc/supervisor.d && \
     echo 'stdout_logfile=/dev/stdout' >> /etc/supervisor.d/supervisord.ini && \
     echo 'stdout_logfile_maxbytes=0' >> /etc/supervisor.d/supervisord.ini && \
     echo 'stderr_logfile=/dev/stderr' >> /etc/supervisor.d/supervisord.ini && \
-    echo 'stderr_logfile_maxbytes=0' >> /etc/supervisor.d/supervisord.ini && \
-    echo '' >> /etc/supervisor.d/supervisord.ini && \
-    echo '[program:backend]' >> /etc/supervisor.d/supervisord.ini && \
-    echo 'command=node /app/server/app.js' >> /etc/supervisor.d/supervisord.ini && \
-    echo 'directory=/app' >> /etc/supervisor.d/supervisord.ini && \
-    echo 'autostart=true' >> /etc/supervisor.d/supervisord.ini && \
-    echo 'autorestart=true' >> /etc/supervisor.d/supervisord.ini && \
-    echo 'stdout_logfile=/dev/stdout' >> /etc/supervisor.d/supervisord.ini && \
-    echo 'stdout_logfile_maxbytes=0' >> /etc/supervisor.d/supervisord.ini && \
-    echo 'stderr_logfile=/dev/stderr' >> /etc/supervisor.d/supervisord.ini && \
     echo 'stderr_logfile_maxbytes=0' >> /etc/supervisor.d/supervisord.ini
 
 # Create entrypoint script with environment validation
 RUN echo '#!/bin/sh' > /app/entrypoint.sh && \
     echo 'echo "🔍 Checking environment variables..."' >> /app/entrypoint.sh && \
-    echo 'if [ -z "$PAGBANK_TOKEN" ]; then' >> /app/entrypoint.sh && \
-    echo '  echo "❌ ERROR: PAGBANK_TOKEN not set!"' >> /app/entrypoint.sh && \
-    echo '  echo "Please configure environment variables in Easypanel"' >> /app/entrypoint.sh && \
-    echo '  exit 1' >> /app/entrypoint.sh && \
-    echo 'fi' >> /app/entrypoint.sh && \
     echo 'echo "✅ Environment variables validated"' >> /app/entrypoint.sh && \
-    echo 'echo "   PAGBANK_ENV: $PAGBANK_ENV"' >> /app/entrypoint.sh && \
-    echo 'echo "   PORT: ${PORT:-5000}"' >> /app/entrypoint.sh && \
     echo 'echo ""' >> /app/entrypoint.sh && \
     echo 'echo "🚀 Starting services..."' >> /app/entrypoint.sh && \
     echo 'echo "   📱 Frontend (Nginx): Port 80"' >> /app/entrypoint.sh && \
-    echo 'echo "   ⚙️  Backend (Node.js): Port 5000"' >> /app/entrypoint.sh && \
     echo 'echo ""' >> /app/entrypoint.sh && \
     echo 'exec /usr/bin/supervisord -c /etc/supervisor.d/supervisord.ini' >> /app/entrypoint.sh && \
     chmod +x /app/entrypoint.sh
 
-# Expose ports for frontend (80) and backend (5000)
-EXPOSE 80 5000
+# Expose port for frontend
+EXPOSE 80
 
 # Start both services with supervisor
 ENTRYPOINT ["/app/entrypoint.sh"]
