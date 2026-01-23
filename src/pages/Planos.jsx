@@ -17,14 +17,11 @@ function Precos() {
   const audienceFromUrl = searchParams.get('audience') || 'estudantes'
   const [selectedAudience, setSelectedAudience] = useState(audienceFromUrl)
   const [schoolPlanType, setSchoolPlanType] = useState('correcao') // 'correcao' ou 'hibrido'
-  const [showHybridFeatures, setShowHybridFeatures] = useState(false)
   const navigate = useNavigate()
   const plansRef = useScrollAnimation()
 
   // Estado para os planos
   const [plansData, setPlansData] = useState(null)
-  const [loadingPlans, setLoadingPlans] = useState(true)
-  const [plansError, setPlansError] = useState(null)
 
   // Atualizar quando a URL mudar
   useEffect(() => {
@@ -37,9 +34,6 @@ function Precos() {
   // Buscar planos da API
   useEffect(() => {
     const fetchPlans = async () => {
-      setLoadingPlans(true)
-      setPlansError(null)
-
       try {
         console.log('🔄 Buscando planos para audience:', selectedAudience)
         const data = await plansService.getPlans(selectedAudience)
@@ -47,9 +41,6 @@ function Precos() {
         console.log('✅ Planos carregados:', data.plans?.length || 0, 'planos')
       } catch (error) {
         console.error('❌ Erro ao buscar planos:', error)
-        setPlansError(error.message || 'Erro ao carregar planos')
-      } finally {
-        setLoadingPlans(false)
       }
     }
 
@@ -85,7 +76,6 @@ function Precos() {
   // Planos vêm da API agora
   const studentPlans = plansData?.plans?.filter(plan => plan.audience === 'estudantes') || []
   const teacherPlansSolo = plansData?.plans?.filter(plan => plan.audience === 'professores' && plan.id?.includes('solo')) || []
-  const teacherPlansHibrido = plansData?.plans?.filter(plan => plan.audience === 'professores' && plan.id?.includes('hibrido')) || []
   const schoolPlansSemestral = plansData?.plans?.filter(plan => plan.audience === 'escolas' && plan.planType === 'semestral') || []
   const schoolPlansAnual = plansData?.plans?.filter(plan => plan.audience === 'escolas' && plan.planType === 'anual') || []
 
@@ -350,7 +340,6 @@ function Precos() {
                   }`}
                   onClick={() => {
                     setSchoolPlanType('hibrido')
-                    setShowHybridFeatures(true)
                   }}
                 >
                   <h4 className="text-base font-bold text-slate-900 mb-1">{schoolModels[1].title}</h4>

@@ -21,8 +21,7 @@ import {
   getDocs,
   updateDoc,
   serverTimestamp,
-  orderBy,
-  startAfter
+  orderBy
 } from 'firebase/firestore'
 
 // Configuração do Firebase para ALUNOS (escrita360aluno)

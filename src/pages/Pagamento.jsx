@@ -7,7 +7,6 @@ import { Separator } from '@/components/ui/separator.jsx'
 import { CreditCard, Lock, Calendar, User, Shield, CheckCircle2, ArrowLeft, AlertCircle, Eye, EyeOff, QrCode, DollarSign } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { firebaseAuthService, firebaseSubscriptionService, firebasePaymentService } from '@/services/firebase.js'
 
 function Pagamento() {
   const navigate = useNavigate()
@@ -19,8 +18,11 @@ function Pagamento() {
     audience: sessionStorage.getItem('selectedAudience')
   }
   const { selectedPlan, isYearly, audience } = stateData
+  // eslint-disable-next-line no-unused-vars
   const [paymentSuccess, setPaymentSuccess] = useState(false)
+  // eslint-disable-next-line no-unused-vars
   const [paymentError, setPaymentError] = useState('')
+  // eslint-disable-next-line no-unused-vars
   const [transactionData, setTransactionData] = useState(null)
   const [formData, setFormData] = useState({
     cardNumber: '',
@@ -204,69 +206,6 @@ function Pagamento() {
     console.log('🔍 Erros encontrados:', newErrors)
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
-  }
-
-  const createUserAccount = async () => {
-    try {
-      console.log(`🔐 Iniciando criação de conta Firebase... (audience: ${audience || 'estudantes'})`)
-      
-      // Criar conta com email e senha no Firebase (projeto baseado no audience)
-      const userData = await firebaseAuthService.register(
-        formData.email,
-        formData.password,
-        {
-          name: formData.fullName || formData.cardName || formData.email.split('@')[0],
-          cpf: formData.cpf,
-          phone: formData.phone
-        },
-        audience || 'estudantes' // Passa o audience para selecionar o projeto Firebase correto
-      )
-      
-      console.log(`✅ Conta Firebase criada com sucesso no projeto: ${userData.projectId}`, userData)
-      return userData
-    } catch (error) {
-      console.error('❌ Erro ao criar conta Firebase:', error)
-      throw new Error(error.message || 'Não foi possível criar sua conta. Por favor, tente novamente.')
-    }
-  }
-
-  const createSubscriptionRecord = async (userId, paymentData) => {
-    try {
-      console.log(`📝 Criando registro de assinatura... (audience: ${audience || 'estudantes'})`)
-      
-      // Criar assinatura no Firestore (projeto baseado no audience)
-      const subscriptionResult = await firebaseSubscriptionService.createSubscription(
-        userId,
-        {
-          plan: selectedPlan,
-          isYearly: isYearly,
-          paymentData: {
-            name: formData.fullName || formData.cardName,
-            email: formData.email,
-            transactionId: paymentData?.transaction_id,
-            ...paymentData
-          }
-        },
-        audience || 'estudantes' // Passa o audience para selecionar o projeto Firebase correto
-      )
-      
-      // Registrar pagamento
-      await firebasePaymentService.recordPayment(userId, {
-        email: formData.email,
-        amount: total,
-        status: 'paid',
-        paymentMethod: 'card',
-        transactionId: paymentData?.transaction_id,
-        plan: selectedPlan.name,
-        isYearly: isYearly
-      }, audience || 'estudantes')
-      
-      console.log(`✅ Assinatura e pagamento registrados no projeto: ${subscriptionResult.projectId}`, subscriptionResult)
-      return subscriptionResult
-    } catch (error) {
-      console.error('❌ Erro ao criar assinatura:', error)
-      throw error
-    }
   }
 
   const handleGoBack = () => navigate('/precos')

@@ -21,7 +21,7 @@ import AdminUsers from './pages/admin/AdminUsers.jsx'
 import AdminSubscriptions from './pages/admin/AdminSubscriptions.jsx'
 import AdminPayments from './pages/admin/AdminPayments.jsx'
 import AdminPagBank from './pages/admin/AdminPagBank.jsx'
-import './App.css'
+import { Toaster } from './components/ui/sonner.jsx'
 
 function App() {
   const location = useLocation()
@@ -319,6 +319,7 @@ function App() {
         } />
       </Routes>
     </AnimatePresence>
+    <Toaster />
     </AuthProvider>
   )
 }

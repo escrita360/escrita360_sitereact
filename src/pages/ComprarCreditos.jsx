@@ -18,7 +18,7 @@ import {
 } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { formatPrice } from '@/lib/utils.js'
+import { formatPrice, formatPriceValue } from '@/lib/utils.js'
 import PagBankCheckout from '@/components/PagBankCheckout.jsx'
 import { firebaseCreditService, firebaseAuthService, firebaseSubscriptionService } from '@/services/firebase.js'
 
