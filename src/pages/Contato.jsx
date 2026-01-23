@@ -173,11 +173,7 @@ function Contato() {
 
                   <div className="flex items-start space-x-2">
                     <Checkbox id="aceito" checked={formData.aceito} onCheckedChange={(checked) => setFormData({...formData, aceito: checked})} required />
-                    <Label htmlFor="aceito" className="text-sm leading-relaxed">
-                      Concordo com a{' '}
-                      <a href="#" className="text-brand-primary hover:underline">Política de Privacidade</a> e os{' '}
-                      <a href="#" className="text-brand-primary hover:underline">Termos e Condições gerais de uso</a>
-                    </Label>
+                    <Label htmlFor="aceito" className="text-sm leading-relaxed">Concordo com os{' '}<a href="#" className="text-brand-primary hover:underline">Termos e Condições gerais de uso</a> e{' '}<a href="#" className="text-brand-primary hover:underline">Política de Privacidade</a></Label>
                   </div>
 
                   <Button type="submit" className="w-full bg-[#4A90E2] hover:bg-[#357ABD] text-white transition-all duration-300 hover:scale-105">
