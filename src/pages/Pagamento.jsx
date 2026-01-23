@@ -451,24 +451,17 @@ function Pagamento() {
       newErrors.email = 'Email válido é obrigatório'
     }
     
-    // Para PIX e Boleto, CPF é sempre obrigatório (mesmo se logado)
-    if (formData.paymentMethod === 'pix' || formData.paymentMethod === 'pay_later') {
-      const cpfToValidate = user ? (user.cpf || formData.cpf) : formData.cpf
-      if (!cpfToValidate || !validateCPF(cpfToValidate)) {
-        newErrors.cpf = 'CPF válido é obrigatório para pagamentos via PIX ou Boleto'
-      }
-      
-      const phoneToValidate = user ? (user.telefone || formData.phone) : formData.phone
-      if (!phoneToValidate || phoneToValidate.replace(/\D/g, '').length < 10) {
-        newErrors.phone = 'Telefone válido é obrigatório para pagamentos via PIX ou Boleto'
-      }
-    } else if (!user && (!formData.cpf || !validateCPF(formData.cpf))) {
-      newErrors.cpf = 'CPF inválido. Verifique os dígitos.'
+    // CPF e Telefone são SEMPRE obrigatórios para PagBank (qualquer método de pagamento)
+    const cpfToValidate = user ? (user.cpf || formData.cpf) : formData.cpf
+    if (!cpfToValidate || !validateCPF(cpfToValidate)) {
+      newErrors.cpf = 'CPF válido é obrigatório para pagamentos'
     }
     
-    if (!user && (!formData.phone || formData.phone.replace(/\D/g, '').length < 10)) {
-      newErrors.phone = 'Telefone válido é obrigatório'
+    const phoneToValidate = user ? (user.telefone || formData.phone) : formData.phone
+    if (!phoneToValidate || phoneToValidate.replace(/\D/g, '').length < 10) {
+      newErrors.phone = 'Telefone válido com DDD é obrigatório para pagamentos'
     }
+    
     if (!user && (!formData.password || formData.password.length < 6)) {
       newErrors.password = 'Senha deve ter no mínimo 6 caracteres'
     }
@@ -768,15 +761,15 @@ function Pagamento() {
               <Card className="shadow-lg">
                 <CardContent className="p-6">
                   <div className="space-y-6">
-                    {/* CPF e Telefone obrigatórios para PIX/Boleto mesmo se logado */}
-                    {user && (formData.paymentMethod === 'pix' || formData.paymentMethod === 'pay_later') && (
+                    {/* CPF e Telefone obrigatórios para TODOS os métodos de pagamento (PagBank exige) */}
+                    {user && (
                       <>
                         <div className="space-y-4">
                           <h3 className="text-lg font-semibold flex items-center gap-2">
                             <User className="w-5 h-5 text-brand-primary" />
                             Dados para Pagamento
                           </h3>
-                          <p className="text-sm text-slate-600">CPF e telefone são obrigatórios para pagamentos via PIX ou Boleto</p>
+                          <p className="text-sm text-slate-600">CPF e telefone são obrigatórios para processar o pagamento</p>
                           <div className="grid grid-cols-2 gap-4">
                             <div>
                               <Label htmlFor="cpf">CPF *</Label>
