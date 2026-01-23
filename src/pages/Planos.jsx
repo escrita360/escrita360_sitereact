@@ -10,6 +10,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { PageHero } from '@/components/PageHero.jsx'
 import { plansService } from '@/services/plans.js'
 import { formatPrice } from '@/lib/utils.js'
+// eslint-disable-next-line no-unused-vars
+import { motion, AnimatePresence } from 'framer-motion'
 
 function Precos() {
   // Force HMR update
@@ -331,11 +333,13 @@ function Precos() {
                   <p className="text-slate-500 text-sm cursor-pointer" onClick={(e) => { e.stopPropagation(); setExpandedInstitucional(!expandedInstitucional); }}>
                     {schoolModels[0].focus}
                   </p>
-                  {expandedInstitucional && (
-                    <p className="text-slate-500 text-sm">
-                      {schoolModels[0].description}
-                    </p>
-                  )}
+                  <AnimatePresence>
+                    {expandedInstitucional && (
+                      <motion.p initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }} className="text-slate-500 text-sm">
+                        {schoolModels[0].description}
+                      </motion.p>
+                    )}
+                  </AnimatePresence>
                 </div>
                 
                 <div 
@@ -352,11 +356,13 @@ function Precos() {
                   <p className="text-slate-500 text-sm cursor-pointer" onClick={(e) => { e.stopPropagation(); setExpandedHibrido(!expandedHibrido); }}>
                     {schoolModels[1].focus}
                   </p>
-                  {expandedHibrido && (
-                    <p className="text-slate-500 text-sm">
-                      {schoolModels[1].description}
-                    </p>
-                  )}
+                  <AnimatePresence>
+                    {expandedHibrido && (
+                      <motion.p initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }} className="text-slate-500 text-sm">
+                        {schoolModels[1].description}
+                      </motion.p>
+                    )}
+                  </AnimatePresence>
                 </div>
               </div>
             </div>
