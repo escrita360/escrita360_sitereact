@@ -32,6 +32,7 @@ const Perfil = () => {
     holderName: '',
     brand: ''
   })
+  const [expiryFormatted, setExpiryFormatted] = useState('')
   const [pixForm, setPixForm] = useState({
     key: '',
     keyType: 'cpf' // cpf, cnpj, email, phone, random
@@ -193,6 +194,7 @@ const Perfil = () => {
       holderName: '',
       brand: ''
     })
+    setExpiryFormatted('')
     setPixForm({
       key: '',
       keyType: 'cpf'
@@ -480,9 +482,10 @@ const Perfil = () => {
                                 <Input
                                   id="expiry"
                                   placeholder="MM/AA"
-                                  value={cardForm.expiryMonth && cardForm.expiryYear ? `${cardForm.expiryMonth}/${cardForm.expiryYear}` : ''}
+                                  value={expiryFormatted}
                                   onChange={(e) => {
                                     const formatted = formatExpiryDate(e.target.value)
+                                    setExpiryFormatted(formatted)
                                     const parts = formatted.split('/')
                                     setCardForm({
                                       ...cardForm, 
