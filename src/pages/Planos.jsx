@@ -448,15 +448,8 @@ function Precos() {
                       <div className="my-4">
                         <span className="text-3xl font-bold text-brand-primary">R$</span>
                         <span className="text-4xl font-bold text-brand-primary">290,00</span>
-                        <span className="text-sm text-slate-600">/mês</span>
                       </div>
                       <div className="mt-4 pt-4 border-t border-slate-100">
-                        <p className="text-sm text-slate-600 font-semibold">
-                          500 correções detalhadas com IA
-                        </p>
-                        <p className="text-xs text-slate-600 mt-1">
-                          Acesso mensal recorrente
-                        </p>
                       </div>
                     </CardHeader>
                     <CardContent className="flex flex-col">
