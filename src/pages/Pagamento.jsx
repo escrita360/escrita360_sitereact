@@ -4,6 +4,7 @@ import { Label } from '@/components/ui/label.jsx'
 import { Card, CardContent } from '@/components/ui/card.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
 import { Separator } from '@/components/ui/separator.jsx'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select.jsx'
 import { CreditCard, Lock, Calendar, User, Shield, CheckCircle2, ArrowLeft, AlertCircle, Eye, EyeOff, QrCode, DollarSign, Plus, Copy, Clock, FileText, RefreshCw } from 'lucide-react'
 import React, { useState, useEffect, useCallback } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
@@ -54,6 +55,8 @@ function Pagamento() {
   const [isLoading, setIsLoading] = useState(true)
   const [savedPaymentMethods, setSavedPaymentMethods] = useState([])
   const [selectedSavedCard, setSelectedSavedCard] = useState(null)
+  const [installmentOptions, setInstallmentOptions] = useState([])
+  const [selectedInstallments, setSelectedInstallments] = useState(1)
 
   useEffect(() => {
     // Aguardar um momento para o estado se estabilizar
@@ -70,6 +73,13 @@ function Pagamento() {
     
     return () => clearTimeout(timer)
   }, [selectedPlan, navigate, location])
+
+  // Carregar opções de parcelamento quando o plano estiver disponível
+  useEffect(() => {
+    if (selectedPlan) {
+      loadInstallmentOptions()
+    }
+  }, [selectedPlan, isYearly])
 
   // Limpar sessionStorage quando componente desmontar
   useEffect(() => {
@@ -114,6 +124,23 @@ function Pagamento() {
       }
     } catch (error) {
       console.error('Erro ao carregar métodos de pagamento:', error)
+    }
+  }
+
+  const loadInstallmentOptions = async () => {
+    if (!selectedPlan) return
+    
+    const price = isYearly ? selectedPlan.yearlyPrice : selectedPlan.monthlyPrice
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/payment/installments?amount=${price}&maxInstallments=12`)
+      const data = await response.json()
+      setInstallmentOptions(data.installments || [])
+    } catch (error) {
+      console.error('Erro ao carregar opções de parcelamento:', error)
+      // Fallback para opções padrão
+      setInstallmentOptions([
+        { quantity: 1, amount: price, total: price, interest_free: true }
+      ])
     }
   }
 
@@ -195,7 +222,7 @@ function Pagamento() {
           planData,
           customerData,
           cardData,
-          installments: isYearly ? 12 : 1
+          installments: selectedInstallments
         }
 
         // Para pagamentos únicos com cartão, usar a rota de orders
@@ -1127,6 +1154,25 @@ function Pagamento() {
                                 {errors.cvv && <p className="text-xs text-red-500 mt-1">{errors.cvv}</p>}
                               </div>
                             </div>
+
+                            {/* Seletor de Parcelas */}
+                            <div>
+                              <Label htmlFor="installments">Parcelas</Label>
+                              <Select value={selectedInstallments.toString()} onValueChange={(value) => setSelectedInstallments(parseInt(value))}>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Selecione as parcelas" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {installmentOptions.map((option) => (
+                                    <SelectItem key={option.quantity} value={option.quantity.toString()}>
+                                      {option.quantity}x de R$ {option.amount.toFixed(2)} 
+                                      {option.quantity > 1 && ` (Total: R$ ${option.total.toFixed(2)})`}
+                                      {!option.interest_free && ' com juros'}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
                           </div>
                         </div>
                       </>
@@ -1197,6 +1243,17 @@ function Pagamento() {
                       <div className="bg-green-50 p-3 rounded-lg">
                         <p className="text-sm text-green-800 font-medium">{installments}x de R$ {installmentValue}</p>
                         <p className="text-xs text-green-600 mt-1">Parcelas sem juros</p>
+                      </div>
+                    )}
+                    {formData.paymentMethod === 'card' && selectedInstallments > 1 && (
+                      <div className="bg-blue-50 p-3 rounded-lg">
+                        <p className="text-sm text-blue-800 font-medium">
+                          {selectedInstallments}x de R$ {installmentOptions.find(opt => opt.quantity === selectedInstallments)?.amount.toFixed(2) || '0.00'}
+                        </p>
+                        <p className="text-xs text-blue-600 mt-1">
+                          Total: R$ {installmentOptions.find(opt => opt.quantity === selectedInstallments)?.total.toFixed(2) || '0.00'}
+                          {installmentOptions.find(opt => opt.quantity === selectedInstallments)?.interest_free ? ' (sem juros)' : ' (com juros)'}
+                        </p>
                       </div>
                     )}
                   </div>
