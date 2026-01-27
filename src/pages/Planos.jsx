@@ -328,13 +328,7 @@ function Precos() {
                   onClick={() => setSchoolPlanType('correcao')}
                 >
                   <h4 className="text-base font-bold text-slate-900 mb-1">{schoolModels[0].title}</h4>
-                  <AnimatePresence>
-                    {expandedInstitucional && (
-                      <motion.p initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }} className="text-slate-500 text-sm">
-                        {schoolModels[0].description}
-                      </motion.p>
-                    )}
-                  </AnimatePresence>
+                  <p className="text-slate-500 text-sm">{schoolModels[0].description}</p>
                 </div>
                 
                 <div 
@@ -348,13 +342,7 @@ function Precos() {
                   }}
                 >
                   <h4 className="text-base font-bold text-slate-900 mb-1">{schoolModels[1].title}</h4>
-                  <AnimatePresence>
-                    {expandedHibrido && (
-                      <motion.p initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }} className="text-slate-500 text-sm">
-                        {schoolModels[1].description}
-                      </motion.p>
-                    )}
-                  </AnimatePresence>
+                  <p className="text-slate-500 text-sm">{schoolModels[1].description}</p>
                 </div>
               </div>
             </div>
