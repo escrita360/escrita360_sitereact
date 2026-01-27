@@ -16,7 +16,7 @@ function Pagamento() {
   const navigate = useNavigate()
   const location = useLocation()
   const { user } = useAuth()
-  
+
   // Tentar obter do location.state primeiro, depois do sessionStorage
   const stateData = location.state || {
     selectedPlan: sessionStorage.getItem('selectedPlan') ? JSON.parse(sessionStorage.getItem('selectedPlan')) : null,
@@ -51,7 +51,7 @@ function Pagamento() {
   const [errors, setErrors] = useState({})
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  
+
   const [isLoading, setIsLoading] = useState(true)
   const [savedPaymentMethods, setSavedPaymentMethods] = useState([])
   const [selectedSavedCard, setSelectedSavedCard] = useState(null)
@@ -70,7 +70,7 @@ function Pagamento() {
         setIsLoading(false)
       }
     }, 100)
-    
+
     return () => clearTimeout(timer)
   }, [selectedPlan, navigate, location])
 
@@ -99,7 +99,7 @@ function Pagamento() {
         cpf: user.cpf || prev.cpf,
         phone: user.telefone || prev.phone
       }))
-      
+
       // Carregar métodos de pagamento salvos
       loadSavedPaymentMethods()
     }
@@ -107,15 +107,15 @@ function Pagamento() {
 
   const loadSavedPaymentMethods = async () => {
     if (!user) return
-    
+
     try {
       const methods = await firebasePaymentService.getPaymentMethods(
-        user.uid, 
+        user.uid,
         user.tipoPlano === 'professor' ? 'professores' : 'estudantes'
       )
       const activeMethods = methods.filter(method => !method.deleted)
       setSavedPaymentMethods(activeMethods)
-      
+
       // Selecionar automaticamente o cartão padrão se existir
       const defaultCard = activeMethods.find(method => method.isDefault && method.type === 'card')
       if (defaultCard) {
@@ -127,30 +127,19 @@ function Pagamento() {
     }
   }
 
-  const loadInstallmentOptions = () => {
+  const loadInstallmentOptions = async () => {
     if (!selectedPlan) return
-    
-    const price = isYearly ? selectedPlan.yearlyPrice : selectedPlan.monthlyPrice
-    
-    let maxInstallments = 1
-    if (price <= 120) {
-      maxInstallments = 1
-    } else if (price <= 290) {
-      maxInstallments = 2
-    } else {
-      maxInstallments = 3
+
+    try {
+      const price = isYearly ? selectedPlan.yearlyPrice : selectedPlan.monthlyPrice
+      const options = await paymentService.getInstallmentOptions(price)
+      setInstallmentOptions(options)
+    } catch (error) {
+      console.error('Erro ao carregar opções de parcelamento:', error)
+      // Fallback: apenas 1x sem juros
+      const price = isYearly ? selectedPlan.yearlyPrice : selectedPlan.monthlyPrice
+      setInstallmentOptions([{ quantity: 1, amount: price, total: price, interest_free: true }])
     }
-    
-    const options = []
-    for (let i = 1; i <= maxInstallments; i++) {
-      options.push({
-        quantity: i,
-        amount: price / i,
-        total: price,
-        interest_free: true
-      })
-    }
-    setInstallmentOptions(options)
   }
 
   const handleSelectSavedCard = (cardMethod) => {
@@ -354,7 +343,7 @@ function Pagamento() {
     try {
       const status = await paymentService.checkOrderStatus(orderId)
       console.log('📊 Status do pagamento:', status)
-      
+
       // Verificar se pagamento foi confirmado
       const chargeStatus = status.charges?.[0]?.status
       if (chargeStatus === 'PAID' || chargeStatus === 'AUTHORIZED') {
@@ -374,7 +363,7 @@ function Pagamento() {
       const interval = setInterval(() => {
         checkPaymentStatus()
       }, 10000) // Verificar a cada 10 segundos
-      
+
       return () => clearInterval(interval)
     }
   }, [awaitingPayment, pixData, boletoData, checkPaymentStatus])
@@ -426,12 +415,12 @@ function Pagamento() {
     else if (field === 'cpf') formattedValue = formatCPF(value)
     else if (field === 'phone') formattedValue = formatPhone(value)
     else if (field === 'cardName') formattedValue = value.toUpperCase()
-    
+
     // Log quando método de pagamento mudar
     if (field === 'paymentMethod') {
       console.log('💳 Método de pagamento alterado para:', value)
     }
-    
+
     setFormData(prev => ({ ...prev, [field]: formattedValue }))
     if (errors[field]) setErrors(prev => ({ ...prev, [field]: '' }))
   }
@@ -439,12 +428,12 @@ function Pagamento() {
   // Validação de CPF usando algoritmo oficial (dígitos verificadores)
   const validateCPF = (cpf) => {
     const cleaned = cpf.replace(/\D/g, '')
-    
+
     if (cleaned.length !== 11) return false
-    
+
     // Verifica se todos os dígitos são iguais (ex: 111.111.111-11)
     if (/^(\d)\1{10}$/.test(cleaned)) return false
-    
+
     // Validação do primeiro dígito verificador
     let sum = 0
     for (let i = 0; i < 9; i++) {
@@ -453,7 +442,7 @@ function Pagamento() {
     let remainder = (sum * 10) % 11
     if (remainder === 10 || remainder === 11) remainder = 0
     if (remainder !== parseInt(cleaned.charAt(9))) return false
-    
+
     // Validação do segundo dígito verificador
     sum = 0
     for (let i = 0; i < 10; i++) {
@@ -462,7 +451,7 @@ function Pagamento() {
     remainder = (sum * 10) % 11
     if (remainder === 10 || remainder === 11) remainder = 0
     if (remainder !== parseInt(cleaned.charAt(10))) return false
-    
+
     return true
   }
 
@@ -476,9 +465,9 @@ function Pagamento() {
       cardNumber: formData.cardNumber,
       cardName: formData.cardName
     })
-    
+
     const newErrors = {}
-    
+
     // Validações gerais (sempre obrigatórias, exceto se usuário estiver logado)
     if (!user && (!formData.fullName || formData.fullName.trim().length < 2)) {
       newErrors.fullName = 'Nome completo é obrigatório'
@@ -486,25 +475,25 @@ function Pagamento() {
     if (!user && (!formData.email || !/\S+@\S+\.\S+/.test(formData.email))) {
       newErrors.email = 'Email válido é obrigatório'
     }
-    
+
     // CPF e Telefone são SEMPRE obrigatórios para PagBank (qualquer método de pagamento)
     const cpfToValidate = user ? (user.cpf || formData.cpf) : formData.cpf
     if (!cpfToValidate || !validateCPF(cpfToValidate)) {
       newErrors.cpf = 'CPF válido é obrigatório para pagamentos'
     }
-    
+
     const phoneToValidate = user ? (user.telefone || formData.phone) : formData.phone
     if (!phoneToValidate || phoneToValidate.replace(/\D/g, '').length < 10) {
       newErrors.phone = 'Telefone válido com DDD é obrigatório para pagamentos'
     }
-    
+
     if (!user && (!formData.password || formData.password.length < 6)) {
       newErrors.password = 'Senha deve ter no mínimo 6 caracteres'
     }
     if (!user && formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'As senhas não coincidem'
     }
-    
+
     // Validações específicas para cartão de crédito
     if (formData.paymentMethod === 'card') {
       // Se não há cartão salvo selecionado, validar campos do novo cartão
@@ -529,7 +518,7 @@ function Pagamento() {
         }
       }
     }
-    
+
     console.log('🔍 Erros encontrados:', newErrors)
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -538,13 +527,13 @@ function Pagamento() {
   const handleGoBack = () => navigate('/precos')
 
   if (!selectedPlan) return null
-  
+
   const basePrice = isYearly ? selectedPlan.yearlyPrice : selectedPlan.monthlyPrice
   const price = basePrice
   const total = price
   const installments = isYearly ? 12 : 1
   const installmentValue = isYearly ? (price / installments).toFixed(2) : price
-  
+
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="bg-white border-b sticky top-0 z-10 shadow-sm">
@@ -580,9 +569,9 @@ function Pagamento() {
                 {/* QR Code */}
                 <div className="flex justify-center">
                   {pixData.qrCode ? (
-                    <img 
-                      src={pixData.qrCode} 
-                      alt="QR Code PIX" 
+                    <img
+                      src={pixData.qrCode}
+                      alt="QR Code PIX"
                       className="w-64 h-64 border-4 border-slate-200 rounded-lg"
                     />
                   ) : (
@@ -597,9 +586,9 @@ function Pagamento() {
                   <div className="space-y-2">
                     <Label>Código PIX (Copia e Cola)</Label>
                     <div className="flex gap-2">
-                      <Input 
-                        value={pixData.qrCodeText} 
-                        readOnly 
+                      <Input
+                        value={pixData.qrCodeText}
+                        readOnly
                         className="font-mono text-xs"
                       />
                       <Button onClick={copyPixCode} variant="outline" className="flex-shrink-0">
@@ -645,9 +634,9 @@ function Pagamento() {
                     <p className="text-sm font-medium text-yellow-900">Aguardando pagamento...</p>
                     <p className="text-xs text-yellow-700">O pagamento será confirmado automaticamente</p>
                   </div>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     onClick={checkPaymentStatus}
                     disabled={checkingPayment}
                     className="ml-auto"
@@ -687,9 +676,9 @@ function Pagamento() {
                   <div className="space-y-2">
                     <Label>Código de Barras</Label>
                     <div className="flex gap-2">
-                      <Input 
-                        value={boletoData.formattedBarcode || boletoData.barcode} 
-                        readOnly 
+                      <Input
+                        value={boletoData.formattedBarcode || boletoData.barcode}
+                        readOnly
                         className="font-mono text-sm"
                       />
                       <Button onClick={copyBoletoCode} variant="outline" className="flex-shrink-0">
@@ -708,8 +697,8 @@ function Pagamento() {
 
                 {/* Botão para baixar PDF */}
                 {boletoData.pdfLink && (
-                  <Button 
-                    className="w-full" 
+                  <Button
+                    className="w-full"
                     onClick={() => window.open(boletoData.pdfLink, '_blank')}
                   >
                     <FileText className="w-4 h-4 mr-2" />
@@ -746,9 +735,9 @@ function Pagamento() {
                     <p className="text-sm font-medium text-yellow-900">Aguardando pagamento...</p>
                     <p className="text-xs text-yellow-700">O pagamento será confirmado em até 3 dias úteis após o pagamento</p>
                   </div>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     onClick={checkPaymentStatus}
                     disabled={checkingPayment}
                     className="ml-auto"
@@ -809,16 +798,16 @@ function Pagamento() {
                           <div className="grid grid-cols-2 gap-4">
                             <div>
                               <Label htmlFor="cpf">CPF *</Label>
-                              <Input id="cpf" placeholder="000.000.000-00" 
-                                value={formData.cpf || (user?.cpf || '')} 
+                              <Input id="cpf" placeholder="000.000.000-00"
+                                value={formData.cpf || (user?.cpf || '')}
                                 onChange={(e) => handleInputChange('cpf', e.target.value)}
                                 className={errors.cpf ? 'border-red-500' : ''} />
                               {errors.cpf && <p className="text-xs text-red-500 mt-1">{errors.cpf}</p>}
                             </div>
                             <div>
                               <Label htmlFor="phone">Telefone *</Label>
-                              <Input id="phone" placeholder="(00) 00000-0000" 
-                                value={formData.phone || (user?.telefone || '')} 
+                              <Input id="phone" placeholder="(00) 00000-0000"
+                                value={formData.phone || (user?.telefone || '')}
                                 onChange={(e) => handleInputChange('phone', e.target.value)}
                                 className={errors.phone ? 'border-red-500' : ''} />
                               {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone}</p>}
@@ -839,14 +828,14 @@ function Pagamento() {
                           <div className="grid grid-cols-2 gap-4">
                             <div className="col-span-2">
                               <Label htmlFor="fullName">Nome Completo *</Label>
-                              <Input id="fullName" placeholder="Seu nome completo" 
+                              <Input id="fullName" placeholder="Seu nome completo"
                                 value={formData.fullName} onChange={(e) => handleInputChange('fullName', e.target.value)}
                                 className={errors.fullName ? 'border-red-500' : ''} />
                               {errors.fullName && <p className="text-xs text-red-500 mt-1">{errors.fullName}</p>}
                             </div>
                             <div className="col-span-2">
                               <Label htmlFor="email">E-mail *</Label>
-                              <Input id="email" type="email" placeholder="seu@email.com" 
+                              <Input id="email" type="email" placeholder="seu@email.com"
                                 value={formData.email} onChange={(e) => handleInputChange('email', e.target.value)}
                                 className={errors.email ? 'border-red-500' : ''} />
                               {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
@@ -854,31 +843,31 @@ function Pagamento() {
                             </div>
                             <div>
                               <Label htmlFor="cpf">CPF *</Label>
-                              <Input id="cpf" placeholder="000.000.000-00" 
+                              <Input id="cpf" placeholder="000.000.000-00"
                                 value={formData.cpf} onChange={(e) => handleInputChange('cpf', e.target.value)}
                                 className={errors.cpf ? 'border-red-500' : ''} />
                               {errors.cpf && <p className="text-xs text-red-500 mt-1">{errors.cpf}</p>}
                             </div>
                             <div>
                               <Label htmlFor="phone">Telefone *</Label>
-                              <Input id="phone" placeholder="(00) 00000-0000" 
+                              <Input id="phone" placeholder="(00) 00000-0000"
                                 value={formData.phone} onChange={(e) => handleInputChange('phone', e.target.value)}
                                 className={errors.phone ? 'border-red-500' : ''} />
                               {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone}</p>}
                             </div>
                           </div>
-                          
+
                           <div className="grid grid-cols-2 gap-4 mt-4">
                             <div>
                               <Label htmlFor="password">Senha *</Label>
                               <div className="relative">
-                                <Input 
-                                  id="password" 
+                                <Input
+                                  id="password"
                                   type={showPassword ? 'text' : 'password'}
                                   placeholder="Mínimo 6 caracteres"
-                                  value={formData.password} 
+                                  value={formData.password}
                                   onChange={(e) => handleInputChange('password', e.target.value)}
-                                  className={errors.password ? 'border-red-500 pr-10' : 'pr-10'} 
+                                  className={errors.password ? 'border-red-500 pr-10' : 'pr-10'}
                                 />
                                 <button
                                   type="button"
@@ -893,13 +882,13 @@ function Pagamento() {
                             <div>
                               <Label htmlFor="confirmPassword">Confirmar Senha *</Label>
                               <div className="relative">
-                                <Input 
-                                  id="confirmPassword" 
+                                <Input
+                                  id="confirmPassword"
                                   type={showConfirmPassword ? 'text' : 'password'}
                                   placeholder="Repita a senha"
-                                  value={formData.confirmPassword} 
+                                  value={formData.confirmPassword}
                                   onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
-                                  className={errors.confirmPassword ? 'border-red-500 pr-10' : 'pr-10'} 
+                                  className={errors.confirmPassword ? 'border-red-500 pr-10' : 'pr-10'}
                                 />
                                 <button
                                   type="button"
@@ -930,18 +919,17 @@ function Pagamento() {
                             Cartões Salvos
                           </h3>
                           <p className="text-sm text-slate-600">Selecione um cartão salvo ou use um novo</p>
-                          
+
                           <div className="space-y-3">
                             {savedPaymentMethods
                               .filter(method => method.type === 'card')
                               .map((method) => (
-                                <div 
+                                <div
                                   key={method.id}
-                                  className={`relative cursor-pointer border-2 rounded-lg p-4 transition-all hover:border-brand-primary ${
-                                    selectedSavedCard?.id === method.id 
-                                      ? 'border-brand-primary bg-brand-primary/5' 
+                                  className={`relative cursor-pointer border-2 rounded-lg p-4 transition-all hover:border-brand-primary ${selectedSavedCard?.id === method.id
+                                      ? 'border-brand-primary bg-brand-primary/5'
                                       : 'border-gray-200'
-                                  }`}
+                                    }`}
                                   onClick={() => handleSelectSavedCard(method)}
                                 >
                                   <div className="flex items-center justify-between">
@@ -966,13 +954,12 @@ function Pagamento() {
                                   </div>
                                 </div>
                               ))}
-                            
-                            <div 
-                              className={`relative cursor-pointer border-2 rounded-lg p-4 transition-all hover:border-brand-primary ${
-                                !selectedSavedCard && formData.paymentMethod === 'card'
-                                  ? 'border-brand-primary bg-brand-primary/5' 
+
+                            <div
+                              className={`relative cursor-pointer border-2 rounded-lg p-4 transition-all hover:border-brand-primary ${!selectedSavedCard && formData.paymentMethod === 'card'
+                                  ? 'border-brand-primary bg-brand-primary/5'
                                   : 'border-gray-200 border-dashed'
-                              }`}
+                                }`}
                               onClick={handleUseNewCard}
                             >
                               <div className="flex items-center gap-3">
@@ -994,15 +981,14 @@ function Pagamento() {
 
                     <div className="space-y-4">
                       <h3 className="text-lg font-semibold">SELECIONE A FORMA DE PAGAMENTO</h3>
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {/* Cartão de Crédito */}
-                        <div 
-                          className={`relative cursor-pointer border-2 rounded-lg p-4 transition-all hover:border-brand-primary ${
-                            formData.paymentMethod === 'card' 
-                              ? 'border-brand-primary bg-brand-primary/5' 
+                        <div
+                          className={`relative cursor-pointer border-2 rounded-lg p-4 transition-all hover:border-brand-primary ${formData.paymentMethod === 'card'
+                              ? 'border-brand-primary bg-brand-primary/5'
                               : 'border-gray-200'
-                          }`}
+                            }`}
                           onClick={() => handleInputChange('paymentMethod', 'card')}
                         >
                           <div className="flex flex-col items-center text-center space-y-3">
@@ -1017,21 +1003,20 @@ function Pagamento() {
                         </div>
 
                         {/* PIX */}
-                        <div 
-                          className={`relative cursor-pointer border-2 rounded-lg p-4 transition-all hover:border-brand-primary ${
-                            formData.paymentMethod === 'pix' 
-                              ? 'border-brand-primary bg-brand-primary/5' 
+                        <div
+                          className={`relative cursor-pointer border-2 rounded-lg p-4 transition-all hover:border-brand-primary ${formData.paymentMethod === 'pix'
+                              ? 'border-brand-primary bg-brand-primary/5'
                               : 'border-gray-200'
-                          }`}
+                            }`}
                           onClick={() => handleInputChange('paymentMethod', 'pix')}
                         >
                           <div className="flex flex-col items-center text-center space-y-3">
                             <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center">
                               <svg className="w-8 h-8 text-teal-600" viewBox="0 0 32 32" fill="currentColor">
-                                <path d="M11.4 4h9.2A7.4 7.4 0 0 1 28 11.4v9.2a7.4 7.4 0 0 1-7.4 7.4h-9.2A7.4 7.4 0 0 1 4 20.6v-9.2A7.4 7.4 0 0 1 11.4 4zm0 1.6A5.8 5.8 0 0 0 5.6 11.4v9.2a5.8 5.8 0 0 0 5.8 5.8h9.2a5.8 5.8 0 0 0 5.8-5.8v-9.2a5.8 5.8 0 0 0-5.8-5.8h-9.2z"/>
-                                <path d="M21.9 11.8c0 .9-.7 1.6-1.6 1.6s-1.6-.7-1.6-1.6.7-1.6 1.6-1.6 1.6.7 1.6 1.6zM13.3 11.8c0 .9-.7 1.6-1.6 1.6s-1.6-.7-1.6-1.6.7-1.6 1.6-1.6 1.6.7 1.6 1.6z"/>
-                                <path d="M10.1 16h11.8c.4 0 .8.4.8.8s-.4.8-.8.8H10.1c-.4 0-.8-.4-.8-.8s.4-.8.8-.8z"/>
-                                <path d="M13.3 20.2c0 .9-.7 1.6-1.6 1.6s-1.6-.7-1.6-1.6.7-1.6 1.6-1.6 1.6.7 1.6 1.6zM21.9 20.2c0 .9-.7 1.6-1.6 1.6s-1.6-.7-1.6-1.6.7-1.6 1.6-1.6 1.6.7 1.6 1.6z"/>
+                                <path d="M11.4 4h9.2A7.4 7.4 0 0 1 28 11.4v9.2a7.4 7.4 0 0 1-7.4 7.4h-9.2A7.4 7.4 0 0 1 4 20.6v-9.2A7.4 7.4 0 0 1 11.4 4zm0 1.6A5.8 5.8 0 0 0 5.6 11.4v9.2a5.8 5.8 0 0 0 5.8 5.8h9.2a5.8 5.8 0 0 0 5.8-5.8v-9.2a5.8 5.8 0 0 0-5.8-5.8h-9.2z" />
+                                <path d="M21.9 11.8c0 .9-.7 1.6-1.6 1.6s-1.6-.7-1.6-1.6.7-1.6 1.6-1.6 1.6.7 1.6 1.6zM13.3 11.8c0 .9-.7 1.6-1.6 1.6s-1.6-.7-1.6-1.6.7-1.6 1.6-1.6 1.6.7 1.6 1.6z" />
+                                <path d="M10.1 16h11.8c.4 0 .8.4.8.8s-.4.8-.8.8H10.1c-.4 0-.8-.4-.8-.8s.4-.8.8-.8z" />
+                                <path d="M13.3 20.2c0 .9-.7 1.6-1.6 1.6s-1.6-.7-1.6-1.6.7-1.6 1.6-1.6 1.6.7 1.6 1.6zM21.9 20.2c0 .9-.7 1.6-1.6 1.6s-1.6-.7-1.6-1.6.7-1.6 1.6-1.6 1.6.7 1.6 1.6z" />
                               </svg>
                             </div>
                             <div>
@@ -1041,12 +1026,11 @@ function Pagamento() {
                         </div>
 
                         {/* Boleto */}
-                        <div 
-                          className={`relative cursor-pointer border-2 rounded-lg p-4 transition-all hover:border-brand-primary ${
-                            formData.paymentMethod === 'pay_later' 
-                              ? 'border-brand-primary bg-brand-primary/5' 
+                        <div
+                          className={`relative cursor-pointer border-2 rounded-lg p-4 transition-all hover:border-brand-primary ${formData.paymentMethod === 'pay_later'
+                              ? 'border-brand-primary bg-brand-primary/5'
                               : 'border-gray-200'
-                          }`}
+                            }`}
                           onClick={() => handleInputChange('paymentMethod', 'pay_later')}
                         >
                           <div className="flex flex-col items-center text-center space-y-3">
@@ -1115,7 +1099,7 @@ function Pagamento() {
                           ) : (
                             <p className="text-sm text-slate-600">Preencha os dados do cartão de crédito para o pagamento</p>
                           )}
-                          
+
                           <div className="space-y-4">
                             {!selectedSavedCard && (
                               <>
@@ -1131,7 +1115,7 @@ function Pagamento() {
                                 </div>
                                 <div>
                                   <Label htmlFor="cardName">Nome no Cartão</Label>
-                                  <Input id="cardName" placeholder="NOME COMO ESTÁ NO CARTÃO" 
+                                  <Input id="cardName" placeholder="NOME COMO ESTÁ NO CARTÃO"
                                     value={formData.cardName} onChange={(e) => handleInputChange('cardName', e.target.value)}
                                     className={errors.cardName ? 'border-red-500' : ''} />
                                   {errors.cardName && <p className="text-xs text-red-500 mt-1">{errors.cardName}</p>}
@@ -1160,7 +1144,7 @@ function Pagamento() {
                                 </div>
                               </>
                             )}
-                            
+
                             {selectedSavedCard && (
                               <div className="grid grid-cols-2 gap-4">
                                 <div className="max-w-xs">
@@ -1182,7 +1166,7 @@ function Pagamento() {
                                     <SelectContent className="bg-white">
                                       {installmentOptions.map((option) => (
                                         <SelectItem key={option.quantity} value={option.quantity.toString()}>
-                                          {option.quantity}x de R$ {option.amount.toFixed(2)} 
+                                          {option.quantity}x de R$ {option.amount.toFixed(2)}
                                           {option.quantity > 1 && ` (Total: R$ ${option.total.toFixed(2)})`}
                                           {!option.interest_free && ' com juros'}
                                         </SelectItem>
@@ -1204,7 +1188,7 @@ function Pagamento() {
                                   <SelectContent className="bg-white">
                                     {installmentOptions.map((option) => (
                                       <SelectItem key={option.quantity} value={option.quantity.toString()}>
-                                        {option.quantity}x de R$ {option.amount.toFixed(2)} 
+                                        {option.quantity}x de R$ {option.amount.toFixed(2)}
                                         {option.quantity > 1 && ` (Total: R$ ${option.total.toFixed(2)})`}
                                         {!option.interest_free && ' com juros'}
                                       </SelectItem>
@@ -1221,8 +1205,8 @@ function Pagamento() {
                     <Separator />
 
                     <div className="space-y-4">
-                      <Button 
-                        size="lg" 
+                      <Button
+                        size="lg"
                         className="w-full bg-brand-primary hover:bg-brand-secondary text-white py-4 text-lg font-semibold"
                         onClick={handlePaymentSubmit}
                         disabled={isLoading}
@@ -1383,8 +1367,8 @@ function Pagamento() {
                     </p>
                   </div>
                   <p className="text-sm text-green-600 mt-3">
-                    {audience === 'professores' 
-                      ? 'Faça login no app Escrita360 Professor com essas credenciais!' 
+                    {audience === 'professores'
+                      ? 'Faça login no app Escrita360 Professor com essas credenciais!'
                       : 'Faça login no app Escrita360 Aluno com essas credenciais!'}
                   </p>
                 </div>

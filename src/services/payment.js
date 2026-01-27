@@ -4,6 +4,16 @@ export const paymentService = {
   // ============ MÉTODOS PAGBANK ============
 
   /**
+   * Consulta opções de parcelamento via backend
+   * @param {number} amount - Valor do pagamento
+   * @returns {Promise<Array>} - Opções de parcelamento
+   */
+  async getInstallmentOptions(amount) {
+    const response = await api.get(`/payment/installments?amount=${amount}`)
+    return response.data.installments
+  },
+
+  /**
    * Cria checkout via PagBank (através do backend)
    * @param {Object} planData - Dados do plano selecionado
    * @param {Object} customerData - Dados do cliente
