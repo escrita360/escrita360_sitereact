@@ -127,21 +127,30 @@ function Pagamento() {
     }
   }
 
-  const loadInstallmentOptions = async () => {
+  const loadInstallmentOptions = () => {
     if (!selectedPlan) return
     
     const price = isYearly ? selectedPlan.yearlyPrice : selectedPlan.monthlyPrice
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/payment/installments?amount=${price}&maxInstallments=12`)
-      const data = await response.json()
-      setInstallmentOptions(data.installments || [])
-    } catch (error) {
-      console.error('Erro ao carregar opções de parcelamento:', error)
-      // Fallback para opções padrão
-      setInstallmentOptions([
-        { quantity: 1, amount: price, total: price, interest_free: true }
-      ])
+    
+    let maxInstallments = 1
+    if (price <= 120) {
+      maxInstallments = 1
+    } else if (price <= 290) {
+      maxInstallments = 2
+    } else {
+      maxInstallments = 3
     }
+    
+    const options = []
+    for (let i = 1; i <= maxInstallments; i++) {
+      options.push({
+        quantity: i,
+        amount: price / i,
+        total: price,
+        interest_free: true
+      })
+    }
+    setInstallmentOptions(options)
   }
 
   const handleSelectSavedCard = (cardMethod) => {
