@@ -113,7 +113,8 @@ function Pagamento() {
         user.uid,
         user.tipoPlano === 'professor' ? 'professores' : 'estudantes'
       )
-      const activeMethods = methods.filter(method => !method.deleted)
+      // Filtrar apenas métodos que tenham token (cartões legados sem token não funcionam)
+      const activeMethods = methods.filter(method => !method.deleted && method.token)
       setSavedPaymentMethods(activeMethods)
 
       // Selecionar automaticamente o cartão padrão se existir
