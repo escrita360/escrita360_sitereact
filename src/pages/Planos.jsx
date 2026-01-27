@@ -489,15 +489,15 @@ function Precos() {
               )}
             </div>
 
-            {/* Quadro de Funções Híbrido - Aluno + Professor */}
+            {/* Quadro de Funções Híbrido - Professor + Aluno */}
             {schoolPlanType === 'hibrido' && selectedAudience === 'escolas' && (
               <div className="mt-12 mb-8">
                 <div className="flex items-center justify-center gap-8 max-w-6xl mx-auto">
-                  {/* Funções do Aluno */}
+                  {/* Funções do Professor */}
                   <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 flex-1 max-w-md">
-                    <h4 className="text-lg font-bold text-slate-900 mb-4 text-center">Funções do Aluno</h4>
+                    <h4 className="text-lg font-bold text-slate-900 mb-4 text-center">Funções do Professor</h4>
                     <div className="space-y-3">
-                      {studentFeatures.map((feature, index) => (
+                      {teacherFeatures.map((feature, index) => (
                         <div key={index} className="flex items-start gap-3">
                           <div className="w-4 h-4 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-0.5">
                             <Check className="w-2.5 h-2.5 text-green-600" />
@@ -515,11 +515,11 @@ function Precos() {
                     </div>
                   </div>
 
-                  {/* Funções do Professor */}
+                  {/* Funções do Aluno */}
                   <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 flex-1 max-w-md">
-                    <h4 className="text-lg font-bold text-slate-900 mb-4 text-center">Funções do Professor</h4>
+                    <h4 className="text-lg font-bold text-slate-900 mb-4 text-center">Funções do Aluno</h4>
                     <div className="space-y-3">
-                      {teacherFeatures.map((feature, index) => (
+                      {studentFeatures.map((feature, index) => (
                         <div key={index} className="flex items-start gap-3">
                           <div className="w-4 h-4 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-0.5">
                             <Check className="w-2.5 h-2.5 text-green-600" />
@@ -538,7 +538,7 @@ function Precos() {
               <div className="mt-12 mb-8">
                 <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 md:p-8 max-w-md mx-auto">
                   <div className="space-y-3 md:space-y-4">
-                    {platformFeatures.map((feature, index) => (
+                    {teacherFeatures.map((feature, index) => (
                       <div key={index} className="flex items-start gap-3">
                         <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-0.5">
                           <Check className="w-3 h-3 text-green-600" />
