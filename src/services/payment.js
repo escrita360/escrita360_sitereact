@@ -452,18 +452,58 @@ export const paymentService = {
     return 'unknown'
   },
 
+  // ============ SPLIT PAYMENT METHODS ============
+
   /**
-   * Consulta status de um pedido
-   * @param {string} orderId - ID do pedido
-   * @returns {Promise<Object>} - Status do pedido
+   * Cria sessão para checkout transparente com split
+   * @returns {Promise<Object>} - Dados da sessão
    */
-  async checkOrderStatus(orderId) {
-    try {
-      const response = await api.get(`/payment/pagbank/order/${orderId}`)
-      return response.data
-    } catch (error) {
-      console.error('Erro ao consultar status do pedido:', error)
-      throw error
-    }
+  async createSplitSession() {
+    const response = await api.post('/payment/pagbank/split/session')
+    return response.data
   },
+
+  /**
+   * Cria split de pagamento com boleto
+   * @param {Object} splitData - Dados do split
+   * @returns {Promise<Object>} - Resultado do split
+   */
+  async createSplitBoleto(splitData) {
+    const response = await api.post('/payment/pagbank/split/boleto', splitData)
+    return response.data
+  },
+
+  /**
+   * Cria split de pagamento com débito online
+   * @param {Object} splitData - Dados do split
+   * @returns {Promise<Object>} - Resultado do split
+   */
+  async createSplitDebit(splitData) {
+    const response = await api.post('/payment/pagbank/split/debit', splitData)
+    return response.data
+  },
+
+  /**
+   * Cria split de pagamento com cartão de crédito
+   * @param {Object} splitData - Dados do split
+   * @returns {Promise<Object>} - Resultado do split
+   */
+  async createSplitCreditCard(splitData) {
+    const response = await api.post('/payment/pagbank/split/credit-card', splitData)
+    return response.data
+  },
+
+  /**
+   * Estorna uma transação de split
+   * @param {string} transactionCode - Código da transação
+   * @param {number} refundValue - Valor do estorno (opcional)
+   * @returns {Promise<Object>} - Resultado do estorno
+   */
+  async refundSplitTransaction(transactionCode, refundValue = null) {
+    const response = await api.post('/payment/pagbank/split/refund', {
+      transactionCode,
+      refundValue
+    })
+    return response.data
+  }
 }
