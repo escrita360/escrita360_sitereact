@@ -1179,7 +1179,7 @@ function Pagamento() {
                                     <SelectTrigger>
                                       <SelectValue placeholder="Selecione as parcelas" />
                                     </SelectTrigger>
-                                    <SelectContent>
+                                    <SelectContent className="bg-white">
                                       {installmentOptions.map((option) => (
                                         <SelectItem key={option.quantity} value={option.quantity.toString()}>
                                           {option.quantity}x de R$ {option.amount.toFixed(2)} 
@@ -1201,7 +1201,7 @@ function Pagamento() {
                                   <SelectTrigger>
                                     <SelectValue placeholder="Selecione as parcelas" />
                                   </SelectTrigger>
-                                  <SelectContent>
+                                  <SelectContent className="bg-white">
                                     {installmentOptions.map((option) => (
                                       <SelectItem key={option.quantity} value={option.quantity.toString()}>
                                         {option.quantity}x de R$ {option.amount.toFixed(2)} 
