@@ -927,8 +927,8 @@ function Pagamento() {
                                 <div
                                   key={method.id}
                                   className={`relative cursor-pointer border-2 rounded-lg p-4 transition-all hover:border-brand-primary ${selectedSavedCard?.id === method.id
-                                      ? 'border-brand-primary bg-brand-primary/5'
-                                      : 'border-gray-200'
+                                    ? 'border-brand-primary bg-brand-primary/5'
+                                    : 'border-gray-200'
                                     }`}
                                   onClick={() => handleSelectSavedCard(method)}
                                 >
@@ -957,8 +957,8 @@ function Pagamento() {
 
                             <div
                               className={`relative cursor-pointer border-2 rounded-lg p-4 transition-all hover:border-brand-primary ${!selectedSavedCard && formData.paymentMethod === 'card'
-                                  ? 'border-brand-primary bg-brand-primary/5'
-                                  : 'border-gray-200 border-dashed'
+                                ? 'border-brand-primary bg-brand-primary/5'
+                                : 'border-gray-200 border-dashed'
                                 }`}
                               onClick={handleUseNewCard}
                             >
@@ -986,8 +986,8 @@ function Pagamento() {
                         {/* Cartão de Crédito */}
                         <div
                           className={`relative cursor-pointer border-2 rounded-lg p-4 transition-all hover:border-brand-primary ${formData.paymentMethod === 'card'
-                              ? 'border-brand-primary bg-brand-primary/5'
-                              : 'border-gray-200'
+                            ? 'border-brand-primary bg-brand-primary/5'
+                            : 'border-gray-200'
                             }`}
                           onClick={() => handleInputChange('paymentMethod', 'card')}
                         >
@@ -1005,8 +1005,8 @@ function Pagamento() {
                         {/* PIX */}
                         <div
                           className={`relative cursor-pointer border-2 rounded-lg p-4 transition-all hover:border-brand-primary ${formData.paymentMethod === 'pix'
-                              ? 'border-brand-primary bg-brand-primary/5'
-                              : 'border-gray-200'
+                            ? 'border-brand-primary bg-brand-primary/5'
+                            : 'border-gray-200'
                             }`}
                           onClick={() => handleInputChange('paymentMethod', 'pix')}
                         >
@@ -1028,8 +1028,8 @@ function Pagamento() {
                         {/* Boleto */}
                         <div
                           className={`relative cursor-pointer border-2 rounded-lg p-4 transition-all hover:border-brand-primary ${formData.paymentMethod === 'pay_later'
-                              ? 'border-brand-primary bg-brand-primary/5'
-                              : 'border-gray-200'
+                            ? 'border-brand-primary bg-brand-primary/5'
+                            : 'border-gray-200'
                             }`}
                           onClick={() => handleInputChange('paymentMethod', 'pay_later')}
                         >
@@ -1168,7 +1168,7 @@ function Pagamento() {
                                         <SelectItem key={option.quantity} value={option.quantity.toString()}>
                                           {option.quantity}x de R$ {option.amount.toFixed(2)}
                                           {option.quantity > 1 && ` (Total: R$ ${option.total.toFixed(2)})`}
-                                          {!option.interest_free && ' com juros'}
+                                          {option.interest_free ? ' sem juros' : (option.fees?.buyer_interest ? ` (+R$ ${option.fees.buyer_interest.toFixed(2)} juros)` : ' com juros')}
                                         </SelectItem>
                                       ))}
                                     </SelectContent>
@@ -1190,7 +1190,7 @@ function Pagamento() {
                                       <SelectItem key={option.quantity} value={option.quantity.toString()}>
                                         {option.quantity}x de R$ {option.amount.toFixed(2)}
                                         {option.quantity > 1 && ` (Total: R$ ${option.total.toFixed(2)})`}
-                                        {!option.interest_free && ' com juros'}
+                                        {option.interest_free ? ' sem juros' : (option.fees?.buyer_interest ? ` (+R$ ${option.fees.buyer_interest.toFixed(2)} juros)` : ' com juros')}
                                       </SelectItem>
                                     ))}
                                   </SelectContent>
@@ -1276,7 +1276,12 @@ function Pagamento() {
                         </p>
                         <p className="text-xs text-blue-600 mt-1">
                           Total: R$ {installmentOptions.find(opt => opt.quantity === selectedInstallments)?.total.toFixed(2) || '0.00'}
-                          {installmentOptions.find(opt => opt.quantity === selectedInstallments)?.interest_free ? ' (sem juros)' : ' (com juros)'}
+                          {(() => {
+                            const selectedOption = installmentOptions.find(opt => opt.quantity === selectedInstallments);
+                            if (selectedOption?.interest_free) return ' (sem juros)';
+                            if (selectedOption?.fees?.buyer_interest) return ` (+R$ ${selectedOption.fees.buyer_interest.toFixed(2)} juros)`;
+                            return ' (com juros)';
+                          })()}
                         </p>
                       </div>
                     )}
