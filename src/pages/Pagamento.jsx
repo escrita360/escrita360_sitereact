@@ -1138,41 +1138,72 @@ function Pagamento() {
                                     </div>
                                     {errors.expiryDate && <p className="text-xs text-red-500 mt-1">{errors.expiryDate}</p>}
                                   </div>
+                                  <div>
+                                    <Label htmlFor="cvv">CVV</Label>
+                                    <div className="relative">
+                                      <Input id="cvv" type="password" placeholder="000" maxLength={4}
+                                        value={formData.cvv} onChange={(e) => handleInputChange('cvv', e.target.value)}
+                                        className={`pl-10 ${errors.cvv ? 'border-red-500' : ''}`} />
+                                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                                    </div>
+                                    {errors.cvv && <p className="text-xs text-red-500 mt-1">{errors.cvv}</p>}
+                                  </div>
                                 </div>
                               </>
                             )}
                             
-                            <div className={selectedSavedCard ? "w-full max-w-xs" : "grid grid-cols-2 gap-4"}>
-                              <div className={selectedSavedCard ? "" : "col-start-2"}>
-                                <Label htmlFor="cvv">CVV</Label>
-                                <div className="relative">
-                                  <Input id="cvv" type="password" placeholder="000" maxLength={4}
-                                    value={formData.cvv} onChange={(e) => handleInputChange('cvv', e.target.value)}
-                                    className={`pl-10 ${errors.cvv ? 'border-red-500' : ''}`} />
-                                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                            {selectedSavedCard && (
+                              <div className="grid grid-cols-2 gap-4">
+                                <div className="max-w-xs">
+                                  <Label htmlFor="cvv">CVV</Label>
+                                  <div className="relative">
+                                    <Input id="cvv" type="password" placeholder="000" maxLength={4}
+                                      value={formData.cvv} onChange={(e) => handleInputChange('cvv', e.target.value)}
+                                      className={`pl-10 ${errors.cvv ? 'border-red-500' : ''}`} />
+                                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                                  </div>
+                                  {errors.cvv && <p className="text-xs text-red-500 mt-1">{errors.cvv}</p>}
                                 </div>
-                                {errors.cvv && <p className="text-xs text-red-500 mt-1">{errors.cvv}</p>}
+                                <div>
+                                  <Label htmlFor="installments">Parcelas</Label>
+                                  <Select value={selectedInstallments.toString()} onValueChange={(value) => setSelectedInstallments(parseInt(value))}>
+                                    <SelectTrigger>
+                                      <SelectValue placeholder="Selecione as parcelas" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {installmentOptions.map((option) => (
+                                        <SelectItem key={option.quantity} value={option.quantity.toString()}>
+                                          {option.quantity}x de R$ {option.amount.toFixed(2)} 
+                                          {option.quantity > 1 && ` (Total: R$ ${option.total.toFixed(2)})`}
+                                          {!option.interest_free && ' com juros'}
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                </div>
                               </div>
-                            </div>
+                            )}
 
                             {/* Seletor de Parcelas */}
-                            <div>
-                              <Label htmlFor="installments">Parcelas</Label>
-                              <Select value={selectedInstallments.toString()} onValueChange={(value) => setSelectedInstallments(parseInt(value))}>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Selecione as parcelas" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  {installmentOptions.map((option) => (
-                                    <SelectItem key={option.quantity} value={option.quantity.toString()}>
-                                      {option.quantity}x de R$ {option.amount.toFixed(2)} 
-                                      {option.quantity > 1 && ` (Total: R$ ${option.total.toFixed(2)})`}
-                                      {!option.interest_free && ' com juros'}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            </div>
+                            {!selectedSavedCard && (
+                              <div>
+                                <Label htmlFor="installments">Parcelas</Label>
+                                <Select value={selectedInstallments.toString()} onValueChange={(value) => setSelectedInstallments(parseInt(value))}>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Selecione as parcelas" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {installmentOptions.map((option) => (
+                                      <SelectItem key={option.quantity} value={option.quantity.toString()}>
+                                        {option.quantity}x de R$ {option.amount.toFixed(2)} 
+                                        {option.quantity > 1 && ` (Total: R$ ${option.total.toFixed(2)})`}
+                                        {!option.interest_free && ' com juros'}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                            )}
                           </div>
                         </div>
                       </>
