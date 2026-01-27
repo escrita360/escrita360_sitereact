@@ -149,14 +149,12 @@ function Precos() {
   const schoolModels = [
     {
       title: 'Modelo Institucional',
-      focus: 'Foco: Facilitar o trabalho docente e otimizar a correção de textos produzidos em sala de aula e provas de redação.',
-      description: 'A escola adquire planos e pacotes para otimizar as correções das redações produzidas pelos estudantes em sala de aula.',
+      description: 'A escola adquire planos e pacotes para otimizar a correção dos textos produzidos em sala de aula e provas de redação.',
       number: 1
     },
     {
       title: 'Modelo híbrido 360',
-      focus: 'Foco: Ampliar o uso contínuo da plataforma por professores e estudantes, otimizando o processo de desenvolvimento da produção e avaliação escrita.',
-      description: 'O modelo híbrido combina a contratação de planos individuais, adquiridos pelas famílias ou com custos compartilhados entre a escola e os responsáveis, conforme a política de cada instituição, com a aquisição, pela escola, de planos ou pacotes de créditos destinados aos professores. Esses créditos de IA podem ser utilizados tanto pelos estudantes, para fins de autoavaliação e geração de relatórios encaminhados aos docentes, quanto pelos professores, especialmente na correção de provas de redação.',
+      description: 'Combina aquisição de planos para estudantes, adquiridos pelas famílias (ou com custos compartilhados com a escola, conforme a política de cada instituição) e a contratação de planos e pacotes de créditos pela escola.',
       number: 2,
       highlighted: true
     }
@@ -330,9 +328,6 @@ function Precos() {
                   onClick={() => setSchoolPlanType('correcao')}
                 >
                   <h4 className="text-base font-bold text-slate-900 mb-1">{schoolModels[0].title}</h4>
-                  <p className="text-slate-500 text-sm cursor-pointer" onClick={(e) => { e.stopPropagation(); setExpandedInstitucional(!expandedInstitucional); }}>
-                    {schoolModels[0].focus}
-                  </p>
                   <AnimatePresence>
                     {expandedInstitucional && (
                       <motion.p initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }} className="text-slate-500 text-sm">
@@ -353,9 +348,6 @@ function Precos() {
                   }}
                 >
                   <h4 className="text-base font-bold text-slate-900 mb-1">{schoolModels[1].title}</h4>
-                  <p className="text-slate-500 text-sm cursor-pointer" onClick={(e) => { e.stopPropagation(); setExpandedHibrido(!expandedHibrido); }}>
-                    {schoolModels[1].focus}
-                  </p>
                   <AnimatePresence>
                     {expandedHibrido && (
                       <motion.p initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }} className="text-slate-500 text-sm">
