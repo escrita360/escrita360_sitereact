@@ -33,11 +33,11 @@ function PagamentoResultado({ status = 'success' }) {
   const config = {
     success: {
       icon: CheckCircle2,
-      iconBg: 'bg-green-100',
-      iconColor: 'text-green-600',
+      iconBg: 'bg-slate-100',
+      iconColor: 'text-slate-600',
       title: 'Pagamento Confirmado!',
       subtitle: 'Sua assinatura foi ativada com sucesso',
-      cardBg: 'bg-green-50',
+      cardBg: 'bg-slate-50',
       cardTitle: 'Pagamento Processado',
       cardText: 'Seu pagamento foi processado com sucesso.',
       features: [
@@ -130,7 +130,7 @@ function PagamentoResultado({ status = 'success' }) {
                 {currentConfig.features.map((feature, index) => (
                   <p key={index} className="flex items-center gap-2">
                     {isSuccess ? (
-                      <CheckCircle2 className="w-4 h-4 text-green-600" />
+                      <CheckCircle2 className="w-4 h-4 text-slate-600" />
                     ) : (
                       <span className="text-brand-primary mt-1">•</span>
                     )}
