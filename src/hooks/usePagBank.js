@@ -45,7 +45,7 @@ export const usePagBank = () => {
   /**
    * Obtém taxas de parcelamento com dados detalhados
    */
-  const getInstallmentFees = async (value, maxInstallments = 12, maxInstallmentsNoInterest = 1, cardBin = null) => {
+  const getInstallmentFees = async (value, maxInstallments = 12, maxInstallmentsNoInterest = 0, cardBin = null) => {
     setIsLoading(true)
     setError(null)
 

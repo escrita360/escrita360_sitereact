@@ -135,7 +135,7 @@ export const paymentService = {
    * @param {string} creditCardBin - BIN do cartão (opcional)
    * @returns {Promise<Object>} - Opções de parcelamento com taxas
    */
-  async getInstallmentFees(value, maxInstallments = 12, maxInstallmentsNoInterest = 1, creditCardBin = null) {
+  async getInstallmentFees(value, maxInstallments = 12, maxInstallmentsNoInterest = 0, creditCardBin = null) {
     try {
       const params = {
         value: Math.round(value * 100), // Converter para centavos
