@@ -250,10 +250,10 @@ function Pagamento() {
             if (plan.installments <= maxInstallments) {
               options.push({
                 quantity: plan.installments,
-                amount: plan.installment_value / 100, // converter de centavos
-                total: plan.amount.total / 100, // converter de centavos
+                amount: Number(plan.installment_value) / 100, // converter de centavos
+                total: Number(plan.amount.total) / 100, // converter de centavos
                 interest_free: plan.amount.fees === 0,
-                fees: plan.amount.fees / 100 // taxas em reais
+                fees: Number(plan.amount.fees) / 100 // taxas em reais
               })
             }
           })
@@ -284,8 +284,8 @@ function Pagamento() {
       // Opção mínima: apenas 1x sem juros
       const emergencyOption = [{ 
         quantity: 1, 
-        amount: price, 
-        total: price, 
+        amount: Number(price), 
+        total: Number(price), 
         interest_free: true,
         fees: 0
       }]
@@ -1308,24 +1308,6 @@ function Pagamento() {
                             {!selectedSavedCard && (
                               <div>
                                 <Label htmlFor="installments">Parcelas</Label>
-                                {/* Informação sobre limites de parcelamento */}
-                                <div className="text-xs text-gray-500 mb-2">
-                                  {(() => {
-                                    const price = isYearly ? selectedPlan.yearlyPrice : selectedPlan.monthlyPrice
-                                    const maxInstallments = getMaxInstallments(price)
-                                    const maxNoInterest = getMaxInstallmentsNoInterest(price)
-                                    
-                                    if (maxInstallments === 1) {
-                                      return "Pagamento à vista (R$49 - R$120)"
-                                    } else if (maxInstallments === 2) {
-                                      return `Até 2x (${maxNoInterest === 2 ? 'sem juros' : '1x sem juros'}) - R$290`
-                                    } else if (maxInstallments === 3) {
-                                      return `Até 3x (${maxNoInterest === 3 ? 'sem juros' : '1x sem juros'}) - R$570-R$1.200`
-                                    }
-                                    return `Até ${maxInstallments}x (1x sem juros)`
-                                  })()}
-                                  <span className="text-blue-600 ml-1">• Taxas consultadas na API</span>
-                                </div>
                                 {loadingInstallments ? (
                                   <div className="border rounded-md p-3 bg-gray-50">
                                     <div className="flex items-center gap-2 text-gray-500">
@@ -1342,9 +1324,9 @@ function Pagamento() {
                                       {installmentOptions.length > 0 ? (
                                         installmentOptions.map((option) => (
                                           <SelectItem key={option.quantity} value={option.quantity.toString()}>
-                                            {option.quantity}x de R$ {option.amount.toFixed(2)}
-                                            {option.quantity > 1 && ` (Total: R$ ${option.total.toFixed(2)})`}
-                                            {option.interest_free ? ' sem juros' : (option.fees?.buyer_interest ? ` (+R$ ${option.fees.buyer_interest.toFixed(2)} juros)` : ' com juros')}
+                                            {option.quantity}x de R$ {(Number(option.amount) || 0).toFixed(2)}
+                                            {option.quantity > 1 && ` (Total: R$ ${(Number(option.total) || 0).toFixed(2)})`}
+                                            {option.interest_free ? ' sem juros' : (option.fees?.buyer_interest ? ` (+R$ ${(Number(option.fees.buyer_interest) || 0).toFixed(2)} juros)` : ' com juros')}
                                           </SelectItem>
                                         ))
                                       ) : (
@@ -1357,9 +1339,6 @@ function Pagamento() {
                                 )}
                                 {installmentOptions.length === 0 && !loadingInstallments && (
                                   <p className="text-xs text-red-500 mt-1">Erro ao consultar taxas de parcelamento na API</p>
-                                )}
-                                {installmentOptions.length > 0 && (
-                                  <p className="text-xs text-green-600 mt-1">✓ {installmentOptions.length} opções consultadas na API do PagBank</p>
                                 )}
                               </div>
                             )}
@@ -1450,14 +1429,14 @@ function Pagamento() {
                     {formData.paymentMethod === 'card' && selectedInstallments > 1 && (
                       <div className="bg-blue-50 p-3 rounded-lg">
                         <p className="text-sm text-blue-800 font-medium">
-                          {selectedInstallments}x de R$ {installmentOptions.find(opt => opt.quantity === selectedInstallments)?.amount.toFixed(2) || '0.00'}
+                          {selectedInstallments}x de R$ {(Number(installmentOptions.find(opt => opt.quantity === selectedInstallments)?.amount) || 0).toFixed(2)}
                         </p>
                         <p className="text-xs text-blue-600 mt-1">
-                          Total: R$ {installmentOptions.find(opt => opt.quantity === selectedInstallments)?.total.toFixed(2) || '0.00'}
+                          Total: R$ {(Number(installmentOptions.find(opt => opt.quantity === selectedInstallments)?.total) || 0).toFixed(2)}
                           {(() => {
                             const selectedOption = installmentOptions.find(opt => opt.quantity === selectedInstallments);
                             if (selectedOption?.interest_free) return ' (sem juros)';
-                            if (selectedOption?.fees?.buyer_interest) return ` (+R$ ${selectedOption.fees.buyer_interest.toFixed(2)} juros)`;
+                            if (selectedOption?.fees?.buyer_interest) return ` (+R$ ${(Number(selectedOption.fees.buyer_interest) || 0).toFixed(2)} juros)`;
                             return ' (com juros)';
                           })()}
                         </p>

@@ -69,10 +69,10 @@ export const usePagBank = () => {
           brandData.installment_plans?.forEach(plan => {
             options.push({
               quantity: plan.installments,
-              amount: plan.installment_value / 100,
-              total: plan.amount.total / 100,
+              amount: Number(plan.installment_value) / 100,
+              total: Number(plan.amount.total) / 100,
               interest_free: plan.amount.fees === 0,
-              fees: plan.amount.fees / 100,
+              fees: Number(plan.amount.fees) / 100,
               interestRate: plan.interest_rate || 0
             })
           })
@@ -83,8 +83,8 @@ export const usePagBank = () => {
       if (options.length === 0) {
         options.push({ 
           quantity: 1, 
-          amount: value, 
-          total: value, 
+          amount: Number(value), 
+          total: Number(value), 
           interest_free: true,
           fees: 0,
           interestRate: 0
@@ -99,8 +99,8 @@ export const usePagBank = () => {
       // Retornar fallback em caso de erro
       return [{ 
         quantity: 1, 
-        amount: value, 
-        total: value, 
+        amount: Number(value), 
+        total: Number(value), 
         interest_free: true,
         fees: 0,
         interestRate: 0
