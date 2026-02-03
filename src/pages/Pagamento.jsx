@@ -92,6 +92,7 @@ function Pagamento() {
   // Carregar opções de parcelamento quando o plano estiver disponível
   useEffect(() => {
     if (selectedPlan) {
+      setSelectedInstallments(1) // Reset to 1 when plan changes
       loadInstallmentOptions()
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
