@@ -23,16 +23,16 @@ function Pagamento() {
     audience: sessionStorage.getItem('selectedAudience')
   }
   const { selectedPlan, isYearly, audience } = stateData
-  // eslint-disable-next-line no-unused-vars
+   
   const [paymentSuccess, setPaymentSuccess] = useState(false)
-  // eslint-disable-next-line no-unused-vars
+   
   const [paymentError, setPaymentError] = useState('')
-  // eslint-disable-next-line no-unused-vars
+   
   const [transactionData, setTransactionData] = useState(null)
   // Estado para aguardar pagamento PIX/Boleto
   const [awaitingPayment, setAwaitingPayment] = useState(false)
   const [pixData, setPixData] = useState(null)
-  const [boletoData, setBoletoData] = useState(null)
+  // const [boletoData, setBoletoData] = useState(null)
   const [copiedToClipboard, setCopiedToClipboard] = useState(false)
   const [checkingPayment, setCheckingPayment] = useState(false)
   const [formData, setFormData] = useState({
@@ -80,6 +80,7 @@ function Pagamento() {
     if (selectedPlan) {
       loadInstallmentOptions()
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedPlan, isYearly])
 
   // Limpar sessionStorage quando componente desmontar
@@ -104,6 +105,7 @@ function Pagamento() {
       // Carregar métodos de pagamento salvos
       loadSavedPaymentMethods()
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
   const loadSavedPaymentMethods = async () => {
@@ -239,7 +241,7 @@ function Pagamento() {
 
         result = await paymentService.createPagBankPixPayment(paymentData)
 
-      } else if (formData.paymentMethod === 'pay_later') {
+      } /* else if (formData.paymentMethod === 'pay_later') {
         // Boleto
         console.log('📄 Gerando boleto...')
 
@@ -249,7 +251,7 @@ function Pagamento() {
         }
 
         result = await paymentService.createPagBankBoletoPayment(paymentData)
-      }
+      } */
 
       console.log('✅ Pagamento processado com sucesso:', result)
 
@@ -277,7 +279,7 @@ function Pagamento() {
         }
         setAwaitingPayment(true)
         return
-      } else if (formData.paymentMethod === 'pay_later') {
+      } /* else if (formData.paymentMethod === 'pay_later') {
         console.log('📄 Boleto gerado, aguardando pagamento...')
         // Extrair dados do boleto da resposta
         const boletoInfo = result.charges?.[0]?.payment_method?.boleto || result.boleto
@@ -291,7 +293,7 @@ function Pagamento() {
         })
         setAwaitingPayment(true)
         return
-      }
+      } */
 
       // Para cartão, marcar como sucesso imediatamente
       setPaymentSuccess(true)
@@ -324,7 +326,7 @@ function Pagamento() {
   }
 
   // Função para copiar código de barras do boleto
-  const copyBoletoCode = async () => {
+  /* const copyBoletoCode = async () => {
     if (boletoData?.barcode || boletoData?.formattedBarcode) {
       try {
         await navigator.clipboard.writeText(boletoData.formattedBarcode || boletoData.barcode)
@@ -334,11 +336,11 @@ function Pagamento() {
         console.error('Erro ao copiar:', err)
       }
     }
-  }
+  } */
 
   // Função para verificar status do pagamento
   const checkPaymentStatus = useCallback(async () => {
-    const orderId = pixData?.orderId || boletoData?.orderId
+    const orderId = pixData?.orderId
     if (!orderId) return
 
     setCheckingPayment(true)
@@ -357,18 +359,18 @@ function Pagamento() {
     } finally {
       setCheckingPayment(false)
     }
-  }, [pixData?.orderId, boletoData?.orderId])
+  }, [pixData?.orderId])
 
   // Polling para verificar pagamento a cada 10 segundos
   useEffect(() => {
-    if (awaitingPayment && (pixData || boletoData)) {
+    if (awaitingPayment && pixData) {
       const interval = setInterval(() => {
         checkPaymentStatus()
       }, 10000) // Verificar a cada 10 segundos
 
       return () => clearInterval(interval)
     }
-  }, [awaitingPayment, pixData, boletoData, checkPaymentStatus])
+  }, [awaitingPayment, pixData, checkPaymentStatus])
 
   if (isLoading) {
     return <div className="flex justify-center items-center min-h-screen">Carregando...</div>
@@ -663,106 +665,7 @@ function Pagamento() {
         </div>
       )}
 
-      {/* Tela de aguardar pagamento Boleto */}
-      {awaitingPayment && boletoData && (
-        <div className="container mx-auto px-4 max-w-4xl py-20">
-          <div className="text-center space-y-6">
-            <div className="flex justify-center">
-              <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center">
-                <FileText className="w-16 h-16 text-blue-600" />
-              </div>
-            </div>
-            <div className="space-y-3">
-              <h2 className="text-4xl font-bold">Boleto Gerado!</h2>
-              <p className="text-xl text-slate-600">Copie o código de barras ou baixe o PDF para pagar</p>
-            </div>
-            <Card className="max-w-2xl mx-auto shadow-xl">
-              <CardContent className="p-6 space-y-6">
-                {/* Código de barras */}
-                {(boletoData.formattedBarcode || boletoData.barcode) && (
-                  <div className="space-y-2">
-                    <Label>Código de Barras</Label>
-                    <div className="flex gap-2">
-                      <Input
-                        value={boletoData.formattedBarcode || boletoData.barcode}
-                        readOnly
-                        className="font-mono text-sm"
-                      />
-                      <Button onClick={copyBoletoCode} variant="outline" className="flex-shrink-0">
-                        {copiedToClipboard ? (
-                          <CheckCircle2 className="w-4 h-4 text-green-600" />
-                        ) : (
-                          <Copy className="w-4 h-4" />
-                        )}
-                      </Button>
-                    </div>
-                    {copiedToClipboard && (
-                      <p className="text-sm text-green-600">✓ Código copiado!</p>
-                    )}
-                  </div>
-                )}
-
-                {/* Botão para baixar PDF */}
-                {boletoData.pdfLink && (
-                  <Button
-                    className="w-full"
-                    onClick={() => window.open(boletoData.pdfLink, '_blank')}
-                  >
-                    <FileText className="w-4 h-4 mr-2" />
-                    Baixar Boleto em PDF
-                  </Button>
-                )}
-
-                <Separator />
-
-                {/* Informações do pedido */}
-                <div className="space-y-3 text-left">
-                  <div className="flex justify-between">
-                    <span className="text-slate-600">Plano</span>
-                    <span className="font-medium">{selectedPlan.name}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-600">Valor</span>
-                    <span className="font-bold text-lg text-blue-600">R$ {total.toFixed(2)}</span>
-                  </div>
-                  {boletoData.dueDate && (
-                    <div className="flex justify-between">
-                      <span className="text-slate-600">Vencimento</span>
-                      <span className="font-medium">{new Date(boletoData.dueDate + 'T00:00:00').toLocaleDateString('pt-BR')}</span>
-                    </div>
-                  )}
-                </div>
-
-                <Separator />
-
-                {/* Status de verificação */}
-                <div className="bg-yellow-50 p-4 rounded-lg flex items-center gap-3">
-                  <Clock className="w-5 h-5 text-yellow-600 animate-pulse" />
-                  <div className="text-left">
-                    <p className="text-sm font-medium text-yellow-900">Aguardando pagamento...</p>
-                    <p className="text-xs text-yellow-700">O pagamento será confirmado em até 3 dias úteis após o pagamento</p>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={checkPaymentStatus}
-                    disabled={checkingPayment}
-                    className="ml-auto"
-                  >
-                    <RefreshCw className={`w-4 h-4 ${checkingPayment ? 'animate-spin' : ''}`} />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              <Button variant="outline" onClick={() => { setAwaitingPayment(false); setBoletoData(null); }}>
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Voltar e escolher outro método
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Tela de aguardar pagamento Boleto - COMENTADA */}
 
       {!paymentSuccess && !awaitingPayment ? (
         <div className="container mx-auto px-4 max-w-7xl py-12">
@@ -1033,7 +936,7 @@ function Pagamento() {
                         </div>
 
                         {/* Boleto */}
-                        <div
+                        {/* <div
                           className={`relative cursor-pointer border-2 rounded-lg p-4 transition-all hover:border-brand-primary ${formData.paymentMethod === 'pay_later'
                             ? 'border-brand-primary bg-brand-primary/5'
                             : 'border-gray-200'
@@ -1048,7 +951,7 @@ function Pagamento() {
                               <p className="font-medium text-gray-900">Boleto</p>
                             </div>
                           </div>
-                        </div>
+                        </div> */}
                       </div>
 
                       {/* Informações do método selecionado */}
@@ -1066,7 +969,7 @@ function Pagamento() {
                         </div>
                       )}
 
-                      {formData.paymentMethod === 'pay_later' && (
+                      {/* {formData.paymentMethod === 'pay_later' && (
                         <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
                           <div className="flex items-start gap-3">
                             <Calendar className="w-5 h-5 text-blue-600 mt-0.5" />
@@ -1078,7 +981,7 @@ function Pagamento() {
                             </div>
                           </div>
                         </div>
-                      )}
+                      )} */}
                     </div>
 
                     {/* Dados do Cartão - só mostrar se cartão estiver selecionado */}
@@ -1236,7 +1139,7 @@ function Pagamento() {
                         {isLoading ? 'Processando...' : (
                           <>
                             {formData.paymentMethod === 'pix' && 'Gerar PIX'}
-                            {formData.paymentMethod === 'pay_later' && 'Gerar Boleto'}
+                            {/* {formData.paymentMethod === 'pay_later' && 'Gerar Boleto'} */}
                             {formData.paymentMethod === 'card' && 'Finalizar Pagamento'}
                           </>
                         )}
