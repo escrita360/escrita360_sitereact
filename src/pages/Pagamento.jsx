@@ -11,11 +11,23 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { firebasePaymentService } from '@/services/firebase'
 import { paymentService } from '@/services/payment'
+import CardBrandIcon from '@/components/CardBrandIcon'
+import usePagBank from '@/hooks/usePagBank'
 
 function Pagamento() {
   const navigate = useNavigate()
   const location = useLocation()
   const { user } = useAuth()
+  
+  // Hook customizado para PagBank
+  const { getInstallmentFees, getCardBrand, isLoading: pagBankLoading } = usePagBank()
+  
+  console.log('🔍 Hook usePagBank:', { getInstallmentFees, getCardBrand, pagBankLoading })
+  console.log('🔍 Tipos:', {
+    getInstallmentFees: typeof getInstallmentFees,
+    getCardBrand: typeof getCardBrand,
+    pagBankLoading: typeof pagBankLoading
+  })
 
   // Tentar obter do location.state primeiro, depois do sessionStorage
   const stateData = location.state || {
@@ -58,6 +70,8 @@ function Pagamento() {
   const [installmentOptions, setInstallmentOptions] = useState([])
   const [selectedInstallments, setSelectedInstallments] = useState(1)
   const [acceptTerms, setAcceptTerms] = useState(false)
+  const [cardBrand, setCardBrand] = useState('')
+  const [loadingInstallments, setLoadingInstallments] = useState(false)
 
   useEffect(() => {
     // Aguardar um momento para o estado se estabilizar
@@ -132,27 +146,91 @@ function Pagamento() {
   }
 
   const loadInstallmentOptions = async () => {
-    if (!selectedPlan) return
+    if (!selectedPlan) {
+      console.log('⚠️ Não há plano selecionado')
+      return
+    }
 
     try {
+      setLoadingInstallments(true)
       const price = isYearly ? selectedPlan.yearlyPrice : selectedPlan.monthlyPrice
       
-      // Usar novo método com taxas detalhadas
-      const feesData = await paymentService.getInstallmentFees(
-        price, // valor em reais
-        12, // máximo 12 parcelas
-        1, // sem juros até 1x
-        formData.cardNumber ? formData.cardNumber.replace(/\s/g, '').substring(0, 6) : null // BIN do cartão se disponível
-      )
+      console.log('💳 =================================')
+      console.log('💳 Carregando opções de parcelamento')
+      console.log('💳 Plano selecionado:', selectedPlan.name)
+      console.log('💳 Preço:', price)
+      console.log('💳 É anual:', isYearly)
+      console.log('💳 BIN do cartão:', formData.cardNumber ? formData.cardNumber.replace(/\s/g, '').substring(0, 6) : 'N/A')
+      console.log('💳 =================================')
+      
+      let feesData = null
+      
+      // Tentar usar o hook primeiro
+      if (typeof getInstallmentFees === 'function') {
+        try {
+          console.log('💳 Chamando getInstallmentFees via hook...')
+          feesData = await getInstallmentFees(
+            price, // valor em reais
+            12, // máximo 12 parcelas
+            1, // sem juros até 1x
+            formData.cardNumber && formData.cardNumber.replace(/\s/g, '').length >= 6 
+              ? formData.cardNumber.replace(/\s/g, '').substring(0, 6) 
+              : null // BIN do cartão se disponível
+          )
+          console.log('✅ Hook funcionou, dados recebidos:', feesData)
+        } catch (hookError) {
+          console.warn('⚠️ Hook falhou, tentando API diretamente:', hookError)
+          
+          // Fallback: chamar API diretamente via paymentService
+          try {
+            feesData = await paymentService.getInstallmentFees(
+              price,
+              12,
+              1,
+              formData.cardNumber && formData.cardNumber.replace(/\s/g, '').length >= 6 
+                ? formData.cardNumber.replace(/\s/g, '').substring(0, 6) 
+                : null
+            )
+            console.log('✅ API direta funcionou:', feesData)
+          } catch (apiError) {
+            console.warn('⚠️ API direta também falhou:', apiError)
+          }
+        }
+      } else {
+        console.warn('⚠️ getInstallmentFees não é função, usando API direta')
+        // Usar API diretamente se hook não estiver disponível
+        try {
+          feesData = await paymentService.getInstallmentFees(
+            price,
+            12,
+            1,
+            formData.cardNumber && formData.cardNumber.replace(/\s/g, '').length >= 6 
+              ? formData.cardNumber.replace(/\s/g, '').substring(0, 6) 
+              : null
+          )
+          console.log('✅ API direta funcionou (sem hook):', feesData)
+        } catch (apiError) {
+          console.warn('⚠️ API direta falhou:', apiError)
+        }
+      }
+      
+      console.log('💳 Resposta da API de taxas (tipo):', typeof feesData)
+      console.log('💳 Resposta da API de taxas (conteúdo):', feesData)
       
       // Converter dados do PagBank para formato esperado pelo componente
       const options = []
       
-      if (feesData.payment_methods?.credit_card) {
+      if (feesData && Array.isArray(feesData) && feesData.length > 0) {
+        // Se retornou o formato já processado pelo hook
+        console.log('💳 Usando dados já processados pelo hook')
+        options.push(...feesData)
+      } else if (feesData?.payment_methods?.credit_card) {
+        console.log('💳 Processando dados brutos do PagBank')
         const brands = Object.keys(feesData.payment_methods.credit_card)
         
         if (brands.length > 0) {
           const brandData = feesData.payment_methods.credit_card[brands[0]]
+          console.log('💳 Dados da primeira bandeira:', brandData)
           
           brandData.installment_plans?.forEach(plan => {
             options.push({
@@ -164,33 +242,58 @@ function Pagamento() {
             })
           })
         }
+      } else {
+        console.log('⚠️ Resposta da API não possui estrutura esperada')
       }
       
       // Fallback se não houver opções
       if (options.length === 0) {
-        options.push({ 
-          quantity: 1, 
-          amount: price, 
-          total: price, 
-          interest_free: true,
-          fees: 0
-        })
+        console.log('⚠️ Criando opções de parcelamento padrão (fallback)')
+        // Criar opções padrão baseadas no preço
+        for (let i = 1; i <= 12; i++) {
+          let installmentAmount = price / i
+          let total = price
+          let interestFree = i <= 3 // Até 3x sem juros
+          
+          // Adicionar juros simulados para parcelas maiores
+          if (!interestFree) {
+            const interestRate = 0.0299 // 2.99% ao mês
+            total = price * Math.pow(1 + interestRate, i - 3)
+            installmentAmount = total / i
+          }
+          
+          options.push({ 
+            quantity: i, 
+            amount: installmentAmount, 
+            total: total, 
+            interest_free: interestFree,
+            fees: total - price
+          })
+        }
       }
       
+      console.log('💳 Opções finais a serem definidas:', options)
       setInstallmentOptions(options)
-      console.log('💳 Opções de parcelamento carregadas:', options.length)
+      console.log('✅ Opções de parcelamento carregadas com sucesso')
       
     } catch (error) {
-      console.error('Erro ao carregar opções de parcelamento:', error)
+      console.error('❌ Erro ao carregar opções de parcelamento:', error)
+      console.error('❌ Stack trace:', error.stack)
+      
       // Fallback: apenas 1x sem juros
       const price = isYearly ? selectedPlan.yearlyPrice : selectedPlan.monthlyPrice
-      setInstallmentOptions([{ 
+      const fallbackOptions = [{ 
         quantity: 1, 
         amount: price, 
         total: price, 
         interest_free: true,
         fees: 0
-      }])
+      }]
+      
+      console.log('⚠️ Definindo opções de fallback:', fallbackOptions)
+      setInstallmentOptions(fallbackOptions)
+    } finally {
+      setLoadingInstallments(false)
     }
   }
 
@@ -471,9 +574,55 @@ function Pagamento() {
     return value
   }
 
+  // Função fallback para detecção de bandeira se hook falhar
+  const detectCardBrandFallback = (cardNumber) => {
+    const number = cardNumber.replace(/\s/g, '')
+    
+    if (/^4/.test(number)) return 'visa'
+    if (/^5[1-5]/.test(number)) return 'mastercard'
+    if (/^3[47]/.test(number)) return 'amex'
+    if (/^6011|65/.test(number)) return 'discover'
+    if (/^35/.test(number)) return 'jcb'
+    if (/^30[0-5]|36|38/.test(number)) return 'diners'
+    if (/^50|5[6-9]|6[0-9]/.test(number)) return 'maestro'
+    if (/^40117[8-9]|^431274|^438935|^451416|^457393|^504175|^627780|^636297|^636368/.test(number)) return 'elo'
+    if (/^606282/.test(number)) return 'hipercard'
+    
+    return 'unknown'
+  }
+
   const handleInputChange = (field, value) => {
     let formattedValue = value
-    if (field === 'cardNumber') formattedValue = formatCardNumber(value)
+    if (field === 'cardNumber') {
+      formattedValue = formatCardNumber(value)
+      
+      console.log('💳 ========= DETECÇÃO DE BANDEIRA =========')
+      console.log('💳 Valor original:', value)
+      console.log('💳 Valor formatado:', formattedValue)
+      console.log('💳 getCardBrand existe?', typeof getCardBrand === 'function')
+      
+      // Detectar bandeira do cartão
+      let brand = 'unknown'
+      
+      if (typeof getCardBrand === 'function') {
+        try {
+          brand = getCardBrand(formattedValue)
+          console.log('💳 Bandeira detectada via hook:', brand)
+        } catch (error) {
+          console.warn('⚠️ Erro ao usar hook, usando fallback:', error)
+          brand = detectCardBrandFallback(formattedValue)
+          console.log('💳 Bandeira detectada via fallback:', brand)
+        }
+      } else {
+        console.warn('⚠️ Hook getCardBrand não disponível, usando fallback')
+        brand = detectCardBrandFallback(formattedValue)
+        console.log('💳 Bandeira detectada via fallback:', brand)
+      }
+      
+      setCardBrand(brand)
+      console.log('💳 Bandeira final definida:', brand)
+      console.log('💳 ==========================================')
+    }
     else if (field === 'expiryDate') formattedValue = formatExpiryDate(value)
     else if (field === 'cvv') formattedValue = value.replace(/\D/g, '').slice(0, 4)
     else if (field === 'cpf') formattedValue = formatCPF(value)
@@ -1078,10 +1227,18 @@ function Pagamento() {
                                   <div className="relative">
                                     <Input id="cardNumber" placeholder="0000 0000 0000 0000" maxLength={19}
                                       value={formData.cardNumber} onChange={(e) => handleInputChange('cardNumber', e.target.value)}
-                                      className={`pl-10 ${errors.cardNumber ? 'border-red-500' : ''}`} />
+                                      className={`pl-10 pr-20 ${errors.cardNumber ? 'border-red-500' : ''}`} />
                                     <CreditCard className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                                    {cardBrand && cardBrand !== 'unknown' && (
+                                      <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                                        <CardBrandIcon brand={cardBrand} className="text-xs" />
+                                      </div>
+                                    )}
                                   </div>
                                   {errors.cardNumber && <p className="text-xs text-red-500 mt-1">{errors.cardNumber}</p>}
+                                  {cardBrand && cardBrand !== 'unknown' && (
+                                    <p className="text-xs text-green-600 mt-1">✓ Bandeira detectada: {cardBrand.toUpperCase()}</p>
+                                  )}
                                 </div>
                                 <div>
                                   <Label htmlFor="cardName">Nome no Cartão</Label>
@@ -1151,20 +1308,41 @@ function Pagamento() {
                             {!selectedSavedCard && (
                               <div>
                                 <Label htmlFor="installments">Parcelas</Label>
-                                <Select value={selectedInstallments.toString()} onValueChange={(value) => setSelectedInstallments(parseInt(value))}>
-                                  <SelectTrigger>
-                                    <SelectValue placeholder="Selecione as parcelas" />
-                                  </SelectTrigger>
-                                  <SelectContent className="bg-white">
-                                    {installmentOptions.map((option) => (
-                                      <SelectItem key={option.quantity} value={option.quantity.toString()}>
-                                        {option.quantity}x de R$ {option.amount.toFixed(2)}
-                                        {option.quantity > 1 && ` (Total: R$ ${option.total.toFixed(2)})`}
-                                        {option.interest_free ? ' sem juros' : (option.fees?.buyer_interest ? ` (+R$ ${option.fees.buyer_interest.toFixed(2)} juros)` : ' com juros')}
-                                      </SelectItem>
-                                    ))}
-                                  </SelectContent>
-                                </Select>
+                                {loadingInstallments ? (
+                                  <div className="border rounded-md p-3 bg-gray-50">
+                                    <div className="flex items-center gap-2 text-gray-500">
+                                      <RefreshCw className="w-4 h-4 animate-spin" />
+                                      <span className="text-sm">Carregando opções de parcelamento...</span>
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <Select value={selectedInstallments.toString()} onValueChange={(value) => setSelectedInstallments(parseInt(value))}>
+                                    <SelectTrigger>
+                                      <SelectValue placeholder="Selecione as parcelas" />
+                                    </SelectTrigger>
+                                    <SelectContent className="bg-white">
+                                      {installmentOptions.length > 0 ? (
+                                        installmentOptions.map((option) => (
+                                          <SelectItem key={option.quantity} value={option.quantity.toString()}>
+                                            {option.quantity}x de R$ {option.amount.toFixed(2)}
+                                            {option.quantity > 1 && ` (Total: R$ ${option.total.toFixed(2)})`}
+                                            {option.interest_free ? ' sem juros' : (option.fees?.buyer_interest ? ` (+R$ ${option.fees.buyer_interest.toFixed(2)} juros)` : ' com juros')}
+                                          </SelectItem>
+                                        ))
+                                      ) : (
+                                        <SelectItem value="1" disabled>
+                                          Nenhuma opção disponível
+                                        </SelectItem>
+                                      )}
+                                    </SelectContent>
+                                  </Select>
+                                )}
+                                {installmentOptions.length === 0 && !loadingInstallments && (
+                                  <p className="text-xs text-red-500 mt-1">Não foi possível carregar as opções de parcelamento</p>
+                                )}
+                                {installmentOptions.length > 0 && (
+                                  <p className="text-xs text-green-600 mt-1">✓ {installmentOptions.length} opções de parcelamento disponíveis</p>
+                                )}
                               </div>
                             )}
                           </div>
