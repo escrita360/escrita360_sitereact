@@ -273,6 +273,12 @@ function Pagamento() {
       console.log('💳 Opções processadas da API:', filteredOptions.length)
       console.log('💳 Opções finais:', filteredOptions)
       setInstallmentOptions(filteredOptions)
+      
+      // Ensure selected installments is valid
+      if (!filteredOptions.some(opt => opt.quantity === selectedInstallments)) {
+        setSelectedInstallments(1)
+      }
+      
       console.log('✅ Opções de parcelamento carregadas da API com sucesso')
       
     } catch (error) {
@@ -293,6 +299,7 @@ function Pagamento() {
       
       console.log('⚠️ Usando opção de emergência (1x):', emergencyOption)
       setInstallmentOptions(emergencyOption)
+      setSelectedInstallments(1)
     } finally {
       setLoadingInstallments(false)
     }
