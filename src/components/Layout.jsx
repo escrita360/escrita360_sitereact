@@ -333,7 +333,7 @@ function Layout({ children }) {
       </footer>
 
       {/* ChatBot Flutuante */}
-      <ChatBot />
+      {/* <ChatBot /> */}
 
       {/* Cookie Consent Banner */}
       <CookieConsent />
