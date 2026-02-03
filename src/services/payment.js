@@ -3,29 +3,89 @@ import api from './api.js'
 // SDK do PagBank para criptografia de cartão
 let PagSeguro = null
 let isSDKLoaded = false
+let isSDKLoading = false
+let sdkLoadPromise = null
 
 /**
  * Carrega o SDK do PagBank dinamicamente
  */
 const loadPagSeguroSDK = () => {
   return new Promise((resolve, reject) => {
+    // Se já está carregado, retornar imediatamente
     if (isSDKLoaded && window.PagSeguro) {
       PagSeguro = window.PagSeguro
       resolve(PagSeguro)
       return
     }
 
-    const script = document.createElement('script')
-    script.src = 'https://assets.pagseguro.com.br/checkout-sdk-js/rc/dist/browser/pagseguro.min.js'
-    script.onload = () => {
-      PagSeguro = window.PagSeguro
-      isSDKLoaded = true
-      resolve(PagSeguro)
+    // Se já está carregando, retornar a promise existente
+    if (isSDKLoading && sdkLoadPromise) {
+      return sdkLoadPromise
     }
-    script.onerror = () => {
-      reject(new Error('Falha ao carregar SDK do PagBank'))
+
+    // Verificar se o script já existe no DOM
+    const existingScript = document.querySelector('script[src="https://assets.pagseguro.com.br/checkout-sdk-js/rc/dist/browser/pagseguro.min.js"]')
+    if (existingScript) {
+      // Script já existe, aguardar carregamento
+      if (window.PagSeguro) {
+        PagSeguro = window.PagSeguro
+        isSDKLoaded = true
+        resolve(PagSeguro)
+        return
+      } else {
+        // Aguardar o script carregar
+        existingScript.addEventListener('load', () => {
+          PagSeguro = window.PagSeguro
+          isSDKLoaded = true
+          resolve(PagSeguro)
+        })
+        existingScript.addEventListener('error', () => {
+          reject(new Error('Falha ao carregar SDK do PagBank'))
+        })
+        return
+      }
     }
-    document.head.appendChild(script)
+
+    // Marcar como carregando
+    isSDKLoading = true
+
+    // Criar nova promise para este carregamento
+    sdkLoadPromise = new Promise((resolvePromise, rejectPromise) => {
+      const script = document.createElement('script')
+      script.src = 'https://assets.pagseguro.com.br/checkout-sdk-js/rc/dist/browser/pagseguro.min.js'
+      script.async = true
+
+      script.onload = () => {
+        try {
+          PagSeguro = window.PagSeguro
+          isSDKLoaded = true
+          isSDKLoading = false
+          resolvePromise(PagSeguro)
+          resolve(PagSeguro) // Resolver a promise externa também
+        } catch (error) {
+          isSDKLoading = false
+          rejectPromise(error)
+          reject(error)
+        }
+      }
+
+      script.onerror = (error) => {
+        isSDKLoading = false
+        const errorMsg = new Error('Falha ao carregar SDK do PagBank')
+        rejectPromise(errorMsg)
+        reject(errorMsg)
+      }
+
+      // Adicionar à head de forma segura
+      if (document.head) {
+        document.head.appendChild(script)
+      } else {
+        // Fallback se head não estiver disponível
+        document.addEventListener('DOMContentLoaded', () => {
+          document.head.appendChild(script)
+        })
+      }
+    })
   })
 }
 
