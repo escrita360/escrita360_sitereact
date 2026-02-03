@@ -57,6 +57,7 @@ function Pagamento() {
   const [selectedSavedCard, setSelectedSavedCard] = useState(null)
   const [installmentOptions, setInstallmentOptions] = useState([])
   const [selectedInstallments, setSelectedInstallments] = useState(1)
+  const [acceptTerms, setAcceptTerms] = useState(false)
 
   useEffect(() => {
     // Aguardar um momento para o estado se estabilizar
@@ -518,6 +519,11 @@ function Pagamento() {
           newErrors.cvv = 'CVV é obrigatório para confirmar o pagamento'
         }
       }
+    }
+
+    // Validação dos termos
+    if (!acceptTerms) {
+      newErrors.acceptTerms = 'Você deve aceitar os termos de uso e política de privacidade para continuar'
     }
 
     console.log('🔍 Erros encontrados:', newErrors)
@@ -1206,11 +1212,26 @@ function Pagamento() {
                     <Separator />
 
                     <div className="space-y-4">
+                      <div className="space-y-2">
+                        <div className="flex items-start space-x-2">
+                          <input
+                            type="checkbox"
+                            id="acceptTerms"
+                            checked={acceptTerms}
+                            onChange={(e) => setAcceptTerms(e.target.checked)}
+                            className="mt-1"
+                          />
+                          <label htmlFor="acceptTerms" className="text-sm text-slate-600">
+                            Eu aceito os <a href="/termos-servico" target="_blank" rel="noopener noreferrer" className="text-brand-primary underline">termos de uso</a> e <a href="/politica-privacidade" target="_blank" rel="noopener noreferrer" className="text-brand-primary underline">política de privacidade</a> *
+                          </label>
+                        </div>
+                        {errors.acceptTerms && <p className="text-xs text-red-500">{errors.acceptTerms}</p>}
+                      </div>
                       <Button
                         size="lg"
                         className="w-full bg-brand-primary hover:bg-brand-secondary text-white py-4 text-lg font-semibold"
                         onClick={handlePaymentSubmit}
-                        disabled={isLoading}
+                        disabled={isLoading || !acceptTerms}
                       >
                         {isLoading ? 'Processando...' : (
                           <>
@@ -1220,9 +1241,6 @@ function Pagamento() {
                           </>
                         )}
                       </Button>
-                      <p className="text-xs text-slate-500 text-center">
-                        Ao finalizar, você concorda com os termos de uso e política de privacidade
-                      </p>
                     </div>
                   </div>
                 </CardContent>
