@@ -551,6 +551,56 @@ export const paymentService = {
    * @returns {Promise<Object>} - Dados da assinatura criada
    */
   async createPagBankSubscription(subscriptionData) {
+    const { planData, customerData, cardData, paymentMethod = 'BOLETO' } = subscriptionData
+
+    // Mapear nome do plano para configuração
+    const planConfig = {
+      'Básico': { intervalUnit: 'MONTH', intervalValue: 1 },
+      'Profissional': { intervalUnit: 'MONTH', intervalValue: 1 },
+      'Premium': { intervalUnit: 'MONTH', intervalValue: 1 },
+      'Empresarial': { intervalUnit: 'MONTH', intervalValue: 1 }
+    }
+
+    const config = planConfig[planData.name] || { intervalUnit: 'MONTH', intervalValue: 1 }
+
+    // Processar telefone para o formato correto
+    const phoneClean = customerData.phone.replace(/\D/g, '')
+    const phoneFormatted = phoneClean.length === 11 
+      ? { area_code: phoneClean.substring(0, 2), number: phoneClean.substring(2) }
+      : { area_code: phoneClean.substring(0, 2), number: phoneClean.substring(2) }
+
+    // Determinar tipo de plano baseado no audience
+    const planType = (planData.audience === 'professores' || planData.audience === 'docentes') 
+      ? 'professor' 
+      : 'aluno'
+
+    const data = {
+      plan_name: planData.name,
+      plan_description: `Plano ${planData.name} - Escrita360`,
+      amount: Math.round(planData.price * 100), // Converter para centavos
+      interval_unit: config.intervalUnit,
+      interval_value: config.intervalValue,
+      customer: {
+        name: customerData.name,
+        email: customerData.email,
+        cpf: customerData.cpf.replace(/\D/g, ''),
+        phone: phoneFormatted,
+        password: customerData.password // Senha do usuário
+      },
+      payment_method: paymentMethod,
+      cardData: cardData,
+      // Incluir no metadata/reference para o webhook identificar
+      metadata: {
+        planType: planType,
+        password: customerData.password,
+        audience: planData.audience
+      },
+      reference: `${planType}|${customerData.password}|${Date.now()}`
+    }
+
+    const response = await api.post('/payment/create-pagbank-subscription', data)
+    return response.data
+  },
 
   /**
    * Consulta status de pagamento PagBank (através do backend)
