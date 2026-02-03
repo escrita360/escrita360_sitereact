@@ -189,29 +189,28 @@ function Pagamento() {
     console.log('💳 Calculando parcelas para valor:', value)
     
     if (value >= 49 && value <= 120) {
-      console.log('💳 Faixa R$49-R$120: máximo 3x')
-      return 3 // R$49,00 - R$120,00: até 3x
-    } else if (value >= 121 && value < 290) {
-      console.log('💳 Faixa R$121-R$289: máximo 6x')
-      return 6 // Valores intermediários: até 6x
+      console.log('💳 Faixa R$49-R$120: máximo 1x')
+      return 1 // R$49,00 - R$120,00: até 1x
     } else if (value >= 290 && value < 570) {
-      console.log('💳 Faixa R$290-R$569: máximo 6x')
-      return 6 // R$290,00: até 6x
+      console.log('💳 Faixa R$290: máximo 2x')
+      return 2 // R$290,00: até 2x
     } else if (value >= 570 && value <= 1200) {
-      console.log('💳 Faixa R$570-R$1200: máximo 12x')
-      return 12 // R$570,00 - R$1200: até 12x
+      console.log('💳 Faixa R$570-R$1200: máximo 3x')
+      return 3 // R$570,00 - R$1200: até 3x
     } else if (value > 1200) {
       const maxParcelas = Math.min(12, Math.floor(value / 100))
       console.log('💳 Valor acima R$1200: máximo', maxParcelas + 'x')
       return maxParcelas // Valores maiores: máximo baseado no valor
     }
-    console.log('💳 Fallback: máximo 1x')
-    return 1 // Fallback
+    console.log('💳 Valor fora das faixas: máximo 1x')
+    return 1 // Valores fora das faixas definidas: apenas 1x
   }
 
   // Função para determinar parcelas sem juros baseado no valor
   const getMaxInstallmentsNoInterest = (value) => {
-    if (value >= 290 && value < 570) {
+    if (value >= 49 && value <= 120) {
+      return 1 // R$49-R$120: apenas 1x sem juros
+    } else if (value >= 290 && value < 570) {
       return 2 // R$290: até 2x sem juros
     } else if (value >= 570 && value <= 1200) {
       return 3 // R$570-R$1200: até 3x sem juros
@@ -1462,7 +1461,7 @@ function Pagamento() {
                                       {installmentOptions.map((option) => (
                                         <SelectItem key={option.quantity} value={option.quantity.toString()}>
                                           {option.quantity}x de R$ {option.amount.toFixed(2)}
-                                          {option.quantity > 1 && ` (Total: R$ ${option.total.toFixed(2)})`}
+                                          {option.quantity > 1 && option.total > 0 && ` (Total: R$ ${option.total.toFixed(2)})`}
                                           {!option.interest_free && option.fees?.buyer_interest ? ` (+R$ ${option.fees.buyer_interest.toFixed(2)} juros)` : ''}
                                         </SelectItem>
                                       ))}
@@ -1493,7 +1492,7 @@ function Pagamento() {
                                         installmentOptions.map((option) => (
                                           <SelectItem key={option.quantity} value={option.quantity.toString()}>
                                             {option.quantity}x de R$ {(Number(option.amount) || 0).toFixed(2)}
-                                            {option.quantity > 1 && ` (Total: R$ ${(Number(option.total) || 0).toFixed(2)})`}
+                                            {option.quantity > 1 && (Number(option.total) || 0) > 0 && ` (Total: R$ ${(Number(option.total) || 0).toFixed(2)})`}
                                             {!option.interest_free && option.fees?.buyer_interest ? ` (+R$ ${(Number(option.fees.buyer_interest) || 0).toFixed(2)} juros)` : ''}
                                           </SelectItem>
                                         ))
@@ -1598,14 +1597,19 @@ function Pagamento() {
                         <p className="text-sm text-blue-800 font-medium">
                           {selectedInstallments}x de R$ {(Number(installmentOptions.find(opt => opt.quantity === selectedInstallments)?.amount) || 0).toFixed(2)}
                         </p>
-                        <p className="text-xs text-blue-600 mt-1">
-                          Total: R$ {(Number(installmentOptions.find(opt => opt.quantity === selectedInstallments)?.total) || 0).toFixed(2)}
-                          {(() => {
-                            const selectedOption = installmentOptions.find(opt => opt.quantity === selectedInstallments);
-                            if (!selectedOption?.interest_free && selectedOption?.fees?.buyer_interest) return ` (+R$ ${(Number(selectedOption.fees.buyer_interest) || 0).toFixed(2)} juros)`;
-                            return '';
-                          })()}
-                        </p>
+                        {(() => {
+                          const selectedOption = installmentOptions.find(opt => opt.quantity === selectedInstallments);
+                          const total = Number(selectedOption?.total) || 0;
+                          if (total > 0) {
+                            return (
+                              <p className="text-xs text-blue-600 mt-1">
+                                Total: R$ {total.toFixed(2)}
+                                {!selectedOption?.interest_free && selectedOption?.fees?.buyer_interest ? ` (+R$ ${(Number(selectedOption.fees.buyer_interest) || 0).toFixed(2)} juros)` : ''}
+                              </p>
+                            );
+                          }
+                          return null;
+                        })()}
                       </div>
                     )}
                   </div>
