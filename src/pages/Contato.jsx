@@ -10,6 +10,7 @@ import { PageHero } from '@/components/PageHero.jsx'
 import { Send } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { contractSignatureService } from '@/services/firebase'
 
 function Contato() {
   const formRef = useScrollAnimation()
@@ -42,6 +43,17 @@ function Contato() {
       if (response.ok) {
         const data = await response.json()
         localStorage.setItem('chatSession', JSON.stringify(data))
+        
+        // Registrar assinatura de contrato se o usuário aceitou os termos
+        if (formData.aceito) {
+          try {
+            await registerContactFormContractSignature()
+          } catch (contractError) {
+            console.warn('⚠️ Erro ao registrar assinatura de contrato:', contractError)
+            // Não falhar o envio do formulário por causa disso
+          }
+        }
+        
         alert('Mensagem enviada com sucesso! O chatbot foi iniciado.')
         setFormData({
           nome: '',
@@ -59,6 +71,47 @@ function Contato() {
     } catch (error) {
       console.error('Error:', error)
       alert('Erro ao enviar mensagem.')
+    }
+  }
+
+  // Função para registrar assinatura de contrato no formulário de contato
+  const registerContactFormContractSignature = async () => {
+    try {
+      console.log('📝 Registrando assinatura de contrato do formulário de contato...')
+      
+      const contractData = {
+        userName: formData.nome,
+        userEmail: formData.email,
+        userPhone: formData.telefone.replace(/\D/g, ''),
+        contractType: 'terms_and_conditions',
+        contractVersion: '1.0',
+        signatureContext: 'contact_form',
+        planType: '', // Não há plano específico no formulário de contato
+        planId: '',
+        metadata: {
+          perfil: formData.perfil,
+          instituicao: formData.instituicao,
+          assunto: formData.assunto,
+          mensagem: formData.mensagem,
+          timestamp: new Date().toISOString()
+        }
+      }
+
+      // Determinar audience baseado no perfil
+      const audience = formData.perfil === 'professor' ? 'professores' : 'alunos'
+
+      const result = await contractSignatureService.registerContractAcceptance(
+        formData.email, // Usar email como identificador
+        contractData,
+        audience
+      )
+
+      console.log('✅ Assinatura de contrato do formulário registrada:', result.signatureId)
+      return result
+      
+    } catch (error) {
+      console.error('❌ Erro ao registrar assinatura de contrato do formulário:', error)
+      throw error
     }
   }
   

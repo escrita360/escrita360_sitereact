@@ -9,7 +9,7 @@ import { CreditCard, Lock, Calendar, User, Shield, CheckCircle2, ArrowLeft, Aler
 import React, { useState, useEffect, useCallback } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
-import { firebasePaymentService } from '@/services/firebase'
+import { firebasePaymentService, contractSignatureService } from '@/services/firebase'
 import { paymentService } from '@/services/payment'
 import CardBrandIcon from '@/components/CardBrandIcon'
 import usePagBank from '@/hooks/usePagBank'
@@ -365,6 +365,46 @@ function Pagamento() {
     }))
   }
 
+  // Função para registrar assinatura de contrato/termos
+  const registerContractSignature = async (customerData, planData, transactionResult) => {
+    try {
+      console.log('📝 Registrando assinatura de contrato...')
+      
+      const contractData = {
+        userName: customerData.name,
+        userEmail: customerData.email,
+        userCpf: customerData.cpf,
+        userPhone: customerData.phone,
+        contractType: 'terms_and_conditions',
+        contractVersion: '1.0',
+        signatureContext: 'payment_process',
+        planType: planData.audience || audience,
+        planId: planData.id || 'plan_' + planData.name,
+        ipAddress: '', // Pode ser obtido via serviço externo se necessário
+        metadata: {
+          transactionId: transactionResult.id,
+          paymentMethod: formData.paymentMethod,
+          planName: planData.name,
+          planPrice: planData.price,
+          timestamp: new Date().toISOString()
+        }
+      }
+
+      const result = await contractSignatureService.registerContractAcceptance(
+        user?.uid || customerData.email, // Usar UID do usuário ou email como fallback
+        contractData,
+        planData.audience || audience
+      )
+
+      console.log('✅ Assinatura de contrato registrada:', result.signatureId)
+      return result
+      
+    } catch (error) {
+      console.error('❌ Erro ao registrar assinatura de contrato:', error)
+      throw error
+    }
+  }
+
   const handlePaymentSubmit = async () => {
     if (!validateForm()) return
 
@@ -505,6 +545,14 @@ function Pagamento() {
 
       // Para cartão, marcar como sucesso imediatamente
       setPaymentSuccess(true)
+
+      // Registrar assinatura de contrato/termos
+      try {
+        await registerContractSignature(customerData, planData, result)
+      } catch (contractError) {
+        console.warn('⚠️ Erro ao registrar assinatura de contrato:', contractError)
+        // Não falhar o pagamento por causa disso
+      }
 
       // Se for usuário novo, criar conta
       if (!user) {

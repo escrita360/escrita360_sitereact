@@ -999,5 +999,146 @@ export const firebaseCreditService = {
   }
 }
 
+/**
+ * Serviço de Assinatura de Contratos/Termos
+ * Gerencia o armazenamento de aceitações de termos e condições pelos usuários
+ */
+export const contractSignatureService = {
+  
+  /**
+   * Registrar assinatura/aceitação de termos pelo usuário
+   */
+  async registerContractAcceptance(userId, contractData, audience = 'alunos') {
+    try {
+      const { db: targetDb, projectId } = getFirebaseForPlan(audience)
+      
+      console.log(`📝 Registrando assinatura de contrato no projeto ${projectId} para usuário:`, userId)
+      
+      const signatureData = removeUndefinedFields({
+        userId: userId,
+        userName: contractData.userName || '',
+        userEmail: contractData.userEmail || '',
+        userCpf: contractData.userCpf || '',
+        userPhone: contractData.userPhone || '',
+        
+        // Informações do contrato/termos
+        contractType: contractData.contractType || 'terms_and_conditions', // 'terms_and_conditions', 'privacy_policy', 'service_agreement'
+        contractVersion: contractData.contractVersion || '1.0',
+        
+        // Dados da aceitação
+        acceptedAt: serverTimestamp(),
+        ipAddress: contractData.ipAddress || '',
+        userAgent: contractData.userAgent || navigator.userAgent,
+        
+        // Contexto da assinatura
+        signatureContext: contractData.signatureContext || 'payment_process', // 'payment_process', 'registration', 'contact_form'
+        planType: contractData.planType || '',
+        planId: contractData.planId || '',
+        
+        // Dados adicionais
+        metadata: contractData.metadata || {},
+        
+        // Status
+        status: 'accepted',
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      })
+      
+      // Criar documento na coleção contract_signatures
+      const signatureRef = doc(collection(targetDb, 'contract_signatures'))
+      await setDoc(signatureRef, signatureData)
+      
+      console.log(`✅ Assinatura de contrato registrada no projeto ${projectId}:`, signatureRef.id)
+      
+      return {
+        success: true,
+        signatureId: signatureRef.id,
+        signature: signatureData
+      }
+      
+    } catch (error) {
+      console.error('❌ Erro ao registrar assinatura de contrato:', error)
+      throw error
+    }
+  },
+
+  /**
+   * Buscar assinaturas de contrato de um usuário
+   */
+  async getUserContractSignatures(userId, audience = 'alunos') {
+    try {
+      const { db: targetDb, projectId } = getFirebaseForPlan(audience)
+      
+      const q = query(
+        collection(targetDb, 'contract_signatures'),
+        where('userId', '==', userId),
+        orderBy('createdAt', 'desc')
+      )
+      
+      const querySnapshot = await getDocs(q)
+      const signatures = []
+      
+      querySnapshot.forEach(doc => {
+        signatures.push({
+          id: doc.id,
+          ...doc.data()
+        })
+      })
+      
+      console.log(`📋 Encontradas ${signatures.length} assinaturas para usuário ${userId} no projeto ${projectId}`)
+      return signatures
+      
+    } catch (error) {
+      console.error('❌ Erro ao buscar assinaturas de contrato:', error)
+      throw error
+    }
+  },
+
+  /**
+   * Verificar se usuário aceitou termos específicos
+   */
+  async hasAcceptedContract(userId, contractType = 'terms_and_conditions', audience = 'alunos') {
+    try {
+      const { db: targetDb } = getFirebaseForPlan(audience)
+      
+      const q = query(
+        collection(targetDb, 'contract_signatures'),
+        where('userId', '==', userId),
+        where('contractType', '==', contractType),
+        where('status', '==', 'accepted')
+      )
+      
+      const querySnapshot = await getDocs(q)
+      return !querySnapshot.empty
+      
+    } catch (error) {
+      console.error('❌ Erro ao verificar aceitação de contrato:', error)
+      return false
+    }
+  },
+
+  /**
+   * Atualizar status de uma assinatura
+   */
+  async updateSignatureStatus(signatureId, newStatus, audience = 'alunos') {
+    try {
+      const { db: targetDb, projectId } = getFirebaseForPlan(audience)
+      
+      const signatureRef = doc(targetDb, 'contract_signatures', signatureId)
+      await updateDoc(signatureRef, {
+        status: newStatus,
+        updatedAt: serverTimestamp()
+      })
+      
+      console.log(`✅ Status da assinatura ${signatureId} atualizado para ${newStatus} no projeto ${projectId}`)
+      return { success: true }
+      
+    } catch (error) {
+      console.error('❌ Erro ao atualizar status da assinatura:', error)
+      throw error
+    }
+  }
+}
+
 // Exportar referências padrão e helpers
 export { auth, db, getFirebaseForPlan, authAluno, dbAluno, authProfessor, dbProfessor }
