@@ -1,10 +1,102 @@
 import api from './api.js'
 
+// SDK do PagBank para criptografia de cartão
+let PagSeguro = null
+let isSDKLoaded = false
+
+/**
+ * Carrega o SDK do PagBank dinamicamente
+ */
+const loadPagSeguroSDK = () => {
+  return new Promise((resolve, reject) => {
+    if (isSDKLoaded && window.PagSeguro) {
+      PagSeguro = window.PagSeguro
+      resolve(PagSeguro)
+      return
+    }
+
+    const script = document.createElement('script')
+    script.src = 'https://assets.pagseguro.com.br/checkout-sdk-js/rc/dist/browser/pagseguro.min.js'
+    script.onload = () => {
+      PagSeguro = window.PagSeguro
+      isSDKLoaded = true
+      resolve(PagSeguro)
+    }
+    script.onerror = () => {
+      reject(new Error('Falha ao carregar SDK do PagBank'))
+    }
+    document.head.appendChild(script)
+  })
+}
+
+/**
+ * Criptografa dados do cartão usando SDK do PagBank
+ * @param {Object} cardData - Dados do cartão
+ * @param {string} publicKey - Chave pública do PagBank
+ * @returns {Promise<Object>} - Cartão criptografado
+ */
+const encryptCard = async (cardData, publicKey) => {
+  try {
+    await loadPagSeguroSDK()
+    
+    const card = PagSeguro.encryptCard({
+      publicKey: publicKey,
+      holder: cardData.holderName,
+      number: cardData.number.replace(/\s/g, ''),
+      expMonth: cardData.expiryMonth.padStart(2, '0'),
+      expYear: cardData.expiryYear,
+      securityCode: cardData.cvv
+    })
+
+    if (card.hasErrors) {
+      const errorMessages = card.errors.map(error => error.message).join(', ')
+      throw new Error(`Erro na criptografia do cartão: ${errorMessages}`)
+    }
+
+    return {
+      encrypted: card.encryptedCard,
+      hasErrors: card.hasErrors,
+      errors: card.errors
+    }
+  } catch (error) {
+    console.error('❌ Erro ao criptografar cartão:', error)
+    throw error
+  }
+}
+
 export const paymentService = {
   // ============ MÉTODOS PAGBANK ============
 
   /**
-   * Consulta opções de parcelamento via backend
+   * Consulta taxas de parcelamento via backend
+   * @param {number} value - Valor em centavos
+   * @param {number} maxInstallments - Máximo de parcelas
+   * @param {number} maxInstallmentsNoInterest - Máximo de parcelas sem juros
+   * @param {string} creditCardBin - BIN do cartão (opcional)
+   * @returns {Promise<Object>} - Opções de parcelamento com taxas
+   */
+  async getInstallmentFees(value, maxInstallments = 12, maxInstallmentsNoInterest = 1, creditCardBin = null) {
+    try {
+      const params = {
+        value: Math.round(value * 100), // Converter para centavos
+        max_installments: maxInstallments,
+        max_installments_no_interest: maxInstallmentsNoInterest
+      }
+
+      if (creditCardBin) {
+        params.credit_card_bin = creditCardBin
+      }
+
+      const response = await api.get('/payment/pagbank/fees', { params })
+      return response.data
+    } catch (error) {
+      console.error('❌ Erro ao consultar taxas:', error)
+      throw error
+    }
+  },
+
+  /**
+   * Consulta opções de parcelamento via backend (método legado)
    * @param {number} amount - Valor do pagamento
    * @returns {Promise<Array>} - Opções de parcelamento
    */
@@ -34,6 +126,74 @@ export const paymentService = {
 
     const response = await api.post('/payment/create-pagbank-checkout', data)
     return response.data
+  },
+
+  /**
+   * Processa pagamento com cartão criptografado via PagBank
+   * @param {Object} paymentData - Dados do pagamento
+   * @param {string} publicKey - Chave pública do PagBank
+   * @returns {Promise<Object>} - Resultado do pagamento
+   */
+  async processPagBankEncryptedCardPayment(paymentData, publicKey) {
+    try {
+      const { planData, customerData, cardData, installments = 1 } = paymentData
+
+      // Criptografar cartão
+      const encryptedCard = await encryptCard(cardData, publicKey)
+
+      // Limpar telefone apenas números
+      const phoneClean = customerData.phone.replace(/\D/g, '')
+      
+      const data = {
+        reference_id: `encrypted_order_${Date.now()}`,
+        customer: {
+          name: customerData.name.trim(),
+          email: customerData.email.trim(),
+          tax_id: customerData.cpf.replace(/\D/g, ''),
+          phones: [{
+            country: '55',
+            area: phoneClean.substring(0, 2),
+            number: phoneClean.substring(2),
+            type: 'MOBILE'
+          }]
+        },
+        items: [{
+          reference_id: `item_${Date.now()}`,
+          name: planData.name,
+          quantity: 1,
+          unit_amount: Math.round(planData.price * 100)
+        }],
+        charges: [{
+          reference_id: `charge_${Date.now()}`,
+          description: `Compra de ${planData.name}`,
+          amount: {
+            value: Math.round(planData.price * 100),
+            currency: 'BRL'
+          },
+          payment_method: {
+            type: 'CREDIT_CARD',
+            installments: installments,
+            capture: true,
+            card: {
+              encrypted: encryptedCard.encrypted,
+              store: false,
+              holder: {
+                name: cardData.holderName,
+                tax_id: customerData.cpf.replace(/\D/g, '')
+              }
+            }
+          }
+        }],
+        notification_urls: []
+      }
+
+      console.log('🔐 Enviando pedido com cartão criptografado...')
+      const response = await api.post('/payment/pagbank/create-encrypted-order', data)
+      return response.data
+    } catch (error) {
+      console.error('❌ Erro no pagamento com cartão criptografado:', error)
+      throw error
+    }
   },
 
   /**
@@ -303,6 +463,94 @@ export const paymentService = {
     const response = await api.post('/payment/create-pagbank-subscription', data)
     return response.data
   },
+
+  /**
+   * Lista pedidos com filtros
+   * @param {Object} filters - Filtros de busca
+   * @returns {Promise<Object>} - Lista de pedidos
+   */
+  async getOrders(filters = {}) {
+    try {
+      const response = await api.get('/payment/pagbank/orders', { params: filters })
+      return response.data
+    } catch (error) {
+      console.error('❌ Erro ao listar pedidos:', error)
+      throw error
+    }
+  },
+
+  /**
+   * Consulta um pedido específico
+   * @param {string} orderId - ID do pedido
+   * @returns {Promise<Object>} - Dados do pedido
+   */
+  async getOrder(orderId) {
+    try {
+      const response = await api.get(`/payment/pagbank/order/${orderId}`)
+      return response.data
+    } catch (error) {
+      console.error('❌ Erro ao consultar pedido:', error)
+      throw error
+    }
+  },
+
+  /**
+   * Consulta pagamentos de um pedido
+   * @param {string} orderId - ID do pedido
+   * @returns {Promise<Object>} - Pagamentos do pedido
+   */
+  async getOrderPayments(orderId) {
+    try {
+      const response = await api.get(`/payment/pagbank/order/${orderId}/payments`)
+      return response.data
+    } catch (error) {
+      console.error('❌ Erro ao consultar pagamentos:', error)
+      throw error
+    }
+  },
+
+  /**
+   * Paga um pedido existente
+   * @param {string} orderId - ID do pedido
+   * @param {Object} paymentData - Dados do pagamento
+   * @returns {Promise<Object>} - Resultado do pagamento
+   */
+  async payOrder(orderId, paymentData) {
+    try {
+      const response = await api.post(`/payment/pagbank/order/${orderId}/pay`, paymentData)
+      return response.data
+    } catch (error) {
+      console.error('❌ Erro ao pagar pedido:', error)
+      throw error
+    }
+  },
+
+  /**
+   * Obtém chave pública do PagBank para criptografia
+   * @returns {Promise<string>} - Chave pública
+   */
+  async getPublicKey() {
+    try {
+      // Por enquanto usando chave de exemplo - em produção viria do backend
+      // TODO: Implementar endpoint no backend para obter a chave pública
+      return process.env.VITE_PAGBANK_PUBLIC_KEY || 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqOmBQ...'
+    } catch (error) {
+      console.error('❌ Erro ao obter chave pública:', error)
+      throw error
+    }
+  },
+
+  // Exportar função de criptografia para uso externo se necessário
+  encryptCard,
+
+  // ============ MÉTODOS LEGADOS ============
+
+  /**
+   * Cria assinatura recorrente via PagBank (através do backend)
+   * @param {Object} subscriptionData - Dados da assinatura
+   * @returns {Promise<Object>} - Dados da assinatura criada
+   */
+  async createPagBankSubscription(subscriptionData) {
 
   /**
    * Consulta status de pagamento PagBank (através do backend)

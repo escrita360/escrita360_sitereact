@@ -83,13 +83,13 @@ function Pagamento() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedPlan, isYearly])
 
-  // Limpar sessionStorage quando componente desmontar
+  // Recarregar taxas quando cartão mudar para obter BIN específico
   useEffect(() => {
-    return () => {
-      sessionStorage.removeItem('selectedPlan')
-      sessionStorage.removeItem('selectedAudience')
+    if (formData.cardNumber && formData.cardNumber.replace(/\s/g, '').length >= 6) {
+      loadInstallmentOptions()
     }
-  }, [])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData.cardNumber])
 
   // Preencher dados automaticamente se usuário estiver logado
   useEffect(() => {
@@ -136,13 +136,61 @@ function Pagamento() {
 
     try {
       const price = isYearly ? selectedPlan.yearlyPrice : selectedPlan.monthlyPrice
-      const options = await paymentService.getInstallmentOptions(price)
+      
+      // Usar novo método com taxas detalhadas
+      const feesData = await paymentService.getInstallmentFees(
+        price, // valor em reais
+        12, // máximo 12 parcelas
+        1, // sem juros até 1x
+        formData.cardNumber ? formData.cardNumber.replace(/\s/g, '').substring(0, 6) : null // BIN do cartão se disponível
+      )
+      
+      // Converter dados do PagBank para formato esperado pelo componente
+      const options = []
+      
+      if (feesData.payment_methods?.credit_card) {
+        const brands = Object.keys(feesData.payment_methods.credit_card)
+        
+        if (brands.length > 0) {
+          const brandData = feesData.payment_methods.credit_card[brands[0]]
+          
+          brandData.installment_plans?.forEach(plan => {
+            options.push({
+              quantity: plan.installments,
+              amount: plan.installment_value / 100, // converter de centavos
+              total: plan.amount.total / 100, // converter de centavos
+              interest_free: plan.amount.fees === 0,
+              fees: plan.amount.fees / 100 // taxas em reais
+            })
+          })
+        }
+      }
+      
+      // Fallback se não houver opções
+      if (options.length === 0) {
+        options.push({ 
+          quantity: 1, 
+          amount: price, 
+          total: price, 
+          interest_free: true,
+          fees: 0
+        })
+      }
+      
       setInstallmentOptions(options)
+      console.log('💳 Opções de parcelamento carregadas:', options.length)
+      
     } catch (error) {
       console.error('Erro ao carregar opções de parcelamento:', error)
       // Fallback: apenas 1x sem juros
       const price = isYearly ? selectedPlan.yearlyPrice : selectedPlan.monthlyPrice
-      setInstallmentOptions([{ quantity: 1, amount: price, total: price, interest_free: true }])
+      setInstallmentOptions([{ 
+        quantity: 1, 
+        amount: price, 
+        total: price, 
+        interest_free: true,
+        fees: 0
+      }])
     }
   }
 
@@ -214,8 +262,8 @@ function Pagamento() {
           holderName: selectedSavedCard.card.holderName
         } : {
           number: formData.cardNumber.replace(/\s/g, ''),
-          expiryMonth: parseInt(formData.expiryDate.split('/')[0]),
-          expiryYear: parseInt(formData.expiryDate.split('/')[1]),
+          expiryMonth: formData.expiryDate.split('/')[0],
+          expiryYear: formData.expiryDate.split('/')[1].length === 2 ? '20' + formData.expiryDate.split('/')[1] : formData.expiryDate.split('/')[1],
           cvv: formData.cvv,
           holderName: formData.cardName
         }
@@ -227,8 +275,20 @@ function Pagamento() {
           installments: selectedInstallments
         }
 
-        // Para pagamentos únicos com cartão, usar a rota de orders
-        result = await paymentService.createPagBankCardOrder(paymentData)
+        try {
+          // Tentar pagamento com cartão criptografado primeiro
+          console.log('🔐 Tentando pagamento com cartão criptografado...')
+          const publicKey = await paymentService.getPublicKey()
+          
+          result = await paymentService.processPagBankEncryptedCardPayment(paymentData, publicKey)
+          console.log('✅ Pagamento criptografado realizado com sucesso')
+          
+        } catch (encryptedError) {
+          console.warn('⚠️ Pagamento criptografado falhou, usando método PCI:', encryptedError.message)
+          
+          // Fallback para método PCI (dados brutos) - apenas se necessário
+          result = await paymentService.createPagBankCardOrder(paymentData)
+        }
 
       } else if (formData.paymentMethod === 'pix') {
         // Pagamento PIX
