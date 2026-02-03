@@ -147,18 +147,37 @@ function Pagamento() {
 
   // Função para determinar número máximo de parcelas baseado no valor
   const getMaxInstallments = (value) => {
+    console.log('💳 Calculando parcelas para valor:', value)
+    
     if (value >= 49 && value <= 120) {
+      console.log('💳 Faixa R$49-R$120: máximo 1x')
       return 1 // R$49,00 - R$120,00: até 1x
-    } else if (value >= 121 && value <= 289) {
+    } else if (value >= 121 && value < 290) {
+      console.log('💳 Faixa R$121-R$289: máximo 2x')
       return 2 // Valores intermediários: até 2x
-    } else if (value >= 290 && value <= 569) {
+    } else if (value >= 290 && value < 570) {
+      console.log('💳 Faixa R$290-R$569: máximo 2x')
       return 2 // R$290,00: até 2x
     } else if (value >= 570 && value <= 1200) {
+      console.log('💳 Faixa R$570-R$1200: máximo 3x')
       return 3 // R$570,00 - R$1200: até 3x
     } else if (value > 1200) {
-      return Math.min(12, Math.floor(value / 100)) // Valores maiores: máximo baseado no valor
+      const maxParcelas = Math.min(12, Math.floor(value / 100))
+      console.log('💳 Valor acima R$1200: máximo', maxParcelas + 'x')
+      return maxParcelas // Valores maiores: máximo baseado no valor
     }
+    console.log('💳 Fallback: máximo 1x')
     return 1 // Fallback
+  }
+
+  // Função para determinar parcelas sem juros baseado no valor
+  const getMaxInstallmentsNoInterest = (value) => {
+    if (value >= 290 && value < 570) {
+      return 2 // R$290: até 2x sem juros
+    } else if (value >= 570 && value <= 1200) {
+      return 3 // R$570-R$1200: até 3x sem juros
+    }
+    return 1 // Demais valores: apenas 1x sem juros
   }
 
   const loadInstallmentOptions = async () => {
@@ -173,7 +192,7 @@ function Pagamento() {
       
       // Determinar número máximo de parcelas baseado no valor
       const maxInstallments = getMaxInstallments(price)
-      const maxInstallmentsNoInterest = Math.min(maxInstallments, 1) // Sem juros sempre até 1x
+      const maxInstallmentsNoInterest = getMaxInstallmentsNoInterest(price)
       
       console.log('💳 =================================')
       console.log('💳 Carregando opções de parcelamento')
@@ -187,10 +206,10 @@ function Pagamento() {
       
       let feesData = null
       
-      // Tentar usar o hook primeiro
+      // Consultar taxas diretamente da API do PagBank
       if (typeof getInstallmentFees === 'function') {
         try {
-          console.log('💳 Chamando getInstallmentFees via hook...')
+          console.log('💳 Consultando taxas de parcelamento na API do PagBank...')
           feesData = await getInstallmentFees(
             price, // valor em reais
             maxInstallments, // máximo de parcelas baseado no valor
@@ -199,53 +218,26 @@ function Pagamento() {
               ? formData.cardNumber.replace(/\s/g, '').substring(0, 6) 
               : null // BIN do cartão se disponível
           )
-          console.log('✅ Hook funcionou, dados recebidos:', feesData)
+          console.log('✅ Taxas consultadas com sucesso:', feesData)
         } catch (hookError) {
-          console.warn('⚠️ Hook falhou, tentando API diretamente:', hookError)
-          
-          // Fallback: chamar API diretamente via paymentService
-          try {
-            feesData = await paymentService.getInstallmentFees(
-              price,
-              maxInstallments,
-              maxInstallmentsNoInterest,
-              formData.cardNumber && formData.cardNumber.replace(/\s/g, '').length >= 6 
-                ? formData.cardNumber.replace(/\s/g, '').substring(0, 6) 
-                : null
-            )
-            console.log('✅ API direta funcionou:', feesData)
-          } catch (apiError) {
-            console.warn('⚠️ API direta também falhou:', apiError)
-          }
+          console.error('❌ Erro ao consultar taxas na API:', hookError)
+          throw new Error(`Não foi possível consultar as taxas de parcelamento: ${hookError.message}`)
         }
       } else {
-        console.warn('⚠️ getInstallmentFees não é função, usando API direta')
-        // Usar API diretamente se hook não estiver disponível
-        try {
-          feesData = await paymentService.getInstallmentFees(
-            price,
-            maxInstallments,
-            maxInstallmentsNoInterest,
-            formData.cardNumber && formData.cardNumber.replace(/\s/g, '').length >= 6 
-              ? formData.cardNumber.replace(/\s/g, '').substring(0, 6) 
-              : null
-          )
-          console.log('✅ API direta funcionou (sem hook):', feesData)
-        } catch (apiError) {
-          console.warn('⚠️ API direta falhou:', apiError)
-        }
+        console.error('❌ Hook getInstallmentFees não disponível')
+        throw new Error('Sistema de consulta de taxas não disponível')
       }
       
       console.log('💳 Resposta da API de taxas (tipo):', typeof feesData)
       console.log('💳 Resposta da API de taxas (conteúdo):', feesData)
       
-      // Converter dados do PagBank para formato esperado pelo componente
+      // Processar dados da API do PagBank
       const options = []
       
       if (feesData && Array.isArray(feesData) && feesData.length > 0) {
         // Se retornou o formato já processado pelo hook
-        console.log('💳 Usando dados já processados pelo hook')
-        options.push(...feesData)
+        console.log('💳 Usando dados processados pelo hook')
+        options.push(...feesData.filter(option => option.quantity <= maxInstallments))
       } else if (feesData?.payment_methods?.credit_card) {
         console.log('💳 Processando dados brutos do PagBank')
         const brands = Object.keys(feesData.payment_methods.credit_card)
@@ -255,59 +247,42 @@ function Pagamento() {
           console.log('💳 Dados da primeira bandeira:', brandData)
           
           brandData.installment_plans?.forEach(plan => {
-            options.push({
-              quantity: plan.installments,
-              amount: plan.installment_value / 100, // converter de centavos
-              total: plan.amount.total / 100, // converter de centavos
-              interest_free: plan.amount.fees === 0,
-              fees: plan.amount.fees / 100 // taxas em reais
-            })
+            if (plan.installments <= maxInstallments) {
+              options.push({
+                quantity: plan.installments,
+                amount: plan.installment_value / 100, // converter de centavos
+                total: plan.amount.total / 100, // converter de centavos
+                interest_free: plan.amount.fees === 0,
+                fees: plan.amount.fees / 100 // taxas em reais
+              })
+            }
           })
         }
-      } else {
-        console.log('⚠️ Resposta da API não possui estrutura esperada')
       }
       
-      // Fallback se não houver opções
+      // Se não conseguiu processar nenhuma opção da API, erro
       if (options.length === 0) {
-        console.log('⚠️ Criando opções de parcelamento padrão (fallback)')
-        // Criar opções padrão baseadas no preço e regras de negócio
-        for (let i = 1; i <= maxInstallments; i++) {
-          let installmentAmount = price / i
-          let total = price
-          let interestFree = i <= maxInstallmentsNoInterest // Baseado na regra de negócio
-          
-          // Adicionar juros simulados para parcelas maiores que o limite sem juros
-          if (!interestFree) {
-            const interestRate = 0.0299 // 2.99% ao mês
-            total = price * Math.pow(1 + interestRate, i - maxInstallmentsNoInterest)
-            installmentAmount = total / i
-          }
-          
-          options.push({ 
-            quantity: i, 
-            amount: installmentAmount, 
-            total: total, 
-            interest_free: interestFree,
-            fees: total - price
-          })
-        }
+        console.error('❌ Nenhuma opção de parcelamento retornada pela API')
+        throw new Error('Não foi possível obter opções de parcelamento da API')
       }
       
       // Garantir que não excedemos o limite máximo de parcelas
       const filteredOptions = options.filter(option => option.quantity <= maxInstallments)
       
-      console.log('💳 Opções filtradas pelo limite de parcelas:', filteredOptions)
+      console.log('💳 Opções processadas da API:', filteredOptions.length)
+      console.log('💳 Opções finais:', filteredOptions)
       setInstallmentOptions(filteredOptions)
-      console.log('✅ Opções de parcelamento carregadas com sucesso')
+      console.log('✅ Opções de parcelamento carregadas da API com sucesso')
       
     } catch (error) {
       console.error('❌ Erro ao carregar opções de parcelamento:', error)
       console.error('❌ Stack trace:', error.stack)
       
-      // Fallback: apenas 1x sem juros
-      const price = isYearly ? selectedPlan.yearlyPrice : selectedPlan.monthlyPrice
-      const fallbackOptions = [{ 
+      // Mostrar erro para o usuário
+      setPaymentError(`Erro ao consultar taxas de parcelamento: ${error.message}`)
+      
+      // Opção mínima: apenas 1x sem juros
+      const emergencyOption = [{ 
         quantity: 1, 
         amount: price, 
         total: price, 
@@ -315,8 +290,8 @@ function Pagamento() {
         fees: 0
       }]
       
-      console.log('⚠️ Definindo opções de fallback:', fallbackOptions)
-      setInstallmentOptions(fallbackOptions)
+      console.log('⚠️ Usando opção de emergência (1x):', emergencyOption)
+      setInstallmentOptions(emergencyOption)
     } finally {
       setLoadingInstallments(false)
     }
@@ -1336,16 +1311,20 @@ function Pagamento() {
                                 {/* Informação sobre limites de parcelamento */}
                                 <div className="text-xs text-gray-500 mb-2">
                                   {(() => {
-                                    const maxInstallments = getMaxInstallments(isYearly ? selectedPlan.yearlyPrice : selectedPlan.monthlyPrice)
+                                    const price = isYearly ? selectedPlan.yearlyPrice : selectedPlan.monthlyPrice
+                                    const maxInstallments = getMaxInstallments(price)
+                                    const maxNoInterest = getMaxInstallmentsNoInterest(price)
+                                    
                                     if (maxInstallments === 1) {
                                       return "Pagamento à vista (R$49 - R$120)"
                                     } else if (maxInstallments === 2) {
-                                      return "Até 2x sem juros (R$290)"
+                                      return `Até 2x (${maxNoInterest === 2 ? 'sem juros' : '1x sem juros'}) - R$290`
                                     } else if (maxInstallments === 3) {
-                                      return "Até 3x sem juros (R$570 - R$1.200)"
+                                      return `Até 3x (${maxNoInterest === 3 ? 'sem juros' : '1x sem juros'}) - R$570-R$1.200`
                                     }
                                     return `Até ${maxInstallments}x (1x sem juros)`
                                   })()}
+                                  <span className="text-blue-600 ml-1">• Taxas consultadas na API</span>
                                 </div>
                                 {loadingInstallments ? (
                                   <div className="border rounded-md p-3 bg-gray-50">
@@ -1377,10 +1356,10 @@ function Pagamento() {
                                   </Select>
                                 )}
                                 {installmentOptions.length === 0 && !loadingInstallments && (
-                                  <p className="text-xs text-red-500 mt-1">Não foi possível carregar as opções de parcelamento</p>
+                                  <p className="text-xs text-red-500 mt-1">Erro ao consultar taxas de parcelamento na API</p>
                                 )}
                                 {installmentOptions.length > 0 && (
-                                  <p className="text-xs text-green-600 mt-1">✓ {installmentOptions.length} opções de parcelamento disponíveis</p>
+                                  <p className="text-xs text-green-600 mt-1">✓ {installmentOptions.length} opções consultadas na API do PagBank</p>
                                 )}
                               </div>
                             )}
