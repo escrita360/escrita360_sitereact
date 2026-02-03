@@ -22,6 +22,37 @@ function Pagamento() {
   // Hook customizado para PagBank
   const { getInstallmentFees, getCardBrand, isLoading: pagBankLoading } = usePagBank()
   
+  // Estados e cidades do Brasil
+  const estadosCidades = {
+    'AC': ['Rio Branco', 'Cruzeiro do Sul', 'Sena Madureira', 'Tarauacá', 'Feijó'],
+    'AL': ['Maceió', 'Arapiraca', 'Palmeira dos Índios', 'Rio Largo', 'Penedo'],
+    'AP': ['Macapá', 'Santana', 'Laranjal do Jari', 'Oiapoque', 'Mazagão'],
+    'AM': ['Manaus', 'Parintins', 'Itacoatiara', 'Manacapuru', 'Coari'],
+    'BA': ['Salvador', 'Feira de Santana', 'Vitória da Conquista', 'Camaçari', 'Itabuna', 'Juazeiro', 'Lauro de Freitas', 'Ilhéus'],
+    'CE': ['Fortaleza', 'Caucaia', 'Juazeiro do Norte', 'Maracanaú', 'Sobral', 'Crato', 'Itapipoca'],
+    'DF': ['Brasília', 'Taguatinga', 'Ceilândia', 'Gama', 'Sobradinho'],
+    'ES': ['Vitória', 'Vila Velha', 'Serra', 'Cariacica', 'Linhares', 'Cachoeiro de Itapemirim'],
+    'GO': ['Goiânia', 'Aparecida de Goiânia', 'Anápolis', 'Rio Verde', 'Luziânia', 'Águas Lindas de Goiás'],
+    'MA': ['São Luís', 'Imperatriz', 'São José de Ribamar', 'Timon', 'Caxias', 'Codó'],
+    'MT': ['Cuiabá', 'Várzea Grande', 'Rondonópolis', 'Sinop', 'Tangará da Serra', 'Cáceres'],
+    'MS': ['Campo Grande', 'Dourados', 'Três Lagoas', 'Corumbá', 'Ponta Porã', 'Naviraí'],
+    'MG': ['Belo Horizonte', 'Uberlândia', 'Contagem', 'Juiz de Fora', 'Betim', 'Montes Claros', 'Ribeirão das Neves', 'Uberaba', 'Governador Valadares', 'Ipatinga'],
+    'PA': ['Belém', 'Ananindeua', 'Santarém', 'Marabá', 'Parauapebas', 'Castanhal', 'Abaetetuba'],
+    'PB': ['João Pessoa', 'Campina Grande', 'Santa Rita', 'Patos', 'Bayeux', 'Sousa'],
+    'PR': ['Curitiba', 'Londrina', 'Maringá', 'Ponta Grossa', 'Cascavel', 'São José dos Pinhais', 'Foz do Iguaçu'],
+    'PE': ['Recife', 'Jaboatão dos Guararapes', 'Olinda', 'Bandeiras', 'Caruaru', 'Petrolina', 'Paulista'],
+    'PI': ['Teresina', 'Parnaíba', 'Picos', 'Piripiri', 'Floriano', 'Campo Maior'],
+    'RJ': ['Rio de Janeiro', 'São Gonçalo', 'Duque de Caxias', 'Nova Iguaçu', 'Niterói', 'Belford Roxo', 'São João de Meriti', 'Campos dos Goytacazes', 'Petrópolis', 'Volta Redonda'],
+    'RN': ['Natal', 'Mossoró', 'Parnamirim', 'São Gonçalo do Amarante', 'Macaíba', 'Ceará-Mirim'],
+    'RS': ['Porto Alegre', 'Caxias do Sul', 'Pelotas', 'Canoas', 'Santa Maria', 'Gravataí', 'Viamão', 'Novo Hamburgo', 'São Leopoldo'],
+    'RO': ['Porto Velho', 'Ji-Paraná', 'Ariquemes', 'Vilhena', 'Cacoal', 'Rolim de Moura'],
+    'RR': ['Boa Vista', 'Rorainópolis', 'Caracaraí', 'Alto Alegre', 'Mucajaí'],
+    'SC': ['Florianópolis', 'Joinville', 'Blumenau', 'São José', 'Criciúma', 'Chapecó', 'Itajaí', 'Lages'],
+    'SP': ['São Paulo', 'Guarulhos', 'Campinas', 'São Bernardo do Campo', 'Santo André', 'Osasco', 'Ribeirão Preto', 'Sorocaba', 'Mauá', 'São José dos Campos', 'Mogi das Cruzes', 'Diadema', 'Jundiaí', 'Piracicaba', 'Carapicuíba', 'Bauru', 'São Vicente', 'Franca', 'Guarujá', 'Taubaté'],
+    'SE': ['Aracaju', 'Nossa Senhora do Socorro', 'Lagarto', 'Itabaiana', 'São Cristóvão', 'Estância'],
+    'TO': ['Palmas', 'Araguaína', 'Gurupi', 'Porto Nacional', 'Paraíso do Tocantins', 'Tocantinópolis']
+  }
+  
   console.log('🔍 Hook usePagBank:', { getInstallmentFees, getCardBrand, pagBankLoading })
   console.log('🔍 Tipos:', {
     getInstallmentFees: typeof getInstallmentFees,
@@ -58,7 +89,14 @@ function Pagamento() {
     password: '',
     confirmPassword: '',
     fullName: '', // Nome completo para PIX/Boleto
-    paymentMethod: 'card' // 'card', 'pix', 'pay_later'
+    paymentMethod: 'card', // 'card', 'pix', 'pay_later'
+    // Dados de endereço
+    cep: '',
+    rua: '',
+    numero: '',
+    complemento: '',
+    estado: '',
+    cidade: ''
   })
   const [errors, setErrors] = useState({})
   const [showPassword, setShowPassword] = useState(false)
@@ -151,17 +189,17 @@ function Pagamento() {
     console.log('💳 Calculando parcelas para valor:', value)
     
     if (value >= 49 && value <= 120) {
-      console.log('💳 Faixa R$49-R$120: máximo 1x')
-      return 1 // R$49,00 - R$120,00: até 1x
+      console.log('💳 Faixa R$49-R$120: máximo 3x')
+      return 3 // R$49,00 - R$120,00: até 3x
     } else if (value >= 121 && value < 290) {
-      console.log('💳 Faixa R$121-R$289: máximo 2x')
-      return 2 // Valores intermediários: até 2x
+      console.log('💳 Faixa R$121-R$289: máximo 6x')
+      return 6 // Valores intermediários: até 6x
     } else if (value >= 290 && value < 570) {
-      console.log('💳 Faixa R$290-R$569: máximo 2x')
-      return 2 // R$290,00: até 2x
+      console.log('💳 Faixa R$290-R$569: máximo 6x')
+      return 6 // R$290,00: até 6x
     } else if (value >= 570 && value <= 1200) {
-      console.log('💳 Faixa R$570-R$1200: máximo 3x')
-      return 3 // R$570,00 - R$1200: até 3x
+      console.log('💳 Faixa R$570-R$1200: máximo 12x')
+      return 12 // R$570,00 - R$1200: até 12x
     } else if (value > 1200) {
       const maxParcelas = Math.min(12, Math.floor(value / 100))
       console.log('💳 Valor acima R$1200: máximo', maxParcelas + 'x')
@@ -582,6 +620,14 @@ function Pagamento() {
     return value
   }
 
+  const formatCEP = (value) => {
+    const cleaned = value.replace(/\D/g, '')
+    if (cleaned.length <= 8) {
+      return cleaned.replace(/(\d{5})(\d)/, '$1-$2')
+    }
+    return value
+  }
+
   // Função fallback para detecção de bandeira se hook falhar
   const detectCardBrandFallback = (cardNumber) => {
     const number = cardNumber.replace(/\s/g, '')
@@ -635,6 +681,7 @@ function Pagamento() {
     else if (field === 'cvv') formattedValue = value.replace(/\D/g, '').slice(0, 4)
     else if (field === 'cpf') formattedValue = formatCPF(value)
     else if (field === 'phone') formattedValue = formatPhone(value)
+    else if (field === 'cep') formattedValue = formatCEP(value)
     else if (field === 'cardName') formattedValue = value.toUpperCase()
 
     // Log quando método de pagamento mudar
@@ -642,7 +689,12 @@ function Pagamento() {
       console.log('💳 Método de pagamento alterado para:', value)
     }
 
-    setFormData(prev => ({ ...prev, [field]: formattedValue }))
+    // Limpar cidade quando estado mudar
+    if (field === 'estado') {
+      setFormData(prev => ({ ...prev, [field]: formattedValue, cidade: '' }))
+    } else {
+      setFormData(prev => ({ ...prev, [field]: formattedValue }))
+    }
     if (errors[field]) setErrors(prev => ({ ...prev, [field]: '' }))
   }
 
@@ -713,6 +765,25 @@ function Pagamento() {
     }
     if (!user && formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'As senhas não coincidem'
+    }
+
+    // Validações de endereço (sempre obrigatórias se usuário não estiver logado)
+    if (!user) {
+      if (!formData.cep || formData.cep.replace(/\D/g, '').length !== 8) {
+        newErrors.cep = 'CEP válido é obrigatório'
+      }
+      if (!formData.rua || formData.rua.trim().length < 3) {
+        newErrors.rua = 'Rua é obrigatória'
+      }
+      if (!formData.numero || formData.numero.trim().length < 1) {
+        newErrors.numero = 'Número é obrigatório'
+      }
+      if (!formData.estado) {
+        newErrors.estado = 'Estado é obrigatório'
+      }
+      if (!formData.cidade || formData.cidade.trim().length < 2) {
+        newErrors.cidade = 'Cidade é obrigatória'
+      }
     }
 
     // Validações específicas para cartão de crédito
@@ -1033,6 +1104,95 @@ function Pagamento() {
                           </p>
                         </div>
 
+                        <div className="space-y-4 mt-6">
+                          <h4 className="text-md font-medium text-slate-700">Endereço de Cobrança</h4>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <Label htmlFor="cep">CEP *</Label>
+                              <Input id="cep" placeholder="00000-000"
+                                value={formData.cep} onChange={(e) => handleInputChange('cep', e.target.value)}
+                                className={errors.cep ? 'border-red-500' : ''} />
+                              {errors.cep && <p className="text-xs text-red-500 mt-1">{errors.cep}</p>}
+                            </div>
+                            <div>
+                              <Label htmlFor="numero">Número</Label>
+                              <Input id="numero" placeholder="0000"
+                                value={formData.numero} onChange={(e) => handleInputChange('numero', e.target.value)}
+                                className={errors.numero ? 'border-red-500' : ''} />
+                              {errors.numero && <p className="text-xs text-red-500 mt-1">{errors.numero}</p>}
+                            </div>
+                            <div className="col-span-2">
+                              <Label htmlFor="rua">Rua</Label>
+                              <Input id="rua" placeholder="Ex: Rua João Pessoa"
+                                value={formData.rua} onChange={(e) => handleInputChange('rua', e.target.value)}
+                                className={errors.rua ? 'border-red-500' : ''} />
+                              {errors.rua && <p className="text-xs text-red-500 mt-1">{errors.rua}</p>}
+                            </div>
+                            <div className="col-span-2">
+                              <Label htmlFor="complemento">Complemento</Label>
+                              <Input id="complemento" placeholder="Ex: Casa 3"
+                                value={formData.complemento} onChange={(e) => handleInputChange('complemento', e.target.value)}
+                                className={errors.complemento ? 'border-red-500' : ''} />
+                              {errors.complemento && <p className="text-xs text-red-500 mt-1">{errors.complemento}</p>}
+                            </div>
+                            <div>
+                              <Label htmlFor="estado">Estado</Label>
+                              <select
+                                id="estado"
+                                value={formData.estado}
+                                onChange={(e) => handleInputChange('estado', e.target.value)}
+                                className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${errors.estado ? 'border-red-500' : ''}`}
+                              >
+                                <option value="">-- Selecione o estado --</option>
+                                <option value="AC">Acre</option>
+                                <option value="AL">Alagoas</option>
+                                <option value="AP">Amapá</option>
+                                <option value="AM">Amazonas</option>
+                                <option value="BA">Bahia</option>
+                                <option value="CE">Ceará</option>
+                                <option value="DF">Distrito Federal</option>
+                                <option value="ES">Espírito Santo</option>
+                                <option value="GO">Goiás</option>
+                                <option value="MA">Maranhão</option>
+                                <option value="MT">Mato Grosso</option>
+                                <option value="MS">Mato Grosso do Sul</option>
+                                <option value="MG">Minas Gerais</option>
+                                <option value="PA">Pará</option>
+                                <option value="PB">Paraíba</option>
+                                <option value="PR">Paraná</option>
+                                <option value="PE">Pernambuco</option>
+                                <option value="PI">Piauí</option>
+                                <option value="RJ">Rio de Janeiro</option>
+                                <option value="RN">Rio Grande do Norte</option>
+                                <option value="RS">Rio Grande do Sul</option>
+                                <option value="RO">Rondônia</option>
+                                <option value="RR">Roraima</option>
+                                <option value="SC">Santa Catarina</option>
+                                <option value="SP">São Paulo</option>
+                                <option value="SE">Sergipe</option>
+                                <option value="TO">Tocantins</option>
+                              </select>
+                              {errors.estado && <p className="text-xs text-red-500 mt-1">{errors.estado}</p>}
+                            </div>
+                            <div>
+                              <Label htmlFor="cidade">Cidade</Label>
+                              <select
+                                id="cidade"
+                                value={formData.cidade}
+                                onChange={(e) => handleInputChange('cidade', e.target.value)}
+                                className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${errors.cidade ? 'border-red-500' : ''}`}
+                                disabled={!formData.estado}
+                              >
+                                <option value="">-- Selecione a cidade --</option>
+                                {formData.estado && estadosCidades[formData.estado]?.map(cidade => (
+                                  <option key={cidade} value={cidade}>{cidade}</option>
+                                ))}
+                              </select>
+                              {errors.cidade && <p className="text-xs text-red-500 mt-1">{errors.cidade}</p>}
+                            </div>
+                          </div>
+                        </div>
+
                         <Separator />
                       </>
                     )}
@@ -1303,7 +1463,7 @@ function Pagamento() {
                                         <SelectItem key={option.quantity} value={option.quantity.toString()}>
                                           {option.quantity}x de R$ {option.amount.toFixed(2)}
                                           {option.quantity > 1 && ` (Total: R$ ${option.total.toFixed(2)})`}
-                                          {option.interest_free ? ' sem juros' : (option.fees?.buyer_interest ? ` (+R$ ${option.fees.buyer_interest.toFixed(2)} juros)` : ' com juros')}
+                                          {!option.interest_free && option.fees?.buyer_interest ? ` (+R$ ${option.fees.buyer_interest.toFixed(2)} juros)` : ''}
                                         </SelectItem>
                                       ))}
                                     </SelectContent>
@@ -1334,7 +1494,7 @@ function Pagamento() {
                                           <SelectItem key={option.quantity} value={option.quantity.toString()}>
                                             {option.quantity}x de R$ {(Number(option.amount) || 0).toFixed(2)}
                                             {option.quantity > 1 && ` (Total: R$ ${(Number(option.total) || 0).toFixed(2)})`}
-                                            {option.interest_free ? ' sem juros' : (option.fees?.buyer_interest ? ` (+R$ ${(Number(option.fees.buyer_interest) || 0).toFixed(2)} juros)` : ' com juros')}
+                                            {!option.interest_free && option.fees?.buyer_interest ? ` (+R$ ${(Number(option.fees.buyer_interest) || 0).toFixed(2)} juros)` : ''}
                                           </SelectItem>
                                         ))
                                       ) : (
@@ -1431,7 +1591,6 @@ function Pagamento() {
                     {isYearly && (
                       <div className="bg-green-50 p-3 rounded-lg">
                         <p className="text-sm text-green-800 font-medium">{installments}x de R$ {installmentValue}</p>
-                        <p className="text-xs text-green-600 mt-1">Parcelas sem juros</p>
                       </div>
                     )}
                     {formData.paymentMethod === 'card' && selectedInstallments > 1 && (
@@ -1443,9 +1602,8 @@ function Pagamento() {
                           Total: R$ {(Number(installmentOptions.find(opt => opt.quantity === selectedInstallments)?.total) || 0).toFixed(2)}
                           {(() => {
                             const selectedOption = installmentOptions.find(opt => opt.quantity === selectedInstallments);
-                            if (selectedOption?.interest_free) return ' (sem juros)';
-                            if (selectedOption?.fees?.buyer_interest) return ` (+R$ ${(Number(selectedOption.fees.buyer_interest) || 0).toFixed(2)} juros)`;
-                            return ' (com juros)';
+                            if (!selectedOption?.interest_free && selectedOption?.fees?.buyer_interest) return ` (+R$ ${(Number(selectedOption.fees.buyer_interest) || 0).toFixed(2)} juros)`;
+                            return '';
                           })()}
                         </p>
                       </div>
@@ -1471,9 +1629,6 @@ function Pagamento() {
                   </div>
                   <Separator />
                   <div className="space-y-2 text-xs text-slate-500">
-                    <p>• Renovação automática</p>
-                    <p>• Cancele quando quiser</p>
-                    <p>• Suporte incluído</p>
                   </div>
                 </CardContent>
               </Card>
