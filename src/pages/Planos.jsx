@@ -396,7 +396,7 @@ function Precos() {
                   {/* Plano Básico - Professor */}
                   <Card className="relative hover-lift animate-scale-in hover:shadow-xl transition-all flex flex-col pt-6 w-full">
                     <CardHeader className="text-center pb-4">
-                      <h3 className="text-xl font-bold text-slate-900">Professor</h3>
+                    <h3 className="text-xl font-bold text-slate-900">Professor/Estudante</h3>
                       <div className="my-4">
                         <span className="text-3xl font-bold text-brand-primary">R$</span>
                         <span className="text-4xl font-bold text-brand-primary">1.200,00</span>
@@ -405,9 +405,7 @@ function Precos() {
                         <p className="text-sm text-slate-600 font-semibold">
                           500 correções detalhadas com IA
                         </p>
-                        <p className="text-xs text-slate-600 mt-1">
-                          Acesso por 30 dias
-                        </p>
+
                       </div>
                     </CardHeader>
                     <CardContent className="flex flex-col">

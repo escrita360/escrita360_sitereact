@@ -46,7 +46,7 @@ function Home() {
             <div className="hero-image flex justify-center">
                 <img 
                   src={Banner} 
-                  alt="Banner Escrita360" 
+                  alt="Banner Escrita 360" 
                   className="w-full h-auto lg:scale-105"
                 />
             </div>
@@ -59,8 +59,8 @@ function Home() {
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="text-center animate-fade-in-up">
             <p className="about-text text-lg text-slate-700 leading-relaxed">
-            O <span className="font-bold text-brand-primary">Escrita360</span> é uma plataforma completa de escrita autorregulada e (auto)avaliação com Inteligência Artificial. Desenvolvida para estudantes, professores e escolas, ela potencializa o desenvolvimento da escrita em todas as etapas do processo.
-Com soluções inovadoras, o Escrita360 engaja os estudantes na construção consciente do texto e oferece aos professores recursos inteligentes para orientar, acompanhar e avaliar as produções de forma criteriosa, eficiente e personalizada.
+            O <span className="font-bold text-brand-primary">Escrita 360</span> é uma plataforma completa de escrita autorregulada e (auto)avaliação com Inteligência Artificial. Desenvolvida para estudantes, professores e escolas, ela potencializa o desenvolvimento da escrita em todas as etapas do processo.
+Com soluções inovadoras, o Escrita 360 engaja os estudantes na construção consciente do texto e oferece aos professores recursos inteligentes para orientar, acompanhar e avaliar as produções de forma criteriosa, eficiente e personalizada.
 
           </p>
           </div>
@@ -72,10 +72,10 @@ Com soluções inovadoras, o Escrita360 engaja os estudantes na construção con
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="section-header text-center mb-8 md:mb-12">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 mb-4" style={{ marginTop: '20px' }}>Conheça os nossos benefícios</h2>
-            <p className="text-lg md:text-xl text-slate-600 font-bold">Por que levar a Plataforma Escrita360 para a sua escola?</p>
+            <p className="text-lg md:text-xl text-slate-600 font-bold">Por que levar a Plataforma Escrita 360 para a sua escola?</p>
           </div>
           <div className="differential-content space-y-8">
-            {/* Plataforma Escrita360 */}
+            {/* Plataforma Escrita 360 */}
             <div className="grid lg:grid-cols-2 gap-8 items-center">
               <div className="order-2 lg:order-1">
                 <h3 className="text-2xl font-bold text-slate-900 mb-4">Plataforma Escrita360</h3>
