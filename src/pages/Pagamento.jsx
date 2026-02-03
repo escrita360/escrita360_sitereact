@@ -145,6 +145,22 @@ function Pagamento() {
     }
   }
 
+  // Função para determinar número máximo de parcelas baseado no valor
+  const getMaxInstallments = (value) => {
+    if (value >= 49 && value <= 120) {
+      return 1 // R$49,00 - R$120,00: até 1x
+    } else if (value >= 121 && value <= 289) {
+      return 2 // Valores intermediários: até 2x
+    } else if (value >= 290 && value <= 569) {
+      return 2 // R$290,00: até 2x
+    } else if (value >= 570 && value <= 1200) {
+      return 3 // R$570,00 - R$1200: até 3x
+    } else if (value > 1200) {
+      return Math.min(12, Math.floor(value / 100)) // Valores maiores: máximo baseado no valor
+    }
+    return 1 // Fallback
+  }
+
   const loadInstallmentOptions = async () => {
     if (!selectedPlan) {
       console.log('⚠️ Não há plano selecionado')
@@ -155,11 +171,17 @@ function Pagamento() {
       setLoadingInstallments(true)
       const price = isYearly ? selectedPlan.yearlyPrice : selectedPlan.monthlyPrice
       
+      // Determinar número máximo de parcelas baseado no valor
+      const maxInstallments = getMaxInstallments(price)
+      const maxInstallmentsNoInterest = Math.min(maxInstallments, 1) // Sem juros sempre até 1x
+      
       console.log('💳 =================================')
       console.log('💳 Carregando opções de parcelamento')
       console.log('💳 Plano selecionado:', selectedPlan.name)
       console.log('💳 Preço:', price)
       console.log('💳 É anual:', isYearly)
+      console.log('💳 Máximo de parcelas permitido:', maxInstallments)
+      console.log('💳 Máximo sem juros:', maxInstallmentsNoInterest)
       console.log('💳 BIN do cartão:', formData.cardNumber ? formData.cardNumber.replace(/\s/g, '').substring(0, 6) : 'N/A')
       console.log('💳 =================================')
       
@@ -171,8 +193,8 @@ function Pagamento() {
           console.log('💳 Chamando getInstallmentFees via hook...')
           feesData = await getInstallmentFees(
             price, // valor em reais
-            12, // máximo 12 parcelas
-            1, // sem juros até 1x
+            maxInstallments, // máximo de parcelas baseado no valor
+            maxInstallmentsNoInterest, // sem juros baseado na regra
             formData.cardNumber && formData.cardNumber.replace(/\s/g, '').length >= 6 
               ? formData.cardNumber.replace(/\s/g, '').substring(0, 6) 
               : null // BIN do cartão se disponível
@@ -185,8 +207,8 @@ function Pagamento() {
           try {
             feesData = await paymentService.getInstallmentFees(
               price,
-              12,
-              1,
+              maxInstallments,
+              maxInstallmentsNoInterest,
               formData.cardNumber && formData.cardNumber.replace(/\s/g, '').length >= 6 
                 ? formData.cardNumber.replace(/\s/g, '').substring(0, 6) 
                 : null
@@ -202,8 +224,8 @@ function Pagamento() {
         try {
           feesData = await paymentService.getInstallmentFees(
             price,
-            12,
-            1,
+            maxInstallments,
+            maxInstallmentsNoInterest,
             formData.cardNumber && formData.cardNumber.replace(/\s/g, '').length >= 6 
               ? formData.cardNumber.replace(/\s/g, '').substring(0, 6) 
               : null
@@ -249,16 +271,16 @@ function Pagamento() {
       // Fallback se não houver opções
       if (options.length === 0) {
         console.log('⚠️ Criando opções de parcelamento padrão (fallback)')
-        // Criar opções padrão baseadas no preço
-        for (let i = 1; i <= 12; i++) {
+        // Criar opções padrão baseadas no preço e regras de negócio
+        for (let i = 1; i <= maxInstallments; i++) {
           let installmentAmount = price / i
           let total = price
-          let interestFree = i <= 3 // Até 3x sem juros
+          let interestFree = i <= maxInstallmentsNoInterest // Baseado na regra de negócio
           
-          // Adicionar juros simulados para parcelas maiores
+          // Adicionar juros simulados para parcelas maiores que o limite sem juros
           if (!interestFree) {
             const interestRate = 0.0299 // 2.99% ao mês
-            total = price * Math.pow(1 + interestRate, i - 3)
+            total = price * Math.pow(1 + interestRate, i - maxInstallmentsNoInterest)
             installmentAmount = total / i
           }
           
@@ -272,8 +294,11 @@ function Pagamento() {
         }
       }
       
-      console.log('💳 Opções finais a serem definidas:', options)
-      setInstallmentOptions(options)
+      // Garantir que não excedemos o limite máximo de parcelas
+      const filteredOptions = options.filter(option => option.quantity <= maxInstallments)
+      
+      console.log('💳 Opções filtradas pelo limite de parcelas:', filteredOptions)
+      setInstallmentOptions(filteredOptions)
       console.log('✅ Opções de parcelamento carregadas com sucesso')
       
     } catch (error) {
@@ -1308,6 +1333,20 @@ function Pagamento() {
                             {!selectedSavedCard && (
                               <div>
                                 <Label htmlFor="installments">Parcelas</Label>
+                                {/* Informação sobre limites de parcelamento */}
+                                <div className="text-xs text-gray-500 mb-2">
+                                  {(() => {
+                                    const maxInstallments = getMaxInstallments(isYearly ? selectedPlan.yearlyPrice : selectedPlan.monthlyPrice)
+                                    if (maxInstallments === 1) {
+                                      return "Pagamento à vista (R$49 - R$120)"
+                                    } else if (maxInstallments === 2) {
+                                      return "Até 2x sem juros (R$290)"
+                                    } else if (maxInstallments === 3) {
+                                      return "Até 3x sem juros (R$570 - R$1.200)"
+                                    }
+                                    return `Até ${maxInstallments}x (1x sem juros)`
+                                  })()}
+                                </div>
                                 {loadingInstallments ? (
                                   <div className="border rounded-md p-3 bg-gray-50">
                                     <div className="flex items-center gap-2 text-gray-500">
