@@ -5,16 +5,14 @@ import { Textarea } from '@/components/ui/textarea.jsx'
 import { Label } from '@/components/ui/label.jsx'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select.jsx'
 import { Checkbox } from '@/components/ui/checkbox.jsx'
-import { Separator } from '@/components/ui/separator.jsx'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
 import { PageHero } from '@/components/PageHero.jsx'
-import { Mail, Phone, MapPin, MessageSquare, Clock, Calendar, Gift, Handshake, GraduationCap, Headphones, Send, Facebook, Instagram, MessageCircle, Rocket, BookOpen, HelpCircle, CalendarDays } from 'lucide-react'
+import { Send } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 function Contato() {
   const formRef = useScrollAnimation()
-  const contactRef = useScrollAnimation()
   
   const [formData, setFormData] = useState({
     nome: '',
@@ -26,7 +24,6 @@ function Contato() {
     mensagem: '',
     aceito: false
   })
-  const [feedback, setFeedback] = useState('')
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -65,16 +62,6 @@ function Contato() {
     }
   }
   
-  const handleFeedbackSubmit = (e) => {
-    e.preventDefault();
-    if (feedback.trim()) {
-      alert('Obrigado pelo seu feedback! Ele foi enviado com sucesso.');
-      setFeedback('');
-    } else {
-      alert('Por favor, escreva seu feedback antes de enviar.');
-    }
-  }
-  
   const getHeroContent = () => {
     return {
       title: 'Vamos',
@@ -96,12 +83,12 @@ function Contato() {
 
       {/* Contact Main Section */}
       <section ref={formRef} className="py-16 bg-slate-50 animate-on-scroll">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <div className="grid lg:grid-cols-2 gap-12 max-w-7xl mx-auto">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="max-w-2xl mx-auto">
             {/* Contact Form */}
-            <Card className="p-6 shadow-lg hover-lift animate-fade-in-left">
+            <Card className="p-6 shadow-lg hover-lift animate-fade-in-up">
               <CardHeader>
-                <CardTitle className="text-2xl text-slate-900 animate-fade-in-up">Envie sua mensagem</CardTitle>
+                <CardTitle className="text-2xl text-slate-900 animate-fade-in-up text-center">Envie sua mensagem</CardTitle>
               </CardHeader>
               <CardContent>
                 <form className="space-y-6" onSubmit={handleSubmit}>
@@ -180,61 +167,6 @@ function Contato() {
                   <Button type="submit" className="w-full bg-[#4A90E2] hover:bg-[#357ABD] text-white transition-all duration-300 hover:scale-105">
                     <Send className="w-4 h-4 mr-2 animate-float" />
                     Enviar Mensagem
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
-
-            {/* Contact Info */}
-            <div className="space-y-6 animate-fade-in-right">
-              {/* Social Media */}
-              <Card className="p-4 shadow-lg hover-lift animate-scale-in delay-300 flex flex-col h-fit">
-                <CardHeader className="text-center">
-                  <CardTitle className="text-lg text-slate-900">Siga-nos nas redes sociais</CardTitle>
-                </CardHeader>
-                <CardContent className="pt-4">
-                  <div className="flex gap-4">
-                    <Button variant="outline" size="icon" className="w-12 h-12 transition-all hover:scale-110 hover:rotate-6">
-                      <Facebook className="w-5 h-5 text-brand-primary" />
-                    </Button>
-                    <Button variant="outline" size="icon" className="w-12 h-12 transition-all hover:scale-110 hover:rotate-6">
-                      <Instagram className="w-5 h-5 text-brand-primary" />
-                    </Button>
-                    <Button variant="outline" size="icon" className="w-12 h-12 transition-all hover:scale-110 hover:rotate-6">
-                      <MessageCircle className="w-5 h-5 text-brand-primary" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Feedback Section */}
-      <section ref={contactRef} className="py-16 bg-white animate-on-scroll">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4 animate-fade-in-up">Deixe seu Feedback</h2>
-            <p className="text-xl text-slate-600 animate-fade-in-up delay-200">Sua opinião é importante para nós. Compartilhe suas sugestões e experiências.</p>
-          </div>
-
-          <div className="max-w-2xl mx-auto">
-            <Card className="shadow-lg hover-lift animate-fade-in-up">
-              <CardHeader>
-                <CardTitle className="text-center" style={{ color: '#1A5B94' }}>Envie seu Feedback</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleFeedbackSubmit}>
-                  <Textarea
-                    placeholder="Escreva seu feedback aqui..."
-                    value={feedback}
-                    onChange={(e) => setFeedback(e.target.value)}
-                    className="mb-4"
-                    rows={8}
-                  />
-                  <Button type="submit" className="w-full" style={{ backgroundColor: '#1A5B94', color: 'white' }}>
-                    Enviar Feedback
                   </Button>
                 </form>
               </CardContent>
