@@ -1681,39 +1681,12 @@ function Pagamento() {
                     </div>
                   )}
                 </div>
-                <Separator />
-                <div className="bg-green-50 p-5 rounded-lg text-left">
-                  <p className="text-base font-medium text-green-900 mb-3">✅ Sua Conta Foi Criada!</p>
-                  <div className="space-y-2">
-                    <p className="text-sm text-green-700">
-                      <strong>E-mail:</strong> {formData.email}
-                    </p>
-                    <p className="text-sm text-green-700">
-                      <strong>Senha:</strong> ••••••• (use a senha que você cadastrou)
-                    </p>
-                    <p className="text-sm text-green-700">
-                      <strong>Plataforma:</strong> {audience === 'professores' ? 'Escrita360 Professor' : 'Escrita360 Aluno'}
-                    </p>
-                  </div>
-                  <p className="text-sm text-green-600 mt-3">
-                    {audience === 'professores'
-                      ? 'Faça login no app Escrita360 Professor com essas credenciais!'
-                      : 'Faça login no app Escrita360 Aluno com essas credenciais!'}
-                  </p>
-                </div>
-                <Separator />
-                <div className="bg-blue-50 p-5 rounded-lg text-left">
-                  <p className="text-base font-medium text-blue-900 mb-2">📧 Confirmação Enviada</p>
-                  <p className="text-sm text-blue-700">Enviamos todos os detalhes para {formData.email}</p>
-                </div>
+
               </CardContent>
             </Card>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
-              <Button size="lg" className="bg-brand-primary hover:bg-brand-secondary" onClick={() => navigate('/dashboard')}>
-                Ir para o Dashboard
-              </Button>
-              <Button size="lg" variant="outline" onClick={() => navigate('/login')}>
-                Fazer Login Agora
+            <div className="flex justify-center pt-8">
+              <Button size="lg" className="bg-brand-primary hover:bg-brand-secondary" onClick={() => navigate('/')}>
+                Retornar à home
               </Button>
             </div>
           </div>
