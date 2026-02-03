@@ -38,17 +38,17 @@ function PagamentoResultado({ status = 'success' }) {
       title: 'Pagamento Confirmado!',
       subtitle: 'Sua assinatura foi ativada com sucesso',
       cardBg: 'bg-green-50',
-      cardTitle: 'Assinatura Ativa',
-      cardText: 'Enviamos um email de confirmação com todos os detalhes da sua assinatura.',
+      cardTitle: 'Pagamento Processado',
+      cardText: 'Seu pagamento foi processado com sucesso.',
       features: [
-        'Acesso imediato a todos os recursos do plano',
-        'Renovação automática (cancele quando quiser)',
-        'Suporte prioritário incluído'
+        'Transação aprovada e confirmada',
+        'Comprovante enviado por email',
+        'Suporte disponível para dúvidas'
       ],
       primaryButton: {
-        text: 'Ir para o Dashboard',
+        text: 'Voltar ao Início',
         icon: Home,
-        action: () => navigate('/dashboard')
+        action: () => navigate('/')
       },
       secondaryButton: {
         text: 'Ver Planos',
@@ -162,11 +162,11 @@ function PagamentoResultado({ status = 'success' }) {
 
           <div className="pt-6 space-y-2">
             <p className="text-sm text-slate-600">
-              <strong>Dúvidas frequentes:</strong>
+              <strong>Informações importantes:</strong>
             </p>
             <div className="text-sm text-slate-500 space-y-1">
-              <p>• Todos os planos incluem suporte e podem ser cancelados a qualquer momento</p>
-              <p>• Aceitamos todas as formas de pagamento através do Stripe</p>
+              <p>• Comprovante de pagamento enviado por email</p>
+              <p>• Para dúvidas sobre sua compra, entre em contato conosco</p>
               <p>• Seus dados são protegidos com criptografia de nível bancário</p>
             </div>
           </div>
