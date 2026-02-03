@@ -1257,7 +1257,7 @@ function Pagamento() {
                   <div className="space-y-3">
                     <div className="flex items-start justify-between">
                       <div>
-                        <p className="font-medium">Plano {selectedPlan.name}</p>
+                        <p className="font-medium">{selectedPlan.name}</p>
                         <p className="text-sm text-slate-600">{isYearly ? 'Cobrança Anual' : 'Cobrança Mensal'}</p>
                       </div>
                     </div>
