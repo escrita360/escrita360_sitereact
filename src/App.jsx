@@ -10,6 +10,8 @@ import Precos from './pages/Planos.jsx'
 import Contato from './pages/Contato.jsx'
 import Faq from './pages/Faq.jsx'
 import SobreNos from './pages/SobreNos.jsx'
+import TermosServico from './pages/TermosServico.jsx'
+import PoliticaPrivacidade from './pages/PoliticaPrivacidade.jsx'
 import Login from './pages/Login.jsx'
 import Perfil from './pages/Perfil.jsx'
 import Pagamento from './pages/Pagamento.jsx'
@@ -141,6 +143,32 @@ function App() {
               transition={pageTransition}
             >
               <SobreNos />
+            </motion.div>
+          </Layout>
+        } />
+        <Route path="/termos-servico" element={
+          <Layout>
+            <motion.div
+              initial="initial"
+              animate="in"
+              exit="out"
+              variants={pageVariants}
+              transition={pageTransition}
+            >
+              <TermosServico />
+            </motion.div>
+          </Layout>
+        } />
+        <Route path="/politica-privacidade" element={
+          <Layout>
+            <motion.div
+              initial="initial"
+              animate="in"
+              exit="out"
+              variants={pageVariants}
+              transition={pageTransition}
+            >
+              <PoliticaPrivacidade />
             </motion.div>
           </Layout>
         } />
