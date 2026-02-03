@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ChevronDown, Search, List, Laptop, Settings, Wrench } from 'lucide-react';
 // eslint-disable-next-line no-unused-vars
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const faqData = [
   {
@@ -271,23 +271,20 @@ export default function Faq() {
                     </motion.div>
                   </Button>
                 </CardHeader>
-                <AnimatePresence>
-                  {openItems.has(faq.id) && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: "easeInOut" }}
-                      className='overflow-hidden'
-                    >
-                      <CardContent className='pt-4' style={{ borderTop: '1px solid #e0f2ff' }}>
-                        <div className='prose prose-sm max-w-none text-gray-700'>
-                          {renderAnswer(faq.answer)}
-                        </div>
-                      </CardContent>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <motion.div
+                  animate={{ 
+                    height: openItems.has(faq.id) ? "auto" : 0,
+                    opacity: openItems.has(faq.id) ? 1 : 0
+                  }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className='overflow-hidden'
+                >
+                  <CardContent className='pt-4' style={{ borderTop: '1px solid #e0f2ff' }}>
+                    <div className='prose prose-sm max-w-none text-gray-700'>
+                      {renderAnswer(faq.answer)}
+                    </div>
+                  </CardContent>
+                </motion.div>
               </Card>
             </motion.div>
           ))

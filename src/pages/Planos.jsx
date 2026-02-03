@@ -11,7 +11,7 @@ import { PageHero } from '@/components/PageHero.jsx'
 import { plansService } from '@/services/plans.js'
 import { formatPrice } from '@/lib/utils.js'
 // eslint-disable-next-line no-unused-vars
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 
 function Precos() {
   // Force HMR update
