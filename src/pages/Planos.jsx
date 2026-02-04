@@ -394,7 +394,7 @@ function Precos() {
                   {/* Plano Básico - Professor */}
                   <Card className="relative hover-lift animate-scale-in hover:shadow-xl transition-all flex flex-col pt-6 w-full">
                     <CardHeader className="text-center pb-4">
-                    <h3 className="text-xl font-bold text-slate-900">Professor/Estudante</h3>
+                    <h3 className="text-xl font-bold text-slate-900">Professor</h3>
                       <div className="my-4">
                         <span className="text-3xl font-bold text-brand-primary">R$</span>
                         <span className="text-4xl font-bold text-brand-primary">1.200,00</span>
@@ -462,9 +462,9 @@ function Precos() {
             {schoolPlanType === 'hibrido' && selectedAudience === 'escolas' && (
               <div className="mt-12 mb-8">
                 <div className="flex items-center justify-center gap-8 max-w-6xl mx-auto">
-                  {/* Funções do Professor */}
+                  {/* Recursos disponíveis na Plataforma */}
                   <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 flex-1 max-w-md">
-                    <h4 className="text-lg font-bold text-slate-900 mb-4 text-center">Funções do Professor</h4>
+                    <h4 className="text-lg font-bold text-slate-900 mb-4 text-center">Recursos disponíveis na Plataforma</h4>
                     <div className="space-y-3">
                       {teacherFeatures.map((feature, index) => (
                         <div key={index} className="flex items-start gap-3">
@@ -484,9 +484,9 @@ function Precos() {
                     </div>
                   </div>
 
-                  {/* Funções do Aluno */}
+                  {/* Recursos disponíveis na Plataforma */}
                   <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 flex-1 max-w-md">
-                    <h4 className="text-lg font-bold text-slate-900 mb-4 text-center">Funções do Aluno</h4>
+                    <h4 className="text-lg font-bold text-slate-900 mb-4 text-center">Recursos disponíveis na Plataforma</h4>
                     <div className="space-y-3">
                       {studentFeatures.map((feature, index) => (
                         <div key={index} className="flex items-start gap-3">
