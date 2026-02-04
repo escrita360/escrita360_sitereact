@@ -10,6 +10,9 @@ import painelSentimentos from '@/assets/Cards/painel_sentimentos.png'
 import usoRubricas from '@/assets/Cards/card5.1.svg'
 import iaAssistente from '@/assets/Cards/ia_assistente.png'
 import computadorEscrita2 from '@/assets/Cards/computador_escrita2.svg'
+import graus1 from '@/assets/Icones/graus1.svg'
+import graus2 from '@/assets/Icones/graus2.svg'
+import graus3 from '@/assets/Icones/graus3.svg'
 
 function Home() {
   const heroRef = useScrollAnimation()
@@ -29,17 +32,26 @@ function Home() {
                 <span className="font-normal">autorregulação e inteligência artificial.</span>
               </h1>
               <div className="hero-stats flex flex-wrap gap-4 justify-center mt-8">
-                <div className="stat bg-white rounded-xl shadow-md border border-slate-100 px-6 py-4 text-center hover:shadow-lg hover:border-[#2b7475]/20 transition-all duration-300">
-                  <strong className="block font-bold text-base mb-2" style={{ color: '#2b7475' }}>Processo</strong>
-                  <span className="text-slate-900 text-xs">Autorregulado</span>
+                <div className="stat-container flex flex-col items-center">
+                  <div className="stat bg-white rounded-xl shadow-md border border-slate-100 px-6 py-4 text-center hover:shadow-lg hover:border-[#2b7475]/20 transition-all duration-300">
+                    <strong className="block font-bold text-base mb-2" style={{ color: '#2b7475' }}>Processo</strong>
+                    <span className="text-slate-900 text-xs">Autorregulado</span>
+                  </div>
+                  <img src={graus1} alt="Grau 1" className="w-28 h-28 mt-4 hover:scale-110 transition-transform duration-300" />
                 </div>
-                <div className="stat bg-white rounded-xl shadow-md border border-slate-100 px-6 py-4 text-center hover:shadow-lg hover:border-[#2b7475]/20 transition-all duration-300">
-                  <strong className="block font-bold text-base mb-2" style={{ color: '#2b7475' }}>IA</strong>
-                  <span className="text-slate-900 text-xs">Complementar</span>
+                <div className="stat-container flex flex-col items-center">
+                  <div className="stat bg-white rounded-xl shadow-md border border-slate-100 px-6 py-4 text-center hover:shadow-lg hover:border-[#2b7475]/20 transition-all duration-300">
+                    <strong className="block font-bold text-base mb-2" style={{ color: '#2b7475' }}>IA</strong>
+                    <span className="text-slate-900 text-xs">Complementar</span>
+                  </div>
+                  <img src={graus2} alt="Grau 2" className="w-28 h-28 mt-4 hover:scale-110 transition-transform duration-300" />
                 </div>
-                <div className="stat bg-white rounded-xl shadow-md border border-slate-100 px-6 py-4 text-center hover:shadow-lg hover:border-[#2b7475]/20 transition-all duration-300">
-                  <strong className="block font-bold text-base mb-2" style={{ color: '#2b7475' }}>Foco</strong>
-                  <span className="text-slate-900 text-xs">Aprendizagem</span>
+                <div className="stat-container flex flex-col items-center">
+                  <div className="stat bg-white rounded-xl shadow-md border border-slate-100 px-6 py-4 text-center hover:shadow-lg hover:border-[#2b7475]/20 transition-all duration-300">
+                    <strong className="block font-bold text-base mb-2" style={{ color: '#2b7475' }}>Foco</strong>
+                    <span className="text-slate-900 text-xs">Aprendizagem</span>
+                  </div>
+                  <img src={graus3} alt="Grau 3" className="w-28 h-28 mt-4 hover:scale-110 transition-transform duration-300" />
                 </div>
               </div>
             </div>
