@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -6,6 +7,7 @@ import { Download, FileText } from 'lucide-react'
 
 export default function TermosServico() {
   const [aceito, setAceito] = useState(false)
+  const navigate = useNavigate()
 
   const handleDownloadPdf = () => {
     const link = document.createElement('a')
@@ -227,6 +229,14 @@ export default function TermosServico() {
               <Download className="w-4 h-4 mr-2" />
               Baixar PDF dos Termos e Condições
             </Button> */}
+            
+            <Button 
+              onClick={() => navigate(-1)}
+              variant="outline"
+              className="w-full mt-4"
+            >
+              Voltar à tela anterior
+            </Button>
           </div>
         </CardContent>
       </Card>
