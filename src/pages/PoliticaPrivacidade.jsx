@@ -347,8 +347,7 @@ export default function PoliticaPrivacidade() {
             
             <Button 
               onClick={() => navigate(-1)}
-              variant="outline"
-              className="w-full mt-4"
+              className="w-full mt-4 bg-brand-primary hover:bg-brand-dark text-white"
             >
               Voltar à tela anterior
             </Button>
