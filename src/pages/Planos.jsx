@@ -506,6 +506,7 @@ function Precos() {
             {selectedAudience === 'escolas' && schoolPlanType !== 'hibrido' && (
               <div className="mt-12 mb-8">
                 <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 md:p-8 max-w-md mx-auto">
+                  <h4 className="text-lg font-bold text-slate-900 mb-4 text-center">Recursos disponíveis na Plataforma</h4>
                   <div className="space-y-3 md:space-y-4">
                     {teacherFeatures.map((feature, index) => (
                       <div key={index} className="flex items-start gap-3">
