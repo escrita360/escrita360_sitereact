@@ -9,7 +9,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useAuth } from '@/contexts/AuthContext'
 import { cn } from '@/lib/utils'
-import Escrita360Logo from '@/assets/Logo/Escrita 360.png'
+import Escrita360Logo from '@/assets/Logo/Escrita360.png'
 import robo from '@/assets/Logo/robo.svg'
 
 const LOGIN_USER_TYPE = {
