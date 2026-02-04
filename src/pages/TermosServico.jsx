@@ -220,13 +220,13 @@ export default function TermosServico() {
               </label>
             </div>
             
-            <Button 
+            {/* <Button 
               onClick={handleDownloadPdf}
               className="w-full bg-brand-primary hover:bg-brand-dark text-white"
             >
               <Download className="w-4 h-4 mr-2" />
               Baixar PDF dos Termos e Condições
-            </Button>
+            </Button> */}
           </div>
         </CardContent>
       </Card>
