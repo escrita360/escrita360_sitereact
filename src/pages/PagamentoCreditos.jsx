@@ -102,7 +102,7 @@ function PagamentoCreditos() {
         newErrors.cardNumber = 'Número do cartão é obrigatório'
       }
       if (!formData.cardName || formData.cardName.trim().length < 2) {
-        newErrors.cardName = 'Nome no cartão é obrigatório'
+        newErrors.cardName = 'Nome do titular é obrigatório'
       }
       if (!formData.expiryDate || !/^\d{2}\/\d{4}$/.test(formData.expiryDate)) {
         newErrors.expiryDate = 'Data de validade é obrigatória (MM/AAAA)'
@@ -255,8 +255,8 @@ function PagamentoCreditos() {
                               {errors.cardNumber && <p className="text-xs text-red-500 mt-1">{errors.cardNumber}</p>}
                             </div>
                             <div>
-                              <Label htmlFor="cardName">Nome no Cartão</Label>
-                              <Input id="cardName" placeholder="NOME COMO ESTÁ NO CARTÃO" 
+                              <Label htmlFor="cardName">Nome do Titular</Label>
+                              <Input id="cardName" placeholder="NOME DO TITULAR" 
                                 value={formData.cardName} onChange={(e) => handleInputChange('cardName', e.target.value)}
                                 className={errors.cardName ? 'border-red-500' : ''} />
                               {errors.cardName && <p className="text-xs text-red-500 mt-1">{errors.cardName}</p>}

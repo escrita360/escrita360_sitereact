@@ -641,7 +641,7 @@ function Pagamento() {
   const formatExpiryDate = (value) => {
     const cleaned = value.replace(/\D/g, '')
     if (cleaned.length >= 2) {
-      return cleaned.slice(0, 2) + '/' + cleaned.slice(2, 6)
+      return cleaned.slice(0, 2) + '/' + cleaned.slice(2, 4)
     }
     return cleaned
   }
@@ -841,10 +841,10 @@ function Pagamento() {
           newErrors.cardNumber = 'Número do cartão é obrigatório'
         }
         if (!formData.cardName || formData.cardName.trim().length < 2) {
-          newErrors.cardName = 'Nome no cartão é obrigatório'
+          newErrors.cardName = 'Nome do titular é obrigatório'
         }
-        if (!formData.expiryDate || !/^\d{2}\/\d{4}$/.test(formData.expiryDate)) {
-          newErrors.expiryDate = 'Data de validade é obrigatória (MM/AAAA)'
+        if (!formData.expiryDate || !/^\d{2}\/\d{2}$/.test(formData.expiryDate)) {
+          newErrors.expiryDate = 'Data de validade é obrigatória (MM/AA)'
         }
         if (!formData.cvv || formData.cvv.length < 3) {
           newErrors.cvv = 'CVV é obrigatório'
@@ -1456,8 +1456,8 @@ function Pagamento() {
                                   )}
                                 </div>
                                 <div>
-                                  <Label htmlFor="cardName">Nome no Cartão</Label>
-                                  <Input id="cardName" placeholder="NOME COMO ESTÁ NO CARTÃO"
+                                  <Label htmlFor="cardName">Nome do Titular</Label>
+                                  <Input id="cardName" placeholder="NOME DO TITULAR"
                                     value={formData.cardName} onChange={(e) => handleInputChange('cardName', e.target.value)}
                                     className={errors.cardName ? 'border-red-500' : ''} />
                                   {errors.cardName && <p className="text-xs text-red-500 mt-1">{errors.cardName}</p>}
@@ -1466,9 +1466,9 @@ function Pagamento() {
                                   <div>
                                     <Label htmlFor="expiryDate">Validade</Label>
                                     <div className="relative">
-                                      <Input id="expiryDate" placeholder="MM/AAAA" maxLength={7}
-                                        value={formData.expiryDate} onChange={(e) => handleInputChange('expiryDate', e.target.value)}
-                                        className={`pl-10 ${errors.expiryDate ? 'border-red-500' : ''}`} />
+                                    <Input id="expiryDate" placeholder="MM/AA" maxLength={5}
+                                      value={formData.expiryDate} onChange={(e) => handleInputChange('expiryDate', e.target.value)}
+                                      className={`pl-10 ${errors.expiryDate ? 'border-red-500' : ''}`} />
                                       <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
                                     </div>
                                     {errors.expiryDate && <p className="text-xs text-red-500 mt-1">{errors.expiryDate}</p>}
@@ -1611,7 +1611,7 @@ function Pagamento() {
                     <div className="flex items-start justify-between">
                       <div>
                         <p className="font-medium">{selectedPlan.name}</p>
-                        <p className="text-sm text-slate-600">{isYearly ? 'Cobrança Anual' : 'Cobrança Mensal'}</p>
+                        {isYearly && <p className="text-sm text-slate-600">Cobrança Anual</p>}
                       </div>
                     </div>
                     <Separator />
@@ -1632,7 +1632,6 @@ function Pagamento() {
                       <span className="text-lg font-bold">Total</span>
                       <div className="text-right">
                         <p className="text-2xl font-bold text-brand-primary">R$ {total.toFixed(2)}</p>
-                        <p className="text-xs text-slate-600">por mês</p>
                       </div>
                     </div>
                     {isYearly && (
