@@ -78,13 +78,13 @@ Com soluções inovadoras, o Escrita 360 engaja os estudantes na construção co
             {/* Plataforma Escrita 360 */}
             <div className="grid lg:grid-cols-2 gap-8 items-center">
               <div className="order-2 lg:order-1">
-                <h3 className="text-2xl font-bold text-slate-900 mb-4">Plataforma Escrita360</h3>
+                <h3 className="text-2xl font-bold text-slate-900 mb-4">Plataforma Escrita 360</h3>
                 <p className="text-lg text-slate-700 leading-relaxed">
-                  A plataforma Escrita360 é um laboratório virtual, que transforma o aprendizado da escrita em uma experiência autorregulada e formativa. Permite ao usuário escrever, revisar, reescrever e analisar seus textos, por meio de recursos inteligentes de análise e geração de insights que favorecem a melhoria contínua e o desenvolvimento de competências linguísticas, argumentativas, críticas e criativas dos estudantes.
+                  A plataforma Escrita 360 é um laboratório virtual, que transforma o aprendizado da escrita em uma experiência autorregulada e formativa. Permite ao usuário escrever, revisar, reescrever e analisar seus textos, por meio de recursos inteligentes de análise e geração de insights que favorecem a melhoria contínua e o desenvolvimento de competências linguísticas, argumentativas, críticas e criativas dos estudantes.
                 </p>
               </div>
               <div className="order-1 lg:order-2 flex items-center justify-center">
-                <img src={card1} alt="Plataforma Escrita360" className="w-full max-w-md h-auto" />
+                <img src={card1} alt="Plataforma Escrita 360" className="w-full max-w-md h-auto" />
               </div>
             </div>
 
@@ -96,7 +96,7 @@ Com soluções inovadoras, o Escrita 360 engaja os estudantes na construção co
               <div>
                 <h3 className="text-2xl font-bold text-slate-900 mb-4">Escrita Autorregulada no Centro</h3>
                 <p className="text-lg text-slate-700 leading-relaxed">
-                  Diferente de plataformas que apenas corrigem textos prontos, a Escrita360 coloca a autorregulação como eixo principal. O estudante vivencia todo o processo de escrita, do planejamento à autoavaliação, em uma experiência imersiva, construída por meio de rascunhos, revisões e reescritas, que transforma a redação em um percurso formativo e contínuo.
+                  Diferente de plataformas que apenas corrigem textos prontos, a Escrita 360 coloca a autorregulação como eixo principal. O estudante vivencia todo o processo de escrita, do planejamento à autoavaliação, em uma experiência imersiva, construída por meio de rascunhos, revisões e reescritas, que transforma a redação em um percurso formativo e contínuo.
                 </p>
               </div>
             </div>
@@ -160,7 +160,7 @@ Com soluções inovadoras, o Escrita 360 engaja os estudantes na construção co
       <section className="how-it-works bg-white py-16">
         <div className="container mx-auto px-4 max-w-7xl">
           <h3 className="text-center mb-20 text-2xl md:text-3xl text-slate-900">
-            O Escrita360 surge como uma solução inovadora que transforma a redação em uma jornada formativa. Aqui, você aprende a escrever de verdade.
+            O Escrita 360 surge como uma solução inovadora que transforma a redação em uma jornada formativa. Aqui, você aprende a escrever de verdade.
           </h3>
           <div className="grid lg:grid-cols-2 gap-8 items-center">
             <div>
@@ -168,7 +168,7 @@ Com soluções inovadoras, o Escrita 360 engaja os estudantes na construção co
                 Escreva. Reescreva. Evolua.
               </h3>
               <h4 className="font-bold text-xl md:text-2xl text-slate-900">
-                Escrita360: inteligência e autoria caminhando juntas.
+                Escrita 360: inteligência e autoria caminhando juntas.
               </h4>
             </div>
             <div className="flex items-center justify-center">

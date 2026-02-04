@@ -236,7 +236,7 @@ function ComprarCreditos() {
               <div className="bg-red-50 p-6 rounded-lg border border-red-200">
                 <h3 className="font-semibold text-red-900 mb-3 text-lg">🔒 Por que preciso de assinatura?</h3>
                 <p className="text-red-800 mb-4">
-                  O aplicativo Escrita360 <strong>só libera o acesso para usuários com assinatura ativa</strong>. 
+                  O aplicativo Escrita 360 <strong>só libera o acesso para usuários com assinatura ativa</strong>. 
                   Os créditos adicionais são complementares à sua assinatura.
                 </p>
                 <p className="text-red-700 text-sm">
@@ -339,7 +339,7 @@ function ComprarCreditos() {
                 <div className="bg-blue-50 p-5 rounded-lg text-left">
                   <p className="text-base font-medium text-blue-900 mb-2">📱 Sincronizado com o App</p>
                   <p className="text-sm text-blue-700">
-                    Seus créditos já estão disponíveis no aplicativo Escrita360!
+                    Seus créditos já estão disponíveis no aplicativo Escrita 360!
                   </p>
                   <p className="text-sm text-blue-600 mt-2">
                     Abra o app Flutter e veja seus novos créditos.

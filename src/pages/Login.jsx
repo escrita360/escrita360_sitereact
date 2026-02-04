@@ -9,7 +9,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useAuth } from '@/contexts/AuthContext'
 import { cn } from '@/lib/utils'
-import escrita360Logo from '@/assets/Logo/Escrita360.png'
+import Escrita360Logo from '@/assets/Logo/Escrita 360.png'
 import robo from '@/assets/Logo/robo.svg'
 
 const LOGIN_USER_TYPE = {
@@ -261,9 +261,9 @@ const Login = () => {
             <CardHeader className="text-center space-y-6 pb-6 bg-white">
               <div>
                 <div className="flex justify-center mb-2">
-                  <img 
-                    src={escrita360Logo} 
-                    alt={isAdmin ? "Escrita360 Admin" : "Escrita360"} 
+                  <img
+                    src={Escrita360Logo}
+                    alt={isAdmin ? "Escrita 360 Admin" : "Escrita 360"}
                     className="h-12 object-contain"
                   />
                   {isAdmin && (
@@ -662,7 +662,7 @@ const Login = () => {
 
             <div className="text-center pt-6 border-t border-gray-100 mt-8">
               <p className="text-sm text-slate-500">
-                Escrita360 © 2025 - Transformando a escrita através da tecnologia
+                Escrita 360 © 2025 - Transformando a escrita através da tecnologia
               </p>
             </div>
           </CardContent>
@@ -675,7 +675,7 @@ const Login = () => {
             <div className="relative w-full h-full flex justify-center items-center robot-container">
               <img 
                 src={robo} 
-                alt="Robô Escrita360" 
+                alt="Robô Escrita 360" 
                 className="w-full h-full max-w-none object-contain hover:animate-pulse transition-all duration-500 ease-in-out hover:scale-105 cursor-pointer"
                 style={{ 
                   filter: 'drop-shadow(0 15px 25px rgba(64, 112, 183, 0.4))',

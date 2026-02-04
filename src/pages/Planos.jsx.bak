@@ -68,7 +68,7 @@ function Precos() {
       monthlyPrice: 120,
       yearlyPrice: 1440,
       description: 'Estudantes (Programa individual)',
-      subDescription: 'Aproveite o preço promocional de lançamento da Plataforma Escrita360',
+      subDescription: 'Aproveite o preço promocional de lançamento da Plataforma Escrita 360',
       credits: 60,
       popular: true,
       features: [
@@ -376,7 +376,7 @@ function Precos() {
       return {
         title: '(Programa individual)',
         titleHighlight: 'Estudantes',
-        subtitle: 'Projetado para uso individual, com foco em escrita, reescrita e feedback. Aproveite o preço promocional de lançamento da Plataforma Escrita360.'
+        subtitle: 'Projetado para uso individual, com foco em escrita, reescrita e feedback. Aproveite o preço promocional de lançamento da Plataforma Escrita 360.'
       }
     } else if (selectedAudience === 'professores') {
       return {

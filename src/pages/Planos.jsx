@@ -19,8 +19,6 @@ function Precos() {
   const audienceFromUrl = searchParams.get('audience') || 'estudantes'
   const [selectedAudience, setSelectedAudience] = useState(audienceFromUrl)
   const [schoolPlanType, setSchoolPlanType] = useState('correcao') // 'correcao' ou 'hibrido'
-  const [expandedHibrido, setExpandedHibrido] = useState(false)
-  const [expandedInstitucional, setExpandedInstitucional] = useState(false)
   const navigate = useNavigate()
   const plansRef = useScrollAnimation()
 
@@ -183,7 +181,7 @@ function Precos() {
         title: '',
         titleHighlight: 'Estudante',
         titleHighlightClass: 'bg-gradient-to-r from-[#1d5a91] to-[#3b82f6] bg-clip-text text-transparent',
-        subtitle: 'Projetado para uso individual, com foco em escrita, reescrita e feedback. Aproveite o preço promocional de lançamento da Plataforma Escrita360.'
+        subtitle: 'Projetado para uso individual, com foco em escrita, reescrita e feedback. Aproveite o preço promocional de lançamento da Plataforma Escrita 360.'
       }
     } else if (selectedAudience === 'professores') {
       return {

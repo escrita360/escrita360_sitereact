@@ -29,7 +29,7 @@ export function PageHero({ title, titleHighlight, subtitle, titleHighlightClass 
           <div className="flex justify-center lg:justify-end animate-fade-in-right delay-200">
             <img 
               src={robo} 
-              alt="Robô Escrita360" 
+              alt="Robô Escrita 360" 
               className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 animate-float hover:scale-110 transition-transform duration-500"
             />
           </div>

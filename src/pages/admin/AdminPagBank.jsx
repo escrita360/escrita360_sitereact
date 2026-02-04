@@ -64,7 +64,7 @@ export default function AdminPagBank() {
         payment_method: payment.paymentMethod || 'UNKNOWN',
         created_at: payment.createdAt || payment.created_at,
         paid_at: payment.paidAt || payment.paid_at,
-        description: payment.description || 'Pagamento Escrita360'
+        description: payment.description || 'Pagamento Escrita 360'
       }))
 
       setOrders(ordersData)

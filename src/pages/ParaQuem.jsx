@@ -31,7 +31,7 @@ function ParaQuem() {
       id: 'professores',
       icon: Presentation,
       title: 'Professores',
-      description: 'Pensado para educadores que atuam em cursos preparatórios ou plataformas online, o Escrita360 otimiza o tempo de correção e amplia o alcance do ensino de redação. Com relatórios automáticos e acompanhamento por versão, o professor foca no que importa: orientar o aprendizado.',
+      description: 'Pensado para educadores que atuam em cursos preparatórios ou plataformas online, o Escrita 360 otimiza o tempo de correção e amplia o alcance do ensino de redação. Com relatórios automáticos e acompanhamento por versão, o professor foca no que importa: orientar o aprendizado.',
       subtitle: 'Mais produtividade para o professor, mais aprendizado para o aluno.',
       cta: 'Conheça os Recursos',
       ctaLink: '/recursos'
@@ -50,7 +50,7 @@ function ParaQuem() {
   const getHeroContent = () => {
     return {
       title: 'Para Quem é o',
-      titleHighlight: 'Escrita360?',
+      titleHighlight: 'Escrita 360?',
       subtitle: 'Descubra como nossa plataforma pode transformar o aprendizado de escrita para estudantes, professores, escolas e cursos preparatórios.'
     }
   }

@@ -10,8 +10,8 @@ const faqData = [
   {
     id: 1,
     category: 'plataforma',
-    question: 'O que diferencia o Escrita360 das demais plataformas?',
-    answer: 'O Escrita360 se apresenta como uma solução inovadora que vai além da correção das redações do ENEM. Funciona como um laboratório digital, com módulo digital imersivo e formativo que permite ao usuário escrever, reescrever, analisar e corrigir seus textos de forma autônoma e reflexiva.\n\nCom recursos integrados de análise e geração de insights, promove o desenvolvimento contínuo das habilidades e aprimora a qualidade da escrita. As correções também podem ser automatizadas com apoio de Inteligência Artificial.'
+    question: 'O que diferencia o Escrita 360 das demais plataformas?',
+    answer: 'O Escrita 360 se apresenta como uma solução inovadora que vai além da correção das redações do ENEM. Funciona como um laboratório digital, com módulo digital imersivo e formativo que permite ao usuário escrever, reescrever, analisar e corrigir seus textos de forma autônoma e reflexiva.\n\nCom recursos integrados de análise e geração de insights, promove o desenvolvimento contínuo das habilidades e aprimora a qualidade da escrita. As correções também podem ser automatizadas com apoio de Inteligência Artificial.'
   },
   {
     id: 2,
@@ -167,7 +167,7 @@ export default function Faq() {
       >
         <h1 className='text-4xl font-bold mb-4' style={{ color: '#1A5B94' }}>Dúvidas Frequentes</h1>
         <p className='text-lg text-gray-600 max-w-2xl mx-auto'>
-          Encontre respostas para as principais dúvidas sobre a plataforma Escrita360
+          Encontre respostas para as principais dúvidas sobre a plataforma Escrita 360
         </p>
       </motion.div>
 

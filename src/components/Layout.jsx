@@ -64,8 +64,8 @@ function Layout({ children }) {
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 animate-fade-in-down">
         <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
                 <Link to="/" className="flex items-center gap-2 font-bold text-2xl text-slate-900 logo-animate">
-                    <img src={logo} alt="Logo Escrita360" className="h-16 w-auto transition-transform duration-500 hover:scale-110 animate-fade-in" />
-                  <span className="sr-only">Escrita360</span>
+                    <img src={logo} alt="Logo Escrita 360" className="h-16 w-auto transition-transform duration-500 hover:scale-110 animate-fade-in" />
+                  <span className="sr-only">Escrita 360</span>
                 </Link>
 
           {/* Desktop Navigation */}
@@ -311,7 +311,7 @@ function Layout({ children }) {
           <div className="grid md:grid-cols-2 gap-8 mb-8">
             <div>
               <Link to="/" className="mb-4 block flex items-center gap-2">
-                <img src={logo} alt="Logo Escrita360" className="h-16 w-auto transition-transform duration-500 hover:scale-110" style={{ filter: 'brightness(0) invert(1)' }} />
+                <img src={logo} alt="Logo Escrita 360" className="h-16 w-auto transition-transform duration-500 hover:scale-110" style={{ filter: 'brightness(0) invert(1)' }} />
                   {/* Removido texto 'Escrita' */}
               </Link>
               <p className="text-slate-400">
@@ -327,7 +327,7 @@ function Layout({ children }) {
             </div>
           </div>
           <div className="border-t border-slate-800 pt-8 text-center text-slate-400">
-            <p>Copyright © 2025 Escrita360. Todos os direitos reservados</p>
+            <p>Copyright © 2025 Escrita 360. Todos os direitos reservados</p>
           </div>
         </div>
       </footer>

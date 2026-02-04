@@ -9,12 +9,6 @@ export default function PoliticaPrivacidade() {
   const [aceito, setAceito] = useState(false)
   const navigate = useNavigate()
 
-  const handleDownloadPdf = () => {
-    const link = document.createElement('a')
-    link.href = '/politica-de-privacidade.pdf'
-    link.download = 'Política de Privacidade - Escrita360.pdf'
-    link.click()
-  }
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
@@ -302,8 +296,8 @@ export default function PoliticaPrivacidade() {
               <h2 className="text-2xl font-bold text-slate-800 mb-4">Informações de Contato, formulários e suporte</h2>
               <p className="text-slate-700 leading-relaxed">
                 Para esclarecimentos sobre esta política, dúvidas, comentários ou sugestões relacionadas à privacidade e proteção de dados, o usuário poderá entrar em contato com nossa equipe de suporte através do e-mail{' '}
-                <a href="mailto:suporte@escrita360.com.br" className="text-brand-primary hover:underline font-medium">
-                  suporte@escrita360.com.br
+                <a href="mailto:suporte@Escrita 360.com.br" className="text-brand-primary hover:underline font-medium">
+                  suporte@Escrita 360.com.br
                 </a>. Nosso compromisso é responder a todas as solicitações legítimas dentro dos prazos legais estabelecidos, com transparência e efetividade na proteção de seus dados e garantir o cumprimento integral dos direitos dos titulares, preservando, ao mesmo tempo, a segurança e integridade da plataforma.
               </p>
               <p className="text-slate-700 leading-relaxed mt-4">

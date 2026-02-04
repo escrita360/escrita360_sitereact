@@ -9,12 +9,6 @@ export default function TermosServico() {
   const [aceito, setAceito] = useState(false)
   const navigate = useNavigate()
 
-  const handleDownloadPdf = () => {
-    const link = document.createElement('a')
-    link.href = '/termos-e-condicoes.pdf'
-    link.download = 'Termos e Condições Gerais de Uso - Escrita360.pdf'
-    link.click()
-  }
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
@@ -193,8 +187,8 @@ export default function TermosServico() {
               <h2 className="text-2xl font-bold text-slate-800 mb-4">Do contato e suporte</h2>
               <p className="text-slate-700 leading-relaxed">
                 Para esclarecimentos, dúvidas, comentários ou sugestões relacionadas aos termos e condições de uso, entre em contato com nossa equipe de suporte em{' '}
-                <a href="mailto:suporte@escrita360.com.br" className="text-brand-primary hover:underline font-medium">
-                  suporte@escrita360.com.br
+                <a href="mailto:suporte@Escrita 360.com.br" className="text-brand-primary hover:underline font-medium">
+                  suporte@Escrita 360.com.br
                 </a>.
               </p>
             </section>
