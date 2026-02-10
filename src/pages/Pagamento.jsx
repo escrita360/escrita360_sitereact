@@ -456,11 +456,22 @@ function Pagamento() {
           holderName: formData.cardName
         }
 
+        // Dados de endereço para envio ao PagBank
+        const addressData = {
+          cep: formData.cep,
+          rua: formData.rua,
+          numero: formData.numero,
+          complemento: formData.complemento,
+          estado: formData.estado,
+          cidade: formData.cidade
+        }
+
         const paymentData = {
           planData,
           customerData,
           cardData,
-          installments: selectedInstallments
+          installments: selectedInstallments,
+          addressData
         }
 
         try {

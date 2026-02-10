@@ -196,10 +196,14 @@ export const paymentService = {
    */
   async processPagBankEncryptedCardPayment(paymentData, publicKey) {
     try {
-      const { planData, customerData, cardData, installments = 1 } = paymentData
+      const { planData, customerData, cardData, installments = 1, addressData } = paymentData
 
-      // Criptografar cartão
+      // Criptografar cartão usando SDK do PagBank
       const encryptedCard = await encryptCard(cardData, publicKey)
+
+      if (!encryptedCard.encrypted) {
+        throw new Error('Falha na criptografia do cartão')
+      }
 
       // Limpar telefone apenas números
       const phoneClean = customerData.phone.replace(/\D/g, '')
@@ -244,10 +248,32 @@ export const paymentService = {
             }
           }
         }],
-        notification_urls: []
+        notification_urls: [] // Backend injeta webhook URL automaticamente
+      }
+
+      // Adicionar endereço de shipping se disponível
+      if (addressData && addressData.cep) {
+        data.shipping = {
+          address: {
+            street: addressData.rua,
+            number: addressData.numero,
+            complement: addressData.complemento || '',
+            locality: addressData.cidade,
+            city: addressData.cidade,
+            region_code: addressData.estado,
+            country: 'BRA',
+            postal_code: addressData.cep.replace(/\D/g, '')
+          }
+        }
       }
 
       console.log('🔐 Enviando pedido com cartão criptografado...')
+      console.log('💳 Dados:', {
+        customer: data.customer.name,
+        amount: data.charges[0].amount.value,
+        installments: data.charges[0].payment_method.installments,
+        hasAddress: !!data.shipping
+      })
       const response = await api.post('/payment/pagbank/create-encrypted-order', data)
       return response.data
     } catch (error) {
@@ -586,17 +612,24 @@ export const paymentService = {
   },
 
   /**
-   * Obtém chave pública do PagBank para criptografia
+   * Obtém chave pública do PagBank para criptografia de cartão
+   * Busca do backend que lê de PAGBANK_PUBLIC_KEY no .env
    * @returns {Promise<string>} - Chave pública
    */
   async getPublicKey() {
     try {
-      // Por enquanto usando chave de exemplo - em produção viria do backend
-      // TODO: Implementar endpoint no backend para obter a chave pública
-      return process.env.VITE_PAGBANK_PUBLIC_KEY || 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqOmBQ...'
+      const response = await api.get('/payment/pagbank/public-key')
+      const publicKey = response.data.public_key
+      
+      if (!publicKey) {
+        throw new Error('Chave pública não retornada pelo servidor')
+      }
+      
+      console.log('🔑 Chave pública obtida do backend com sucesso')
+      return publicKey
     } catch (error) {
       console.error('❌ Erro ao obter chave pública:', error)
-      throw error
+      throw new Error('Não foi possível obter a chave de criptografia do PagBank. Verifique a configuração do servidor.')
     }
   },
 
