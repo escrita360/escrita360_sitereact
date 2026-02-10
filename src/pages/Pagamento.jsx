@@ -1173,14 +1173,14 @@ function Pagamento() {
                               {errors.cep && <p className="text-xs text-red-500 mt-1">{errors.cep}</p>}
                             </div>
                             <div>
-                              <Label htmlFor="numero">Número</Label>
+                              <Label htmlFor="numero">Número *</Label>
                               <Input id="numero" placeholder="0000"
                                 value={formData.numero} onChange={(e) => handleInputChange('numero', e.target.value)}
                                 className={errors.numero ? 'border-red-500' : ''} />
                               {errors.numero && <p className="text-xs text-red-500 mt-1">{errors.numero}</p>}
                             </div>
                             <div className="col-span-2">
-                              <Label htmlFor="rua">Rua</Label>
+                              <Label htmlFor="rua">Rua *</Label>
                               <Input id="rua" placeholder="Ex: Rua João Pessoa"
                                 value={formData.rua} onChange={(e) => handleInputChange('rua', e.target.value)}
                                 className={errors.rua ? 'border-red-500' : ''} />
@@ -1194,7 +1194,7 @@ function Pagamento() {
                               {errors.complemento && <p className="text-xs text-red-500 mt-1">{errors.complemento}</p>}
                             </div>
                             <div>
-                              <Label htmlFor="estado">Estado</Label>
+                              <Label htmlFor="estado">Estado *</Label>
                               <select
                                 id="estado"
                                 value={formData.estado}
@@ -1233,7 +1233,7 @@ function Pagamento() {
                               {errors.estado && <p className="text-xs text-red-500 mt-1">{errors.estado}</p>}
                             </div>
                             <div>
-                              <Label htmlFor="cidade">Cidade</Label>
+                              <Label htmlFor="cidade">Cidade *</Label>
                               <select
                                 id="cidade"
                                 value={formData.cidade}
@@ -1449,7 +1449,7 @@ function Pagamento() {
                             {!selectedSavedCard && (
                               <>
                                 <div>
-                                  <Label htmlFor="cardNumber">Número do Cartão</Label>
+                                  <Label htmlFor="cardNumber">Número do Cartão *</Label>
                                   <div className="relative">
                                     <Input id="cardNumber" placeholder="0000 0000 0000 0000" maxLength={19}
                                       value={formData.cardNumber} onChange={(e) => handleInputChange('cardNumber', e.target.value)}
@@ -1467,7 +1467,7 @@ function Pagamento() {
                                   )}
                                 </div>
                                 <div>
-                                  <Label htmlFor="cardName">Nome do Titular</Label>
+                                  <Label htmlFor="cardName">Nome do Titular *</Label>
                                   <Input id="cardName" placeholder="NOME DO TITULAR"
                                     value={formData.cardName} onChange={(e) => handleInputChange('cardName', e.target.value)}
                                     className={errors.cardName ? 'border-red-500' : ''} />
@@ -1475,7 +1475,7 @@ function Pagamento() {
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
                                   <div>
-                                    <Label htmlFor="expiryDate">Validade</Label>
+                                    <Label htmlFor="expiryDate">Validade *</Label>
                                     <div className="relative">
                                     <Input id="expiryDate" placeholder="MM/AA" maxLength={5}
                                       value={formData.expiryDate} onChange={(e) => handleInputChange('expiryDate', e.target.value)}
@@ -1485,7 +1485,7 @@ function Pagamento() {
                                     {errors.expiryDate && <p className="text-xs text-red-500 mt-1">{errors.expiryDate}</p>}
                                   </div>
                                   <div>
-                                    <Label htmlFor="cvv">CVV</Label>
+                                    <Label htmlFor="cvv">CVV *</Label>
                                     <div className="relative">
                                       <Input id="cvv" type="password" placeholder="000" maxLength={4}
                                         value={formData.cvv} onChange={(e) => handleInputChange('cvv', e.target.value)}
@@ -1501,7 +1501,7 @@ function Pagamento() {
                             {selectedSavedCard && (
                               <div className="grid grid-cols-2 gap-4">
                                 <div className="max-w-xs">
-                                  <Label htmlFor="cvv">CVV</Label>
+                                  <Label htmlFor="cvv">CVV *</Label>
                                   <div className="relative">
                                     <Input id="cvv" type="password" placeholder="000" maxLength={4}
                                       value={formData.cvv} onChange={(e) => handleInputChange('cvv', e.target.value)}
