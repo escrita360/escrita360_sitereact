@@ -53,7 +53,6 @@ function Precos() {
   const teacherPlansSolo = [
     {
       name: 'Plano Básico',
-      badge: 'Preço promocional de lançamento',
       monthlyPrice: 49,
       yearlyPrice: 588,
       subDescription: '',
@@ -64,7 +63,6 @@ function Precos() {
     },
     {
       name: 'Plano 2 Mensal',
-      badge: 'Preço promocional de lançamento',
       monthlyPrice: 120,
       yearlyPrice: 1440,
       description: 'Estudantes (Programa individual)',
