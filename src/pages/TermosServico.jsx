@@ -25,7 +25,7 @@ export default function TermosServico() {
         
         <CardContent className="prose prose-slate max-w-none">
           <p className="text-slate-700 leading-relaxed">
-            Este documento tem por finalidade apresentar os termos e condições gerais de uso adotados pela <strong>NI Projetos LTDA</strong>, pessoa jurídica de direito privado, inscrita no CNPJ nº 63.207.397/0001-07, titular da propriedade intelectual sobre o software, website, conteúdos e demais ativos relacionados à plataforma Escrita 360.
+            Este documento tem por finalidade apresentar os termos e condições gerais de uso adotados pela NI Projetos LTDA, pessoa jurídica de direito privado, inscrita no CNPJ nº 63.207.397/0001-07, titular da propriedade intelectual sobre o software, website, conteúdos e demais ativos relacionados à plataforma Escrita 360.
           </p>
 
           <div className="space-y-8 mt-8">
@@ -38,22 +38,24 @@ export default function TermosServico() {
                 Todas as práticas estão alinhadas às habilidades previstas na Base Nacional Comum Curricular (MEC) e as competências e critérios avaliativos do ENEM (INEP), favorecendo o desenvolvimento de competências linguísticas, argumentativas, críticas e criativas dos estudantes, para que possam gerenciar o próprio processo, evolução e melhoria da qualidade escrita.
               </p>
               <p className="text-slate-700 leading-relaxed mt-4">
-                A Plataforma disponibiliza os seguintes produtos e serviços: (i) módulo automatizado para apoio à produção, análise e avaliação de textos destinados a estudantes; (ii) módulo de correção e feedback de redações voltado a professores; e (iii) comercialização de planos e pacotes de créditos adicionais para a realização de análises textuais assistidas por inteligência artificial.
+                A Plataforma disponibiliza os seguintes produtos e serviços: (i) módulo automatizado para apoio à produção, análise e avaliação de textos, destinado aos estudantes; (ii) módulo de correção e feedback de redações, destinado aos professores; e (iii) comercialização de planos e pacotes de créditos adicionais para a realização de análises textuais assistidas por inteligência artificial.
               </p>
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-slate-800 mb-4">Da aceitação e Acesso dos usuários</h2>
-              <ul className="list-disc list-inside space-y-2 text-slate-700">
-                <li>Ao acessar ou utilizar a plataforma Escrita 360, o usuário aceita integralmente os presentes termos e compromete-se a observá-los. Caso não concorde com estes termos, o acesso e o uso do sistema não devem ser realizados;</li>
-                <li>A plataforma emprega todos os recursos técnicos disponíveis para garantir acesso contínuo. Contudo, a navegação pode ser temporariamente interrompida ou limitada para atualizações, manutenção ou outras ações quando se fizerem necessárias ao seu funcionamento.</li>
-              </ul>
+              <h2 className="text-2xl font-bold text-slate-800 mb-4">Da aceitação e acesso dos usuários</h2>
+              <p className="text-slate-700 leading-relaxed">
+                Ao acessar ou utilizar a plataforma Escrita 360, o usuário aceita integralmente os presentes termos e compromete-se a observá-los. Caso não concorde com estes termos, o acesso e o uso do sistema não devem ser realizados;
+              </p>
+              <p className="text-slate-700 leading-relaxed mt-4">
+                A plataforma emprega todos os recursos técnicos disponíveis para garantir acesso contínuo. Contudo, a navegação pode ser temporariamente interrompida ou limitada para atualizações, manutenção ou outras ações quando se fizerem necessárias ao seu funcionamento.
+              </p>
             </section>
 
             <section>
               <h2 className="text-2xl font-bold text-slate-800 mb-4">Do cadastro</h2>
               <p className="text-slate-700 leading-relaxed">
-                O acesso às funcionalidades da plataforma requer a realização de um cadastro prévio e o pagamento de um plano ou assinatura realizada conforme a periodicidade escolhida (mensal, semestral ou anual), cujos valores e condições estão descritos no site.
+                O acesso às funcionalidades da plataforma requer a realização de um cadastro prévio e o pagamento de um dos planos conforme a periodicidade escolhida (mensal, semestral ou anual), cujos valores e condições estão descritos no site.
               </p>
               <p className="text-slate-700 leading-relaxed mt-4">
                 Antes de finalizar o pagamento do plano escolhido, o usuário deverá se informar sobre as suas especificações e finalidade.
@@ -65,7 +67,7 @@ export default function TermosServico() {
                 Ao se cadastrar, o usuário deve fornecer dados completos, atualizados e válidos, incluindo um e-mail válido para comunicações. É responsabilidade do usuário manter esses dados atualizados e garantir sua veracidade.
               </p>
               <p className="text-slate-700 leading-relaxed mt-4">
-                Após o cadastro, o usuário receberá login e senha pessoais, sendo responsável por mantê-los confidenciais e seguros, evitando acesso não autorizado. O usuário não deve compartilhar seus dados de acesso com terceiros, respondendo integralmente por qualquer uso indevido.
+                Após o cadastro, o usuário receberá login e senha pessoais, sendo responsável por mantê-los confidenciais e seguros, evitando acesso não autorizado. O usuário não deve compartilhar seus dados de acesso com terceiros, respondendo integralmente por qualquer uso indevido;
               </p>
               <p className="text-slate-700 leading-relaxed mt-4">
                 Ao aceitar os Termos, o usuário autoriza a coletar e usar os dados fornecidos no cadastro ou uso da plataforma.
@@ -83,49 +85,57 @@ export default function TermosServico() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-slate-800 mb-4">Das Responsabilidades</h2>
-              
-              <h3 className="text-xl font-semibold text-slate-800 mb-3">É de responsabilidade do usuário:</h3>
+              <h2 className="text-2xl font-bold text-slate-800 mb-4">Das responsabilidades</h2>
+              <p className="text-slate-700 leading-relaxed">
+                É de responsabilidade do usuário:
+              </p>
               <ol className="list-decimal list-inside space-y-2 text-slate-700 ml-4">
                 <li>Utilizar a Plataforma de forma adequada, ética, responsável e em conformidade com as disposições deste Termo de Condições de Uso e demais políticas aplicáveis</li>
                 <li>Cumprir integralmente as regras e políticas estabelecidas neste Termo de Condições de Uso;</li>
                 <li>Proteger os dados de acesso à sua conta (login e senha), responsabilizando-se por qualquer atividade realizada a partir dela. A conta de acesso é pessoal e intransferível, sendo expressamente proibido ceder, vender, compartilhar ou emprestar login e senha a terceiros. O descumprimento dessa regra poderá resultar em bloqueio ou encerramento da conta, sem direito a reembolso;</li>
                 <li>Assegurar que seu dispositivo e conexão sejam compatíveis com os requisitos técnicos da Plataforma.</li>
               </ol>
-
-              <h3 className="text-xl font-semibold text-slate-800 mb-3 mt-6">É de responsabilidade da Plataforma:</h3>
+              <p className="text-slate-700 leading-relaxed mt-4">
+                É de responsabilidade da Plataforma:
+              </p>
               <ol className="list-decimal list-inside space-y-2 text-slate-700 ml-4">
                 <li>Indicar de forma clara e acessível as características, funcionalidades e limitações dos serviços oferecidos;</li>
                 <li>Garantir a veracidade das informações divulgadas por seus canais oficiais;</li>
                 <li>Zelar pela segurança e integridade do ambiente virtual, adotando medidas técnicas para proteção dos dados e estabilidade do sistema;</li>
                 <li>Manter suporte técnico e canais de comunicação adequados para atendimento aos usuários.</li>
               </ol>
-
-              <h3 className="text-xl font-semibold text-slate-800 mb-3 mt-6">A Plataforma não se responsabiliza:</h3>
+              <p className="text-slate-700 leading-relaxed mt-4">
+                A Plataforma não se responsabiliza:
+              </p>
               <ul className="list-disc list-inside space-y-2 text-slate-700 ml-4">
                 <li>Por conteúdos, comentários ou informações publicadas pelos próprios usuários, os quais são de inteira responsabilidade destes;</li>
                 <li>Por links externos que possam redirecionar o usuário a ambientes fora de seu domínio, sobre os quais não possui controle;</li>
                 <li>Por eventuais interrupções, falhas de acesso ou incompatibilidades técnicas decorrentes de fatores alheios à sua atuação direta.</li>
               </ul>
-              
               <p className="text-slate-700 leading-relaxed mt-4 italic">
                 Demais responsabilidades estão detalhadas no Documento de Política de Privacidade.
               </p>
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-slate-800 mb-4">Pagamento e consumo dos Créditos de correção com IA</h2>
+              <h2 className="text-2xl font-bold text-slate-800 mb-4">Pagamento e consumo dos créditos de correção com IA</h2>
               <p className="text-slate-700 leading-relaxed">
-                Os pagamentos podem ser realizados por meio de PIX e cartão de crédito. Para pagamentos efetuados com cartão de crédito, é permitido, em alguns casos, o parcelamento, observado o limite máximo de parcelas, que está definido no site, de acordo com o valor e a duração do plano contratado.
+                Os pagamentos podem ser realizados por meio de PIX e cartão de crédito. Para pagamentos efetuados com cartão de crédito, é permitido, em alguns casos, o parcelamento, observado o limite máximo de parcelas, que está definido no site, de acordo com o valor e a duração do plano adquirido.
+              </p>
+              <p className="text-slate-700 leading-relaxed mt-4">
+                No caso de aquisição de planos para as instituições, é de responsabilidade da escola, configurar e gerenciar o ambiente da plataforma para professores e alunos, o que inclui o cadastro de professores, turmas e alunos, a definição de limites de correções por aluno, o gerenciamento contínuo de professores, turmas e alunos, bem como o cadastro de textos motivadores e/ou a inserção de materiais de estudo.
+              </p>
+              <p className="text-slate-700 leading-relaxed mt-4">
+                Alunos vinculados a instituições escolares não realizam pagamento direto pelo uso da plataforma, pois a responsabilidade pelo pagamento é da própria instituição. Caso desejem adquirir créditos adicionais, esses alunos podem contratar um plano à parte como alunos independentes.
               </p>
               <p className="text-slate-700 leading-relaxed mt-4">
                 Quando o usuário solicita a correção de seu texto com auxílio da IA, o sistema consome créditos de uso, equivalentes a chamadas à IA. Cada solicitação de correção consome um crédito (uma unidade de consumo).
               </p>
               <p className="text-slate-700 leading-relaxed mt-4">
-                Os créditos podem ser adquiridos das seguintes formas: i) comprando juntamente com o plano adquirido; ii) adquirindo créditos extras (por meio da aquisição de pacotes de créditos no site); e iii) por intermédio das escolas, quando o plano é contrato pela instituição.
+                Os créditos podem ser adquiridos a qualquer momento, das seguintes formas: i) por meio da aquisição de um dos planos que contém uma quantidade específica de créditos; ii) por meio de compra de créditos extras (aquisição de pacotes de créditos diretamente no site); e iii) por intermédio das escolas, quando o plano é contrato pela instituição.
               </p>
               <p className="text-slate-700 leading-relaxed mt-4">
-                Os créditos para correção e análises dos textos com IA devem ser utilizados dentro do período de vigência do plano adquirido. Créditos não utilizados durante o mês ativo não serão acumulativos para os meses seguintes.
+                Os créditos destinados à correção e à análise de textos por IA devem ser utilizados dentro do período de vigência do plano contratado. Os créditos não utilizados durante o mês ativo somente poderão ser aproveitados mediante a renovação do plano.
               </p>
               <p className="text-slate-700 leading-relaxed mt-4">
                 Da mesma forma, os artefatos gerados na plataforma, incluindo redações e relatórios, deixam de estar acessíveis ao usuário após o término da vigência do plano adquirido. Para fins de arquivamento, a plataforma disponibiliza a geração de relatórios em formato PDF, que podem ser baixados e armazenados pelo usuário em seu dispositivo pessoal.
@@ -135,13 +145,13 @@ export default function TermosServico() {
             <section>
               <h2 className="text-2xl font-bold text-slate-800 mb-4">Sobre os relatórios e análises gerados por IA</h2>
               <p className="text-slate-700 leading-relaxed">
-                Os relatórios de correção e análise textual disponibilizados pela plataforma são produzidos com o apoio de tecnologias de IA e Processamento de Linguagem Natural (PLN). Esses modelos realizam interpretações automáticas de textos, buscando identificar padrões linguísticos, discursivos e estruturais semelhantes aos observados em correções humanas.
+                Os relatórios de correção e análise textual disponibilizados pela plataforma são produzidos com o apoio de tecnologias de IA e Processamento de Linguagem Natural. Esses modelos realizam interpretações automáticas de textos, buscando identificar padrões linguísticos, discursivos e estruturais semelhantes aos observados em correções humanas.
               </p>
               <p className="text-slate-700 leading-relaxed mt-4">
                 A análise automatizada combina abordagens quantitativas e qualitativas, orientadas por prompts específicos desenvolvidos para avaliar aspectos como coerência, coesão, argumentação, estrutura e adequação ao tema. Para realizar essas avaliações, a IA utiliza uma ampla base de conhecimento composta por textos disponíveis publicamente na internet, corpora acadêmicos e dados linguísticos de domínio geral.
               </p>
               <p className="text-slate-700 leading-relaxed mt-4">
-                As análises para as correções das redações do ENEM seguem, como referência principal, a Cartilha do Participante do ENEM, publicada pelo INEP, e as matrizes de pontuação associadas a cada competência avaliativa. Dessa forma, os relatórios buscam reproduzir os critérios oficiais de análise, destacando pontos fortes e aspectos a serem aprimorados em cada texto, além de oferecer previsões de nota por competência e observações sobre o contexto e a estrutura da redação.
+                As análises para as correções das redações do ENEM seguem, como referência principal, a Cartilha do Participante do ENEM, publicada pelo INEP, assim como as matrizes de pontuação associadas a cada competência avaliativa. Dessa forma, os relatórios buscam reproduzir os critérios oficiais de análise, destacando pontos fortes e aspectos a serem aprimorados em cada texto. Além disso, os relatórios oferecem previsões de nota por competência, observações sobre o contexto e a estrutura da redação.
               </p>
               <p className="text-slate-700 leading-relaxed mt-4">
                 É importante destacar que, por se tratar de um sistema automatizado, podem ocorrer imprecisões ou divergências, assim como acontece com a avaliação humana. A IA não substitui o julgamento pedagógico ou profissional, e eventuais erros de interpretação ou classificação são possíveis, especialmente em casos de linguagem ambígua, ironias, variações regionais ou construções criativas.
@@ -187,8 +197,8 @@ export default function TermosServico() {
               <h2 className="text-2xl font-bold text-slate-800 mb-4">Do contato e suporte</h2>
               <p className="text-slate-700 leading-relaxed">
                 Para esclarecimentos, dúvidas, comentários ou sugestões relacionadas aos termos e condições de uso, entre em contato com nossa equipe de suporte em{' '}
-                <a href="mailto:suporte@Escrita 360.com.br" className="text-brand-primary hover:underline font-medium">
-                  suporte@Escrita 360.com.br
+                <a href="mailto:suporte@escrita360.com.br" className="text-brand-primary hover:underline font-medium">
+                  suporte@escrita360.com.br
                 </a>.
               </p>
             </section>
