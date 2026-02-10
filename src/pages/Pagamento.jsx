@@ -1715,7 +1715,7 @@ function Pagamento() {
             <Card className="max-w-2xl mx-auto shadow-xl">
               <CardContent className="p-6 space-y-4">
                 <div className="space-y-2">
-                  <p className="text-sm text-slate-600">Plano Ativado</p>
+                  <p className="text-sm text-slate-600">Pagamento efetuado com sucesso!</p>
                   <p className="text-2xl font-bold text-brand-primary">{selectedPlan.name}</p>
                 </div>
                 <Separator />

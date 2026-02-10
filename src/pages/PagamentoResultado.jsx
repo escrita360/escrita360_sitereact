@@ -34,9 +34,9 @@ function PagamentoResultado({ status = 'success' }) {
     success: {
       icon: CheckCircle2,
       iconBg: 'bg-slate-100',
-      iconColor: 'text-slate-600',
+      iconColor: 'text-green-600',
       title: 'Pagamento Confirmado!',
-      subtitle: 'Sua assinatura foi ativada com sucesso',
+      subtitle: 'Pagamento efetuado com sucesso!',
       cardBg: 'bg-slate-50',
       cardTitle: 'Pagamento Processado',
       cardText: 'Seu pagamento foi processado com sucesso.',
