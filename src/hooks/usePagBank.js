@@ -11,26 +11,54 @@ export const usePagBank = () => {
   const [error, setError] = useState(null)
 
   /**
-   * Processa pagamento com cartão (tenta criptografado primeiro)
+   * Processa pagamento com cartão (tenta múltiplas estratégias)
    */
-  const processCardPayment = async (paymentData) => {
+  const processCardPayment = async (paymentData, options = {}) => {
     setIsLoading(true)
     setError(null)
+
+    const { encryptionMethod = 'frontend' } = options // 'frontend', 'backend', 'complete'
 
     try {
       let result
       
-      // Tentar pagamento criptografado primeiro
-      try {
-        console.log('🔐 Tentando pagamento com cartão criptografado...')
-        const publicKey = await paymentService.getPublicKey()
-        result = await paymentService.processPagBankEncryptedCardPayment(paymentData, publicKey)
-        console.log('✅ Pagamento criptografado realizado com sucesso')
-      } catch (encryptedError) {
-        console.warn('⚠️ Pagamento criptografado falhou, usando método PCI:', encryptedError.message)
-        
-        // Fallback para método PCI
-        result = await paymentService.createPagBankCardOrder(paymentData)
+      if (encryptionMethod === 'complete') {
+        // Estratégia 1: Criptografia completa no backend
+        console.log('🔐 Tentando pagamento com criptografia completa no backend...')
+        try {
+          result = await paymentService.processPagBankCompleteBackendEncryption(paymentData)
+          console.log('✅ Pagamento com criptografia completa realizado com sucesso')
+        } catch (completeError) {
+          console.warn('⚠️ Criptografia completa falhou, tentando criptografia backend:', completeError.message)
+          encryptionMethod = 'backend'
+        }
+      }
+
+      if (encryptionMethod === 'backend') {
+        // Estratégia 2: Criptografia no backend
+        console.log('🔐 Tentando pagamento com criptografia no backend...')
+        try {
+          result = await paymentService.processPagBankBackendEncryptedCardPayment(paymentData)
+          console.log('✅ Pagamento com criptografia backend realizado com sucesso')
+        } catch (backendError) {
+          console.warn('⚠️ Criptografia backend falhou, usando método frontend:', backendError.message)
+          encryptionMethod = 'frontend'
+        }
+      }
+
+      if (encryptionMethod === 'frontend') {
+        // Estratégia 3: Criptografia no frontend (padrão)
+        console.log('🔐 Tentando pagamento com criptografia no frontend...')
+        try {
+          const publicKey = await paymentService.getPublicKey()
+          result = await paymentService.processPagBankEncryptedCardPayment(paymentData, publicKey)
+          console.log('✅ Pagamento com criptografia frontend realizado com sucesso')
+        } catch (encryptedError) {
+          console.warn('⚠️ Pagamento criptografado falhou, usando método PCI:', encryptedError.message)
+          
+          // Fallback para método PCI
+          result = await paymentService.createPagBankCardOrder(paymentData)
+        }
       }
 
       return result

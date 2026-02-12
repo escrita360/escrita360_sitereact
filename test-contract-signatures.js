@@ -13,10 +13,10 @@ async function testContractSignatures() {
     
     const testUserId = 'test_user_' + Date.now()
     const contractData = {
-      userName: 'João da Silva',
-      userEmail: 'joao.teste@example.com',
-      userCpf: '12345678901',
-      userPhone: '11999999999',
+      userName: 'USER_NAME',
+      userEmail: 'user@example.com',
+      userCpf: 'CPF_NUMBER',
+      userPhone: 'PHONE_NUMBER',
       contractType: 'terms_and_conditions',
       contractVersion: '1.0',
       signatureContext: 'payment_process',

@@ -11,12 +11,12 @@ async function testCreateAccount() {
   
   try {
     const result = await firebaseAuthService.register(
-      'teste@escrita360.com.br',
-      'senha123456',
+      'test@example.com',
+      'PASSWORD_PLACEHOLDER',
       {
-        name: 'Usuário Teste',
-        cpf: '12345678900',
-        phone: '11987654321'
+        name: 'USER_NAME_PLACEHOLDER',
+        cpf: 'CPF_PLACEHOLDER',
+        phone: 'PHONE_PLACEHOLDER'
       }
     )
     

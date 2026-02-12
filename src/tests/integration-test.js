@@ -72,11 +72,11 @@ async function testPayment() {
     isYearly: false,
     email: 'teste@email.com',
     cardName: 'TESTE USUARIO',
-    cardNumber: '4242424242424242', // Cartão de teste Stripe
-    expiryDate: '12/25',
-    cvv: '123',
+    cardNumber: 'CARD_NUMBER', // REMOVER: Cartão de teste
+    expiryDate: 'MM/YY',
+    cvv: 'CVV',
     phone: '11999999999',
-    cpf: '12345678901'
+    cpf: 'CPF_NUMBER'
   }
   
   try {

@@ -79,7 +79,7 @@ const loadPagSeguroSDK = () => {
         }
       }
 
-      script.onerror = (error) => {
+      script.onerror = () => {
         isSDKLoading = false
         const errorMsg = new Error('Falha ao carregar SDK do PagBank')
         rejectPromise(errorMsg)
@@ -622,29 +622,211 @@ export const paymentService = {
   },
 
   /**
-   * Obtém chave pública do PagBank para criptografia de cartão
-   * Busca do backend que lê de PAGBANK_PUBLIC_KEY no .env
-   * @returns {Promise<string>} - Chave pública
+   * Criptografa dados do cartão usando backend (alternativa ao SDK)
+   * Útil quando não é possível usar o SDK do PagBank no frontend
+   * @param {Object} cardData - Dados do cartão
+   * @returns {Promise<Object>} - Cartão criptografado
    */
-  async getPublicKey() {
+  async encryptCardOnBackend(cardData) {
     try {
-      const response = await api.get('/payment/pagbank/public-key')
-      const publicKey = response.data.public_key
+      const response = await api.post('/payment/pagbank/encrypt-card', { cardData })
       
-      if (!publicKey) {
-        throw new Error('Chave pública não retornada pelo servidor')
+      if (response.data.success) {
+        return {
+          encrypted: response.data.encryptedCard,
+          hasErrors: false,
+          errors: []
+        }
+      } else {
+        return {
+          encrypted: null,
+          hasErrors: true,
+          errors: [{ message: 'Erro na criptografia do backend' }]
+        }
       }
-      
-      console.log('🔑 Chave pública obtida do backend com sucesso')
-      return publicKey
     } catch (error) {
-      console.error('❌ Erro ao obter chave pública:', error)
-      throw new Error('Não foi possível obter a chave de criptografia do PagBank. Verifique a configuração do servidor.')
+      console.error('❌ Erro ao criptografar cartão no backend:', error)
+      return {
+        encrypted: null,
+        hasErrors: true,
+        errors: [{ message: error.response?.data?.error || error.message }]
+      }
     }
   },
 
-  // Exportar função de criptografia para uso externo se necessário
-  encryptCard,
+  /**
+   * Processa pagamento com cartão criptografado via backend
+   * Criptografa os dados no backend em vez de usar SDK do frontend
+   * @param {Object} paymentData - Dados do pagamento
+   * @returns {Promise<Object>} - Resultado do pagamento
+   */
+  async processPagBankBackendEncryptedCardPayment(paymentData) {
+    try {
+      const { planData, customerData, cardData, installments = 1, addressData } = paymentData
+
+      // Criptografar cartão usando backend
+      const encryptedCard = await this.encryptCardOnBackend(cardData)
+
+      if (!encryptedCard.encrypted) {
+        throw new Error('Falha na criptografia do cartão no backend')
+      }
+
+      // Limpar telefone apenas números
+      const phoneClean = customerData.phone.replace(/\D/g, '')
+      
+      const data = {
+        reference_id: buildReferenceId(planData),
+        customer: {
+          name: customerData.name.trim(),
+          email: customerData.email.trim(),
+          tax_id: customerData.cpf.replace(/\D/g, ''),
+          phones: [{
+            country: '55',
+            area: phoneClean.substring(0, 2),
+            number: phoneClean.substring(2),
+            type: 'MOBILE'
+          }]
+        },
+        items: [{
+          reference_id: `item_${Date.now()}`,
+          name: planData.name,
+          quantity: 1,
+          unit_amount: Math.round(planData.price * 100)
+        }],
+        charges: [{
+          reference_id: `charge_${Date.now()}`,
+          description: `Compra de ${planData.name}`,
+          amount: {
+            value: Math.round(planData.price * 100),
+            currency: 'BRL'
+          },
+          payment_method: {
+            type: 'CREDIT_CARD',
+            installments: installments,
+            capture: true,
+            card: {
+              encrypted: encryptedCard.encrypted,
+              store: false,
+              holder: {
+                name: cardData.holderName,
+                tax_id: customerData.cpf.replace(/\D/g, '')
+              }
+            }
+          }
+        }],
+        notification_urls: [] // Backend injeta webhook URL automaticamente
+      }
+
+      // Adicionar endereço de shipping se disponível
+      if (addressData && addressData.cep) {
+        data.shipping = {
+          address: {
+            street: addressData.rua,
+            number: addressData.numero,
+            complement: addressData.complemento || '',
+            locality: addressData.cidade,
+            city: addressData.cidade,
+            region_code: addressData.estado,
+            country: 'BRA',
+            postal_code: addressData.cep.replace(/\D/g, '')
+          }
+        }
+      }
+
+      console.log('🔐 Enviando pedido com cartão criptografado via backend...')
+      console.log('💳 Dados:', {
+        customer: data.customer.name,
+        amount: data.charges[0].amount.value,
+        installments: data.charges[0].payment_method.installments,
+        hasAddress: !!data.shipping
+      })
+      const response = await api.post('/payment/pagbank/create-encrypted-order', data)
+      return response.data
+    } catch (error) {
+      console.error('❌ Erro no pagamento com cartão criptografado via backend:', error)
+      throw error
+    }
+  },
+
+  /**
+   * Processa pagamento completo com criptografia no backend
+   * Combina criptografia e criação de pedido em uma única chamada
+   * @param {Object} paymentData - Dados do pagamento
+   * @returns {Promise<Object>} - Resultado do pagamento
+   */
+  async processPagBankCompleteBackendEncryption(paymentData) {
+    try {
+      const { planData, customerData, cardData, installments = 1, addressData } = paymentData
+
+      // Limpar telefone apenas números
+      const phoneClean = customerData.phone.replace(/\D/g, '')
+      
+      const data = {
+        reference_id: buildReferenceId(planData),
+        customer: {
+          name: customerData.name.trim(),
+          email: customerData.email.trim(),
+          tax_id: customerData.cpf.replace(/\D/g, ''),
+          phones: [{
+            country: '55',
+            area: phoneClean.substring(0, 2),
+            number: phoneClean.substring(2),
+            type: 'MOBILE'
+          }]
+        },
+        items: [{
+          reference_id: `item_${Date.now()}`,
+          name: planData.name,
+          quantity: 1,
+          unit_amount: Math.round(planData.price * 100)
+        }],
+        charges: [{
+          reference_id: `charge_${Date.now()}`,
+          description: `Compra de ${planData.name}`,
+          amount: {
+            value: Math.round(planData.price * 100),
+            currency: 'BRL'
+          },
+          payment_method: {
+            type: 'CREDIT_CARD',
+            installments: installments,
+            capture: true
+          }
+        }],
+        cardData: cardData, // Dados do cartão serão criptografados no backend
+        notification_urls: []
+      }
+
+      // Adicionar endereço de shipping se disponível
+      if (addressData && addressData.cep) {
+        data.shipping = {
+          address: {
+            street: addressData.rua,
+            number: addressData.numero,
+            complement: addressData.complemento || '',
+            locality: addressData.cidade,
+            city: addressData.cidade,
+            region_code: addressData.estado,
+            country: 'BRA',
+            postal_code: addressData.cep.replace(/\D/g, '')
+          }
+        }
+      }
+
+      console.log('🔐 Enviando pedido com criptografia completa no backend...')
+      console.log('💳 Dados:', {
+        customer: data.customer.name,
+        amount: data.charges[0].amount.value,
+        installments: data.charges[0].payment_method.installments,
+        hasAddress: !!data.shipping
+      })
+      const response = await api.post('/payment/pagbank/create-order-with-card-encryption', data)
+      return response.data
+    } catch (error) {
+      console.error('❌ Erro no pagamento completo com criptografia backend:', error)
+      throw error
+    }
+  },
 
   // ============ MÉTODOS LEGADOS ============
 
@@ -653,6 +835,7 @@ export const paymentService = {
    * @param {Object} subscriptionData - Dados da assinatura
    * @returns {Promise<Object>} - Dados da assinatura criada
    */
+  // eslint-disable-next-line no-dupe-keys
   async createPagBankSubscription(subscriptionData) {
     const { planData, customerData, cardData, paymentMethod = 'BOLETO' } = subscriptionData
 
