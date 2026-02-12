@@ -11,15 +11,24 @@ service cloud.firestore {
     // COLEÇÃO: usuarios
     // ===========================
     match /usuarios/{userId} {
-      // Usuários podem ler/escrever apenas seus próprios dados
+      // Usuários podem ler apenas seus próprios dados
       allow read: if request.auth != null && request.auth.uid == userId;
       
-      // Criar/atualizar próprio perfil
-      allow create: if request.auth != null && request.auth.uid == userId;
-      allow update: if request.auth != null && request.auth.uid == userId;
+      // Apenas backend (Admin SDK) pode criar/atualizar perfil
+      // Isso impede o usuário de alterar role, plan, appAccess
+      allow create, update, delete: if false;
+    }
+    
+    // ===========================
+    // COLEÇÃO: users (provisionada pelo backend via webhook)
+    // ===========================
+    match /users/{userId} {
+      // Usuários podem ler seus próprios dados
+      allow read: if request.auth != null && request.auth.uid == userId;
       
-      // Não pode deletar (apenas admin via backend)
-      allow delete: if false;
+      // Apenas backend (Admin SDK) pode criar/atualizar
+      // Perfil com role, plan, appAccess é imutável pelo cliente
+      allow create, update, delete: if false;
     }
     
     // ===========================

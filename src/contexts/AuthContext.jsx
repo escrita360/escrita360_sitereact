@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { onAuthStateChanged, signOut } from 'firebase/auth'
+import { onAuthStateChanged, signOut, getIdTokenResult } from 'firebase/auth'
 import { doc, getDoc } from 'firebase/firestore'
 import { auth, db, firebaseAuthService } from '@/services/firebase'
 
@@ -15,11 +15,28 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
+  const [claims, setClaims] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
+        // Buscar custom claims (role, plan, app) do token
+        try {
+          const tokenResult = await getIdTokenResult(firebaseUser)
+          const userClaims = tokenResult.claims || {}
+          setClaims({
+            role: userClaims.role || null,
+            plan: userClaims.plan || null,
+            app: userClaims.app || null,
+            planType: userClaims.planType || null,
+            subscriptionStatus: userClaims.subscriptionStatus || null
+          })
+        } catch (claimsError) {
+          console.error('Erro ao buscar claims do token:', claimsError)
+          setClaims(null)
+        }
+
         // Buscar dados completos do usuário do Firestore
         try {
           const userDoc = await getDoc(doc(db, 'usuarios', firebaseUser.uid))
@@ -34,6 +51,7 @@ export const AuthProvider = ({ children }) => {
         }
       } else {
         setUser(null)
+        setClaims(null)
       }
       setLoading(false)
     })
@@ -63,6 +81,7 @@ export const AuthProvider = ({ children }) => {
 
   const value = {
     user,
+    claims,
     loading,
     login,
     register,

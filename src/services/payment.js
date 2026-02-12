@@ -1,5 +1,15 @@
 import api from './api.js'
 
+/**
+ * Gera reference_id com metadata do plano para o webhook detectar
+ * Formato: planId__audience__timestamp
+ */
+function buildReferenceId(planData) {
+  const planId = planData?.id || 'unknown'
+  const audience = planData?.audience || 'estudantes'
+  return `${planId}__${audience}__${Date.now()}`
+}
+
 // SDK do PagBank para criptografia de cartão
 let PagSeguro = null
 let isSDKLoaded = false
@@ -209,7 +219,7 @@ export const paymentService = {
       const phoneClean = customerData.phone.replace(/\D/g, '')
       
       const data = {
-        reference_id: `encrypted_order_${Date.now()}`,
+        reference_id: buildReferenceId(planData),
         customer: {
           name: customerData.name.trim(),
           email: customerData.email.trim(),
@@ -361,7 +371,7 @@ export const paymentService = {
     }
     
     const data = {
-      reference_id: `pix_${Date.now()}`,
+      reference_id: buildReferenceId(planData),
       customer: {
         name: customerData.name.trim(),
         email: customerData.email.trim(),
@@ -775,7 +785,7 @@ export const paymentService = {
     const expMonth = String(cardData.expiryMonth).padStart(2, '0')
     
     const data = {
-      reference_id: `card_${Date.now()}`,
+      reference_id: buildReferenceId(planData),
       customer: {
         name: customerData.name,
         email: customerData.email,
