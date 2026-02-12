@@ -52,13 +52,6 @@ function Pagamento() {
     'SE': ['Aracaju', 'Nossa Senhora do Socorro', 'Lagarto', 'Itabaiana', 'São Cristóvão', 'Estância'],
     'TO': ['Palmas', 'Araguaína', 'Gurupi', 'Porto Nacional', 'Paraíso do Tocantins', 'Tocantinópolis']
   }
-  
-  console.log('🔍 Hook usePagBank:', { getInstallmentFees, getCardBrand, pagBankLoading })
-  console.log('🔍 Tipos:', {
-    getInstallmentFees: typeof getInstallmentFees,
-    getCardBrand: typeof getCardBrand,
-    pagBankLoading: typeof pagBankLoading
-  })
 
   // Tentar obter do location.state primeiro, depois do sessionStorage
   const stateData = location.state || {
