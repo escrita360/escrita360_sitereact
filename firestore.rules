@@ -109,6 +109,20 @@ service cloud.firestore {
     }
     
     // ===========================
+    // COLEÇÃO: contract_signatures
+    // ===========================
+    match /contract_signatures/{signatureId} {
+      // Allow anyone to create contract signatures (for contact forms and payments)
+      allow create: if true;
+      // Allow authenticated users to read/update their own
+      allow read, update: if request.auth != null && 
+        (request.auth.uid == resource.data.userId || resource.data.userId == request.auth.token.email);
+      // Allow authenticated users to delete their own
+      allow delete: if request.auth != null && 
+        (request.auth.uid == resource.data.userId || resource.data.userId == request.auth.token.email);
+    }
+    
+    // ===========================
     // REGRAS DE ADMIN (Backend)
     // ===========================
     // Admins podem acessar tudo via Firebase Admin SDK
