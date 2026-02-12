@@ -138,6 +138,20 @@ export const paymentService = {
   // ============ MÉTODOS PAGBANK ============
 
   /**
+   * Obtém a chave pública do PagBank via backend
+   * @returns {Promise<string>} - Chave pública para criptografia de cartão
+   */
+  async getPublicKey() {
+    try {
+      const response = await api.get('/payment/pagbank/public-key')
+      return response.data.public_key
+    } catch (error) {
+      console.error('❌ Erro ao obter chave pública:', error)
+      throw error
+    }
+  },
+
+  /**
    * Consulta taxas de parcelamento via backend
    * @param {number} value - Valor em centavos
    * @param {number} maxInstallments - Máximo de parcelas
