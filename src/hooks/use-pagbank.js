@@ -33,13 +33,15 @@ export const usePagBank = () => {
     }
   }, [])
 
-  // Processa pagamento com cartão
+  // Processa pagamento com cartão (usa criptografia SDK PagBank)
   const processCardPayment = useCallback(async (paymentData) => {
     setIsLoading(true)
     setError(null)
     
     try {
-      const result = await paymentService.processPagBankCardPayment(paymentData)
+      // Obter chave pública e processar com cartão criptografado
+      const publicKey = await paymentService.getPublicKey()
+      const result = await paymentService.processPagBankEncryptedCardPayment(paymentData, publicKey)
       setPaymentData(result)
       return result
     } catch (err) {

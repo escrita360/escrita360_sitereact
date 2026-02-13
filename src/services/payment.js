@@ -13,90 +13,67 @@ function buildReferenceId(planData) {
 // SDK do PagBank para criptografia de cartão
 let PagSeguro = null
 let isSDKLoaded = false
-let isSDKLoading = false
 let sdkLoadPromise = null
 
 /**
  * Carrega o SDK do PagBank dinamicamente
+ * Usa o script já incluído no index.html ou injeta dinamicamente
  */
 const loadPagSeguroSDK = () => {
-  return new Promise((resolve, reject) => {
-    // Se já está carregado, retornar imediatamente
-    if (isSDKLoaded && window.PagSeguro) {
-      PagSeguro = window.PagSeguro
-      resolve(PagSeguro)
-      return
-    }
+  // Se já está carregado, retornar imediatamente
+  if (isSDKLoaded && window.PagSeguro) {
+    PagSeguro = window.PagSeguro
+    return Promise.resolve(PagSeguro)
+  }
 
-    // Se já está carregando, retornar a promise existente
-    if (isSDKLoading && sdkLoadPromise) {
-      return sdkLoadPromise
-    }
+  // Se já está carregando, retornar a promise existente (evita hang)
+  if (sdkLoadPromise) {
+    return sdkLoadPromise
+  }
 
-    // Verificar se o script já existe no DOM
+  sdkLoadPromise = new Promise((resolve, reject) => {
+    // Verificar se o script já existe no DOM (incluído via index.html)
     const existingScript = document.querySelector('script[src="https://assets.pagseguro.com.br/checkout-sdk-js/rc/dist/browser/pagseguro.min.js"]')
     if (existingScript) {
-      // Script já existe, aguardar carregamento
       if (window.PagSeguro) {
         PagSeguro = window.PagSeguro
         isSDKLoaded = true
         resolve(PagSeguro)
         return
-      } else {
-        // Aguardar o script carregar
-        existingScript.addEventListener('load', () => {
-          PagSeguro = window.PagSeguro
-          isSDKLoaded = true
-          resolve(PagSeguro)
-        })
-        existingScript.addEventListener('error', () => {
-          reject(new Error('Falha ao carregar SDK do PagBank'))
-        })
-        return
       }
+      // Script existe mas ainda não carregou - aguardar
+      existingScript.addEventListener('load', () => {
+        PagSeguro = window.PagSeguro
+        isSDKLoaded = true
+        resolve(PagSeguro)
+      })
+      existingScript.addEventListener('error', () => {
+        sdkLoadPromise = null
+        reject(new Error('Falha ao carregar SDK do PagBank'))
+      })
+      return
     }
 
-    // Marcar como carregando
-    isSDKLoading = true
+    // Script não existe no DOM - criar dinamicamente
+    const script = document.createElement('script')
+    script.src = 'https://assets.pagseguro.com.br/checkout-sdk-js/rc/dist/browser/pagseguro.min.js'
+    script.async = true
 
-    // Criar nova promise para este carregamento
-    sdkLoadPromise = new Promise((resolvePromise, rejectPromise) => {
-      const script = document.createElement('script')
-      script.src = 'https://assets.pagseguro.com.br/checkout-sdk-js/rc/dist/browser/pagseguro.min.js'
-      script.async = true
+    script.onload = () => {
+      PagSeguro = window.PagSeguro
+      isSDKLoaded = true
+      resolve(PagSeguro)
+    }
 
-      script.onload = () => {
-        try {
-          PagSeguro = window.PagSeguro
-          isSDKLoaded = true
-          isSDKLoading = false
-          resolvePromise(PagSeguro)
-          resolve(PagSeguro) // Resolver a promise externa também
-        } catch (error) {
-          isSDKLoading = false
-          rejectPromise(error)
-          reject(error)
-        }
-      }
+    script.onerror = () => {
+      sdkLoadPromise = null
+      reject(new Error('Falha ao carregar SDK do PagBank'))
+    }
 
-      script.onerror = () => {
-        isSDKLoading = false
-        const errorMsg = new Error('Falha ao carregar SDK do PagBank')
-        rejectPromise(errorMsg)
-        reject(errorMsg)
-      }
-
-      // Adicionar à head de forma segura
-      if (document.head) {
-        document.head.appendChild(script)
-      } else {
-        // Fallback se head não estiver disponível
-        document.addEventListener('DOMContentLoaded', () => {
-          document.head.appendChild(script)
-        })
-      }
-    })
+    document.head.appendChild(script)
   })
+
+  return sdkLoadPromise
 }
 
 /**
@@ -306,36 +283,6 @@ export const paymentService = {
     }
   },
 
-  /**
-   * Processa pagamento direto com cartão via PagBank (através do backend)
-   * @param {Object} paymentData - Dados do pagamento
-   * @returns {Promise<Object>} - Resultado do pagamento
-   */
-  async processPagBankCardPayment(paymentData) {
-    const { planData, customerData, cardData, installments } = paymentData
-
-    const data = {
-      plan_name: planData.name,
-      amount: planData.price,
-      installments: installments || 1,
-      customer: {
-        name: customerData.name,
-        email: customerData.email,
-        cpf: customerData.cpf,
-        phone: customerData.phone
-      },
-      card: {
-        number: cardData.number,
-        expiry_month: cardData.expiryMonth,
-        expiry_year: cardData.expiryYear,
-        cvv: cardData.cvv,
-        holder_name: cardData.holderName
-      }
-    }
-
-    const response = await api.post('/payment/process-pagbank-card-payment', data)
-    return response.data
-  },
 
   /**
    * Cria pagamento PIX via PagBank (através do backend)
