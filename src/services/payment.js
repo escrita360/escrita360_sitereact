@@ -262,7 +262,7 @@ export const paymentService = {
           address: {
             street: addressData.rua,
             number: addressData.numero,
-            complement: addressData.complemento || '',
+            ...(addressData.complemento ? { complement: addressData.complemento } : {}),
             locality: addressData.cidade,
             city: addressData.cidade,
             region_code: addressData.estado,
@@ -695,7 +695,7 @@ export const paymentService = {
           address: {
             street: addressData.rua,
             number: addressData.numero,
-            complement: addressData.complemento || '',
+            ...(addressData.complemento ? { complement: addressData.complemento } : {}),
             locality: addressData.cidade,
             city: addressData.cidade,
             region_code: addressData.estado,
@@ -774,7 +774,7 @@ export const paymentService = {
           address: {
             street: addressData.rua,
             number: addressData.numero,
-            complement: addressData.complemento || '',
+            ...(addressData.complemento ? { complement: addressData.complemento } : {}),
             locality: addressData.cidade,
             city: addressData.cidade,
             region_code: addressData.estado,
