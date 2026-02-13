@@ -1,7 +1,13 @@
 /**
+ * @deprecated NÃO USAR - Este serviço expõe o token PagBank no frontend.
+ * Use paymentService de '@/services/payment.js' que roteia tudo pelo backend.
+ * 
  * Serviço de Assinaturas (Pagamentos Recorrentes) PagBank
  * Documentação: https://developer.pagbank.com.br/docs/pagamentos-recorrentes
  * API Reference: https://developer.pagbank.com.br/reference/criar-assinatura
+ * 
+ * SEGURANÇA: NÃO use VITE_PAGBANK_TOKEN no frontend - variáveis VITE_ são
+ * incluídas no bundle JS e ficam visíveis para qualquer usuário.
  */
 
 // Configurações da API de Assinaturas
@@ -18,13 +24,15 @@ const SUBSCRIPTIONS_CONFIG = {
 
 class PagBankSubscriptionsService {
   constructor() {
+    console.warn('⚠️ PagBankSubscriptionsService está DEPRECADO. Use paymentService de payment.js que roteia pelo backend.')
     // Detect environment safely without referencing an undefined `process`
     const isNode = typeof globalThis !== 'undefined' && typeof globalThis.process !== 'undefined' && typeof globalThis.process.env !== 'undefined'
     const env = isNode ? globalThis.process.env : (typeof import.meta !== 'undefined' ? import.meta.env : {})
     
     this.environment = env.VITE_PAGBANK_ENV || 'sandbox'
     this.config = SUBSCRIPTIONS_CONFIG[this.environment]
-    this.token = env.VITE_PAGBANK_TOKEN
+    // SEGURANÇA: Token removido do frontend - usar backend como proxy
+    this.token = null
   }
 
   /**

@@ -1,4 +1,7 @@
 /**
+ * @deprecated NÃO USAR - Este serviço expõe o token PagBank no frontend.
+ * Use paymentService de '@/services/payment.js' que roteia tudo pelo backend.
+ * 
  * Serviço para gerenciar chaves públicas PagBank
  * Usado para criptografia de dados sensíveis no frontend
  * Documentação: https://developer.pagbank.com.br/reference/criar-chave-publica
@@ -12,10 +15,14 @@
  * - A chave pública tem validade de 24 horas
  * - Deve ser criada via POST /public-keys antes de consultar
  * - Para produção, use VITE_PAGBANK_ENV=production
+ * 
+ * SEGURANÇA: NÃO use VITE_PAGBANK_TOKEN no frontend - variáveis VITE_ são 
+ * incluídas no bundle JS e ficam visíveis para qualquer usuário.
  */
 
 class ChavePublicaService {
   constructor() {
+    console.warn('⚠️ ChavePublicaService está DEPRECADO. Use paymentService de payment.js que roteia pelo backend.')
     // Suporte para Node.js (scripts) e Vite (frontend)
     const isNode = typeof process !== 'undefined' && process.env
     const env = isNode ? process.env : import.meta.env
@@ -29,7 +36,8 @@ class ChavePublicaService {
       ? 'https://sandbox.api.pagseguro.com'
       : 'https://api.pagseguro.com'
     
-    this.token = env.VITE_PAGBANK_TOKEN
+    // SEGURANÇA: Token removido do frontend - usar backend como proxy
+    this.token = null
     this.publicKey = null
     this.publicKeyExpiry = null
     

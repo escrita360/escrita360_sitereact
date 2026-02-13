@@ -1,6 +1,12 @@
 /**
+ * @deprecated NÃO USAR - Este serviço expõe o token PagBank no frontend.
+ * Use paymentService de '@/services/payment.js' que roteia tudo pelo backend.
+ * 
  * Serviço de integração com APIs PagBank
  * Baseado na documentação oficial: https://dev.pagbank.uol.com.br/
+ * 
+ * SEGURANÇA: NÃO use VITE_PAGBANK_TOKEN no frontend - variáveis VITE_ são
+ * incluídas no bundle JS e ficam visíveis para qualquer usuário.
  */
 
 // Configurações do PagBank
@@ -25,6 +31,7 @@ const PAGBANK_CONFIG = {
 
 class PagBankService {
   constructor() {
+    console.warn('⚠️ PagBankService está DEPRECADO. Use paymentService de payment.js que roteia pelo backend.')
     // Suporte para Node.js (scripts) e Vite (frontend)
      
     const isNode = typeof process !== 'undefined' && process.env
@@ -33,10 +40,11 @@ class PagBankService {
     
     this.environment = env.VITE_PAGBANK_ENV || 'sandbox'
     this.config = PAGBANK_CONFIG[this.environment]
-    this.token = env.VITE_PAGBANK_TOKEN
-    this.appId = env.VITE_PAGBANK_APP_ID
-    this.clientId = env.VITE_PAGBANK_CLIENT_ID
-    this.clientSecret = env.VITE_PAGBANK_CLIENT_SECRET
+    // SEGURANÇA: Token removido do frontend - usar backend como proxy
+    this.token = null
+    this.appId = null
+    this.clientId = null
+    this.clientSecret = null
   }
 
   /**

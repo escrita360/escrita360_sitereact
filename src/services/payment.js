@@ -368,10 +368,7 @@ export const paymentService = {
         },
         expiration_date: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().replace(/\.\d{3}Z$/, '-03:00')
       }]
-      // Removendo notification_urls para desenvolvimento
-      // notification_urls: [
-      //   'https://escrita360.com/api/webhook/pagbank'
-      // ]
+      // notification_urls é injetado automaticamente pelo backend quando PAGBANK_WEBHOOK_URL está configurado
     }
 
     console.log('📤 Enviando dados PIX para backend:', {
@@ -515,18 +512,16 @@ export const paymentService = {
         name: customerData.name,
         email: customerData.email,
         cpf: customerData.cpf.replace(/\D/g, ''),
-        phone: phoneFormatted,
-        password: customerData.password // Senha do usuário
+        phone: phoneFormatted
       },
       payment_method: paymentMethod,
       cardData: cardData,
-      // Incluir no metadata/reference para o webhook identificar
+      // Metadata segura (sem dados sensíveis)
       metadata: {
         planType: planType,
-        password: customerData.password,
         audience: planData.audience
       },
-      reference: `${planType}|${customerData.password}|${Date.now()}`
+      reference: `${planType}__${planData.audience}__${Date.now()}`
     }
 
     const response = await api.post('/payment/create-pagbank-subscription', data)
@@ -799,66 +794,6 @@ export const paymentService = {
     }
   },
 
-  // ============ MÉTODOS LEGADOS ============
-
-  /**
-   * Cria assinatura recorrente via PagBank (através do backend)
-   * @param {Object} subscriptionData - Dados da assinatura
-   * @returns {Promise<Object>} - Dados da assinatura criada
-   */
-  // eslint-disable-next-line no-dupe-keys
-  async createPagBankSubscription(subscriptionData) {
-    const { planData, customerData, cardData, paymentMethod = 'BOLETO' } = subscriptionData
-
-    // Mapear nome do plano para configuração
-    const planConfig = {
-      'Básico': { intervalUnit: 'MONTH', intervalValue: 1 },
-      'Profissional': { intervalUnit: 'MONTH', intervalValue: 1 },
-      'Premium': { intervalUnit: 'MONTH', intervalValue: 1 },
-      'Empresarial': { intervalUnit: 'MONTH', intervalValue: 1 }
-    }
-
-    const config = planConfig[planData.name] || { intervalUnit: 'MONTH', intervalValue: 1 }
-
-    // Processar telefone para o formato correto
-    const phoneClean = customerData.phone.replace(/\D/g, '')
-    const phoneFormatted = phoneClean.length === 11 
-      ? { area_code: phoneClean.substring(0, 2), number: phoneClean.substring(2) }
-      : { area_code: phoneClean.substring(0, 2), number: phoneClean.substring(2) }
-
-    // Determinar tipo de plano baseado no audience
-    const planType = (planData.audience === 'professores' || planData.audience === 'docentes') 
-      ? 'professor' 
-      : 'aluno'
-
-    const data = {
-      plan_name: planData.name,
-      plan_description: `Plano ${planData.name} - Escrita360`,
-      amount: Math.round(planData.price * 100), // Converter para centavos
-      interval_unit: config.intervalUnit,
-      interval_value: config.intervalValue,
-      customer: {
-        name: customerData.name,
-        email: customerData.email,
-        cpf: customerData.cpf.replace(/\D/g, ''),
-        phone: phoneFormatted,
-        password: customerData.password // Senha do usuário
-      },
-      payment_method: paymentMethod,
-      cardData: cardData,
-      // Incluir no metadata/reference para o webhook identificar
-      metadata: {
-        planType: planType,
-        password: customerData.password,
-        audience: planData.audience
-      },
-      reference: `${planType}|${customerData.password}|${Date.now()}`
-    }
-
-    const response = await api.post('/payment/create-pagbank-subscription', data)
-    return response.data
-  },
-
   /**
    * Consulta status de pagamento PagBank (através do backend)
    * @param {string} orderId - ID do pedido
@@ -916,84 +851,6 @@ export const paymentService = {
     if (!holderName || holderName.trim().length < 2) return false
     
     return true
-  },
-
-  /**
-   * Cria pagamento com cartão de crédito via PagBank Orders API (através do backend)
-   * @param {Object} paymentData - Dados do pagamento
-   * @returns {Promise<Object>} - Dados do pedido criado
-   */
-  async createPagBankCardOrder(paymentData) {
-    const { planData, customerData, cardData, installments } = paymentData
-
-    // Limpar telefone apenas números
-    const phoneClean = customerData.phone.replace(/\D/g, '')
-    
-    // Garantir que o ano tenha 4 dígitos
-    let expYear = cardData.expiryYear
-    if (expYear < 100) {
-      expYear = 2000 + expYear
-    }
-    
-    // Garantir que o mês tenha formato correto (string com 2 dígitos)
-    const expMonth = String(cardData.expiryMonth).padStart(2, '0')
-    
-    const data = {
-      reference_id: buildReferenceId(planData),
-      customer: {
-        name: customerData.name,
-        email: customerData.email,
-        tax_id: customerData.cpf,
-        phones: [{
-          country: '55',
-          area: phoneClean.substring(0, 2),
-          number: phoneClean.substring(2),
-          type: 'MOBILE'
-        }]
-      },
-      items: [{
-        reference_id: `item_${Date.now()}`,
-        name: planData.name,
-        quantity: 1,
-        unit_amount: Math.round(planData.price * 100)
-      }],
-      charges: [{
-        reference_id: `charge_${Date.now()}`,
-        description: `Compra de ${planData.name}`,
-        amount: {
-          value: Math.round(planData.price * 100),
-          currency: 'BRL'
-        },
-        payment_method: {
-          type: 'CREDIT_CARD',
-          installments: installments || 1,
-          capture: true,
-          card: {
-            number: cardData.number.replace(/\s/g, ''),
-            exp_month: expMonth,
-            exp_year: String(expYear),
-            security_code: cardData.cvv
-          },
-          holder: {
-            name: cardData.holderName,
-            tax_id: customerData.cpf.replace(/\D/g, '')
-          }
-        }
-      }]
-    }
-
-    console.log('💳 Enviando dados do cartão para backend:', {
-      customer: { ...data.customer, tax_id: '***' },
-      planData: planData,
-      card: { 
-        ...data.charges[0].payment_method.card, 
-        number: '**** **** **** ' + cardData.number.slice(-4),
-        security_code: '***'
-      }
-    })
-
-    const response = await api.post('/payment/pagbank/create-order', data)
-    return response.data
   },
 
   /**

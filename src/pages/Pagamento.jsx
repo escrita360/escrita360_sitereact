@@ -12,15 +12,11 @@ import { useAuth } from '@/contexts/AuthContext'
 import { firebasePaymentService, contractSignatureService } from '@/services/firebase'
 import { paymentService } from '@/services/payment'
 import CardBrandIcon from '@/components/CardBrandIcon'
-import usePagBank from '@/hooks/usePagBank'
 
 function Pagamento() {
   const navigate = useNavigate()
   const location = useLocation()
   const { user } = useAuth()
-  
-  // Hook customizado para PagBank
-  const { getInstallmentFees, getCardBrand, isLoading: pagBankLoading } = usePagBank()
   
   // Estados e cidades do Brasil
   const estadosCidades = {
@@ -238,25 +234,20 @@ function Pagamento() {
       let feesData = null
       
       // Consultar taxas diretamente da API do PagBank
-      if (typeof getInstallmentFees === 'function') {
-        try {
-          console.log('💳 Consultando taxas de parcelamento na API do PagBank...')
-          feesData = await getInstallmentFees(
-            price, // valor em reais
-            maxInstallments, // máximo de parcelas baseado no valor
-            maxInstallmentsNoInterest, // sem juros baseado na regra
-            formData.cardNumber && formData.cardNumber.replace(/\s/g, '').length >= 6 
-              ? formData.cardNumber.replace(/\s/g, '').substring(0, 6) 
-              : null // BIN do cartão se disponível
-          )
-          console.log('✅ Taxas consultadas com sucesso:', feesData)
-        } catch (hookError) {
-          console.error('❌ Erro ao consultar taxas na API:', hookError)
-          throw new Error(`Não foi possível consultar as taxas de parcelamento: ${hookError.message}`)
-        }
-      } else {
-        console.error('❌ Hook getInstallmentFees não disponível')
-        throw new Error('Sistema de consulta de taxas não disponível')
+      try {
+        console.log('💳 Consultando taxas de parcelamento na API do PagBank...')
+        feesData = await paymentService.getInstallmentFees(
+          price, // valor em reais
+          maxInstallments, // máximo de parcelas baseado no valor
+          maxInstallmentsNoInterest, // sem juros baseado na regra
+          formData.cardNumber && formData.cardNumber.replace(/\s/g, '').length >= 6 
+            ? formData.cardNumber.replace(/\s/g, '').substring(0, 6) 
+            : null // BIN do cartão se disponível
+        )
+        console.log('✅ Taxas consultadas com sucesso:', feesData)
+      } catch (hookError) {
+        console.error('❌ Erro ao consultar taxas na API:', hookError)
+        throw new Error(`Não foi possível consultar as taxas de parcelamento: ${hookError.message}`)
       }
       
       console.log('💳 Resposta da API de taxas (tipo):', typeof feesData)
@@ -476,10 +467,10 @@ function Pagamento() {
           console.log('✅ Pagamento criptografado realizado com sucesso')
           
         } catch (encryptedError) {
-          console.warn('⚠️ Pagamento criptografado falhou, usando método PCI:', encryptedError.message)
+          console.warn('⚠️ Pagamento criptografado falhou, tentando criptografia no backend:', encryptedError.message)
           
-          // Fallback para método PCI (dados brutos) - apenas se necessário
-          result = await paymentService.createPagBankCardOrder(paymentData)
+          // Fallback para criptografia no backend (nunca envia cartão bruto)
+          result = await paymentService.processPagBankCompleteBackendEncryption(paymentData)
         }
 
       } else if (formData.paymentMethod === 'pix') {
@@ -704,22 +695,14 @@ function Pagamento() {
       console.log('💳 ========= DETECÇÃO DE BANDEIRA =========')
       console.log('💳 Valor original:', value)
       console.log('💳 Valor formatado:', formattedValue)
-      console.log('💳 getCardBrand existe?', typeof getCardBrand === 'function')
-      
       // Detectar bandeira do cartão
       let brand = 'unknown'
       
-      if (typeof getCardBrand === 'function') {
-        try {
-          brand = getCardBrand(formattedValue)
-          console.log('💳 Bandeira detectada via hook:', brand)
-        } catch (error) {
-          console.warn('⚠️ Erro ao usar hook, usando fallback:', error)
-          brand = detectCardBrandFallback(formattedValue)
-          console.log('💳 Bandeira detectada via fallback:', brand)
-        }
-      } else {
-        console.warn('⚠️ Hook getCardBrand não disponível, usando fallback')
+      try {
+        brand = paymentService.getCardBrand(formattedValue)
+        console.log('💳 Bandeira detectada:', brand)
+      } catch (error) {
+        console.warn('⚠️ Erro ao detectar bandeira, usando fallback:', error)
         brand = detectCardBrandFallback(formattedValue)
         console.log('💳 Bandeira detectada via fallback:', brand)
       }

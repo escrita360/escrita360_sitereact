@@ -56,8 +56,8 @@ export const usePagBank = () => {
         } catch (encryptedError) {
           console.warn('⚠️ Pagamento criptografado falhou, usando método PCI:', encryptedError.message)
           
-          // Fallback para método PCI
-          result = await paymentService.createPagBankCardOrder(paymentData)
+          // Fallback para criptografia no backend (nunca envia cartão bruto)
+          result = await paymentService.processPagBankCompleteBackendEncryption(paymentData)
         }
       }
 
