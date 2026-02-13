@@ -262,7 +262,7 @@ export const paymentService = {
           address: {
             street: addressData.rua,
             number: addressData.numero,
-            complement: addressData.complemento || '',
+            complement: addressData.complemento || 'N/A',
             locality: addressData.cidade,
             city: addressData.cidade,
             region_code: addressData.estado,
@@ -271,8 +271,6 @@ export const paymentService = {
           }
         }
       }
-
-      console.log('🔐 Enviando pedido com cartão criptografado...')
       console.log('💳 Dados:', {
         customer: data.customer.name,
         amount: data.charges[0].amount.value,
@@ -690,7 +688,7 @@ export const paymentService = {
           address: {
             street: addressData.rua,
             number: addressData.numero,
-            complement: addressData.complemento || '',
+            complement: addressData.complemento || 'N/A',
             locality: addressData.cidade,
             city: addressData.cidade,
             region_code: addressData.estado,
@@ -769,7 +767,7 @@ export const paymentService = {
           address: {
             street: addressData.rua,
             number: addressData.numero,
-            complement: addressData.complemento || '',
+            complement: addressData.complemento || 'N/A',
             locality: addressData.cidade,
             city: addressData.cidade,
             region_code: addressData.estado,
