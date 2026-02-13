@@ -206,6 +206,11 @@ export const paymentService = {
         throw new Error('Falha na criptografia do cartão')
       }
 
+      // Validar que o cartão criptografado tem formato válido
+      if (encryptedCard.encrypted.length < 100) {
+        throw new Error('Cartão criptografado inválido - tente novamente')
+      }
+
       // Limpar telefone apenas números
       const phoneClean = customerData.phone.replace(/\D/g, '')
       
@@ -248,8 +253,7 @@ export const paymentService = {
               tax_id: customerData.cpf.replace(/\D/g, '')
             }
           }
-        }],
-        notification_urls: [] // Backend injeta webhook URL automaticamente
+        }]
       }
 
       // Adicionar endereço de shipping se disponível
@@ -273,12 +277,20 @@ export const paymentService = {
         customer: data.customer.name,
         amount: data.charges[0].amount.value,
         installments: data.charges[0].payment_method.installments,
-        hasAddress: !!data.shipping
+        hasAddress: !!data.shipping,
+        encryptedLength: encryptedCard.encrypted?.length
       })
+
+      if (!encryptedCard.encrypted || encryptedCard.encrypted.length < 100) {
+        throw new Error('Cartão criptografado inválido - tente novamente')
+      }
       const response = await api.post('/payment/pagbank/create-encrypted-order', data)
       return response.data
     } catch (error) {
-      console.error('❌ Erro no pagamento com cartão criptografado:', error)
+      // Extrair mensagem detalhada do erro PagBank
+      const pagbankError = error.response?.data?.error || error.response?.data?.details?.error_messages?.[0]?.error
+      const errorMsg = pagbankError || error.message
+      console.error('❌ Erro no pagamento com cartão criptografado:', errorMsg)
       throw error
     }
   },
@@ -674,8 +686,7 @@ export const paymentService = {
               tax_id: customerData.cpf.replace(/\D/g, '')
             }
           }
-        }],
-        notification_urls: [] // Backend injeta webhook URL automaticamente
+        }]
       }
 
       // Adicionar endereço de shipping se disponível
@@ -755,7 +766,6 @@ export const paymentService = {
           }
         }],
         cardData: cardData, // Dados do cartão serão criptografados no backend
-        notification_urls: []
       }
 
       // Adicionar endereço de shipping se disponível
@@ -969,8 +979,7 @@ export const paymentService = {
             tax_id: customerData.cpf.replace(/\D/g, '')
           }
         }
-      }],
-      notification_urls: []
+      }]
     }
 
     console.log('💳 Enviando dados do cartão para backend:', {
