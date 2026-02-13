@@ -264,11 +264,11 @@ export const paymentService = {
             capture: true,
             card: {
               encrypted: encryptedCard.encrypted,
-              store: false
-            },
-            holder: {
-              name: cardData.holderName,
-              tax_id: customerData.cpf.replace(/\D/g, '')
+              store: false,
+              holder: {
+                name: cardData.holderName,
+                tax_id: customerData.cpf.replace(/\D/g, '')
+              }
             }
           }
         }],
@@ -720,11 +720,11 @@ export const paymentService = {
             capture: true,
             card: {
               encrypted: encryptedCard.encrypted,
-              store: false
-            },
-            holder: {
-              name: cardData.holderName,
-              tax_id: customerData.cpf.replace(/\D/g, '')
+              store: false,
+              holder: {
+                name: cardData.holderName,
+                tax_id: customerData.cpf.replace(/\D/g, '')
+              }
             }
           }
         }],
@@ -1015,11 +1015,10 @@ export const paymentService = {
             number: cardData.number.replace(/\s/g, ''),
             exp_month: expMonth,
             exp_year: String(expYear),
-            security_code: cardData.cvv
-          },
-          holder: {
-            name: cardData.holderName,
-            tax_id: customerData.cpf.replace(/\D/g, '')
+            security_code: cardData.cvv,
+            holder: {
+              name: cardData.holderName
+            }
           }
         }
       }],
