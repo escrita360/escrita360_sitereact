@@ -459,18 +459,33 @@ function Pagamento() {
         }
 
         try {
-          // Tentar pagamento com cartão criptografado primeiro
-          console.log('🔐 Tentando pagamento com cartão criptografado...')
+          // Pagamento com cartão criptografado via SDK PagBank (único método permitido)
+          console.log('🔐 Processando pagamento com cartão criptografado via SDK...')
           const publicKey = await paymentService.getPublicKey()
+          
+          if (!publicKey) {
+            throw new Error('Não foi possível obter a chave pública do PagBank. Tente novamente.')
+          }
           
           result = await paymentService.processPagBankEncryptedCardPayment(paymentData, publicKey)
           console.log('✅ Pagamento criptografado realizado com sucesso')
           
         } catch (encryptedError) {
-          console.warn('⚠️ Pagamento criptografado falhou, tentando criptografia no backend:', encryptedError.message)
+          console.error('❌ Erro no pagamento com cartão criptografado:', encryptedError.message)
           
-          // Fallback para criptografia no backend (nunca envia cartão bruto)
-          result = await paymentService.processPagBankCompleteBackendEncryption(paymentData)
+          // Não usar fallback PCI - mostrar erro ao usuário
+          let errorMessage = encryptedError.message || 'Erro ao processar pagamento'
+          
+          // Melhorar mensagens de erro específicas
+          if (errorMessage.includes('criptografia') || errorMessage.includes('encrypt')) {
+            errorMessage = 'Erro na criptografia do cartão. Verifique se os dados estão corretos e tente novamente.'
+          } else if (errorMessage.includes('DECLINED') || errorMessage.includes('recusado')) {
+            errorMessage = 'Pagamento recusado pela operadora. Verifique os dados do cartão ou tente outro cartão.'
+          } else if (errorMessage.includes('network') || errorMessage.includes('timeout')) {
+            errorMessage = 'Erro de conexão. Verifique sua internet e tente novamente.'
+          }
+          
+          throw new Error(errorMessage)
         }
 
       } else if (formData.paymentMethod === 'pix') {

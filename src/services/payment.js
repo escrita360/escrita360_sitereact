@@ -84,22 +84,56 @@ const loadPagSeguroSDK = () => {
  */
 const encryptCard = async (cardData, publicKey) => {
   try {
+    console.log('🔐 Iniciando criptografia do cartão via SDK PagBank...')
+    
+    // Validar dados de entrada
+    if (!publicKey || publicKey.length < 100) {
+      throw new Error('Chave pública inválida ou não fornecida')
+    }
+    
+    if (!cardData.number || !cardData.expiryMonth || !cardData.expiryYear || !cardData.cvv || !cardData.holderName) {
+      throw new Error('Dados do cartão incompletos')
+    }
+    
     await loadPagSeguroSDK()
+    
+    if (!PagSeguro || !PagSeguro.encryptCard) {
+      throw new Error('SDK PagBank não carregado corretamente')
+    }
+    
+    const cardNumber = cardData.number.replace(/\s/g, '')
+    const expMonth = cardData.expiryMonth.padStart(2, '0')
+    const expYear = cardData.expiryYear.length === 2 ? cardData.expiryYear : cardData.expiryYear.slice(-2)
+    
+    console.log('📋 Dados para criptografia:', {
+      holderName: cardData.holderName,
+      cardBin: cardNumber.substring(0, 6) + '******' + cardNumber.slice(-4),
+      expMonth,
+      expYear: '20' + expYear,
+      cvvLength: cardData.cvv?.length
+    })
     
     const card = PagSeguro.encryptCard({
       publicKey: publicKey,
       holder: cardData.holderName,
-      number: cardData.number.replace(/\s/g, ''),
-      expMonth: cardData.expiryMonth.padStart(2, '0'),
-      expYear: cardData.expiryYear,
+      number: cardNumber,
+      expMonth: expMonth,
+      expYear: '20' + expYear,
       securityCode: cardData.cvv
     })
 
     if (card.hasErrors) {
-      const errorMessages = card.errors.map(error => error.message).join(', ')
+      const errorMessages = card.errors.map(error => `${error.code}: ${error.message}`).join(', ')
+      console.error('❌ Erros na criptografia:', card.errors)
       throw new Error(`Erro na criptografia do cartão: ${errorMessages}`)
     }
+    
+    if (!card.encryptedCard || card.encryptedCard.length < 100) {
+      throw new Error('Criptografia retornou resultado inválido')
+    }
 
+    console.log('✅ Cartão criptografado com sucesso, tamanho:', card.encryptedCard.length)
+    
     return {
       encrypted: card.encryptedCard,
       hasErrors: card.hasErrors,
