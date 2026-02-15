@@ -496,7 +496,7 @@ function Pagamento() {
         result = await paymentService.createPagBankBoletoPayment(paymentData)
       } */
 
-      console.log('✅ Pagamento processado com sucesso:', result)
+      console.log('✅ Resposta do pagamento recebida:', result)
 
       // Salvar dados da transação
       setTransactionData(result)
@@ -538,8 +538,40 @@ function Pagamento() {
         return
       } */
 
-      // Para cartão, marcar como sucesso imediatamente
-      setPaymentSuccess(true)
+      // Para cartão, verificar status do pagamento antes de marcar como sucesso
+      const chargeStatus = result.charges?.[0]?.status
+      const paymentCode = result.charges?.[0]?.payment_response?.code
+      const paymentMessage = result.charges?.[0]?.payment_response?.message
+      
+      console.log('💳 Status do pagamento:', { chargeStatus, paymentCode, paymentMessage })
+      
+      // Verificar se o pagamento foi realmente aprovado
+      if (chargeStatus === 'PAID' || chargeStatus === 'AUTHORIZED') {
+        console.log('✅ Pagamento aprovado com status:', chargeStatus)
+        setPaymentSuccess(true)
+      } else if (chargeStatus === 'DECLINED') {
+        // Pagamento recusado
+        const declineReason = paymentMessage || 'Pagamento recusado pela operadora do cartão'
+        console.error('❌ Pagamento recusado:', declineReason)
+        throw new Error(`Pagamento recusado: ${declineReason}. Por favor, verifique os dados do cartão ou tente outro cartão.`)
+      } else if (chargeStatus === 'IN_ANALYSIS') {
+        // Pagamento em análise de fraude
+        console.log('🔍 Pagamento em análise')
+        setPaymentSuccess(true)
+        // Informar ao usuário que está em análise
+      } else if (chargeStatus === 'CANCELED') {
+        throw new Error('Pagamento cancelado. Por favor, tente novamente.')
+      } else {
+        // Status desconhecido ou não retornado - verificar se há erro
+        console.warn('⚠️ Status não reconhecido:', chargeStatus, 'Resposta completa:', result)
+        // Se não conseguimos determinar o status, verificar se a ordem foi criada
+        if (result.id && result.charges?.length > 0) {
+          // Ordem foi criada, mas status incerto - mostrar mensagem mais cautelosa
+          setPaymentSuccess(true)
+        } else {
+          throw new Error('Não foi possível processar o pagamento. Por favor, tente novamente.')
+        }
+      }
 
       // Registrar assinatura de contrato/termos
       try {
