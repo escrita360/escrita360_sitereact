@@ -1,10 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button.jsx'
 import { Loader2 } from 'lucide-react'
+import { paymentService } from '@/services/payment.js'
 
 /**
  * Componente para pagamento único via PagBank
  * Usado para compra de pacotes de créditos (não recorrente)
+ * 
+ * IMPORTANTE: Cartões são criptografados via SDK PagBank (PagSeguro.encryptCard())
+ * antes de serem enviados ao backend, conforme exigência PCI-DSS.
  */
 function PagBankOneTimePayment({ 
   packageData, 
@@ -18,6 +22,20 @@ function PagBankOneTimePayment({
   const [isProcessing, setIsProcessing] = useState(false)
   const [pixQrCode, setPixQrCode] = useState(null)
   const [boletoUrl, setBoletoUrl] = useState(null)
+  const [publicKey, setPublicKey] = useState(null)
+
+  // Carregar chave pública do PagBank ao montar o componente
+  useEffect(() => {
+    const loadPublicKey = async () => {
+      try {
+        const key = await paymentService.getPublicKey()
+        setPublicKey(key)
+      } catch (error) {
+        console.error('Erro ao carregar chave pública:', error)
+      }
+    }
+    loadPublicKey()
+  }, [])
 
   const handlePayment = async () => {
     // Validar formulário antes de processar
@@ -28,7 +46,6 @@ function PagBankOneTimePayment({
     setIsProcessing(true)
 
     try {
-      // Remove trailing slash se existir
       const apiUrl = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace(/\/$/, '')
       
       // Preparar dados do pedido baseado no método de pagamento
@@ -55,11 +72,26 @@ function PagBankOneTimePayment({
         // Em produção, adicionar: notification_urls: ['https://seudominio.com/api/webhook/pagbank']
       }
 
-      let endpoint = '/payment/pagbank/create-order' // Padrão para cartão
+      let endpoint = '/payment/pagbank/create-encrypted-order' // Rota segura com cartão criptografado
       
       // Adicionar dados específicos do método de pagamento
       if (paymentMethod === 'card' && cardData) {
-        // Pagamento com cartão de crédito
+        // Verificar se temos a chave pública para criptografar
+        if (!publicKey) {
+          throw new Error('Chave pública do PagBank não carregada. Tente novamente.')
+        }
+
+        // Criptografar cartão usando SDK PagBank (PagSeguro.encryptCard)
+        console.log('🔐 Criptografando cartão via SDK PagBank...')
+        const encryptedCard = await paymentService.encryptCardForPayment(cardData, publicKey)
+        
+        if (!encryptedCard || !encryptedCard.encrypted) {
+          throw new Error('Falha na criptografia do cartão')
+        }
+
+        console.log('✅ Cartão criptografado com sucesso')
+        
+        // Pagamento com cartão de crédito CRIPTOGRAFADO
         orderData.charges = [{
           reference_id: `CHARGE_${Date.now()}`,
           description: `Compra de ${packageData.name}`,
@@ -72,13 +104,12 @@ function PagBankOneTimePayment({
             installments: 1,
             capture: true,
             card: {
-              number: cardData.number,
-              exp_month: cardData.expiryMonth,
-              exp_year: cardData.expiryYear,
-              security_code: cardData.cvv,
-              holder: {
-                name: cardData.holderName
-              }
+              encrypted: encryptedCard.encrypted,
+              store: false
+            },
+            holder: {
+              name: cardData.holderName,
+              tax_id: customerData.cpf.replace(/\D/g, '')
             }
           }
         }]

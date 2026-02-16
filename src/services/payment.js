@@ -149,6 +149,17 @@ export const paymentService = {
   // ============ MÉTODOS PAGBANK ============
 
   /**
+   * Criptografa dados do cartão usando SDK PagBank
+   * Wrapper para uso externo do método encryptCard
+   * @param {Object} cardData - Dados do cartão (number, expiryMonth, expiryYear, cvv, holderName)
+   * @param {string} publicKey - Chave pública do PagBank
+   * @returns {Promise<Object>} - { encrypted: string, hasErrors: boolean, errors: array }
+   */
+  async encryptCardForPayment(cardData, publicKey) {
+    return encryptCard(cardData, publicKey)
+  },
+
+  /**
    * Obtém a chave pública do PagBank via backend
    * @returns {Promise<string>} - Chave pública para criptografia de cartão
    */
@@ -748,12 +759,23 @@ export const paymentService = {
   },
 
   /**
-   * Processa pagamento completo com criptografia no backend
-   * Combina criptografia e criação de pedido em uma única chamada
-   * @param {Object} paymentData - Dados do pagamento
-   * @returns {Promise<Object>} - Resultado do pagamento
+   * @deprecated Este método enviava dados de cartão abertos para o backend.
+   * Por motivos de segurança PCI-DSS, foi desativado.
+   * Use processPagBankEncryptedCardPayment() que criptografa o cartão no frontend.
+   * 
+   * @throws {Error} Sempre lança erro informando que o método está deprecado
    */
   async processPagBankCompleteBackendEncryption(paymentData) {
+    throw new Error(
+      'MÉTODO DEPRECADO: processPagBankCompleteBackendEncryption() foi desativado por segurança (PCI-DSS). ' +
+      'Use processPagBankEncryptedCardPayment() que criptografa o cartão no frontend via PagSeguro.encryptCard().'
+    )
+  },
+
+  /**
+   * @deprecated Método original mantido apenas para referência - NÃO USE
+   */
+  async _processPagBankCompleteBackendEncryption_DEPRECATED(paymentData) {
     try {
       const { planData, customerData, cardData, installments = 1, addressData } = paymentData
 
