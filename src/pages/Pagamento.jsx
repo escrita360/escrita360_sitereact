@@ -67,6 +67,7 @@ function Pagamento() {
   // const [boletoData, setBoletoData] = useState(null)
   const [copiedToClipboard, setCopiedToClipboard] = useState(false)
   const [checkingPayment, setCheckingPayment] = useState(false)
+  const [pagbankEnvironment, setPagbankEnvironment] = useState(null)
   const [formData, setFormData] = useState({
     cardNumber: '',
     cardName: '',
@@ -115,6 +116,24 @@ function Pagamento() {
 
     return () => clearTimeout(timer)
   }, [selectedPlan, navigate, location])
+
+  // Verificar ambiente PagBank (sandbox vs produção)
+  useEffect(() => {
+    const checkEnvironment = async () => {
+      try {
+        const response = await paymentService.getPagBankEnvironment()
+        setPagbankEnvironment(response)
+        if (response?.isSandbox) {
+          console.log('🧪 PagBank em modo SANDBOX — use cartões de teste')
+        } else {
+          console.log('🏭 PagBank em modo PRODUÇÃO — use cartões reais')
+        }
+      } catch (e) {
+        console.warn('⚠️ Não foi possível verificar ambiente PagBank:', e.message)
+      }
+    }
+    checkEnvironment()
+  }, [])
 
   // Carregar opções de parcelamento quando o plano estiver disponível
   useEffect(() => {
@@ -478,8 +497,14 @@ function Pagamento() {
           // Não usar fallback PCI - mostrar erro ao usuário
           let errorMessage = encryptedError.message || 'Erro ao processar pagamento'
 
-          // Melhorar mensagens de erro específicas
-          if (errorMessage.includes('criptografia') || errorMessage.includes('encrypt')) {
+          // Melhorar mensagens de erro específicas baseadas no código PagBank
+          if (encryptedError.pagbankCode === 'BRAND_NOT_FOUND' || errorMessage.includes('BRAND_NOT_FOUND')) {
+            if (pagbankEnvironment && !pagbankEnvironment.isSandbox) {
+              errorMessage = 'Bandeira do cartão não reconhecida. Verifique se o número do cartão está correto. Cartões de teste não funcionam em produção.'
+            } else {
+              errorMessage = 'Bandeira do cartão não reconhecida. Verifique o número do cartão ou use um dos cartões de teste válidos.'
+            }
+          } else if (errorMessage.includes('criptografia') || errorMessage.includes('encrypt')) {
             errorMessage = 'Erro na criptografia do cartão. Verifique se os dados estão corretos e tente novamente.'
           } else if (errorMessage.includes('DECLINED') || errorMessage.includes('recusado')) {
             errorMessage = 'Pagamento recusado pela operadora. Verifique os dados do cartão ou tente outro cartão.'
@@ -1088,7 +1113,23 @@ function Pagamento() {
                 <div>
                   <p className="text-sm font-medium text-red-900">Erro no Pagamento</p>
                   <p className="text-sm text-red-700 mt-1">{paymentError}</p>
+                  {pagbankEnvironment && !pagbankEnvironment.isSandbox && paymentError.includes('Bandeira') && (
+                    <p className="text-xs text-red-500 mt-2">
+                      Dica: O sistema está em modo <strong>produção</strong>. Cartões de teste (sandbox) não são aceitos. Use um cartão real ou altere para modo sandbox no backend.
+                    </p>
+                  )}
                 </div>
+              </div>
+            </div>
+          )}
+
+          {pagbankEnvironment?.isSandbox && (
+            <div className="mb-6 max-w-4xl mx-auto">
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 flex items-center gap-3">
+                <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0" />
+                <p className="text-sm text-yellow-800">
+                  <strong>Modo Sandbox (Testes)</strong> — Use cartões de teste da documentação PagBank. Pagamentos não serão cobrados.
+                </p>
               </div>
             </div>
           )}

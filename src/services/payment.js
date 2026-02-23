@@ -160,6 +160,20 @@ export const paymentService = {
   },
 
   /**
+   * Obtém o ambiente atual do PagBank (sandbox/production)
+   * @returns {Promise<Object>} - { environment, isSandbox, testCardsWork, message }
+   */
+  async getPagBankEnvironment() {
+    try {
+      const response = await api.get('/payment/pagbank/environment')
+      return response.data
+    } catch (error) {
+      console.warn('⚠️ Não foi possível verificar ambiente PagBank:', error.message)
+      return null
+    }
+  },
+
+  /**
    * Obtém a chave pública do PagBank via backend
    * @returns {Promise<string>} - Chave pública para criptografia de cartão
    */
@@ -331,10 +345,20 @@ export const paymentService = {
       return response.data
     } catch (error) {
       // Extrair mensagem detalhada do erro PagBank
-      const pagbankError = error.response?.data?.error || error.response?.data?.details?.error_messages?.[0]?.error
+      const responseData = error.response?.data
+      const pagbankError = responseData?.error || responseData?.details?.error_messages?.[0]?.error
+      const pagbankCode = responseData?.pagbankCode || responseData?.details?.error_messages?.[0]?.error
+      const environment = responseData?.environment || 'unknown'
       const errorMsg = pagbankError || error.message
       console.error('❌ Erro no pagamento com cartão criptografado:', errorMsg)
-      throw error
+      console.error('   Código PagBank:', pagbankCode, '| Ambiente:', environment)
+
+      // Criar erro com informações adicionais para o componente tratar
+      const enhancedError = new Error(errorMsg)
+      enhancedError.pagbankCode = pagbankCode
+      enhancedError.environment = environment
+      enhancedError.originalError = error
+      throw enhancedError
     }
   },
 
