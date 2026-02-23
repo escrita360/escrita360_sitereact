@@ -213,9 +213,11 @@ function Pagamento() {
       return
     }
 
+    // Declare price outside try so it is accessible in the catch block
+    const price = isYearly ? selectedPlan.yearlyPrice : selectedPlan.monthlyPrice
+
     try {
       setLoadingInstallments(true)
-      const price = isYearly ? selectedPlan.yearlyPrice : selectedPlan.monthlyPrice
 
       // Determinar número máximo de parcelas baseado no valor
       const maxInstallments = getMaxInstallments(price)
