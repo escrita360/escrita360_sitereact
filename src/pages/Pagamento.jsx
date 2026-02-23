@@ -17,7 +17,7 @@ function Pagamento() {
   const navigate = useNavigate()
   const location = useLocation()
   const { user } = useAuth()
-  
+
   // Estados e cidades do Brasil
   const estadosCidades = {
     'AC': ['Rio Branco', 'Cruzeiro do Sul', 'Sena Madureira', 'Tarauacá', 'Feijó'],
@@ -55,11 +55,11 @@ function Pagamento() {
     audience: sessionStorage.getItem('selectedAudience')
   }
   const { selectedPlan, isYearly, audience } = stateData
-   
+
   const [paymentSuccess, setPaymentSuccess] = useState(false)
-   
+
   const [paymentError, setPaymentError] = useState('')
-   
+
   const [transactionData, setTransactionData] = useState(null)
   // Estado para aguardar pagamento PIX/Boleto
   const [awaitingPayment, setAwaitingPayment] = useState(false)
@@ -122,7 +122,7 @@ function Pagamento() {
       setSelectedInstallments(1) // Reset to 1 when plan changes
       loadInstallmentOptions()
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedPlan, isYearly])
 
   // Recarregar taxas quando cartão mudar para obter BIN específico
@@ -130,7 +130,7 @@ function Pagamento() {
     if (formData.cardNumber && formData.cardNumber.replace(/\s/g, '').length >= 6) {
       loadInstallmentOptions()
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData.cardNumber])
 
   // Preencher dados automaticamente se usuário estiver logado
@@ -147,7 +147,7 @@ function Pagamento() {
       // Carregar métodos de pagamento salvos
       loadSavedPaymentMethods()
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
   const loadSavedPaymentMethods = async () => {
@@ -176,7 +176,7 @@ function Pagamento() {
   // Função para determinar número máximo de parcelas baseado no valor
   const getMaxInstallments = (value) => {
     console.log('💳 Calculando parcelas para valor:', value)
-    
+
     if (value >= 49 && value <= 120) {
       console.log('💳 Faixa R$49-R$120: máximo 1x')
       return 1 // R$49,00 - R$120,00: até 1x
@@ -216,11 +216,11 @@ function Pagamento() {
     try {
       setLoadingInstallments(true)
       const price = isYearly ? selectedPlan.yearlyPrice : selectedPlan.monthlyPrice
-      
+
       // Determinar número máximo de parcelas baseado no valor
       const maxInstallments = getMaxInstallments(price)
       const maxInstallmentsNoInterest = getMaxInstallmentsNoInterest(price)
-      
+
       console.log('💳 =================================')
       console.log('💳 Carregando opções de parcelamento')
       console.log('💳 Plano selecionado:', selectedPlan.name)
@@ -230,9 +230,9 @@ function Pagamento() {
       console.log('💳 Máximo sem juros:', maxInstallmentsNoInterest)
       console.log('💳 BIN do cartão:', formData.cardNumber ? formData.cardNumber.replace(/\s/g, '').substring(0, 6) : 'N/A')
       console.log('💳 =================================')
-      
+
       let feesData = null
-      
+
       // Consultar taxas diretamente da API do PagBank
       try {
         console.log('💳 Consultando taxas de parcelamento na API do PagBank...')
@@ -240,8 +240,8 @@ function Pagamento() {
           price, // valor em reais
           maxInstallments, // máximo de parcelas baseado no valor
           maxInstallmentsNoInterest, // sem juros baseado na regra
-          formData.cardNumber && formData.cardNumber.replace(/\s/g, '').length >= 6 
-            ? formData.cardNumber.replace(/\s/g, '').substring(0, 6) 
+          formData.cardNumber && formData.cardNumber.replace(/\s/g, '').length >= 6
+            ? formData.cardNumber.replace(/\s/g, '').substring(0, 6)
             : null // BIN do cartão se disponível
         )
         console.log('✅ Taxas consultadas com sucesso:', feesData)
@@ -249,13 +249,13 @@ function Pagamento() {
         console.error('❌ Erro ao consultar taxas na API:', hookError)
         throw new Error(`Não foi possível consultar as taxas de parcelamento: ${hookError.message}`)
       }
-      
+
       console.log('💳 Resposta da API de taxas (tipo):', typeof feesData)
       console.log('💳 Resposta da API de taxas (conteúdo):', feesData)
-      
+
       // Processar dados da API do PagBank
       const options = []
-      
+
       if (feesData && Array.isArray(feesData) && feesData.length > 0) {
         // Se retornou o formato já processado pelo hook
         console.log('💳 Usando dados processados pelo hook')
@@ -263,11 +263,11 @@ function Pagamento() {
       } else if (feesData?.payment_methods?.credit_card) {
         console.log('💳 Processando dados brutos do PagBank')
         const brands = Object.keys(feesData.payment_methods.credit_card)
-        
+
         if (brands.length > 0) {
           const brandData = feesData.payment_methods.credit_card[brands[0]]
           console.log('💳 Dados da primeira bandeira:', brandData)
-          
+
           brandData.installment_plans?.forEach(plan => {
             if (plan.installments <= maxInstallments) {
               options.push({
@@ -281,43 +281,43 @@ function Pagamento() {
           })
         }
       }
-      
+
       // Se não conseguiu processar nenhuma opção da API, erro
       if (options.length === 0) {
         console.error('❌ Nenhuma opção de parcelamento retornada pela API')
         throw new Error('Não foi possível obter opções de parcelamento da API')
       }
-      
+
       // Garantir que não excedemos o limite máximo de parcelas
       const filteredOptions = options.filter(option => option.quantity <= maxInstallments)
-      
+
       console.log('💳 Opções processadas da API:', filteredOptions.length)
       console.log('💳 Opções finais:', filteredOptions)
       setInstallmentOptions(filteredOptions)
-      
+
       // Ensure selected installments is valid
       if (!filteredOptions.some(opt => opt.quantity === selectedInstallments)) {
         setSelectedInstallments(1)
       }
-      
+
       console.log('✅ Opções de parcelamento carregadas da API com sucesso')
-      
+
     } catch (error) {
       console.error('❌ Erro ao carregar opções de parcelamento:', error)
       console.error('❌ Stack trace:', error.stack)
-      
+
       // Mostrar erro para o usuário
       setPaymentError(`Erro ao consultar taxas de parcelamento: ${error.message}`)
-      
+
       // Opção mínima: apenas 1x sem juros
-      const emergencyOption = [{ 
-        quantity: 1, 
-        amount: Number(price), 
-        total: Number(price), 
+      const emergencyOption = [{
+        quantity: 1,
+        amount: Number(price),
+        total: Number(price),
         interest_free: true,
         fees: 0
       }]
-      
+
       console.log('⚠️ Usando opção de emergência (1x):', emergencyOption)
       setInstallmentOptions(emergencyOption)
       setSelectedInstallments(1)
@@ -353,7 +353,7 @@ function Pagamento() {
   const registerContractSignature = async (customerData, planData, transactionResult) => {
     try {
       console.log('📝 Registrando assinatura de contrato...')
-      
+
       const contractData = {
         userName: customerData.name,
         userEmail: customerData.email,
@@ -382,7 +382,7 @@ function Pagamento() {
 
       console.log('✅ Assinatura de contrato registrada:', result.signatureId)
       return result
-      
+
     } catch (error) {
       console.error('❌ Erro ao registrar assinatura de contrato:', error)
       throw error
@@ -462,20 +462,20 @@ function Pagamento() {
           // Pagamento com cartão criptografado via SDK PagBank (único método permitido)
           console.log('🔐 Processando pagamento com cartão criptografado via SDK...')
           const publicKey = await paymentService.getPublicKey()
-          
+
           if (!publicKey) {
             throw new Error('Não foi possível obter a chave pública do PagBank. Tente novamente.')
           }
-          
+
           result = await paymentService.processPagBankEncryptedCardPayment(paymentData, publicKey)
           console.log('✅ Pagamento criptografado realizado com sucesso')
-          
+
         } catch (encryptedError) {
           console.error('❌ Erro no pagamento com cartão criptografado:', encryptedError.message)
-          
+
           // Não usar fallback PCI - mostrar erro ao usuário
           let errorMessage = encryptedError.message || 'Erro ao processar pagamento'
-          
+
           // Melhorar mensagens de erro específicas
           if (errorMessage.includes('criptografia') || errorMessage.includes('encrypt')) {
             errorMessage = 'Erro na criptografia do cartão. Verifique se os dados estão corretos e tente novamente.'
@@ -484,7 +484,7 @@ function Pagamento() {
           } else if (errorMessage.includes('network') || errorMessage.includes('timeout')) {
             errorMessage = 'Erro de conexão. Verifique sua internet e tente novamente.'
           }
-          
+
           throw new Error(errorMessage)
         }
 
@@ -557,9 +557,9 @@ function Pagamento() {
       const chargeStatus = result.charges?.[0]?.status
       const paymentCode = result.charges?.[0]?.payment_response?.code
       const paymentMessage = result.charges?.[0]?.payment_response?.message
-      
+
       console.log('💳 Status do pagamento:', { chargeStatus, paymentCode, paymentMessage })
-      
+
       // Verificar se o pagamento foi realmente aprovado
       if (chargeStatus === 'PAID' || chargeStatus === 'AUTHORIZED') {
         console.log('✅ Pagamento aprovado com status:', chargeStatus)
@@ -596,10 +596,23 @@ function Pagamento() {
         // Não falhar o pagamento por causa disso
       }
 
-      // Se for usuário novo, criar conta
+      // Se for usuário novo, criar conta imediatamente com a senha do checkout
       if (!user) {
-        console.log('👤 Criando conta para novo usuário...')
-        // A criação da conta será feita pelo webhook quando o pagamento for confirmado
+        console.log('👤 Provisionando conta para novo usuário...')
+        try {
+          const provisionResult = await paymentService.provisionUser({
+            email: formData.email,
+            password: formData.password,
+            planId: selectedPlan?.id || 'plan_' + selectedPlan?.name,
+            audience: audience,
+            customerName: formData.fullName,
+            orderId: result?.id || ''
+          })
+          console.log('✅ Conta provisionada:', provisionResult)
+        } catch (provisionError) {
+          console.warn('⚠️ Erro ao provisionar conta (o webhook fará fallback):', provisionError.message)
+          // Não falhar o pagamento — o webhook criará a conta com senha aleatória
+        }
       }
 
     } catch (error) {
@@ -651,6 +664,24 @@ function Pagamento() {
       if (chargeStatus === 'PAID' || chargeStatus === 'AUTHORIZED') {
         setPaymentSuccess(true)
         setAwaitingPayment(false)
+
+        // Se for usuário novo, provisionar conta com a senha do checkout
+        if (!user && formData.email && formData.password) {
+          try {
+            console.log('👤 PIX confirmado — provisionando conta...')
+            await paymentService.provisionUser({
+              email: formData.email,
+              password: formData.password,
+              planId: selectedPlan?.id || 'plan_' + selectedPlan?.name,
+              audience: audience,
+              customerName: formData.fullName,
+              orderId: pixData?.orderId || ''
+            })
+            console.log('✅ Conta provisionada após PIX')
+          } catch (provisionError) {
+            console.warn('⚠️ Erro ao provisionar após PIX (webhook fará fallback):', provisionError.message)
+          }
+        }
       }
     } catch (error) {
       console.error('Erro ao verificar status:', error)
@@ -720,7 +751,7 @@ function Pagamento() {
   // Função fallback para detecção de bandeira se hook falhar
   const detectCardBrandFallback = (cardNumber) => {
     const number = cardNumber.replace(/\s/g, '')
-    
+
     if (/^4/.test(number)) return 'visa'
     if (/^5[1-5]/.test(number)) return 'mastercard'
     if (/^3[47]/.test(number)) return 'amex'
@@ -730,7 +761,7 @@ function Pagamento() {
     if (/^50|5[6-9]|6[0-9]/.test(number)) return 'maestro'
     if (/^40117[8-9]|^431274|^438935|^451416|^457393|^504175|^627780|^636297|^636368/.test(number)) return 'elo'
     if (/^606282/.test(number)) return 'hipercard'
-    
+
     return 'unknown'
   }
 
@@ -738,13 +769,13 @@ function Pagamento() {
     let formattedValue = value
     if (field === 'cardNumber') {
       formattedValue = formatCardNumber(value)
-      
+
       console.log('💳 ========= DETECÇÃO DE BANDEIRA =========')
       console.log('💳 Valor original:', value)
       console.log('💳 Valor formatado:', formattedValue)
       // Detectar bandeira do cartão
       let brand = 'unknown'
-      
+
       try {
         brand = paymentService.getCardBrand(formattedValue)
         console.log('💳 Bandeira detectada:', brand)
@@ -753,7 +784,7 @@ function Pagamento() {
         brand = detectCardBrandFallback(formattedValue)
         console.log('💳 Bandeira detectada via fallback:', brand)
       }
-      
+
       setCardBrand(brand)
       console.log('💳 Bandeira final definida:', brand)
       console.log('💳 ==========================================')
@@ -1500,9 +1531,9 @@ function Pagamento() {
                                   <div>
                                     <Label htmlFor="expiryDate">Validade *</Label>
                                     <div className="relative">
-                                    <Input id="expiryDate" placeholder="MM/AA" maxLength={5}
-                                      value={formData.expiryDate} onChange={(e) => handleInputChange('expiryDate', e.target.value)}
-                                      className={`pl-10 ${errors.expiryDate ? 'border-red-500' : ''}`} />
+                                      <Input id="expiryDate" placeholder="MM/AA" maxLength={5}
+                                        value={formData.expiryDate} onChange={(e) => handleInputChange('expiryDate', e.target.value)}
+                                        className={`pl-10 ${errors.expiryDate ? 'border-red-500' : ''}`} />
                                       <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
                                     </div>
                                     {errors.expiryDate && <p className="text-xs text-red-500 mt-1">{errors.expiryDate}</p>}

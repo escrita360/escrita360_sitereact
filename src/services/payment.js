@@ -85,26 +85,26 @@ const loadPagSeguroSDK = () => {
 const encryptCard = async (cardData, publicKey) => {
   try {
     console.log('🔐 Iniciando criptografia do cartão via SDK PagBank...')
-    
+
     // Validar dados de entrada
     if (!publicKey || publicKey.length < 100) {
       throw new Error('Chave pública inválida ou não fornecida')
     }
-    
+
     if (!cardData.number || !cardData.expiryMonth || !cardData.expiryYear || !cardData.cvv || !cardData.holderName) {
       throw new Error('Dados do cartão incompletos')
     }
-    
+
     await loadPagSeguroSDK()
-    
+
     if (!PagSeguro || !PagSeguro.encryptCard) {
       throw new Error('SDK PagBank não carregado corretamente')
     }
-    
+
     const cardNumber = cardData.number.replace(/\s/g, '')
     const expMonth = cardData.expiryMonth.padStart(2, '0')
     const expYear = cardData.expiryYear.length === 2 ? cardData.expiryYear : cardData.expiryYear.slice(-2)
-    
+
     console.log('📋 Dados para criptografia:', {
       holderName: cardData.holderName,
       cardBin: cardNumber.substring(0, 6) + '******' + cardNumber.slice(-4),
@@ -112,7 +112,7 @@ const encryptCard = async (cardData, publicKey) => {
       expYear: '20' + expYear,
       cvvLength: cardData.cvv?.length
     })
-    
+
     const card = PagSeguro.encryptCard({
       publicKey: publicKey,
       holder: cardData.holderName,
@@ -127,13 +127,13 @@ const encryptCard = async (cardData, publicKey) => {
       console.error('❌ Erros na criptografia:', card.errors)
       throw new Error(`Erro na criptografia do cartão: ${errorMessages}`)
     }
-    
+
     if (!card.encryptedCard || card.encryptedCard.length < 100) {
       throw new Error('Criptografia retornou resultado inválido')
     }
 
     console.log('✅ Cartão criptografado com sucesso, tamanho:', card.encryptedCard.length)
-    
+
     return {
       encrypted: card.encryptedCard,
       hasErrors: card.hasErrors,
@@ -258,7 +258,7 @@ export const paymentService = {
 
       // Limpar telefone apenas números
       const phoneClean = customerData.phone.replace(/\D/g, '')
-      
+
       const data = {
         reference_id: buildReferenceId(planData),
         customer: {
@@ -374,7 +374,7 @@ export const paymentService = {
 
     // Limpar telefone apenas números
     const phoneClean = customerData.phone.replace(/\D/g, '')
-    
+
     // Validar telefone
     if (phoneClean.length < 10) {
       throw new Error('Telefone inválido. Digite um número válido com DDD.')
@@ -385,7 +385,7 @@ export const paymentService = {
     if (cpfClean.length !== 11) {
       throw new Error('CPF inválido. Digite um CPF com 11 dígitos.')
     }
-    
+
     const data = {
       reference_id: buildReferenceId(planData),
       customer: {
@@ -424,12 +424,12 @@ export const paymentService = {
       return response.data
     } catch (error) {
       console.error('❌ Erro na requisição PIX:', error)
-      
+
       // Tratamento melhorado de erros
       if (error.response) {
         const errorData = error.response.data
         console.error('📋 Dados do erro:', errorData)
-        
+
         if (errorData?.details?.error_messages) {
           // Erro do PagBank com detalhes
           const pagbankError = errorData.details.error_messages[0]
@@ -458,9 +458,9 @@ export const paymentService = {
 
     // Limpar telefone apenas números
     const phoneClean = customerData.phone.replace(/\D/g, '')
-    
+
     const dueDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] // 7 dias
-    
+
     const data = {
       reference_id: `boleto_${Date.now()}`,
       customer: {
@@ -536,13 +536,13 @@ export const paymentService = {
 
     // Processar telefone para o formato correto
     const phoneClean = customerData.phone.replace(/\D/g, '')
-    const phoneFormatted = phoneClean.length === 11 
+    const phoneFormatted = phoneClean.length === 11
       ? { area_code: phoneClean.substring(0, 2), number: phoneClean.substring(2) }
       : { area_code: phoneClean.substring(0, 2), number: phoneClean.substring(2) }
 
     // Determinar tipo de plano baseado no audience
-    const planType = (planData.audience === 'professores' || planData.audience === 'docentes') 
-      ? 'professor' 
+    const planType = (planData.audience === 'professores' || planData.audience === 'docentes')
+      ? 'professor'
       : 'aluno'
 
     const data = {
@@ -641,7 +641,7 @@ export const paymentService = {
   async encryptCardOnBackend(cardData) {
     try {
       const response = await api.post('/payment/pagbank/encrypt-card', { cardData })
-      
+
       if (response.data.success) {
         return {
           encrypted: response.data.encryptedCard,
@@ -684,7 +684,7 @@ export const paymentService = {
 
       // Limpar telefone apenas números
       const phoneClean = customerData.phone.replace(/\D/g, '')
-      
+
       const data = {
         reference_id: buildReferenceId(planData),
         customer: {
@@ -781,7 +781,7 @@ export const paymentService = {
 
       // Limpar telefone apenas números
       const phoneClean = customerData.phone.replace(/\D/g, '')
-      
+
       const data = {
         reference_id: buildReferenceId(planData),
         customer: {
@@ -885,25 +885,25 @@ export const paymentService = {
    */
   validateCardData(cardData) {
     const { number, cvv, expiryDate, holderName } = cardData
-    
+
     // Validação básica do número do cartão (algoritmo de Luhn)
     const cardNumber = number.replace(/\s/g, '')
     if (!/^\d{13,19}$/.test(cardNumber)) return false
-    
+
     // Validação CVV
     if (!/^\d{3,4}$/.test(cvv)) return false
-    
+
     // Validação data de expiração
     if (!/^\d{2}\/\d{2}$/.test(expiryDate)) return false
-    
+
     const [month, year] = expiryDate.split('/')
     const now = new Date()
     const expiry = new Date(2000 + parseInt(year), parseInt(month) - 1)
     if (expiry <= now) return false
-    
+
     // Validação nome do portador
     if (!holderName || holderName.trim().length < 2) return false
-    
+
     return true
   },
 
@@ -914,7 +914,7 @@ export const paymentService = {
    */
   getCardBrand(cardNumber) {
     const number = cardNumber.replace(/\s/g, '')
-    
+
     if (/^4/.test(number)) return 'visa'
     if (/^5[1-5]/.test(number)) return 'mastercard'
     if (/^3[47]/.test(number)) return 'amex'
@@ -924,7 +924,7 @@ export const paymentService = {
     if (/^50|5[6-9]|6[0-9]/.test(number)) return 'maestro'
     if (/^40117[8-9]|^431274|^438935|^451416|^457393|^504175|^627780|^636297|^636368/.test(number)) return 'elo'
     if (/^606282/.test(number)) return 'hipercard'
-    
+
     return 'unknown'
   },
 
@@ -981,5 +981,36 @@ export const paymentService = {
       refundValue
     })
     return response.data
+  },
+
+  /**
+   * Provisiona conta do usuário no app após pagamento confirmado.
+   * Envia a senha escolhida pelo usuário no checkout para que seja a mesma no app.
+   * Idempotente: se o webhook já criou a conta, retorna sucesso sem duplicar.
+   * 
+   * @param {Object} params
+   * @param {string} params.email - Email do comprador
+   * @param {string} params.password - Senha escolhida pelo usuário no checkout
+   * @param {string} params.planId - ID do plano comprado
+   * @param {string} params.audience - Audiência (estudantes, professores, escolas)
+   * @param {string} params.customerName - Nome do comprador
+   * @param {string} params.orderId - ID do pedido PagBank
+   * @returns {Promise<Object>} - { success, uid, email, alreadyExisted }
+   */
+  async provisionUser({ email, password, planId, audience, customerName, orderId }) {
+    try {
+      const response = await api.post('/payment/provision-user', {
+        email,
+        password,
+        planId,
+        audience,
+        customerName,
+        orderId
+      })
+      return response.data
+    } catch (error) {
+      console.error('❌ Erro ao provisionar usuário:', error)
+      throw error
+    }
   }
 }
