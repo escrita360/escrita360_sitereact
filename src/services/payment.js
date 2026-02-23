@@ -602,6 +602,21 @@ export const paymentService = {
   },
 
   /**
+   * Verifica o status de um pedido (usado para polling de PIX/boleto)
+   * @param {string} orderId - ID do pedido
+   * @returns {Promise<Object>} - Dados do pedido com status das charges
+   */
+  async checkOrderStatus(orderId) {
+    try {
+      const response = await api.get(`/payment/pagbank/order/${orderId}`)
+      return response.data
+    } catch (error) {
+      console.error('❌ Erro ao verificar status do pedido:', error)
+      throw error
+    }
+  },
+
+  /**
    * Consulta pagamentos de um pedido
    * @param {string} orderId - ID do pedido
    * @returns {Promise<Object>} - Pagamentos do pedido
