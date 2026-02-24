@@ -696,21 +696,26 @@ function Pagamento() {
         setPaymentSuccess(true)
         setAwaitingPayment(false)
 
-        // Se for usuário novo, provisionar conta com a senha do checkout
+        // Se for usuário novo, salvar conta pendente para o admin criar
         if (!user && formData.email && formData.password) {
           try {
-            console.log('👤 PIX confirmado — provisionando conta...')
-            await paymentService.provisionUser({
+            console.log('👤 PIX confirmado — salvando conta pendente...')
+            await pendingAccountService.savePendingAccount({
               email: formData.email,
               password: formData.password,
-              planId: selectedPlan?.id || 'plan_' + selectedPlan?.name,
-              audience: audience,
               customerName: formData.fullName,
-              orderId: pixData?.orderId || ''
+              cpf: formData.cpf,
+              phone: formData.phone,
+              planId: selectedPlan?.id || 'plan_' + selectedPlan?.name,
+              planName: selectedPlan?.name || '',
+              planPrice: planData?.price,
+              audience: audience,
+              orderId: pixData?.orderId || '',
+              chargeStatus: chargeStatus
             })
-            console.log('✅ Conta provisionada após PIX')
-          } catch (provisionError) {
-            console.warn('⚠️ Erro ao provisionar após PIX (webhook fará fallback):', provisionError.message)
+            console.log('✅ Conta pendente salva após PIX')
+          } catch (pendingError) {
+            console.warn('⚠️ Erro ao salvar conta pendente após PIX:', pendingError.message)
           }
         }
       }
