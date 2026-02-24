@@ -623,8 +623,8 @@ function Pagamento() {
         // Não falhar o pagamento por causa disso
       }
 
-      // Salvar conta pendente no Firestore para o admin criar via app
-      console.log('📝 Salvando conta pendente para criação pelo admin...')
+      // Salvar conta pendente no Firestore como backup
+      console.log('📝 Salvando conta pendente como backup...')
       try {
         const chargeStatus = result.charges?.[0]?.status || 'PAID'
         const pendingResult = await pendingAccountService.savePendingAccount({
@@ -643,7 +643,23 @@ function Pagamento() {
         console.log('✅ Conta pendente salva:', pendingResult)
       } catch (pendingError) {
         console.warn('⚠️ Erro ao salvar conta pendente:', pendingError.message)
-        // Não falhar o pagamento — o admin pode criar manualmente
+      }
+
+      // Criar conta Firebase automaticamente via backend
+      console.log('🔑 Criando conta Firebase via backend...')
+      try {
+        const provisionResult = await paymentService.provisionUser({
+          email: formData.email,
+          password: formData.password,
+          planId: selectedPlan?.id || 'plan_' + selectedPlan?.name,
+          audience: audience,
+          customerName: customerData.name,
+          orderId: result?.id || ''
+        })
+        console.log('✅ Conta Firebase criada:', provisionResult)
+      } catch (provisionError) {
+        console.warn('⚠️ Erro ao criar conta Firebase automaticamente:', provisionError.message)
+        // Não falhar o pagamento — a conta pendente já foi salva para o admin criar manualmente
       }
 
     } catch (error) {
@@ -696,8 +712,9 @@ function Pagamento() {
         setPaymentSuccess(true)
         setAwaitingPayment(false)
 
-        // Se for usuário novo, salvar conta pendente para o admin criar
+        // Se for usuário novo, criar conta automaticamente
         if (!user && formData.email && formData.password) {
+          // Salvar conta pendente como backup
           try {
             console.log('👤 PIX confirmado — salvando conta pendente...')
             await pendingAccountService.savePendingAccount({
@@ -716,6 +733,22 @@ function Pagamento() {
             console.log('✅ Conta pendente salva após PIX')
           } catch (pendingError) {
             console.warn('⚠️ Erro ao salvar conta pendente após PIX:', pendingError.message)
+          }
+
+          // Criar conta Firebase automaticamente via backend
+          try {
+            console.log('🔑 Criando conta Firebase após PIX via backend...')
+            const provisionResult = await paymentService.provisionUser({
+              email: formData.email,
+              password: formData.password,
+              planId: selectedPlan?.id || 'plan_' + selectedPlan?.name,
+              audience: audience,
+              customerName: formData.fullName,
+              orderId: pixData?.orderId || ''
+            })
+            console.log('✅ Conta Firebase criada após PIX:', provisionResult)
+          } catch (provisionError) {
+            console.warn('⚠️ Erro ao criar conta Firebase após PIX:', provisionError.message)
           }
         }
       }
