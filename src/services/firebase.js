@@ -2,22 +2,22 @@
 // Integração com múltiplos projetos Firebase baseado no tipo de plano
 
 import { initializeApp, getApps, getApp } from 'firebase/app'
-import { 
-  getAuth, 
-  createUserWithEmailAndPassword, 
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
-  sendPasswordResetEmail 
+  sendPasswordResetEmail
 } from 'firebase/auth'
-import { 
-  getFirestore, 
-  collection, 
-  doc, 
-  setDoc, 
-  getDoc, 
-  query, 
-  where, 
+import {
+  getFirestore,
+  collection,
+  doc,
+  setDoc,
+  getDoc,
+  query,
+  where,
   getDocs,
   updateDoc,
   serverTimestamp,
@@ -56,8 +56,8 @@ const getOrCreateApp = (config, name) => {
 }
 
 // App padrão (aluno) - usado para operações gerais do site
-const appAluno = getApps().length === 0 
-  ? initializeApp(firebaseConfigAluno) 
+const appAluno = getApps().length === 0
+  ? initializeApp(firebaseConfigAluno)
   : getApp()
 
 // App para professores
@@ -127,15 +127,15 @@ export const firebaseAuthService = {
     try {
       // Selecionar projeto Firebase baseado no audience
       const { auth: targetAuth, db: targetDb, projectId } = getFirebaseForPlan(audience)
-      
+
       console.log(`🔐 Criando conta Firebase para: ${email} no projeto: ${projectId}`)
-      
+
       // Criar usuário no Firebase Auth
       const userCredential = await createUserWithEmailAndPassword(targetAuth, email, password)
       const user = userCredential.user
-      
+
       console.log(`✅ Conta Firebase criada - UID: ${user.uid} no projeto: ${projectId}`)
-      
+
       // Salvar dados do usuário no Firestore
       const userDocData = removeUndefinedFields({
         uid: user.uid,
@@ -150,10 +150,10 @@ export const firebaseAuthService = {
         emailVerificado: user.emailVerified,
         ...userData
       })
-      
+
       await setDoc(doc(targetDb, 'usuarios', user.uid), userDocData)
       console.log(`✅ Dados do usuário salvos no Firestore (${projectId})`)
-      
+
       return {
         success: true,
         uid: user.uid,
@@ -163,7 +163,7 @@ export const firebaseAuthService = {
       }
     } catch (error) {
       console.error('❌ Erro ao criar conta:', error)
-      
+
       // Traduzir erros do Firebase
       let errorMessage = 'Erro ao criar conta'
       if (error.code === 'auth/email-already-in-use') {
@@ -173,7 +173,7 @@ export const firebaseAuthService = {
       } else if (error.code === 'auth/weak-password') {
         errorMessage = 'Senha muito fraca. Use no mínimo 6 caracteres'
       }
-      
+
       throw new Error(errorMessage)
     }
   },
@@ -185,11 +185,11 @@ export const firebaseAuthService = {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password)
       const user = userCredential.user
-      
+
       // Buscar dados completos do usuário
       const userDoc = await getDoc(doc(db, 'usuarios', user.uid))
       const userData = userDoc.exists() ? userDoc.data() : {}
-      
+
       return {
         success: true,
         uid: user.uid,
@@ -198,7 +198,7 @@ export const firebaseAuthService = {
       }
     } catch (error) {
       console.error('❌ Erro ao fazer login:', error)
-      
+
       let errorMessage = 'Erro ao fazer login'
       if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
         errorMessage = 'Email ou senha incorretos'
@@ -207,7 +207,7 @@ export const firebaseAuthService = {
       } else if (error.code === 'auth/too-many-requests') {
         errorMessage = 'Muitas tentativas. Tente novamente mais tarde'
       }
-      
+
       throw new Error(errorMessage)
     }
   },
@@ -267,23 +267,23 @@ export const firebaseSubscriptionService = {
     try {
       // Selecionar projeto Firebase baseado no audience
       const { db: targetDb, projectId } = getFirebaseForPlan(audience)
-      
+
       console.log(`📝 Criando assinatura no Firestore (${projectId}) para:`, userId)
-      
+
       const { plan, isYearly, paymentData } = subscriptionData
-      
+
       // Calcular datas
       const dataInicio = new Date()
       const dataExpiracao = new Date()
       dataExpiracao.setDate(dataExpiracao.getDate() + (isYearly ? 365 : 30))
-      
+
       // Mapear tipo de assinatura para o formato do app Flutter
       const tipoAssinatura = {
         'Básico': 0,
         'Intermediário': 1,
         'Avançado': 2
       }[plan.name] || 0
-      
+
       // Criar documento de assinatura (compatível com AssinaturaModel do Flutter)
       const assinaturaData = removeUndefinedFields({
         codigo: `WEB_${Date.now()}`,
@@ -305,13 +305,13 @@ export const firebaseSubscriptionService = {
         criado_em: serverTimestamp(),
         atualizado_em: serverTimestamp()
       })
-      
+
       // Salvar no Firestore do projeto correto
       const assinaturaRef = doc(collection(targetDb, 'assinaturas'))
       await setDoc(assinaturaRef, assinaturaData)
-      
+
       console.log(`✅ Assinatura criada no projeto ${projectId}:`, assinaturaRef.id)
-      
+
       // Atualizar dados do usuário com a assinatura
       await updateDoc(doc(targetDb, 'usuarios', userId), {
         assinaturaAtiva: true,
@@ -319,7 +319,7 @@ export const firebaseSubscriptionService = {
         planoAtual: plan.name,
         atualizadoEm: serverTimestamp()
       })
-      
+
       return {
         success: true,
         assinaturaId: assinaturaRef.id,
@@ -342,23 +342,23 @@ export const firebaseSubscriptionService = {
         where('userId', '==', userId),
         where('ativa', '==', true)
       )
-      
+
       const querySnapshot = await getDocs(q)
-      
+
       if (querySnapshot.empty) {
         return null
       }
-      
+
       // Retornar a assinatura mais recente
       const assinaturas = querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       }))
-      
-      assinaturas.sort((a, b) => 
+
+      assinaturas.sort((a, b) =>
         new Date(b.dataExpiracao) - new Date(a.dataExpiracao)
       )
-      
+
       return assinaturas[0]
     } catch (error) {
       console.error('❌ Erro ao buscar assinatura:', error)
@@ -372,15 +372,15 @@ export const firebaseSubscriptionService = {
   async hasActiveSubscription(userId) {
     try {
       const subscription = await this.getActiveSubscription(userId)
-      
+
       if (!subscription) {
         return false
       }
-      
+
       // Verificar se a assinatura não expirou
       const dataExpiracao = new Date(subscription.dataExpiracao)
       const agora = new Date()
-      
+
       return dataExpiracao > agora
     } catch (error) {
       console.error('❌ Erro ao verificar assinatura:', error)
@@ -730,7 +730,7 @@ export const firebasePaymentService = {
     try {
       // Selecionar projeto Firebase baseado no audience
       const { db: targetDb, projectId } = getFirebaseForPlan(audience)
-      
+
       const pagamentoData = removeUndefinedFields({
         userId: userId,
         userEmail: paymentData?.email || '',
@@ -745,12 +745,12 @@ export const firebasePaymentService = {
         criadoEm: serverTimestamp(),
         dadosCompletos: paymentData || {}
       })
-      
+
       const pagamentoRef = doc(collection(targetDb, 'pagamentos'))
       await setDoc(pagamentoRef, pagamentoData)
-      
+
       console.log(`✅ Pagamento registrado no projeto ${projectId}:`, pagamentoRef.id)
-      
+
       return {
         success: true,
         pagamentoId: pagamentoRef.id
@@ -776,19 +776,19 @@ export const firebaseCreditService = {
   async purchaseCredits(userId, creditData) {
     try {
       console.log('💳 Comprando créditos para usuário:', userId)
-      
+
       // VALIDAÇÃO CRÍTICA: Verificar assinatura ativa ANTES de processar pagamento
       const hasActiveSubscription = await firebaseSubscriptionService.hasActiveSubscription(userId)
-      
+
       if (!hasActiveSubscription) {
         throw new Error(
           'ASSINATURA ATIVA NECESSÁRIA: O app Escrita360 só libera acesso para usuários com assinatura válida. ' +
           'Adquira uma assinatura antes de comprar créditos adicionais.'
         )
       }
-      
+
       const { quantity, amount, paymentData } = creditData
-      
+
       // 1. Criar registro de compra de créditos
       const compraData = removeUndefinedFields({
         userId: userId,
@@ -803,31 +803,31 @@ export const firebaseCreditService = {
         origem: 'site',
         criadoEm: serverTimestamp()
       })
-      
+
       const compraRef = doc(collection(db, 'compras_creditos'))
       await setDoc(compraRef, compraData)
-      
+
       console.log('✅ Compra de créditos registrada:', compraRef.id)
-      
+
       // 2. Adicionar créditos à assinatura do usuário (que já foi validada)
       const assinatura = await firebaseSubscriptionService.getActiveSubscription(userId)
-      
+
       // Assinatura sempre existirá (validação acima garante isso)
       if (!assinatura) {
         throw new Error('Erro: Assinatura não encontrada após validação')
       }
-      
+
       // Atualizar tokens na assinatura existente
       const novoTotal = (assinatura.tokens || 0) + quantity
-      
+
       await updateDoc(doc(db, 'assinaturas', assinatura.id), {
         tokens: novoTotal,
         ultimaCompraCreditos: serverTimestamp(),
         atualizadoEm: serverTimestamp()
       })
-      
+
       console.log(`✅ Créditos adicionados à assinatura: ${quantity} (Total: ${novoTotal})`)
-      
+
       // 3. Registrar no histórico de pagamentos
       await firebasePaymentService.recordPayment(userId, {
         email: paymentData.email,
@@ -838,7 +838,7 @@ export const firebaseCreditService = {
         plan: `${quantity} créditos`,
         isYearly: false
       })
-      
+
       return {
         success: true,
         compraId: compraRef.id,
@@ -858,28 +858,28 @@ export const firebaseCreditService = {
   async getTotalCredits(userId) {
     try {
       let totalCreditos = 0
-      
+
       // 1. Buscar tokens da assinatura ativa
       const assinatura = await firebaseSubscriptionService.getActiveSubscription(userId)
       if (assinatura && assinatura.ativa) {
         totalCreditos += assinatura.tokens || 0
       }
-      
+
       // 2. Buscar créditos avulsos
       const q = query(
         collection(db, 'creditos_avulsos'),
         where('userId', '==', userId),
         where('ativo', '==', true)
       )
-      
+
       const querySnapshot = await getDocs(q)
       querySnapshot.forEach(doc => {
         const data = doc.data()
         totalCreditos += data.tokens || 0
       })
-      
+
       console.log(`📊 Total de créditos para ${userId}: ${totalCreditos}`)
-      
+
       return {
         total: totalCreditos,
         assinatura: assinatura?.tokens || 0,
@@ -898,40 +898,40 @@ export const firebaseCreditService = {
   async consumeCredits(userId, quantity) {
     try {
       console.log(`💸 Consumindo ${quantity} créditos do usuário ${userId}`)
-      
+
       // 1. Buscar assinatura ativa
       const assinatura = await firebaseSubscriptionService.getActiveSubscription(userId)
-      
+
       if (assinatura && assinatura.tokens >= quantity) {
         // Descontar da assinatura
         const novoTotal = assinatura.tokens - quantity
-        
+
         await updateDoc(doc(db, 'assinaturas', assinatura.id), {
           tokens: novoTotal,
           ultimoConsumo: serverTimestamp(),
           atualizadoEm: serverTimestamp()
         })
-        
+
         console.log(`✅ Créditos consumidos da assinatura: ${quantity} (Restante: ${novoTotal})`)
         return { success: true, restante: novoTotal }
       }
-      
+
       // 2. Se não tem assinatura ou não tem tokens suficientes, buscar créditos avulsos
       const q = query(
         collection(db, 'creditos_avulsos'),
         where('userId', '==', userId),
         where('ativo', '==', true)
       )
-      
+
       const querySnapshot = await getDocs(q)
-      
+
       for (const docSnapshot of querySnapshot.docs) {
         const data = docSnapshot.data()
         const tokensDisponiveis = data.tokens || 0
-        
+
         if (tokensDisponiveis >= quantity) {
           const novoTotal = tokensDisponiveis - quantity
-          
+
           if (novoTotal === 0) {
             // Se zerou, desativar
             await updateDoc(doc(db, 'creditos_avulsos', docSnapshot.id), {
@@ -946,12 +946,12 @@ export const firebaseCreditService = {
               atualizadoEm: serverTimestamp()
             })
           }
-          
+
           console.log(`✅ Créditos avulsos consumidos: ${quantity} (Restante: ${novoTotal})`)
           return { success: true, restante: novoTotal }
         }
       }
-      
+
       // Se chegou aqui, não tem créditos suficientes
       console.log('❌ Créditos insuficientes')
       return {
@@ -973,9 +973,9 @@ export const firebaseCreditService = {
         collection(db, 'compras_creditos'),
         where('userId', '==', userId)
       )
-      
+
       const querySnapshot = await getDocs(q)
-      
+
       const compras = []
       querySnapshot.forEach(doc => {
         compras.push({
@@ -983,14 +983,14 @@ export const firebaseCreditService = {
           ...doc.data()
         })
       })
-      
+
       // Ordenar por data (mais recente primeiro)
       compras.sort((a, b) => {
         const aDate = a.criadoEm?.toDate?.() || new Date(0)
         const bDate = b.criadoEm?.toDate?.() || new Date(0)
         return bDate - aDate
       })
-      
+
       return compras
     } catch (error) {
       console.error('❌ Erro ao buscar histórico de compras:', error)
@@ -1004,58 +1004,58 @@ export const firebaseCreditService = {
  * Gerencia o armazenamento de aceitações de termos e condições pelos usuários
  */
 export const contractSignatureService = {
-  
+
   /**
    * Registrar assinatura/aceitação de termos pelo usuário
    */
   async registerContractAcceptance(userId, contractData, audience = 'alunos') {
     try {
       const { db: targetDb, projectId } = getFirebaseForPlan(audience)
-      
+
       console.log(`📝 Registrando assinatura de contrato no projeto ${projectId} para usuário:`, userId)
-      
+
       const signatureData = removeUndefinedFields({
         userId: userId,
         userName: contractData.userName || '',
         userEmail: contractData.userEmail || '',
         userCpf: contractData.userCpf || '',
         userPhone: contractData.userPhone || '',
-        
+
         // Informações do contrato/termos
         contractType: contractData.contractType || 'terms_and_conditions', // 'terms_and_conditions', 'privacy_policy', 'service_agreement'
         contractVersion: contractData.contractVersion || '1.0',
-        
+
         // Dados da aceitação
         acceptedAt: serverTimestamp(),
         ipAddress: contractData.ipAddress || '',
         userAgent: contractData.userAgent || navigator.userAgent,
-        
+
         // Contexto da assinatura
         signatureContext: contractData.signatureContext || 'payment_process', // 'payment_process', 'registration', 'contact_form'
         planType: contractData.planType || '',
         planId: contractData.planId || '',
-        
+
         // Dados adicionais
         metadata: contractData.metadata || {},
-        
+
         // Status
         status: 'accepted',
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp()
       })
-      
+
       // Criar documento na coleção contract_signatures
       const signatureRef = doc(collection(targetDb, 'contract_signatures'))
       await setDoc(signatureRef, signatureData)
-      
+
       console.log(`✅ Assinatura de contrato registrada no projeto ${projectId}:`, signatureRef.id)
-      
+
       return {
         success: true,
         signatureId: signatureRef.id,
         signature: signatureData
       }
-      
+
     } catch (error) {
       console.error('❌ Erro ao registrar assinatura de contrato:', error)
       throw error
@@ -1068,26 +1068,26 @@ export const contractSignatureService = {
   async getUserContractSignatures(userId, audience = 'alunos') {
     try {
       const { db: targetDb, projectId } = getFirebaseForPlan(audience)
-      
+
       const q = query(
         collection(targetDb, 'contract_signatures'),
         where('userId', '==', userId),
         orderBy('createdAt', 'desc')
       )
-      
+
       const querySnapshot = await getDocs(q)
       const signatures = []
-      
+
       querySnapshot.forEach(doc => {
         signatures.push({
           id: doc.id,
           ...doc.data()
         })
       })
-      
+
       console.log(`📋 Encontradas ${signatures.length} assinaturas para usuário ${userId} no projeto ${projectId}`)
       return signatures
-      
+
     } catch (error) {
       console.error('❌ Erro ao buscar assinaturas de contrato:', error)
       throw error
@@ -1100,17 +1100,17 @@ export const contractSignatureService = {
   async hasAcceptedContract(userId, contractType = 'terms_and_conditions', audience = 'alunos') {
     try {
       const { db: targetDb } = getFirebaseForPlan(audience)
-      
+
       const q = query(
         collection(targetDb, 'contract_signatures'),
         where('userId', '==', userId),
         where('contractType', '==', contractType),
         where('status', '==', 'accepted')
       )
-      
+
       const querySnapshot = await getDocs(q)
       return !querySnapshot.empty
-      
+
     } catch (error) {
       console.error('❌ Erro ao verificar aceitação de contrato:', error)
       return false
@@ -1123,16 +1123,16 @@ export const contractSignatureService = {
   async updateSignatureStatus(signatureId, newStatus, audience = 'alunos') {
     try {
       const { db: targetDb, projectId } = getFirebaseForPlan(audience)
-      
+
       const signatureRef = doc(targetDb, 'contract_signatures', signatureId)
       await updateDoc(signatureRef, {
         status: newStatus,
         updatedAt: serverTimestamp()
       })
-      
+
       console.log(`✅ Status da assinatura ${signatureId} atualizado para ${newStatus} no projeto ${projectId}`)
       return { success: true }
-      
+
     } catch (error) {
       console.error('❌ Erro ao atualizar status da assinatura:', error)
       throw error
@@ -1176,30 +1176,12 @@ export const pendingAccountService = {
   }) {
     try {
       const { db: targetDb, projectId } = getFirebaseForPlan(audience)
-      
+
       console.log(`📝 Salvando conta pendente no projeto ${projectId} para: ${email}`)
 
-      // Verificar se já existe conta pendente com mesmo email e orderId
-      const existingQuery = query(
-        collection(targetDb, 'contas_pendentes'),
-        where('email', '==', email),
-        where('orderId', '==', orderId)
-      )
-      const existingDocs = await getDocs(existingQuery)
-      
-      if (!existingDocs.empty) {
-        console.log('⚠️ Conta pendente já existe para este pedido, atualizando...')
-        const existingDoc = existingDocs.docs[0]
-        await updateDoc(doc(targetDb, 'contas_pendentes', existingDoc.id), {
-          status: 'pendente',
-          chargeStatus: chargeStatus || 'PAID',
-          updatedAt: serverTimestamp()
-        })
-        return { id: existingDoc.id, projectId, alreadyExisted: true }
-      }
-
-      // Criar novo documento de conta pendente
-      const pendingId = `pending_${Date.now()}`
+      // Usar orderId como ID do documento para evitar duplicatas
+      // setDoc sobrescreve se já existir — sem necessidade de query (que exigiria autenticação)
+      const pendingId = orderId ? `pending_${orderId.replace(/[^a-zA-Z0-9_-]/g, '_')}` : `pending_${Date.now()}`
       const pendingData = removeUndefinedFields({
         email: email?.trim(),
         password: password || null,
@@ -1220,10 +1202,10 @@ export const pendingAccountService = {
       })
 
       await setDoc(doc(targetDb, 'contas_pendentes', pendingId), pendingData)
-      
+
       console.log(`✅ Conta pendente salva: ${pendingId} no projeto ${projectId}`)
       return { id: pendingId, projectId, alreadyExisted: false }
-      
+
     } catch (error) {
       console.error('❌ Erro ao salvar conta pendente:', error)
       throw error
