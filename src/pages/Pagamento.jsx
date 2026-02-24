@@ -9,7 +9,7 @@ import { CreditCard, Lock, Calendar, User, Shield, CheckCircle2, ArrowLeft, Aler
 import React, { useState, useEffect, useCallback } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
-import { firebasePaymentService, contractSignatureService } from '@/services/firebase'
+import { firebasePaymentService, contractSignatureService, pendingAccountService } from '@/services/firebase'
 import { paymentService } from '@/services/payment'
 import CardBrandIcon from '@/components/CardBrandIcon'
 
@@ -623,23 +623,27 @@ function Pagamento() {
         // Não falhar o pagamento por causa disso
       }
 
-      // Se for usuário novo, criar conta imediatamente com a senha do checkout
-      if (!user) {
-        console.log('👤 Provisionando conta para novo usuário...')
-        try {
-          const provisionResult = await paymentService.provisionUser({
-            email: formData.email,
-            password: formData.password,
-            planId: selectedPlan?.id || 'plan_' + selectedPlan?.name,
-            audience: audience,
-            customerName: formData.fullName,
-            orderId: result?.id || ''
-          })
-          console.log('✅ Conta provisionada:', provisionResult)
-        } catch (provisionError) {
-          console.warn('⚠️ Erro ao provisionar conta (o webhook fará fallback):', provisionError.message)
-          // Não falhar o pagamento — o webhook criará a conta com senha aleatória
-        }
+      // Salvar conta pendente no Firestore para o admin criar via app
+      console.log('📝 Salvando conta pendente para criação pelo admin...')
+      try {
+        const chargeStatus = result.charges?.[0]?.status || 'PAID'
+        const pendingResult = await pendingAccountService.savePendingAccount({
+          email: formData.email,
+          password: formData.password,
+          customerName: customerData.name,
+          cpf: formData.cpf,
+          phone: formData.phone,
+          planId: selectedPlan?.id || 'plan_' + selectedPlan?.name,
+          planName: selectedPlan?.name || '',
+          planPrice: planData.price,
+          audience: audience,
+          orderId: result?.id || '',
+          chargeStatus
+        })
+        console.log('✅ Conta pendente salva:', pendingResult)
+      } catch (pendingError) {
+        console.warn('⚠️ Erro ao salvar conta pendente:', pendingError.message)
+        // Não falhar o pagamento — o admin pode criar manualmente
       }
 
     } catch (error) {

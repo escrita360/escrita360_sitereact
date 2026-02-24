@@ -1140,5 +1140,96 @@ export const contractSignatureService = {
   }
 }
 
+/**
+ * Serviço de Contas Pendentes
+ * Salva dados de pagamentos aprovados para que o admin crie as contas via app
+ */
+export const pendingAccountService = {
+  /**
+   * Salva uma conta pendente no Firestore após pagamento aprovado
+   * O admin app lê essa coleção e cria o usuário + assinatura
+   * @param {Object} params
+   * @param {string} params.email - Email do usuário
+   * @param {string} params.password - Senha escolhida no checkout
+   * @param {string} params.customerName - Nome completo do cliente
+   * @param {string} params.cpf - CPF do cliente
+   * @param {string} params.phone - Telefone do cliente
+   * @param {string} params.planId - ID do plano comprado
+   * @param {string} params.planName - Nome do plano
+   * @param {number} params.planPrice - Preço pago
+   * @param {string} params.audience - 'estudantes' | 'professores' | 'escolas'
+   * @param {string} params.orderId - ID do pedido PagBank
+   * @param {string} params.chargeStatus - Status da cobrança (PAID, AUTHORIZED, etc)
+   */
+  async savePendingAccount({
+    email,
+    password,
+    customerName,
+    cpf,
+    phone,
+    planId,
+    planName,
+    planPrice,
+    audience,
+    orderId,
+    chargeStatus
+  }) {
+    try {
+      const { db: targetDb, projectId } = getFirebaseForPlan(audience)
+      
+      console.log(`📝 Salvando conta pendente no projeto ${projectId} para: ${email}`)
+
+      // Verificar se já existe conta pendente com mesmo email e orderId
+      const existingQuery = query(
+        collection(targetDb, 'contas_pendentes'),
+        where('email', '==', email),
+        where('orderId', '==', orderId)
+      )
+      const existingDocs = await getDocs(existingQuery)
+      
+      if (!existingDocs.empty) {
+        console.log('⚠️ Conta pendente já existe para este pedido, atualizando...')
+        const existingDoc = existingDocs.docs[0]
+        await updateDoc(doc(targetDb, 'contas_pendentes', existingDoc.id), {
+          status: 'pendente',
+          chargeStatus: chargeStatus || 'PAID',
+          updatedAt: serverTimestamp()
+        })
+        return { id: existingDoc.id, projectId, alreadyExisted: true }
+      }
+
+      // Criar novo documento de conta pendente
+      const pendingId = `pending_${Date.now()}`
+      const pendingData = removeUndefinedFields({
+        email: email?.trim(),
+        password: password || null,
+        nome: customerName?.trim(),
+        cpf: cpf?.replace(/\D/g, '') || null,
+        telefone: phone || null,
+        planId: planId,
+        planName: planName || planId,
+        planPrice: planPrice || 0,
+        audience: audience,
+        tipo: audience === 'professores' || audience === 'escolas' ? 'professor' : 'aluno',
+        orderId: orderId,
+        chargeStatus: chargeStatus || 'PAID',
+        status: 'pendente', // pendente | processado | erro
+        source: 'site_pagbank',
+        criadoEm: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      })
+
+      await setDoc(doc(targetDb, 'contas_pendentes', pendingId), pendingData)
+      
+      console.log(`✅ Conta pendente salva: ${pendingId} no projeto ${projectId}`)
+      return { id: pendingId, projectId, alreadyExisted: false }
+      
+    } catch (error) {
+      console.error('❌ Erro ao salvar conta pendente:', error)
+      throw error
+    }
+  }
+}
+
 // Exportar referências padrão e helpers
 export { auth, db, getFirebaseForPlan, authAluno, dbAluno, authProfessor, dbProfessor }
