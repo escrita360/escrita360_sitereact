@@ -659,6 +659,10 @@ function Pagamento() {
         console.log('✅ Conta Firebase criada:', provisionResult)
       } catch (provisionError) {
         console.warn('⚠️ Erro ao criar conta Firebase automaticamente:', provisionError.message)
+        // Log detalhes do erro para debugging
+        if (provisionError.response?.data) {
+          console.warn('   Detalhes:', JSON.stringify(provisionError.response.data))
+        }
         // Não falhar o pagamento — a conta pendente já foi salva para o admin criar manualmente
       }
 
@@ -749,6 +753,10 @@ function Pagamento() {
             console.log('✅ Conta Firebase criada após PIX:', provisionResult)
           } catch (provisionError) {
             console.warn('⚠️ Erro ao criar conta Firebase após PIX:', provisionError.message)
+            // Log detalhes do erro para debugging
+            if (provisionError.response?.data) {
+              console.warn('   Detalhes:', JSON.stringify(provisionError.response.data))
+            }
           }
         }
       }

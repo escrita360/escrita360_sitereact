@@ -1049,6 +1049,11 @@ export const paymentService = {
       return response.data
     } catch (error) {
       console.error('❌ Erro ao provisionar usuário:', error)
+      // Log detalhes da resposta do servidor para debugging
+      if (error.response) {
+        console.error('   Status:', error.response.status)
+        console.error('   Dados:', JSON.stringify(error.response.data, null, 2))
+      }
       throw error
     }
   }
