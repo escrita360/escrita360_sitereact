@@ -334,11 +334,39 @@ export const firebaseSubscriptionService = {
 
   /**
    * Buscar assinatura ativa do usuário
+   * @param {string} userId - ID do usuário
+   * @param {string} audience - Tipo de público ('estudantes' ou 'professores') - opcional
    */
-  async getActiveSubscription(userId) {
+  async getActiveSubscription(userId, audience = null) {
+    try {
+      // Se audience não foi especificado, tentar buscar em ambos os projetos
+      if (!audience) {
+        // Primeiro tentar no projeto aluno
+        const alunoResult = await this._getActiveSubscriptionFromDb(userId, dbAluno)
+        if (alunoResult) return alunoResult
+
+        // Se não encontrou, tentar no projeto professor
+        const professorResult = await this._getActiveSubscriptionFromDb(userId, dbProfessor)
+        return professorResult
+      }
+
+      // Se audience foi especificado, usar apenas esse projeto
+      const { db: targetDb } = getFirebaseForPlan(audience)
+      return await this._getActiveSubscriptionFromDb(userId, targetDb)
+    } catch (error) {
+      console.error('❌ Erro ao buscar assinatura:', error)
+      throw error
+    }
+  },
+
+  /**
+   * Helper interno para buscar assinatura em um banco específico
+   * @private
+   */
+  async _getActiveSubscriptionFromDb(userId, targetDb) {
     try {
       const q = query(
-        collection(db, 'assinaturas'),
+        collection(targetDb, 'assinaturas'),
         where('userId', '==', userId),
         where('ativa', '==', true)
       )
@@ -352,7 +380,8 @@ export const firebaseSubscriptionService = {
       // Retornar a assinatura mais recente
       const assinaturas = querySnapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
+        _projectDb: targetDb // Salvar referência ao DB para operações futuras
       }))
 
       assinaturas.sort((a, b) =>
@@ -361,17 +390,19 @@ export const firebaseSubscriptionService = {
 
       return assinaturas[0]
     } catch (error) {
-      console.error('❌ Erro ao buscar assinatura:', error)
-      throw error
+      console.error('❌ Erro ao buscar assinatura no projeto:', error)
+      return null
     }
   },
 
   /**
    * Verificar se usuário tem assinatura ativa
+   * @param {string} userId - ID do usuário
+   * @param {string} audience - Tipo de público ('estudantes' ou 'professores') - opcional
    */
-  async hasActiveSubscription(userId) {
+  async hasActiveSubscription(userId, audience = null) {
     try {
-      const subscription = await this.getActiveSubscription(userId)
+      const subscription = await this.getActiveSubscription(userId, audience)
 
       if (!subscription) {
         return false
@@ -771,25 +802,30 @@ export const firebaseCreditService = {
    * Comprar créditos (REQUER ASSINATURA ATIVA)
    * @param {string} userId - ID do usuário autenticado
    * @param {Object} creditData - Dados da compra
+   * @param {string} audience - Tipo de público ('estudantes' ou 'professores') - opcional
    * @returns {Promise<Object>}
    */
-  async purchaseCredits(userId, creditData) {
+  async purchaseCredits(userId, creditData, audience = null) {
     try {
-      console.log('💳 Comprando créditos para usuário:', userId)
+      console.log('💳 Comprando créditos para usuário:', userId, 'audience:', audience)
 
       // VALIDAÇÃO CRÍTICA: Verificar assinatura ativa ANTES de processar pagamento
-      const hasActiveSubscription = await firebaseSubscriptionService.hasActiveSubscription(userId)
+      // Busca em ambos os projetos se audience não foi especificado
+      const assinatura = await firebaseSubscriptionService.getActiveSubscription(userId, audience)
 
-      if (!hasActiveSubscription) {
+      if (!assinatura) {
         throw new Error(
           'ASSINATURA ATIVA NECESSÁRIA: O app Escrita360 só libera acesso para usuários com assinatura válida. ' +
           'Adquira uma assinatura antes de comprar créditos adicionais.'
         )
       }
 
+      // Determinar o banco de dados correto baseado na assinatura encontrada
+      const targetDb = assinatura._projectDb || db
+
       const { quantity, amount, paymentData } = creditData
 
-      // 1. Criar registro de compra de créditos
+      // 1. Criar registro de compra de créditos no projeto correto
       const compraData = removeUndefinedFields({
         userId: userId,
         userEmail: paymentData?.email || '',
@@ -804,23 +840,15 @@ export const firebaseCreditService = {
         criadoEm: serverTimestamp()
       })
 
-      const compraRef = doc(collection(db, 'compras_creditos'))
+      const compraRef = doc(collection(targetDb, 'compras_creditos'))
       await setDoc(compraRef, compraData)
 
       console.log('✅ Compra de créditos registrada:', compraRef.id)
 
-      // 2. Adicionar créditos à assinatura do usuário (que já foi validada)
-      const assinatura = await firebaseSubscriptionService.getActiveSubscription(userId)
-
-      // Assinatura sempre existirá (validação acima garante isso)
-      if (!assinatura) {
-        throw new Error('Erro: Assinatura não encontrada após validação')
-      }
-
-      // Atualizar tokens na assinatura existente
+      // 2. Atualizar tokens na assinatura existente (no projeto correto)
       const novoTotal = (assinatura.tokens || 0) + quantity
 
-      await updateDoc(doc(db, 'assinaturas', assinatura.id), {
+      await updateDoc(doc(targetDb, 'assinaturas', assinatura.id), {
         tokens: novoTotal,
         ultimaCompraCreditos: serverTimestamp(),
         atualizadoEm: serverTimestamp()
@@ -828,7 +856,36 @@ export const firebaseCreditService = {
 
       console.log(`✅ Créditos adicionados à assinatura: ${quantity} (Total: ${novoTotal})`)
 
+      // 2.1 IMPORTANTE: Para professores, também atualizar a coleção 'usuarios' campo 'tokens_ia'
+      // O app de professor lê tokens da coleção 'usuarios' e não 'assinaturas'
+      const tipoPlano = assinatura.tipoPlano || assinatura.tipo || ''
+      const isProfessor = tipoPlano === 'professor' || tipoPlano === 'professores'
+
+      if (isProfessor) {
+        try {
+          // Buscar documento do usuário na coleção 'usuarios'
+          const userDoc = await getDoc(doc(targetDb, 'usuarios', userId))
+          if (userDoc.exists()) {
+            const currentTokensIa = userDoc.data()?.tokens_ia || 0
+            const newTokensIa = currentTokensIa + quantity
+
+            await updateDoc(doc(targetDb, 'usuarios', userId), {
+              tokens_ia: newTokensIa,
+              ultimaCompraCreditos: serverTimestamp(),
+              atualizadoEm: serverTimestamp()
+            })
+            console.log(`✅ Tokens IA atualizados para professor: ${quantity} (Total: ${newTokensIa})`)
+          } else {
+            console.warn(`⚠️ Documento de usuário não encontrado para professor ${userId}, apenas assinatura foi atualizada`)
+          }
+        } catch (userUpdateError) {
+          console.error('⚠️ Erro ao atualizar tokens_ia do professor (assinatura já foi atualizada):', userUpdateError)
+          // Não lançar erro - assinatura foi atualizada, só o sync extra falhou
+        }
+      }
+
       // 3. Registrar no histórico de pagamentos
+      const paymentAudience = isProfessor ? 'professores' : 'estudantes'
       await firebasePaymentService.recordPayment(userId, {
         email: paymentData.email,
         amount: amount,
@@ -837,13 +894,13 @@ export const firebaseCreditService = {
         transactionId: paymentData.transactionId,
         plan: `${quantity} créditos`,
         isYearly: false
-      })
+      }, paymentAudience)
 
       return {
         success: true,
         compraId: compraRef.id,
         quantidade: quantity,
-        novoTotal: assinatura ? (assinatura.tokens + quantity) : quantity
+        novoTotal: novoTotal
       }
     } catch (error) {
       console.error('❌ Erro ao comprar créditos:', error)
@@ -854,20 +911,23 @@ export const firebaseCreditService = {
   /**
    * Buscar total de créditos do usuário
    * Soma tokens da assinatura + créditos avulsos
+   * @param {string} userId - ID do usuário
+   * @param {string} audience - Tipo de público ('estudantes' ou 'professores') - opcional
    */
-  async getTotalCredits(userId) {
+  async getTotalCredits(userId, audience = null) {
     try {
       let totalCreditos = 0
 
-      // 1. Buscar tokens da assinatura ativa
-      const assinatura = await firebaseSubscriptionService.getActiveSubscription(userId)
+      // 1. Buscar tokens da assinatura ativa (busca em ambos os projetos se audience não especificado)
+      const assinatura = await firebaseSubscriptionService.getActiveSubscription(userId, audience)
       if (assinatura && assinatura.ativa) {
         totalCreditos += assinatura.tokens || 0
       }
 
-      // 2. Buscar créditos avulsos
+      // 2. Buscar créditos avulsos no projeto correto
+      const targetDb = assinatura?._projectDb || db
       const q = query(
-        collection(db, 'creditos_avulsos'),
+        collection(targetDb, 'creditos_avulsos'),
         where('userId', '==', userId),
         where('ativo', '==', true)
       )
@@ -894,19 +954,25 @@ export const firebaseCreditService = {
   /**
    * Consumir créditos
    * Usado quando o usuário usa uma funcionalidade que gasta créditos
+   * @param {string} userId - ID do usuário
+   * @param {number} quantity - Quantidade de créditos a consumir
+   * @param {string} audience - Tipo de público ('estudantes' ou 'professores') - opcional
    */
-  async consumeCredits(userId, quantity) {
+  async consumeCredits(userId, quantity, audience = null) {
     try {
       console.log(`💸 Consumindo ${quantity} créditos do usuário ${userId}`)
 
-      // 1. Buscar assinatura ativa
-      const assinatura = await firebaseSubscriptionService.getActiveSubscription(userId)
+      // 1. Buscar assinatura ativa (busca em ambos os projetos se audience não especificado)
+      const assinatura = await firebaseSubscriptionService.getActiveSubscription(userId, audience)
+
+      // Determinar o banco de dados correto
+      const targetDb = assinatura?._projectDb || db
 
       if (assinatura && assinatura.tokens >= quantity) {
         // Descontar da assinatura
         const novoTotal = assinatura.tokens - quantity
 
-        await updateDoc(doc(db, 'assinaturas', assinatura.id), {
+        await updateDoc(doc(targetDb, 'assinaturas', assinatura.id), {
           tokens: novoTotal,
           ultimoConsumo: serverTimestamp(),
           atualizadoEm: serverTimestamp()
@@ -918,7 +984,7 @@ export const firebaseCreditService = {
 
       // 2. Se não tem assinatura ou não tem tokens suficientes, buscar créditos avulsos
       const q = query(
-        collection(db, 'creditos_avulsos'),
+        collection(targetDb, 'creditos_avulsos'),
         where('userId', '==', userId),
         where('ativo', '==', true)
       )
@@ -934,14 +1000,14 @@ export const firebaseCreditService = {
 
           if (novoTotal === 0) {
             // Se zerou, desativar
-            await updateDoc(doc(db, 'creditos_avulsos', docSnapshot.id), {
+            await updateDoc(doc(targetDb, 'creditos_avulsos', docSnapshot.id), {
               tokens: 0,
               ativo: false,
               atualizadoEm: serverTimestamp()
             })
           } else {
             // Atualizar quantidade
-            await updateDoc(doc(db, 'creditos_avulsos', docSnapshot.id), {
+            await updateDoc(doc(targetDb, 'creditos_avulsos', docSnapshot.id), {
               tokens: novoTotal,
               atualizadoEm: serverTimestamp()
             })

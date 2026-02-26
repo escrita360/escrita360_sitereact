@@ -396,6 +396,17 @@ const Login = () => {
                   >
                     {isLoading ? 'Entrando...' : 'Entrar'}
                   </Button>
+
+                  <div className="text-center pt-2">
+                    <button
+                      type="button"
+                      onClick={() => navigate('/resetar-senha')}
+                      className="text-sm transition-colors hover:underline"
+                      style={{ color: BRAND_COLORS.primary }}
+                    >
+                      Esqueci minha senha
+                    </button>
+                  </div>
                 </form>
               </TabsContent>
 

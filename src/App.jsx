@@ -23,6 +23,7 @@ import AdminUsers from './pages/admin/AdminUsers.jsx'
 import AdminSubscriptions from './pages/admin/AdminSubscriptions.jsx'
 import AdminPayments from './pages/admin/AdminPayments.jsx'
 import AdminPagBank from './pages/admin/AdminPagBank.jsx'
+import ResetarSenha from './pages/ResetarSenha.jsx'
 import NotFound from './pages/404.jsx'
 import { Toaster } from './components/ui/sonner.jsx'
 import './App.css'
@@ -246,6 +247,17 @@ function App() {
             transition={pageTransition}
           >
             <Login />
+          </motion.div>
+        } />
+        <Route path="/resetar-senha" element={
+          <motion.div
+            initial="initial"
+            animate="in"
+            exit="out"
+            variants={pageVariants}
+            transition={pageTransition}
+          >
+            <ResetarSenha />
           </motion.div>
         } />
         <Route path="/perfil" element={
