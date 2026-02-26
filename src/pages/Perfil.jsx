@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { User, Mail, Calendar, CreditCard, LogOut, Plus, CreditCardIcon, Smartphone, Banknote, Eye, Trash2, Star } from 'lucide-react'
+import { User, Mail, Calendar, CreditCard, LogOut, Plus, CreditCardIcon, Smartphone, Banknote, Eye, EyeOff, Trash2, Star, Key, Copy, Check } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { firebasePaymentService, getFirebaseForPlan } from '@/services/firebase'
 import { updateDoc, doc } from 'firebase/firestore'
@@ -28,6 +28,10 @@ const Perfil = () => {
   const [transactionHistory, setTransactionHistory] = useState([])
   const [loading, setLoading] = useState(false)
   const [showHistory, setShowHistory] = useState(false)
+
+  // Estados para mostrar/ocultar e copiar senha do app
+  const [showAppPassword, setShowAppPassword] = useState(false)
+  const [copiedPassword, setCopiedPassword] = useState(false)
 
   // Estados para modal de adicionar cartão
   const [showAddForm, setShowAddForm] = useState(false)
@@ -171,12 +175,12 @@ const Perfil = () => {
       }
 
       await firebasePaymentService.addPaymentMethod(user.uid, paymentData, user.tipoPlano === 'professor' ? 'professores' : 'estudantes')
-      
+
       // Limpar formulários e fechar modal
       resetForms()
       setShowAddForm(false)
       await loadPaymentMethods() // Recarregar lista
-      
+
       toast.success('Método de pagamento adicionado com sucesso')
     } catch (error) {
       console.error('Erro ao salvar método de pagamento:', error)
@@ -312,7 +316,7 @@ const Perfil = () => {
                         <Input
                           id="profileName"
                           value={profileForm.name}
-                          onChange={(e) => setProfileForm({...profileForm, name: e.target.value})}
+                          onChange={(e) => setProfileForm({ ...profileForm, name: e.target.value })}
                           placeholder="Seu nome completo"
                         />
                       </div>
@@ -321,7 +325,7 @@ const Perfil = () => {
                         <Input
                           id="profileCpf"
                           value={profileForm.cpf}
-                          onChange={(e) => setProfileForm({...profileForm, cpf: e.target.value.replace(/[^0-9]/g, '')})}
+                          onChange={(e) => setProfileForm({ ...profileForm, cpf: e.target.value.replace(/[^0-9]/g, '') })}
                           placeholder="000.000.000-00"
                           maxLength={11}
                         />
@@ -405,7 +409,7 @@ const Perfil = () => {
                   {/* Cartões Salvos */}
                   <div className="space-y-3">
                     <h4 className="font-medium text-sm text-slate-700">Cartões Salvos</h4>
-                    
+
                     {paymentMethods.length === 0 ? (
                       <div className="text-center py-4 text-slate-500">
                         <CreditCardIcon className="w-8 h-8 mx-auto mb-2 opacity-50" />
@@ -420,7 +424,7 @@ const Perfil = () => {
                               {method.type === 'card' && <CreditCardIcon className="w-5 h-5 text-blue-600" />}
                               {method.type === 'pix' && <Smartphone className="w-5 h-5 text-green-600" />}
                               {method.type === 'boleto' && <Banknote className="w-5 h-5 text-purple-600" />}
-                              
+
                               <div>
                                 {method.type === 'card' && method.card && (
                                   <>
@@ -446,7 +450,7 @@ const Perfil = () => {
                                 )}
                               </div>
                             </div>
-                            
+
                             <div className="flex items-center gap-2">
                               {method.isDefault && (
                                 <Badge variant="default" className="text-xs">
@@ -454,7 +458,7 @@ const Perfil = () => {
                                   Padrão
                                 </Badge>
                               )}
-                              
+
                               {!method.isDefault && (
                                 <Button
                                   size="sm"
@@ -466,7 +470,7 @@ const Perfil = () => {
                                   Tornar Padrão
                                 </Button>
                               )}
-                              
+
                               <Button
                                 size="sm"
                                 variant="ghost"
@@ -486,9 +490,9 @@ const Perfil = () => {
                   {/* Métodos de Pagamento Disponíveis */}
                   <div className="space-y-3">
                     <h4 className="font-medium text-sm text-slate-700">Métodos Disponíveis</h4>
-                    
+
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div 
+                      <div
                         className="flex items-center gap-3 p-3 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors cursor-pointer"
                         onClick={() => handleAddPaymentMethod('card')}
                       >
@@ -499,7 +503,7 @@ const Perfil = () => {
                         </div>
                       </div>
 
-                      <div 
+                      <div
                         className="flex items-center gap-3 p-3 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors cursor-pointer"
                         onClick={() => handleAddPaymentMethod('boleto')}
                       >
@@ -534,7 +538,7 @@ const Perfil = () => {
                                 id="cardNumber"
                                 placeholder="1234 5678 9012 3456"
                                 value={cardForm.number}
-                                onChange={(e) => setCardForm({...cardForm, number: formatCardNumber(e.target.value)})}
+                                onChange={(e) => setCardForm({ ...cardForm, number: formatCardNumber(e.target.value) })}
                                 maxLength={19}
                               />
                             </div>
@@ -551,7 +555,7 @@ const Perfil = () => {
                                     setExpiryFormatted(formatted)
                                     const parts = formatted.split('/')
                                     setCardForm({
-                                      ...cardForm, 
+                                      ...cardForm,
                                       expiryMonth: parts[0] || '',
                                       expiryYear: parts[1] || ''
                                     })
@@ -565,7 +569,7 @@ const Perfil = () => {
                                   id="cvv"
                                   placeholder="123"
                                   value={cardForm.cvv}
-                                  onChange={(e) => setCardForm({...cardForm, cvv: e.target.value.replace(/[^0-9]/g, '')})}
+                                  onChange={(e) => setCardForm({ ...cardForm, cvv: e.target.value.replace(/[^0-9]/g, '') })}
                                   maxLength={4}
                                 />
                               </div>
@@ -577,7 +581,7 @@ const Perfil = () => {
                                 id="holderName"
                                 placeholder="Nome como aparece no cartão"
                                 value={cardForm.holderName}
-                                onChange={(e) => setCardForm({...cardForm, holderName: e.target.value})}
+                                onChange={(e) => setCardForm({ ...cardForm, holderName: e.target.value })}
                               />
                             </div>
                           </div>
@@ -591,7 +595,7 @@ const Perfil = () => {
                                 id="boletoName"
                                 placeholder="Nome como no documento"
                                 value={boletoForm.name}
-                                onChange={(e) => setBoletoForm({...boletoForm, name: e.target.value})}
+                                onChange={(e) => setBoletoForm({ ...boletoForm, name: e.target.value })}
                               />
                             </div>
 
@@ -601,7 +605,7 @@ const Perfil = () => {
                                 id="boletoCpf"
                                 placeholder="000.000.000-00"
                                 value={boletoForm.cpf}
-                                onChange={(e) => setBoletoForm({...boletoForm, cpf: e.target.value.replace(/[^0-9]/g, '')})}
+                                onChange={(e) => setBoletoForm({ ...boletoForm, cpf: e.target.value.replace(/[^0-9]/g, '') })}
                                 maxLength={11}
                               />
                             </div>
@@ -613,7 +617,7 @@ const Perfil = () => {
                                 type="email"
                                 placeholder="seu@email.com"
                                 value={boletoForm.email}
-                                onChange={(e) => setBoletoForm({...boletoForm, email: e.target.value})}
+                                onChange={(e) => setBoletoForm({ ...boletoForm, email: e.target.value })}
                               />
                             </div>
                           </div>
@@ -634,7 +638,7 @@ const Perfil = () => {
                   {/* Histórico de Pagamentos */}
                   <div className="space-y-3">
                     <h4 className="font-medium text-sm text-slate-700">Últimos Pagamentos</h4>
-                    
+
                     {!showHistory ? (
                       <>
                         <div className="text-center py-4 text-slate-500">
@@ -643,9 +647,9 @@ const Perfil = () => {
                           <p className="text-xs">Clique para ver seus pagamentos</p>
                         </div>
 
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
+                        <Button
+                          variant="ghost"
+                          size="sm"
                           className="w-full text-slate-600"
                           onClick={loadTransactionHistory}
                           disabled={loading}
@@ -669,7 +673,7 @@ const Perfil = () => {
                                   {transaction.paymentMethodType === 'card' && <CreditCardIcon className="w-4 h-4 text-blue-600" />}
                                   {transaction.paymentMethodType === 'pix' && <Smartphone className="w-4 h-4 text-green-600" />}
                                   {transaction.paymentMethodType === 'boleto' && <Banknote className="w-4 h-4 text-purple-600" />}
-                                  
+
                                   <div>
                                     <p className="font-medium text-sm">
                                       R$ {(transaction.amount / 100).toFixed(2).replace('.', ',')}
@@ -679,19 +683,19 @@ const Perfil = () => {
                                     </p>
                                   </div>
                                 </div>
-                                
+
                                 <div className="text-right">
-                                  <Badge 
+                                  <Badge
                                     variant={
                                       transaction.status === 'completed' ? 'default' :
-                                      transaction.status === 'pending' ? 'secondary' :
-                                      transaction.status === 'failed' ? 'destructive' : 'outline'
+                                        transaction.status === 'pending' ? 'secondary' :
+                                          transaction.status === 'failed' ? 'destructive' : 'outline'
                                     }
                                     className="text-xs"
                                   >
                                     {transaction.status === 'completed' ? 'Concluído' :
-                                     transaction.status === 'pending' ? 'Pendente' :
-                                     transaction.status === 'failed' ? 'Falhou' : transaction.status}
+                                      transaction.status === 'pending' ? 'Pendente' :
+                                        transaction.status === 'failed' ? 'Falhou' : transaction.status}
                                   </Badge>
                                   <p className="text-xs text-slate-500 mt-1">
                                     {transaction.createdAt?.toDate?.()?.toLocaleDateString('pt-BR') || 'Data não disponível'}
@@ -699,7 +703,7 @@ const Perfil = () => {
                                 </div>
                               </div>
                             ))}
-                            
+
                             {transactionHistory.length > 5 && (
                               <Button variant="ghost" size="sm" className="w-full text-slate-600">
                                 <Eye className="w-4 h-4 mr-2" />
@@ -781,6 +785,71 @@ const Perfil = () => {
                   </div>
                 </CardContent>
               </Card>
+
+              {/* Senha do App - exibida apenas se o usuário tiver senhaApp salva */}
+              {user.senhaApp && (
+                <Card className="border-blue-200 bg-blue-50/50">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="flex items-center gap-2 text-base">
+                      <Key className="w-4 h-4 text-blue-600" />
+                      Senha do App
+                    </CardTitle>
+                    <CardDescription className="text-xs">
+                      Use esta senha para fazer login no aplicativo
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 relative">
+                          <Input
+                            type={showAppPassword ? "text" : "password"}
+                            value={user.senhaApp}
+                            readOnly
+                            className="pr-20 font-mono bg-white"
+                          />
+                          <div className="absolute right-1 top-1/2 -translate-y-1/2 flex gap-1">
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="h-7 w-7 p-0"
+                              onClick={() => setShowAppPassword(!showAppPassword)}
+                            >
+                              {showAppPassword ? (
+                                <EyeOff className="w-4 h-4 text-slate-500" />
+                              ) : (
+                                <Eye className="w-4 h-4 text-slate-500" />
+                              )}
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="h-7 w-7 p-0"
+                              onClick={() => {
+                                navigator.clipboard.writeText(user.senhaApp)
+                                setCopiedPassword(true)
+                                toast.success('Senha copiada!')
+                                setTimeout(() => setCopiedPassword(false), 2000)
+                              }}
+                            >
+                              {copiedPassword ? (
+                                <Check className="w-4 h-4 text-green-600" />
+                              ) : (
+                                <Copy className="w-4 h-4 text-slate-500" />
+                              )}
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                      <p className="text-xs text-slate-500">
+                        Esta é a senha gerada quando você adquiriu seu plano. Guarde-a em local seguro.
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
             </div>
           </div>
         </div>
