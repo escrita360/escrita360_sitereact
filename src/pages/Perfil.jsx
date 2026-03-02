@@ -81,7 +81,7 @@ const ESTADOS_BR = [
 
 // ── Componente de campo de exibição ────────────────────────────────
 
-const ProfileField = ({ icon: FieldIcon, label, value, displayValue, emptyText = 'Não informado' }) => (
+const ProfileField = ({  label, value, displayValue, emptyText = 'Não informado' }) => (
   <div className="flex items-start gap-3 py-3">
     <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-500">
       <FieldIcon className="h-4 w-4" />
