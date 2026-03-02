@@ -1279,5 +1279,126 @@ export const pendingAccountService = {
   }
 }
 
+/**
+ * Serviço de Perfil do Usuário no Firestore
+ * Gerencia dados pessoais, endereço e preferências
+ */
+export const firebaseProfileService = {
+  /**
+   * Buscar perfil completo do usuário
+   */
+  async getProfile(userId, audience = 'estudantes') {
+    try {
+      const { db: targetDb } = getFirebaseForPlan(audience)
+      // Tentar coleção 'users' primeiro, depois 'usuarios'
+      let userDoc = await getDoc(doc(targetDb, 'users', userId))
+      if (!userDoc.exists()) {
+        userDoc = await getDoc(doc(targetDb, 'usuarios', userId))
+      }
+      return userDoc.exists() ? { id: userDoc.id, ...userDoc.data() } : null
+    } catch (error) {
+      console.error('❌ Erro ao buscar perfil:', error)
+      throw error
+    }
+  },
+
+  /**
+   * Atualizar informações pessoais
+   */
+  async updatePersonalInfo(userId, data, audience = 'estudantes') {
+    try {
+      const { db: targetDb } = getFirebaseForPlan(audience)
+      const cleanData = removeUndefinedFields({
+        nome: data.nome,
+        cpf: data.cpf?.replace(/\D/g, '') || null,
+        telefone: data.telefone || null,
+        dataNascimento: data.dataNascimento || null,
+        genero: data.genero || null,
+        atualizadoEm: serverTimestamp()
+      })
+
+      // Atualizar em ambas coleções se existirem
+      const usersRef = doc(targetDb, 'users', userId)
+      const usuariosRef = doc(targetDb, 'usuarios', userId)
+
+      const usersDoc = await getDoc(usersRef)
+      const usuariosDoc = await getDoc(usuariosRef)
+
+      if (usersDoc.exists()) await updateDoc(usersRef, cleanData)
+      if (usuariosDoc.exists()) await updateDoc(usuariosRef, cleanData)
+
+      console.log('✅ Informações pessoais atualizadas')
+      return { success: true }
+    } catch (error) {
+      console.error('❌ Erro ao atualizar informações pessoais:', error)
+      throw error
+    }
+  },
+
+  /**
+   * Atualizar endereço
+   */
+  async updateAddress(userId, address, audience = 'estudantes') {
+    try {
+      const { db: targetDb } = getFirebaseForPlan(audience)
+      const cleanAddress = removeUndefinedFields({
+        endereco: {
+          cep: address.cep?.replace(/\D/g, '') || '',
+          logradouro: address.logradouro || '',
+          numero: address.numero || '',
+          complemento: address.complemento || '',
+          bairro: address.bairro || '',
+          cidade: address.cidade || '',
+          estado: address.estado || ''
+        },
+        atualizadoEm: serverTimestamp()
+      })
+
+      const usersRef = doc(targetDb, 'users', userId)
+      const usuariosRef = doc(targetDb, 'usuarios', userId)
+
+      const usersDoc = await getDoc(usersRef)
+      const usuariosDoc = await getDoc(usuariosRef)
+
+      if (usersDoc.exists()) await updateDoc(usersRef, cleanAddress)
+      if (usuariosDoc.exists()) await updateDoc(usuariosRef, cleanAddress)
+
+      console.log('✅ Endereço atualizado')
+      return { success: true }
+    } catch (error) {
+      console.error('❌ Erro ao atualizar endereço:', error)
+      throw error
+    }
+  },
+
+  /**
+   * Atualizar email (apenas no Firestore, Auth email requer re-autenticação)
+   */
+  async updateEmail(userId, newEmail, audience = 'estudantes') {
+    try {
+      const { db: targetDb } = getFirebaseForPlan(audience)
+      const data = {
+        emailContato: newEmail.trim(),
+        atualizadoEm: serverTimestamp()
+      }
+
+      const usersRef = doc(targetDb, 'users', userId)
+      const usuariosRef = doc(targetDb, 'usuarios', userId)
+
+      const usersDoc = await getDoc(usersRef)
+      const usuariosDoc = await getDoc(usuariosRef)
+
+      if (usersDoc.exists()) await updateDoc(usersRef, data)
+      if (usuariosDoc.exists()) await updateDoc(usuariosRef, data)
+
+      console.log('✅ Email de contato atualizado')
+      return { success: true }
+    } catch (error) {
+      console.error('❌ Erro ao atualizar email:', error)
+      throw error
+    }
+  }
+}
+
 // Exportar referências padrão e helpers
 export { auth, db, getFirebaseForPlan, authAluno, dbAluno, authProfessor, dbProfessor }

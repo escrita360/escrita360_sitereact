@@ -79,13 +79,26 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  const refreshUser = async () => {
+    const firebaseUser = auth.currentUser
+    if (!firebaseUser) return
+    try {
+      const userDoc = await getDoc(doc(db, 'usuarios', firebaseUser.uid))
+      const userData = userDoc.exists() ? userDoc.data() : {}
+      setUser({ ...firebaseUser, ...userData })
+    } catch (error) {
+      console.error('Erro ao atualizar dados do usuário:', error)
+    }
+  }
+
   const value = {
     user,
     claims,
     loading,
     login,
     register,
-    logout
+    logout,
+    refreshUser
   }
 
   return (
