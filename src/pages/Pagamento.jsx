@@ -1869,11 +1869,7 @@ function Pagamento() {
                 <div className="space-y-3 text-left">
                   <div className="flex justify-between">
                     <span className="text-slate-600">Valor</span>
-                    <span className="font-medium text-lg">R$ {total.toFixed(2)}/mês</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-600">Próxima cobrança</span>
-                    <span className="font-medium">{new Date(Date.now() + (isYearly ? 365 : 30) * 24 * 60 * 60 * 1000).toLocaleDateString('pt-BR')}</span>
+                    <span className="font-medium text-lg">R$ {total.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-600">E-mail</span>
