@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Menu, ChevronDown, GraduationCap, School, UserCheck, User, LogOut } from 'lucide-react'
+import { Menu, ChevronDown, GraduationCap, School, UserCheck, User, LogOut, ExternalLink } from 'lucide-react'
 import { useState, useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button.jsx'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet.jsx'
@@ -17,7 +17,22 @@ function Layout({ children }) {
   const profileDropdownRef = useRef(null)
   const location = useLocation()
   const navigate = useNavigate()
-  const { user, logout } = useAuth()
+  const { user, claims, logout } = useAuth()
+
+  // Determinar URL do app baseado no tipo de plano do usuário
+  const getUserAppUrl = () => {
+    const planType = user?.tipoPlano || claims?.planType
+    if (planType === 'professor') return 'https://professor.escrita360.com.br'
+    if (planType === 'aluno') return 'https://aluno.escrita360.com.br'
+    return null
+  }
+
+  const getUserAppLabel = () => {
+    const planType = user?.tipoPlano || claims?.planType
+    if (planType === 'professor') return 'Área do Professor'
+    if (planType === 'aluno') return 'Área do Aluno'
+    return 'Acessar Plataforma'
+  }
 
   const plansOptions = [
     { key: 'estudantes', label: 'Estudantes', icon: GraduationCap },
@@ -119,6 +134,19 @@ function Layout({ children }) {
             
             {/* User Profile or Login Button */}
             {user ? (
+              <>
+              {/* Botão Acessar Plataforma */}
+              {getUserAppUrl() && (
+                <a
+                  href={getUserAppUrl()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-all duration-300 hover:scale-105 font-medium text-sm"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  {getUserAppLabel()}
+                </a>
+              )}
               <div className="relative" ref={profileDropdownRef}>
                 <button
                   onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
@@ -145,7 +173,26 @@ function Layout({ children }) {
                       <p className="text-sm text-slate-500">
                         {user.email}
                       </p>
+                      {(user?.tipoPlano || claims?.planType) && (
+                        <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium bg-emerald-100 text-emerald-700 rounded-full">
+                          {(user?.tipoPlano || claims?.planType) === 'professor' ? 'Professor' : 'Aluno'}
+                        </span>
+                      )}
                     </div>
+                    {getUserAppUrl() && (
+                      <a
+                        href={getUserAppUrl()}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => setIsProfileDropdownOpen(false)}
+                        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-emerald-50 transition-colors text-left border-b border-slate-100"
+                      >
+                        <ExternalLink className="w-4 h-4 text-emerald-600" />
+                        <span className="font-medium text-emerald-700">
+                          {getUserAppLabel()}
+                        </span>
+                      </a>
+                    )}
                     <button
                       onClick={() => {
                         setIsProfileDropdownOpen(false)
@@ -170,6 +217,7 @@ function Layout({ children }) {
                   </div>
                 )}
               </div>
+              </>
             ) : (
               <Button asChild size="lg" className="bg-[var(--brand-primary)] text-white hover:bg-[var(--brand-dark)]">
                 <Link to="/login">Entrar</Link>
@@ -268,6 +316,18 @@ function Layout({ children }) {
                         </p>
                       </div>
                     </div>
+                    {getUserAppUrl() && (
+                      <a
+                        href={getUserAppUrl()}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => setIsOpen(false)}
+                        className="w-full flex items-center justify-center gap-2 px-4 py-2 mb-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 transition-colors font-medium text-sm"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                        {getUserAppLabel()}
+                      </a>
+                    )}
                     <Button
                       onClick={() => {
                         navigate('/perfil')
