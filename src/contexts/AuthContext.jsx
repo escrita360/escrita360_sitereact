@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { onAuthStateChanged, signOut, getIdTokenResult } from 'firebase/auth'
 import { doc, getDoc } from 'firebase/firestore'
-import { auth, db, firebaseAuthService } from '@/services/firebase'
+import { auth, db, firebaseAuthService, getActiveAuth, getActiveDb, authAluno, authProfessor, dbAluno, dbProfessor } from '@/services/firebase'
 
 const AuthContext = createContext()
 
@@ -19,7 +19,8 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+    // Handler compartilhado para processar login de qualquer projeto
+    const handleAuthUser = async (firebaseUser) => {
       if (firebaseUser) {
         // Buscar custom claims (role, plan, app) do token
         try {
@@ -37,9 +38,10 @@ export const AuthProvider = ({ children }) => {
           setClaims(null)
         }
 
-        // Buscar dados completos do usuário do Firestore
+        // Usar o Firestore do projeto ativo (aluno ou professor)
+        const activeDb = getActiveDb()
         try {
-          const userDoc = await getDoc(doc(db, 'usuarios', firebaseUser.uid))
+          const userDoc = await getDoc(doc(activeDb, 'usuarios', firebaseUser.uid))
           const userData = userDoc.exists() ? userDoc.data() : {}
           setUser({
             ...firebaseUser,
@@ -50,13 +52,23 @@ export const AuthProvider = ({ children }) => {
           setUser(firebaseUser)
         }
       } else {
-        setUser(null)
-        setClaims(null)
+        // Só limpar estado se nenhum dos projetos tem usuário logado
+        if (!authAluno.currentUser && !authProfessor.currentUser) {
+          setUser(null)
+          setClaims(null)
+        }
       }
       setLoading(false)
-    })
+    }
 
-    return unsubscribe
+    // Escutar auth state de AMBOS os projetos
+    const unsubAluno = onAuthStateChanged(authAluno, handleAuthUser)
+    const unsubProfessor = onAuthStateChanged(authProfessor, handleAuthUser)
+
+    return () => {
+      unsubAluno()
+      unsubProfessor()
+    }
   }, [])
 
   const login = async (email, password) => {
@@ -71,8 +83,15 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await signOut(auth)
+      // Sign out de ambos os projetos
+      const promises = []
+      if (authAluno.currentUser) promises.push(signOut(authAluno))
+      if (authProfessor.currentUser) promises.push(signOut(authProfessor))
+      if (promises.length === 0) promises.push(signOut(authAluno))
+      await Promise.all(promises)
       localStorage.removeItem('user')
+      setUser(null)
+      setClaims(null)
     } catch (error) {
       console.error('Erro ao fazer logout:', error)
       throw error
@@ -80,10 +99,12 @@ export const AuthProvider = ({ children }) => {
   }
 
   const refreshUser = async () => {
-    const firebaseUser = auth.currentUser
+    // Verificar em ambos os projetos qual tem usuário logado
+    const firebaseUser = authAluno.currentUser || authProfessor.currentUser
     if (!firebaseUser) return
+    const activeDb = getActiveDb()
     try {
-      const userDoc = await getDoc(doc(db, 'usuarios', firebaseUser.uid))
+      const userDoc = await getDoc(doc(activeDb, 'usuarios', firebaseUser.uid))
       const userData = userDoc.exists() ? userDoc.data() : {}
       setUser({ ...firebaseUser, ...userData })
     } catch (error) {

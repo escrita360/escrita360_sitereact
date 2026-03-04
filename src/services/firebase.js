@@ -70,9 +70,34 @@ const dbAluno = getFirestore(appAluno)
 const authProfessor = getAuth(appProfessor)
 const dbProfessor = getFirestore(appProfessor)
 
-// Exportar referências padrão (aluno) para compatibilidade
+// Referências padrão (aluno) para compatibilidade
 const auth = authAluno
 const db = dbAluno
+
+// ============================================================
+// Estado do projeto ativo (muda conforme login do usuário)
+// Permite que AuthContext e outros serviços usem o projeto correto
+// ============================================================
+let _activeAuth = authAluno
+let _activeDb = dbAluno
+let _activeProjectId = firebaseConfigAluno.projectId
+
+export const getActiveAuth = () => _activeAuth
+export const getActiveDb = () => _activeDb
+export const getActiveProjectId = () => _activeProjectId
+
+function setActiveProject(projectKey) {
+  if (projectKey === 'professor') {
+    _activeAuth = authProfessor
+    _activeDb = dbProfessor
+    _activeProjectId = firebaseConfigProfessor.projectId
+  } else {
+    _activeAuth = authAluno
+    _activeDb = dbAluno
+    _activeProjectId = firebaseConfigAluno.projectId
+  }
+  console.log(`🔄 Projeto ativo alterado para: ${_activeProjectId}`)
+}
 
 console.log('✅ Firebase inicializado - projeto aluno:', firebaseConfigAluno.projectId)
 console.log('✅ Firebase inicializado - projeto professor:', firebaseConfigProfessor.projectId)
@@ -179,45 +204,100 @@ export const firebaseAuthService = {
   },
 
   /**
-   * Login de usuário
+   * Login de usuário — tenta no projeto aluno, depois no professor
+   * Isso garante que contas criadas após pagamento (em qualquer projeto)
+   * funcionem para login no site.
    */
   async login(email, password) {
+    // Tentar login no projeto ALUNO primeiro
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password)
+      const userCredential = await signInWithEmailAndPassword(authAluno, email, password)
       const user = userCredential.user
 
       // Buscar dados completos do usuário
-      const userDoc = await getDoc(doc(db, 'usuarios', user.uid))
+      const userDoc = await getDoc(doc(dbAluno, 'usuarios', user.uid))
       const userData = userDoc.exists() ? userDoc.data() : {}
+
+      // Definir projeto ativo como aluno
+      setActiveProject('aluno')
+      console.log(`✅ Login bem-sucedido no projeto aluno: ${email}`)
 
       return {
         success: true,
         uid: user.uid,
         email: user.email,
-        user: userData
+        user: userData,
+        projectId: firebaseConfigAluno.projectId
       }
-    } catch (error) {
-      console.error('❌ Erro ao fazer login:', error)
+    } catch (alunoError) {
+      // Se não encontrou no aluno ou credencial inválida, tentar no professor
+      const isNotFound = alunoError.code === 'auth/user-not-found'
+      const isInvalidCredential = alunoError.code === 'auth/invalid-credential'
 
-      let errorMessage = 'Erro ao fazer login'
-      if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
-        errorMessage = 'Email ou senha incorretos'
-      } else if (error.code === 'auth/user-not-found') {
-        errorMessage = 'Usuário não encontrado'
-      } else if (error.code === 'auth/too-many-requests') {
-        errorMessage = 'Muitas tentativas. Tente novamente mais tarde'
+      if (!isNotFound && !isInvalidCredential) {
+        // Erro diferente de "não encontrado" — já propagar
+        console.error('❌ Erro ao fazer login (projeto aluno):', alunoError)
+        throw this._translateAuthError(alunoError)
       }
 
-      throw new Error(errorMessage)
+      console.log(`🔄 Usuário não encontrado no projeto aluno, tentando projeto professor...`)
+    }
+
+    // Tentar login no projeto PROFESSOR
+    try {
+      const userCredential = await signInWithEmailAndPassword(authProfessor, email, password)
+      const user = userCredential.user
+
+      // Buscar dados completos do usuário
+      const userDoc = await getDoc(doc(dbProfessor, 'usuarios', user.uid))
+      const userData = userDoc.exists() ? userDoc.data() : {}
+
+      // Definir projeto ativo como professor
+      setActiveProject('professor')
+      console.log(`✅ Login bem-sucedido no projeto professor: ${email}`)
+
+      return {
+        success: true,
+        uid: user.uid,
+        email: user.email,
+        user: userData,
+        projectId: firebaseConfigProfessor.projectId
+      }
+    } catch (profError) {
+      console.error('❌ Erro ao fazer login em ambos os projetos:', profError)
+      throw this._translateAuthError(profError)
     }
   },
 
   /**
-   * Logout
+   * Traduz erros de autenticação do Firebase para mensagens amigáveis
+   */
+  _translateAuthError(error) {
+    let errorMessage = 'Erro ao fazer login'
+    if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
+      errorMessage = 'Email ou senha incorretos'
+    } else if (error.code === 'auth/user-not-found') {
+      errorMessage = 'Usuário não encontrado'
+    } else if (error.code === 'auth/too-many-requests') {
+      errorMessage = 'Muitas tentativas. Tente novamente mais tarde'
+    }
+    return new Error(errorMessage)
+  },
+
+  /**
+   * Logout — encerra sessão em AMBOS os projetos Firebase
    */
   async logout() {
     try {
-      await signOut(auth)
+      // Sign out de ambos os projetos para garantir limpeza completa
+      const promises = []
+      if (authAluno.currentUser) promises.push(signOut(authAluno))
+      if (authProfessor.currentUser) promises.push(signOut(authProfessor))
+      if (promises.length === 0) promises.push(signOut(authAluno)) // fallback
+      await Promise.all(promises)
+
+      // Resetar para projeto padrão
+      setActiveProject('aluno')
       return { success: true }
     } catch (error) {
       console.error('❌ Erro ao fazer logout:', error)
@@ -226,30 +306,72 @@ export const firebaseAuthService = {
   },
 
   /**
-   * Recuperar senha
+   * Recuperar senha — tenta em ambos os projetos
    */
   async resetPassword(email) {
+    // Tentar enviar reset no projeto aluno primeiro
     try {
-      await sendPasswordResetEmail(auth, email)
+      await sendPasswordResetEmail(authAluno, email)
+      console.log(`✅ Email de recuperação enviado via projeto aluno para: ${email}`)
       return { success: true }
-    } catch (error) {
-      console.error('❌ Erro ao enviar email de recuperação:', error)
-      throw error
+    } catch (alunoError) {
+      if (alunoError.code !== 'auth/user-not-found') {
+        // Erro diferente de user-not-found, propagar
+        console.error('❌ Erro ao enviar email de recuperação:', alunoError)
+        throw alunoError
+      }
+    }
+
+    // Tentar no projeto professor
+    try {
+      await sendPasswordResetEmail(authProfessor, email)
+      console.log(`✅ Email de recuperação enviado via projeto professor para: ${email}`)
+      return { success: true }
+    } catch (profError) {
+      console.error('❌ Erro ao enviar email de recuperação em ambos os projetos:', profError)
+      throw profError
     }
   },
 
   /**
-   * Observar mudanças de autenticação
+   * Observar mudanças de autenticação em AMBOS os projetos
+   * Retorna função de unsubscribe que limpa ambos os listeners
    */
   onAuthChange(callback) {
-    return onAuthStateChanged(auth, callback)
+    // Listener no projeto aluno
+    const unsubAluno = onAuthStateChanged(authAluno, (user) => {
+      if (user) {
+        setActiveProject('aluno')
+        callback(user)
+      } else if (!authProfessor.currentUser) {
+        // Só chamar callback(null) se professor também estiver deslogado
+        callback(null)
+      }
+    })
+
+    // Listener no projeto professor
+    const unsubProfessor = onAuthStateChanged(authProfessor, (user) => {
+      if (user) {
+        setActiveProject('professor')
+        callback(user)
+      } else if (!authAluno.currentUser) {
+        // Só chamar callback(null) se aluno também estiver deslogado
+        callback(null)
+      }
+    })
+
+    // Retornar função que limpa ambos os listeners
+    return () => {
+      unsubAluno()
+      unsubProfessor()
+    }
   },
 
   /**
-   * Obter usuário atual
+   * Obter usuário atual (de qualquer projeto)
    */
   getCurrentUser() {
-    return auth.currentUser
+    return authAluno.currentUser || authProfessor.currentUser
   }
 }
 
