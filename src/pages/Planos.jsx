@@ -201,7 +201,7 @@ function Precos() {
         title: '',
         titleHighlight: 'Estudante',
         titleHighlightClass: 'bg-gradient-to-r from-[#1d5a91] to-[#3b82f6] bg-clip-text text-transparent',
-        subtitle: 'Projetado para uso individual, com foco em escrita, reescrita e feedback. Aproveite o preço promocional de lançamento da Plataforma Escrita 360.'
+        subtitle: 'Projetado para uso individual, com foco em escrita, reescrita e feedback. '
       }
     } else if (selectedAudience === 'professores') {
       return {
