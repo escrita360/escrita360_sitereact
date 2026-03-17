@@ -21,7 +21,7 @@ function Home() {
   return (
     <div>
       {/* Hero Section */}
-      <section ref={heroRef} className="hero bg-white animate-on-scroll min-h-screen flex items-center -mt-20 pt-20">
+      <section ref={heroRef} className="hero bg-white animate-on-scroll min-h-screen flex items-start pt-6 md:pt-8 lg:pt-10">
         <div className="container mx-auto max-w-7xl px-4">
           <div className="grid lg:grid-cols-2 items-center gap-8">
             <div className="hero-content animate-fade-in-left text-center lg:text-left">
@@ -37,21 +37,21 @@ function Home() {
                     <strong className="block font-bold text-base mb-2" style={{ color: '#2b7475' }}>Processo</strong>
                     <span className="text-slate-900 text-xs">Autorregulado</span>
                   </div>
-                  <img src={graus1} alt="Grau 1" className="relative z-0 w-28 h-28 mt-4 hover:scale-110 transition-transform duration-300 animate-bounce pointer-events-none" style={{animationDuration: '2s'}} />
+                  <img src={graus1} alt="Grau 1" className="relative z-0 w-28 h-28 mt-4 pointer-events-none" />
                 </div>
                 <div className="stat-container flex flex-col items-center">
                   <div className="stat relative z-10 bg-white rounded-xl shadow-md border border-slate-100 px-6 py-4 text-center hover:shadow-lg hover:border-[#2b7475]/20 transition-all duration-300">
                     <strong className="block font-bold text-base mb-2" style={{ color: '#2b7475' }}>IA</strong>
                     <span className="text-slate-900 text-xs">Complementar</span>
                   </div>
-                  <img src={graus2} alt="Grau 2" className="relative z-0 w-28 h-28 mt-4 hover:scale-110 transition-transform duration-300 animate-bounce pointer-events-none" style={{animationDuration: '2.2s'}} />
+                  <img src={graus2} alt="Grau 2" className="relative z-0 w-28 h-28 mt-4 pointer-events-none" />
                 </div>
                 <div className="stat-container flex flex-col items-center">
                   <div className="stat relative z-10 bg-white rounded-xl shadow-md border border-slate-100 px-6 py-4 text-center hover:shadow-lg hover:border-[#2b7475]/20 transition-all duration-300">
                     <strong className="block font-bold text-base mb-2" style={{ color: '#2b7475' }}>Foco</strong>
                     <span className="text-slate-900 text-xs">Aprendizagem</span>
                   </div>
-                  <img src={graus3} alt="Grau 3" className="relative z-0 w-28 h-28 mt-4 hover:scale-110 transition-transform duration-300 animate-bounce pointer-events-none" style={{animationDuration: '2.4s'}} />
+                  <img src={graus3} alt="Grau 3" className="relative z-0 w-28 h-28 mt-4 pointer-events-none" />
                 </div>
               </div>
             </div>
