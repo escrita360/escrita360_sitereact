@@ -16,7 +16,20 @@ import { motion } from 'framer-motion'
 function Precos() {
   // Force HMR update
   const [searchParams] = useSearchParams()
-  const audienceFromUrl = searchParams.get('audience') || 'estudantes'
+
+  const normalizeAudience = (value) => {
+    const raw = (value || '').toString().trim().toLowerCase()
+
+    if (['estudantes', 'estudante', 'aluno', 'alunos'].includes(raw)) return 'estudantes'
+    if (['professores', 'professor', 'docente', 'docentes', 'prof'].includes(raw)) return 'professores'
+    if (['escolas', 'escola', 'instituicao', 'instituições', 'instituicoes', 'institucional'].includes(raw)) return 'escolas'
+
+    return 'estudantes'
+  }
+
+  const rawAudienceFromUrl = searchParams.get('audience')
+  const audienceFromUrl = rawAudienceFromUrl ? normalizeAudience(rawAudienceFromUrl) : 'estudantes'
+
   const [selectedAudience, setSelectedAudience] = useState(audienceFromUrl)
   const [schoolPlanType, setSchoolPlanType] = useState('correcao') // 'correcao' ou 'hibrido'
   const navigate = useNavigate()
@@ -27,8 +40,11 @@ function Precos() {
 
   // Atualizar quando a URL mudar
   useEffect(() => {
-    const urlAudience = searchParams.get('audience')
-    if (urlAudience && urlAudience !== selectedAudience) {
+    const urlAudienceRaw = searchParams.get('audience')
+    if (!urlAudienceRaw) return
+
+    const urlAudience = normalizeAudience(urlAudienceRaw)
+    if (urlAudience !== selectedAudience) {
       setSelectedAudience(urlAudience)
     }
   }, [searchParams, selectedAudience])
