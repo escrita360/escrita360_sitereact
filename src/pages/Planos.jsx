@@ -75,6 +75,10 @@ function Precos() {
     }
   }
 
+  const handleConsultSpecialists = () => {
+    navigate('/contato')
+  }
+
   // Planos vêm da API agora
   const studentPlans = plansData?.plans?.filter(plan => plan.audience === 'estudantes') || []
   const teacherPlans = plansData?.plans?.filter(plan => plan.audience === 'professores') || []
@@ -345,119 +349,6 @@ function Precos() {
               </div>
             </div>
 
-            {/* Planos para Escolas */}
-            <div className="mt-12 space-y-6">
-              {/* Plano Essencial */}
-              {schoolPlanType === 'correcao' && (
-                <div className="grid gap-8 mx-auto mt-6 justify-center grid-cols-1 max-w-md">
-                  {/* Plano Básico */}
-                  <Card className="relative hover-lift animate-scale-in hover:shadow-xl transition-all flex flex-col pt-6 w-full">
-                    <CardHeader className="text-center pb-4">
-                      <h3 className="text-xl font-bold text-slate-900">Básico</h3>
-                      <div className="my-4">
-                        <span className="text-3xl font-bold text-brand-primary">R$</span>
-                        <span className="text-4xl font-bold text-brand-primary">1.200,00</span>
-                      </div>
-                      <div className="mt-4 pt-4 border-t border-slate-100">
-                        <p className="text-sm text-slate-600 font-semibold">
-                          {selectedAudience === 'professores' ? '500 correções detalhadas com IA' : '500 correções detalhadas com IA'}
-                        </p>
-                        <p className="text-xs text-slate-600 mt-1">
-                          Acesso por 30 dias
-                        </p>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="flex flex-col">
-                      <Button
-                        className="w-full transition-all duration-300 hover:scale-105 mt-auto bg-[#4A90E2] hover:bg-[#357ABD] text-white"
-                        variant="default"
-                        size="lg"
-                        onClick={() => handleOpenPagamento({
-                          name: 'Básico',
-                          monthlyPrice: 1200,
-                          yearlyPrice: 1200,
-                          credits: 500,
-                          duration: '1 mês',
-                          buttonText: 'Contratar Plano'
-                        })}
-                      >
-                        Escolher Plano
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </div>
-              )}
-
-              {/* Plano Híbrido */}
-              {schoolPlanType === 'hibrido' && (
-                <div className="grid gap-8 mx-auto mt-6 justify-center md:grid-cols-2 max-w-5xl">
-                  {/* Plano Básico - Professor */}
-                  <Card className="relative hover-lift animate-scale-in hover:shadow-xl transition-all flex flex-col pt-6 w-full">
-                    <CardHeader className="text-center pb-4">
-                    <h3 className="text-xl font-bold text-slate-900">Professor</h3>
-                      <div className="my-4">
-                        <span className="text-3xl font-bold text-brand-primary">R$</span>
-                        <span className="text-4xl font-bold text-brand-primary">1.200,00</span>
-                      </div>
-                      <div className="mt-4 pt-4 border-t border-slate-100">
-                        <p className="text-sm text-slate-600 font-semibold">
-                          500 correções detalhadas com IA
-                        </p>
-
-                      </div>
-                    </CardHeader>
-                    <CardContent className="flex flex-col">
-                      <Button
-                        className="w-full transition-all duration-300 hover:scale-105 mt-auto bg-[#4A90E2] hover:bg-[#357ABD] text-white"
-                        variant="default"
-                        size="lg"
-                        onClick={() => handleOpenPagamento({
-                          name: 'Professor',
-                          monthlyPrice: 1200,
-                          yearlyPrice: 1200,
-                          credits: 500,
-                          duration: '1 mês',
-                          buttonText: 'Contratar Plano'
-                        })}
-                      >
-                        Escolher Plano
-                      </Button>
-                    </CardContent>
-                  </Card>
-
-                  {/* Plano Estudante */}
-                  <Card className="relative hover-lift animate-scale-in delay-200 border-2 border-brand-primary shadow-xl transition-all flex flex-col pt-6 w-full">
-                    <CardHeader className="text-center pb-4">
-                      <h3 className="text-xl font-bold text-slate-900">Estudante</h3>
-                      <div className="my-4">
-                        <span className="text-3xl font-bold text-brand-primary">R$</span>
-                        <span className="text-4xl font-bold text-brand-primary">290,00</span>
-                      </div>
-                      <div className="mt-4 pt-4 border-t border-slate-100">
-                      </div>
-                    </CardHeader>
-                    <CardContent className="flex flex-col">
-                      <Button
-                        className="w-full transition-all duration-300 hover:scale-105 mt-auto bg-[#4A90E2] hover:bg-[#357ABD] text-white"
-                        variant="default"
-                        size="lg"
-                        onClick={() => handleOpenPagamento({
-                          name: 'Estudante',
-                          monthlyPrice: 290,
-                          yearlyPrice: 3480,
-                          credits: 500,
-                          duration: 'Mensal',
-                          buttonText: 'Escolher Plano'
-                        })}
-                      >
-                        Escolher Plano
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </div>
-              )}
-            </div>
-
             {/* Quadro de Funções Híbrido - Professor + Aluno */}
             {schoolPlanType === 'hibrido' && selectedAudience === 'escolas' && (
               <div className="mt-12 mb-8">
@@ -521,65 +412,18 @@ function Precos() {
               </div>
             )}
 
-            {/* Pacotes de Análises Detalhadas para Escolas */}
-            <div className="mt-16 space-y-6">
-              <h3 className="text-3xl font-bold text-center text-slate-900 mb-4">Pacotes de Créditos</h3>
-              <p className="text-lg text-slate-600 text-center max-w-3xl mx-auto mb-8">
-                Para escolas que necessitam de mais análises além do plano adquirido. .
-              </p>
-              
-              <div className="grid gap-6 mx-auto justify-items-center md:grid-cols-2 max-w-2xl">
-                {/* Pacote 1 */}
-                <Card className="relative hover-lift hover:shadow-xl transition-all flex flex-col pt-4 w-full max-w-xs">
-                  <CardHeader className="text-center pb-2">
-                    <h3 className="text-lg font-bold text-slate-900">Pacote 1</h3>
-                    <div className="my-2">
-                      <span className="text-2xl font-bold text-brand-primary">
-                        {formatPrice(1200)}
-                      </span>
-                    </div>
-                    <p className="text-slate-600 text-sm">
-                      <strong>500 análises detalhadas com IA</strong>
-                    </p>
-                    <p className="text-slate-500 text-xs mt-1">Os créditos extras são utilizados durante a vigência do plano</p>
-                  </CardHeader>
-                  <CardContent>
-                    <Button 
-                      className="w-full bg-[#4A90E2] hover:bg-[#357ABD] text-white" 
-                      variant="default"
-                      onClick={() => navigate('/pagamento-creditos', { state: { selectedPackage: { name: 'Pacote 1', credits: 500, price: 1200, features: ['Análises detalhadas com IA'] }, audience: 'escolas' } })}
-                    >
-                      Adquirir Pacote
-                    </Button>
-                  </CardContent>
-                </Card>
-
-                {/* Pacote 2 */}
-                <Card className="relative hover-lift hover:shadow-xl transition-all flex flex-col pt-4 w-full max-w-xs">
-                  <CardHeader className="text-center pb-2">
-                    <h3 className="text-lg font-bold text-slate-900">Pacote 2</h3>
-                    <div className="my-2">
-                      <span className="text-2xl font-bold text-brand-primary">
-                        {formatPrice(2400)}
-                      </span>
-                    </div>
-                    <p className="text-slate-600 text-sm">
-                      <strong>1000 análises detalhadas com IA</strong>
-                    </p>
-                    <p className="text-slate-500 text-xs mt-1">Os créditos extras são utilizados durante a vigência do plano</p>
-                  </CardHeader>
-                  <CardContent>
-                    <Button 
-                      className="w-full bg-[#4A90E2] hover:bg-[#357ABD] text-white" 
-                      variant="default"
-                      onClick={() => navigate('/pagamento-creditos', { state: { selectedPackage: { name: 'Pacote 2', credits: 1000, price: 2400, popular: true, features: ['Análises detalhadas com IA'] }, audience: 'escolas' } })}
-                    >
-                      Adquirir Pacote
-                    </Button>
-                  </CardContent>
-                </Card>
-              </div>
+            <div className="mt-12 flex justify-center">
+              <Button
+                className="w-full max-w-md bg-[#4A90E2] hover:bg-[#357ABD] text-white"
+                variant="default"
+                size="lg"
+                onClick={handleConsultSpecialists}
+              >
+                Consulte nossos especialistas
+              </Button>
             </div>
+
+            {/* Cards de planos/pacotes removidos conforme solicitado */}
           </div>
         </section>
       )}
