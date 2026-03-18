@@ -435,7 +435,7 @@ function Precos() {
                 size="lg"
                 onClick={handleConsultSpecialists}
               >
-                Consulte nossos especialistas
+                Solicitar orçamento
               </Button>
             </div>
 

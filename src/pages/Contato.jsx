@@ -190,7 +190,6 @@ function Contato() {
                         <SelectValue placeholder="Selecione..." />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="demonstracao">Solicitar Demonstração</SelectItem>
                         <SelectItem value="duvidas">Dúvidas sobre a Plataforma</SelectItem>
                         <SelectItem value="planos">Informações sobre Planos</SelectItem>
                         <SelectItem value="suporte">Suporte Técnico</SelectItem>
