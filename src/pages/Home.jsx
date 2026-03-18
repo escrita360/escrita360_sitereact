@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent } from '@/components/ui/card.jsx'
 import { Check, X, PenTool, Brain, TrendingUp, GraduationCap, School, Edit, FileText, CheckCircle, Bot, RotateCcw, Trophy, Heart, Target, BarChart, Users, UserCheck, BookOpen, Award, Cloud, Clock } from 'lucide-react'
+import { motion, useReducedMotion } from 'framer-motion'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation.js'
 import Banner from '@/assets/Cards/BANNER_HOME01.svg'
 import card1 from '@/assets/Cards/card1.0.svg'
@@ -17,6 +18,8 @@ import graus3 from '@/assets/Icones/graus3.svg'
 function Home() {
   const heroRef = useScrollAnimation()
   const aboutRef = useScrollAnimation()
+  const shouldReduceMotion = useReducedMotion()
+  const MotionImg = motion.img
 
   return (
     <div>
@@ -37,21 +40,51 @@ function Home() {
                     <strong className="block font-bold text-base mb-2" style={{ color: '#2b7475' }}>Processo</strong>
                     <span className="text-slate-900 text-xs">Autorregulado</span>
                   </div>
-                  <img src={graus1} alt="Grau 1" className="relative z-0 w-28 h-28 mt-4 pointer-events-none" />
+                  <MotionImg
+                    src={graus1}
+                    alt="Grau 1"
+                    className="relative z-0 w-28 h-28 mt-4 pointer-events-none"
+                    initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
+                    animate={shouldReduceMotion ? undefined : { opacity: 1, y: [0, -12, 0] }}
+                    transition={shouldReduceMotion ? undefined : {
+                      opacity: { duration: 0.6, delay: 0 },
+                      y: { duration: 2.5, repeat: Infinity, ease: 'easeInOut', delay: 0.6 }
+                    }}
+                  />
                 </div>
                 <div className="stat-container flex flex-col items-center">
                   <div className="stat relative z-10 bg-white rounded-xl shadow-md border border-slate-100 px-6 py-4 text-center hover:shadow-lg hover:border-[#2b7475]/20 transition-all duration-300">
                     <strong className="block font-bold text-base mb-2" style={{ color: '#2b7475' }}>IA</strong>
                     <span className="text-slate-900 text-xs">Complementar</span>
                   </div>
-                  <img src={graus2} alt="Grau 2" className="relative z-0 w-28 h-28 mt-4 pointer-events-none" />
+                  <MotionImg
+                    src={graus2}
+                    alt="Grau 2"
+                    className="relative z-0 w-28 h-28 mt-4 pointer-events-none"
+                    initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
+                    animate={shouldReduceMotion ? undefined : { opacity: 1, y: [0, -12, 0] }}
+                    transition={shouldReduceMotion ? undefined : {
+                      opacity: { duration: 0.6, delay: 0.15 },
+                      y: { duration: 2.5, repeat: Infinity, ease: 'easeInOut', delay: 0.75 }
+                    }}
+                  />
                 </div>
                 <div className="stat-container flex flex-col items-center">
                   <div className="stat relative z-10 bg-white rounded-xl shadow-md border border-slate-100 px-6 py-4 text-center hover:shadow-lg hover:border-[#2b7475]/20 transition-all duration-300">
                     <strong className="block font-bold text-base mb-2" style={{ color: '#2b7475' }}>Foco</strong>
                     <span className="text-slate-900 text-xs">Aprendizagem</span>
                   </div>
-                  <img src={graus3} alt="Grau 3" className="relative z-0 w-28 h-28 mt-4 pointer-events-none" />
+                  <MotionImg
+                    src={graus3}
+                    alt="Grau 3"
+                    className="relative z-0 w-28 h-28 mt-4 pointer-events-none"
+                    initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0 }}
+                    animate={shouldReduceMotion ? undefined : { opacity: 1, y: [0, -12, 0] }}
+                    transition={shouldReduceMotion ? undefined : {
+                      opacity: { duration: 0.6, delay: 0.3 },
+                      y: { duration: 2.5, repeat: Infinity, ease: 'easeInOut', delay: 0.9 }
+                    }}
+                  />
                 </div>
               </div>
             </div>
